@@ -44,6 +44,12 @@ namespace SelfTab {
 				}
 			}
 
+			if (!IsInGame())
+			{
+				State.NoClip = false;
+				State.FreeCam = false;
+			}
+
 			ImGui::EndTabItem();
 		}
 	}
