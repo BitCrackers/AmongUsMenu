@@ -48,7 +48,7 @@ namespace PlayersTab {
 						}
 					}
 
-					if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer)
+					if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && State.selectedPlayer != *Game::pLocalPlayer)
 					{
 						if (State.selectedPlayer->fields.PlayerId != State.PlayerToFollow.fields.PlayerId)
 						{
@@ -59,12 +59,21 @@ namespace PlayersTab {
 								State.FollowPlayer = true;
 							}
 						}
-						else
+						else if(State.FollowPlayer)
 						{
 							if (ImGui::Button("Stop Spectating"))
 							{
 								State.FollowPlayer = false;
 								State.PlayerToFollow = **Game::pLocalPlayer;
+							}
+						}
+						else
+						{
+							if (ImGui::Button("Spectate"))
+							{
+								State.FreeCam = false;
+								State.PlayerToFollow = *State.selectedPlayer;
+								State.FollowPlayer = true;
 							}
 						}
 					}
@@ -74,6 +83,30 @@ namespace PlayersTab {
 					if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
 						State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer, NULL)));
 					}
+				}
+
+				ImGui::NewLine();
+
+				if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && IsInMultiplayerGame())
+				{
+					ImGui::Text("Tasks:");
+					auto tasks = GetNormalPlayerTasks(State.selectedPlayer);
+
+					if (State.RevealImpostors && GetPlayerData(State.selectedPlayer)->fields.IsImpostor)
+					{
+						ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
+					}
+
+					ImGui::ListBoxHeader("", ImVec2(181, 94));
+
+					for (auto task : tasks)
+					{
+						if (task->fields.taskStep == task->fields.MaxStep)
+							ImGui::TextColored(ImVec4(0.0F, 1.0F, 0.0F, 1.0F), (std::string(TranslateTaskTypes(task->fields._.TaskType))).c_str());
+						else
+							ImGui::Text((std::string(TranslateTaskTypes(task->fields._.TaskType))).c_str());
+					}
+					ImGui::ListBoxFooter();
 				}
 				ImGui::EndChild();
 				ImGui::EndTabItem();
