@@ -25,9 +25,18 @@ std::vector<MapTexture> maps{
 bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height) {
 	int image_width = 0;
 	int image_height = 0;
-	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	int channels = 0;
+	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, &channels, 4);
 	if (image_data == NULL)
 		return false;
+
+	for (int i = 0; i < (image_width * image_height * channels); i += channels) {
+		if (image_data[i] == 255 && image_data[i + 1] == 255 && image_data[i + 2] == 255) continue;
+
+		image_data[i] *= State.SelectedColor.x;
+		image_data[i + 1] *= State.SelectedColor.y;
+		image_data[i + 2] *= State.SelectedColor.z;
+	}
 
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -137,6 +146,13 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	}
 
 	if (IsInGame() && State.ShowRadar) {
+		if (State.LastColor.x != State.SelectedColor.x || State.LastColor.y != State.SelectedColor.y || State.LastColor.z != State.SelectedColor.z) {
+			int MapType = (*Game::pShipStatus)->fields.Type;
+			LoadTextureFromFile(getModulePath().append("resources\\").append(maps[MapType].name).c_str(), &maps[MapType].buffer, &maps[MapType].width, &maps[MapType].height);
+			State.LastColor.x = State.SelectedColor.x;
+			State.LastColor.y = State.SelectedColor.y;
+			State.LastColor.z = State.SelectedColor.z;
+		}
 		Radar::Render();
 	}
 
