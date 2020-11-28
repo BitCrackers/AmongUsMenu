@@ -37,6 +37,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 * [std-nullptr](https://github.com/std-nullptr) (Maintainer & IL2CPP Madman)
 * [OsOmE1](https://github.com/OsOmE1) (Contributor)
 * [RealMVC](https://github.com/RealMVC) (Contributor)
+* [Kyreus](https://github.com/marcohajek) (Contributor)
 
 ## Contributing
 
