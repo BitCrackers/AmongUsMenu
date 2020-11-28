@@ -89,12 +89,15 @@ namespace PlayersTab {
 
 				if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && IsInMultiplayerGame())
 				{
-					ImGui::Text("Tasks:");
 					auto tasks = GetNormalPlayerTasks(State.selectedPlayer);
 
 					if (State.RevealImpostors && GetPlayerData(State.selectedPlayer)->fields.IsImpostor)
 					{
 						ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
+					}
+					else
+					{
+						ImGui::Text("Tasks:");
 					}
 
 					ImGui::ListBoxHeader("", ImVec2(181, 94));

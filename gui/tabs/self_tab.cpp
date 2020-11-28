@@ -3,6 +3,7 @@
 namespace SelfTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Self")) {
+			ImGui::Dummy(ImVec2(4, 4));
 			ImGui::Checkbox("Max Vision", &State.MaxVision);
 			ImGui::Checkbox("Wallhack", &State.Wallhack);
 
@@ -13,6 +14,20 @@ namespace SelfTab {
 			}
 
 			SteppedSliderFloat("Freecam Speed", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
+
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+
+			ImGui::Checkbox("Always show Chat Button", &State.ChatAlwaysActive);
+			ImGui::Checkbox("Read Messages by Ghosts", &State.ReadGhostMessages);
+
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+
+			ImGui::Checkbox("Reveal Impostors", &State.RevealImpostors);
+			ImGui::Checkbox("Unlock Vents", &State.UnlockVents);
 
 			if (ImGui::Checkbox("No Clip", &State.NoClip)) {
 				if (!IsInGame()) State.NoClip = false;
@@ -25,11 +40,6 @@ namespace SelfTab {
 					}
 				}
 			}
-
-			ImGui::Checkbox("Reveal Impostors", &State.RevealImpostors);
-			ImGui::Checkbox("Unlock Vents", &State.UnlockVents);
-			ImGui::Checkbox("Always show Chat Button", &State.ChatAlwaysActive);
-			ImGui::Checkbox("Read Messages by Ghosts", &State.ReadGhostMessages);
 
 			ImGui::EndTabItem();
 		}

@@ -3,6 +3,7 @@
 namespace GameTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Game")) {
+			ImGui::Dummy(ImVec2(4, 4));
 			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				if (!IsInGame()) State.PlayerSpeed = State.PrevPlayerSpeed;
 				else {
