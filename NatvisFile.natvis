@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="app::GameData_PlayerInfo">
+    <DisplayString>{{PlayerName={fields.PlayerName,na}}}</DisplayString>
+  </Type>
+  <Type Name="app::String">
+    <DisplayString>{&amp;(fields.m_firstChar),su}</DisplayString>
+  </Type>
+</AutoVisualizer>
