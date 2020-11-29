@@ -48,6 +48,7 @@ namespace SelfTab {
 			{
 				State.NoClip = false;
 				State.FreeCam = false;
+				State.FollowPlayer = false;
 			}
 
 			ImGui::EndTabItem();

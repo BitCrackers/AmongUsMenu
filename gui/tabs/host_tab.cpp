@@ -59,6 +59,8 @@ namespace HostTab {
 				ImGui::EndChild();
 				ImGui::SameLine();
 				ImGui::BeginChild("host#actions", ImVec2(200, 0), true);
+				State.impostors_amount = std::clamp(State.impostors_amount, 0, 2);
+				State.map = std::clamp(State.map, 0, 2);
 				if (CustomListBoxInt("Impostors", &State.impostors_amount, IMPOSTOR_AMOUNTS, 75)) {
 					if (!IsInGame()) (*Game::pGameOptionsData)->fields.NumImpostors = (State.impostors_amount + 1);
 				}
