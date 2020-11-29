@@ -84,6 +84,13 @@ namespace PlayersTab {
 					}
 
 					if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer) {
+						if (!GetPlayerData(State.selectedPlayer)->fields.IsDead && GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor 
+							&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && !State.InMeeting) //Found game will black screen if murdering in a meeting
+						{
+							if (ImGui::Button("Murder"))
+								State.rpcQueue.push(new RpcMurderPlayer(*Game::pLocalPlayer, State.selectedPlayer));
+						}
+
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
 							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer, NULL)));
 						}

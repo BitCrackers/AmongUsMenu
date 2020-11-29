@@ -54,6 +54,7 @@
     <ClCompile Include="hooks\StatsManager.cpp" />
     <ClCompile Include="hooks\Vent.cpp" />
     <ClCompile Include="hooks\_hooks.cpp" />
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp" />
     <ClCompile Include="rpc\RpcRepairSystem.cpp" />
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="events\TaskCompletedEvent.cpp" />

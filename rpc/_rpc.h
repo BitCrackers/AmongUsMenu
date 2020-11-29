@@ -38,3 +38,11 @@ public:
 	RpcCompleteTask(uint32_t taskId);
 	virtual void Process() override;
 };
+
+class RpcMurderPlayer : public RPCInterface {
+	PlayerControl* murderer;
+	PlayerControl* selectedPlayer;
+public:
+	RpcMurderPlayer(PlayerControl* murderer, PlayerControl* selected_player);
+	virtual void Process() override;
+};
