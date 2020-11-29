@@ -179,6 +179,7 @@ void DetourInitilization() {
 	if (DetourAttach(&(PVOID&)ChatController_AddChat, dChatController_AddChat) != 0) return;
 	if (DetourAttach(&(PVOID&)ChatController_SetVisible, dChatController_SetVisible) != 0) return;
 	if (DetourAttach(&(PVOID&)HudManager_ShowMap, dHudManager_ShowMap) != 0) return;
+	if (DetourAttach(&(PVOID&)HudManager_Update, dHudManager_Update) != 0) return;
 	if (DetourAttach(&(PVOID&)KeyboardJoystick_Update, dKeyboardJoystick_Update) != 0) return;
 	if (DetourAttach(&(PVOID&)PlainDoor_SetDoorway, dPlainDoor_SetDoorway) != 0) return;
 	if (DetourAttach(&(PVOID&)GameOptionsData_Deserialize, dGameOptionsData_Deserialize) != 0) return;

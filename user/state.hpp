@@ -56,6 +56,7 @@ public:
 	bool ShowRadar = false;
 	bool ShowRadar_DeadBodies = false;
 	bool ShowRadar_Ghosts = false;
+	bool ShowHud = true;
 	bool HideRadar_During_Meetings = false;
 	bool ShowRadar_RightClick_Teleport = false;
 
@@ -80,6 +81,10 @@ public:
 	bool Wallhack = false;
 	bool FreeCam = false;
 	float FreeCamSpeed = 1.f;
+
+	float CameraHeight = 3.0;
+	Camera* FollowerCam = nullptr;
+
 
 	bool FollowPlayer = false;
 	PlayerControl PlayerToFollow;

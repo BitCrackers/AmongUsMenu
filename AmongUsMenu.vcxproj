@@ -35,6 +35,7 @@
     <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
+    <ClCompile Include="HudManager.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
     <ClCompile Include="framework\dllmain.cpp">

@@ -18,6 +18,19 @@ namespace SelfTab {
 
 			SteppedSliderFloat("Freecam Speed", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
 
+			if (SteppedSliderFloat("Zoom", &State.CameraHeight, 1.0, 100.0, 1.0, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
+				if (!IsInGame() && !IsInLobby())
+				{
+					State.FollowerCam = nullptr;
+					State.CameraHeight = 3.0;
+				}
+			}
+
+			if (ImGui::Button("Reset Zoom")) {
+				State.CameraHeight = 3.0;
+			}
+			ImGui::Checkbox("Show Hud", &State.ShowHud);
+
 			ImGui::Dummy(ImVec2(7, 7));
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));

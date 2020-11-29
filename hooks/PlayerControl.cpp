@@ -37,6 +37,24 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100}, NULL);
 		}
 
+		if (__this == *Game::pLocalPlayer) {
+			if (State.FollowerCam == nullptr) {
+				for (auto cam : GetAllCameras()) {
+					if (Camera_get_orthographicSize(cam, NULL) == 3.0) {
+						State.FollowerCam = cam;
+						break;
+					}
+				};
+			}
+			if (State.FollowerCam != nullptr) {
+				Camera_set_orthographicSize(State.FollowerCam, State.CameraHeight, NULL);
+
+				Transform* cameraTransform = Component_get_transform((Component*)State.FollowerCam, NULL);
+				Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
+				Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100 }, NULL);
+			}
+		}
+
 		if (!State.FreeCam  && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
