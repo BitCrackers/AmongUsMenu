@@ -54,7 +54,7 @@ namespace Radar {
 			Radar::Init();
 
 		int MapType = (*Game::pShipStatus)->fields.Type;
-		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].width * 0.5F + 10, (float)maps[MapType].height * 0.5F + 10), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].width * 0.5F + 10, (float)maps[MapType].height * 0.5F + 10), ImGuiCond_None);
 		ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
 
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
