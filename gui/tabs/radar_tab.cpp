@@ -15,6 +15,14 @@ namespace RadarTab {
 			ImGui::Checkbox("Hide Radar During Meetings", &State.HideRadar_During_Meetings);
 			ImGui::Checkbox("Right Click to Teleport", &State.ShowRadar_RightClick_Teleport);
 
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+
+			ImGui::PushItemWidth(ImGui::GetWindowWidth() / 3.5);
+			ImGui::ColorPicker4("##picker", (float*)&State.SelectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+			ImGui::PopItemWidth();
+
 			ImGui::EndTabItem();
 		}
 	}

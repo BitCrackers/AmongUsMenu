@@ -1,11 +1,26 @@
 #pragma once
 #include <imgui/imgui.h>
+#include "state.hpp"
 
-#define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
-#define MED(v)  ImVec4(0.455f, 0.198f, 0.301f, v)
-#define LOW(v)  ImVec4(0.232f, 0.201f, 0.271f, v)
 #define BG(v)   ImVec4(0.200f, 0.220f, 0.270f, v)
 #define IMGUI_TEXT(v) ImVec4(0.860f, 0.930f, 0.890f, v)
+
+#define BG(v)   ImVec4(0.200f, 0.220f, 0.270f, v)
+
+ImVec4 HI(float v) {
+	ImVec4 vec = State.SelectedColor;
+	return ImVec4(vec.x, vec.y, vec.z, v);
+}
+
+ImVec4 MED(float v) {
+	ImVec4 vec = State.SelectedColor;
+	return ImVec4(vec.x / 1.5, vec.y / 1.5, vec.z / 1.5, v);
+}
+
+ImVec4 LOW(float v) {
+	ImVec4 vec = State.SelectedColor;
+	return ImVec4(vec.x / 2, vec.y / 2, vec.z / 2, v);
+}
 
 void ApplyTheme() {
 	auto& style = ImGui::GetStyle();
