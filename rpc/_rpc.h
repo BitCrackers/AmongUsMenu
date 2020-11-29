@@ -38,3 +38,12 @@ public:
 	RpcCompleteTask(uint32_t taskId);
 	virtual void Process() override;
 };
+
+class RpcReportPlayer : public RPCInterface {
+	PlayerControl* reportingPlayer;
+	PlayerControl* selectedPlayer;
+public:
+	RpcReportPlayer(PlayerControl* reporting_player, PlayerControl* selected_player);
+	virtual void Process() override;
+};
+

@@ -41,44 +41,42 @@ namespace PlayersTab {
 				if (State.selectedPlayerId > -1 && GetPlayerData(GetPlayerControlById(State.selectedPlayerId)) != nullptr)
 				{
 
-					if (IsInMultiplayerGame() && !IsHost()) {
-						if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
-							if (ImGui::Button("Call Meeting")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, NULL, NULL);
-							}
-							ImGui::NewLine();
-							if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer && ImGui::Button("Report Body")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, GetPlayerData(State.selectedPlayer), NULL);
+					if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+						if (ImGui::Button("Call Meeting")) {
+							State.rpcQueue.push(new RpcReportPlayer(*Game::pLocalPlayer, NULL));
+						}
+						ImGui::NewLine();
+						if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer && ImGui::Button("Report Body")) {
+							State.rpcQueue.push(new RpcReportPlayer(*Game::pLocalPlayer, State.selectedPlayer));
+						}
+					}
+
+					if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && State.selectedPlayer != *Game::pLocalPlayer)
+					{
+						if (State.selectedPlayer->fields.PlayerId != State.PlayerToFollow.fields.PlayerId)
+						{
+							if (ImGui::Button("Spectate"))
+							{
+								State.FreeCam = false;
+								State.PlayerToFollow = *State.selectedPlayer;
+								State.FollowPlayer = true;
 							}
 						}
-
-						if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && State.selectedPlayer != *Game::pLocalPlayer)
+						else if (State.FollowPlayer)
 						{
-							if (State.selectedPlayer->fields.PlayerId != State.PlayerToFollow.fields.PlayerId)
+							if (ImGui::Button("Stop Spectating"))
 							{
-								if (ImGui::Button("Spectate"))
-								{
-									State.FreeCam = false;
-									State.PlayerToFollow = *State.selectedPlayer;
-									State.FollowPlayer = true;
-								}
+								State.FollowPlayer = false;
+								State.PlayerToFollow = **Game::pLocalPlayer;
 							}
-							else if (State.FollowPlayer)
+						}
+						else
+						{
+							if (ImGui::Button("Spectate"))
 							{
-								if (ImGui::Button("Stop Spectating"))
-								{
-									State.FollowPlayer = false;
-									State.PlayerToFollow = **Game::pLocalPlayer;
-								}
-							}
-							else
-							{
-								if (ImGui::Button("Spectate"))
-								{
-									State.FreeCam = false;
-									State.PlayerToFollow = *State.selectedPlayer;
-									State.FollowPlayer = true;
-								}
+								State.FreeCam = false;
+								State.PlayerToFollow = *State.selectedPlayer;
+								State.FollowPlayer = true;
 							}
 						}
 					}
