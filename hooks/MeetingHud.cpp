@@ -6,11 +6,14 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	for (auto playerData : GetAllPlayerData())
 		State.voteMonitor[playerData->fields.PlayerId] = false;
 
+	State.InMeeting = true;
+
 	MeetingHud_Awake(__this, method);
 }
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.clear();
+	State.InMeeting = false;
 
 	MeetingHud_Close(__this, method);
 }

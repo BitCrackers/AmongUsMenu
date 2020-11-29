@@ -56,7 +56,10 @@ public:
 	bool ShowRadar = false;
 	bool ShowRadar_DeadBodies = false;
 	bool ShowRadar_Ghosts = false;
+	bool HideRadar_During_Meetings = false;
 	bool ShowRadar_RightClick_Teleport = false;
+
+	bool InMeeting = false;
 
 	bool ChatAlwaysActive = false;
 	bool ReadGhostMessages = false;
