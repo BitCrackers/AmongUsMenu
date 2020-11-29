@@ -4,7 +4,7 @@ using namespace app;
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(400, 270), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(435, 270), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
@@ -16,6 +16,7 @@ namespace Menu {
 		ImGui::Begin("AmongUsMenu", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 		ImGui::BeginTabBar("AmongUs#TopBar", ImGuiTabBarFlags_NoTabListScrollingButtons);
 
+		SettingsTab::Render();
 		GameTab::Render();
 		SelfTab::Render();
 		RadarTab::Render();
