@@ -169,8 +169,8 @@ void DetourInitilization() {
 	if (DetourAttach(&(PVOID&)ShipStatus_CalculateLightRadius, dShipStatus_CalculateLightRadius) != 0) return;
 	if (DetourAttach(&(PVOID&)ShipStatus_OnEnable, dShipStatus_OnEnable) != 0) return;
 	if (DetourAttach(&(PVOID&)Vent_CanUse, dVent_CanUse) != 0) return;
-	//if (DetourAttach(&(PVOID&)Vent_EnterVent, dVent_EnterVent) != 0) return;
-	//if (DetourAttach(&(PVOID&)Vent_ExitVent, dVent_ExitVent) != 0) return;
+	if (DetourAttach(&(PVOID&)Vent_EnterVent, dVent_EnterVent) != 0) return;
+	if (DetourAttach(&(PVOID&)Vent_ExitVent, dVent_ExitVent) != 0) return;
 	if (DetourAttach(&(PVOID&)StatsManager_get_AmBanned, dStatsManager_get_AmBanned) != 0) return;
 	if (DetourAttach(&(PVOID&)StatsManager_get_BanMinutesLeft, dStatsManager_get_BanMinutesLeft) != 0) return;
 	if (DetourAttach(&(PVOID&)StatsManager_get_BanPoints, dStatsManager_get_BanPoints) != 0) return;

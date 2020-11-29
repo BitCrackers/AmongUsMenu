@@ -243,7 +243,7 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector) {
 		auto allRooms = shipStatus->fields._AllRooms_k__BackingField;
 
 		for (size_t i = 0; i < allRooms->max_length; i++)
-			if (app::Collider2D_OverlapPoint(allRooms->vector[i]->fields.roomArea, vector, NULL)) return allRooms->vector[i]->fields.RoomId;
+			if (allRooms->vector[i]->fields.roomArea != nullptr && app::Collider2D_OverlapPoint(allRooms->vector[i]->fields.roomArea, vector, NULL)) return allRooms->vector[i]->fields.RoomId;
 	}
 	return SystemTypes__Enum_Outside;
 }
