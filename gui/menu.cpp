@@ -25,6 +25,14 @@ namespace Menu {
 		DoorsTab::Render();
 		HostTab::Render();
 
+		if (!IsInGame())
+		{
+			State.NoClip = false;
+			State.FreeCam = false;
+			State.FollowPlayer = false;
+			State.InMeeting = false;
+		}
+
 		ImGui::EndTabBar();
 		ImGui::End();
 	}

@@ -15,11 +15,6 @@ namespace RadarTab {
 			ImGui::Checkbox("Hide Radar During Meetings", &State.HideRadar_During_Meetings);
 			ImGui::Checkbox("Right Click to Teleport", &State.ShowRadar_RightClick_Teleport);
 
-			if (!IsInGame())
-			{
-				State.InMeeting = false;
-			}
-
 			ImGui::EndTabItem();
 		}
 	}
