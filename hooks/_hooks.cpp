@@ -136,7 +136,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		Menu::Render();
 	}
 
-	if (IsInGame() && State.ShowRadar) {
+	if (IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings)) {
 		Radar::Render();
 	}
 

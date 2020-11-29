@@ -12,7 +12,9 @@ namespace RadarTab {
 
 			ImGui::Checkbox("Show Dead Bodies", &State.ShowRadar_DeadBodies);
 			ImGui::Checkbox("Show Ghosts", &State.ShowRadar_Ghosts);
+			ImGui::Checkbox("Hide Radar During Meetings", &State.HideRadar_During_Meetings);
 			ImGui::Checkbox("Right Click to Teleport", &State.ShowRadar_RightClick_Teleport);
+
 			ImGui::EndTabItem();
 		}
 	}
