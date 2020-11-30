@@ -33,7 +33,7 @@
     <ClCompile Include="gui\tabs\players_tab.cpp" />
     <ClCompile Include="gui\tabs\radar_tab.cpp" />
     <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
-	<ClCompile Include="gui\tabs\settings_tab.cpp" />
+    <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
     <ClCompile Include="HudManager.cpp" />
@@ -57,6 +57,7 @@
     <ClCompile Include="hooks\Vent.cpp" />
     <ClCompile Include="hooks\_hooks.cpp" />
     <ClCompile Include="rpc\RpcRepairSystem.cpp" />
+    <ClCompile Include="rpc\RpcReportPlayer.cpp" />
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
@@ -98,7 +99,7 @@
     <ClInclude Include="gui\tabs\players_tab.h" />
     <ClInclude Include="gui\tabs\radar_tab.h" />
     <ClInclude Include="gui\tabs\sabotage_tab.h" />
-	<ClInclude Include="gui\tabs\settings_tab.h" />
+    <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\_hooks.hpp" />
     <ClInclude Include="includes\detours\detours.h" />
