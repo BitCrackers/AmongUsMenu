@@ -45,26 +45,23 @@ namespace PlayersTab {
 
 				if (State.selectedPlayer.has_value())
 				{
-
-					if (IsInMultiplayerGame() && !IsHost()) {
-						if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
-							ImGui::NewLine();
-							if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
-								State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
-							}
+					if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+						ImGui::NewLine();
+						if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
+							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
 						}
+					}
 
-						if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
-						{
-							if (State.playerToFollow.equals(State.selectedPlayer)) {
-								if (ImGui::Button("Stop Spectating")) {
-									State.playerToFollow = PlayerSelection();
-								}
-							} else {
-								if (ImGui::Button("Spectate")) {
-									State.FreeCam = false;
-									State.playerToFollow = State.selectedPlayer;
-								}
+					if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
+					{
+						if (State.playerToFollow.equals(State.selectedPlayer)) {
+							if (ImGui::Button("Stop Spectating")) {
+								State.playerToFollow = PlayerSelection();
+							}
+						} else {
+							if (ImGui::Button("Spectate")) {
+								State.FreeCam = false;
+								State.playerToFollow = State.selectedPlayer;
 							}
 						}
 					}
