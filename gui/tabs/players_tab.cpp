@@ -12,9 +12,8 @@ namespace PlayersTab {
 					std::string playerName = convert_from_string(playerData->fields.PlayerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayerId == playerData->fields.PlayerId)) {
-						State.selectedPlayerId = playerData->fields.PlayerId;
-						State.selectedPlayer = GetPlayerControlById(playerData->fields.PlayerId);
+					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
+						State.selectedPlayer = playerData;
 					}
 					ImGui::SameLine();
 					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
@@ -38,7 +37,7 @@ namespace PlayersTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
 
-				if (State.selectedPlayerId > -1 && GetPlayerData(GetPlayerControlById(State.selectedPlayerId)) != nullptr)
+				if (State.selectedPlayer.has_value())
 				{
 
 					if (IsInMultiplayerGame() && !IsHost()) {
@@ -47,55 +46,39 @@ namespace PlayersTab {
 								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, NULL, NULL);
 							}
 							ImGui::NewLine();
-							if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer && ImGui::Button("Report Body")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, GetPlayerData(State.selectedPlayer), NULL);
+							if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
+								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, (GameData_PlayerInfo*)State.selectedPlayer, NULL);
 							}
 						}
 
-						if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && State.selectedPlayer != *Game::pLocalPlayer)
+						if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
 						{
-							if (State.selectedPlayer->fields.PlayerId != State.PlayerToFollow.fields.PlayerId)
-							{
-								if (ImGui::Button("Spectate"))
-								{
-									State.FreeCam = false;
-									State.PlayerToFollow = *State.selectedPlayer;
-									State.FollowPlayer = true;
+							if (State.playerToFollow.equals(State.selectedPlayer)) {
+								if (ImGui::Button("Stop Spectating")) {
+									State.playerToFollow = SelectedPlayer();
 								}
-							}
-							else if (State.FollowPlayer)
-							{
-								if (ImGui::Button("Stop Spectating"))
-								{
-									State.FollowPlayer = false;
-									State.PlayerToFollow = **Game::pLocalPlayer;
-								}
-							}
-							else
-							{
-								if (ImGui::Button("Spectate"))
-								{
+							} else {
+								if (ImGui::Button("Spectate")) {
 									State.FreeCam = false;
-									State.PlayerToFollow = *State.selectedPlayer;
-									State.FollowPlayer = true;
+									State.playerToFollow = State.selectedPlayer;
 								}
 							}
 						}
 					}
 
-					if (State.selectedPlayerId > -1 && State.selectedPlayer != *Game::pLocalPlayer) {
+					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
-							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer, NULL)));
+							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition((PlayerControl*)State.selectedPlayer, NULL)));
 						}
 					}
 
 					ImGui::NewLine();
 
-					if (State.selectedPlayerId > -1 && !GetPlayerData(State.selectedPlayer)->fields.Disconnected && IsInMultiplayerGame())
+					if (!State.selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
 					{
-						auto tasks = GetNormalPlayerTasks(State.selectedPlayer);
+						auto tasks = GetNormalPlayerTasks((PlayerControl*)State.selectedPlayer);
 
-						if (State.RevealImpostors && GetPlayerData(State.selectedPlayer)->fields.IsImpostor)
+						if (State.RevealImpostors && GetPlayerData((PlayerControl*)State.selectedPlayer)->fields.IsImpostor)
 						{
 							ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
 						}
@@ -106,7 +89,7 @@ namespace PlayersTab {
 
 						ImGui::ListBoxHeader("", ImVec2(181, 94));
 
-						if (State.selectedPlayer->fields.myTasks == nullptr)
+						if (((PlayerControl*)State.selectedPlayer)->fields.myTasks == NULL)
 						{
 							ImGui::Text("ERROR: Could not load tasks.");
 						}

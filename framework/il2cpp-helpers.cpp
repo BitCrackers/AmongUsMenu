@@ -26,7 +26,7 @@ app::String* convert_to_string(std::string input) {
 }
 
 KLASS translate_klass(KLASS klass_input) {
-	for (auto klass_pair : KLASS_TRANSLATIONS) {
+	for (KLASS_PAIR klass_pair : KLASS_TRANSLATIONS) {
 		if (klass_input == klass_pair.obfuscated_klass)
 			return klass_pair.deobfuscated_klass;
 
@@ -37,7 +37,7 @@ KLASS translate_klass(KLASS klass_input) {
 }
 
 std::string translate_method_name(std::string input) {
-	for (auto pair : METHOD_TRANSLATIONS) {
+	for (std::pair<std::string, std::string> pair : METHOD_TRANSLATIONS) {
 		if (input.compare(pair.first) == 0) return pair.second;
 		if (input.compare(pair.second) == 0) return pair.first;
 	}
@@ -49,7 +49,7 @@ std::string translate_type_name(std::string input) {
 	int8_t conversion = 0;
 	size_t match_length = 0;
 
-	for (auto klass_pair : KLASS_TRANSLATIONS) {
+	for (KLASS_PAIR klass_pair : KLASS_TRANSLATIONS) {
 		if (conversion != 1) {
 			auto deobfuscated_length = klass_pair.deobfuscated_klass.contains_type(input);
 			if (deobfuscated_length > match_length) {
@@ -70,7 +70,7 @@ std::string translate_type_name(std::string input) {
 	}
 
 	if (match.has_value()) {
-		auto klass_pair = match.value();
+		KLASS_PAIR klass_pair = match.value();
 		if (conversion == -1) {
 			size_t position = input.find(klass_pair.deobfuscated_klass.klass_name, 0);
 			input.replace(position, klass_pair.deobfuscated_klass.klass_name.length(), klass_pair.obfuscated_klass.klass_name);

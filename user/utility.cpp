@@ -11,6 +11,121 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
+SelectedPlayer::SelectedPlayer()
+{
+	this->hasValue = false;
+	this->playerId = 0;
+	this->clientId = 0;
+}
+
+SelectedPlayer::SelectedPlayer(PlayerControl* player)
+{
+	this->hasValue = true;
+	this->playerId = player->fields.PlayerId;
+	this->clientId = app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)player, NULL);
+}
+
+SelectedPlayer::SelectedPlayer(GameData_PlayerInfo* player)
+{
+	auto playerControl = player->fields._object;
+	if (playerControl != NULL) {
+		this->hasValue = true;
+		this->playerId = player->fields.PlayerId;
+		this->clientId = app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)player, NULL);
+	} else {
+		this->hasValue = false;
+		this->playerId = 0;
+		this->clientId = 0;
+	}
+}
+
+SelectedPlayer::SelectedPlayer(const SelectedPlayer& selectedPlayer)
+{
+	this->hasValue = selectedPlayer.hasValue;
+	this->playerId = selectedPlayer.playerId;
+	this->clientId = selectedPlayer.clientId;
+}
+
+SelectedPlayer::operator PlayerControl* ()
+{
+	if (!this->has_value()) return NULL;
+	auto playerControl = GetPlayerControlById(this->playerId);
+	if (playerControl == NULL) return NULL;
+	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
+	return playerControl;
+}
+
+SelectedPlayer::operator GameData_PlayerInfo* ()
+{
+	if (!this->has_value()) return NULL;
+	auto playerControl = GetPlayerControlById(this->playerId);
+	if (playerControl == NULL) return NULL;
+	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
+	return playerControl->fields._cachedData;
+}
+
+bool SelectedPlayer::equals(PlayerControl* playerControl)
+{
+	if (!this->has_value()) return false;
+	return ((PlayerControl*)this) == playerControl;
+}
+
+bool SelectedPlayer::equals(GameData_PlayerInfo* playerData)
+{
+	if (!this->has_value()) return false;
+	return ((GameData_PlayerInfo*)this) == playerData;
+}
+
+bool SelectedPlayer::equals(SelectedPlayer selectedPlayer)
+{
+	if (!this->has_value() || !selectedPlayer.has_value()) return false;
+	return (this->get_PlayerId() == selectedPlayer.get_PlayerId() && this->get_PlayerId() == selectedPlayer.get_PlayerId());
+}
+bool SelectedPlayer::has_value()
+{
+	if (!this->hasValue) {
+		this->playerId = 0;
+		this->clientId = 0;
+		return false;
+	}
+
+	auto playerControl = (PlayerControl*)this;
+	if (playerControl == NULL) {
+		this->hasValue = false;
+		this->playerId = 0;
+		this->clientId = 0;
+		return false;
+	}
+
+	return true;
+}
+
+uint8_t SelectedPlayer::get_PlayerId()
+{
+	if (!this->has_value()) return 0;
+	return this->playerId;
+}
+
+int32_t SelectedPlayer::get_ClientId()
+{
+	if (!this->has_value()) return 0;
+	return this->clientId;
+}
+
+bool SelectedPlayer::is_LocalPlayer()
+{
+	if (!this->has_value()) return false;
+	return ((PlayerControl*)this) == *Game::pLocalPlayer;
+}
+
+bool SelectedPlayer::is_Disconnected()
+{
+	// This is a sanity check, I don't think this is necessary as when a player.
+	// When a player disconnects their PlayerControl is destroyed and as such has_value() should return false
+	if (!this->has_value()) return true;
+	return ((GameData_PlayerInfo*)this)->fields.Disconnected;
+}
+
 ImVec4 AmongUsColorToImVec4(Color color) {
 	return ImVec4(color.r, color.g, color.b, color.a);
 }

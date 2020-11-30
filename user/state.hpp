@@ -49,8 +49,7 @@ public:
 
 	bool NoClip = false;
 
-	int selectedPlayerId = -1;
-	PlayerControl* selectedPlayer = NULL;
+	SelectedPlayer selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 
 	bool ShowRadar = false;
@@ -86,9 +85,7 @@ public:
 	Camera* FollowerCam = nullptr;
 	bool EnableZoom = false;
 
-
-	bool FollowPlayer = false;
-	PlayerControl PlayerToFollow;
+	SelectedPlayer playerToFollow;
 
 	Vector3 camPos = { NULL, NULL, NULL };
 	Vector3 prevCamPos = { NULL, NULL, NULL };

@@ -11,8 +11,7 @@ namespace SelfTab {
 			{
 				if (IsInGame())
 				{
-					State.FollowPlayer = false;
-					State.PlayerToFollow = **Game::pLocalPlayer;
+					State.playerToFollow = SelectedPlayer();
 				}
 			}
 

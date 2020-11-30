@@ -27,9 +27,10 @@ namespace Menu {
 
 		if (!IsInGame())
 		{
+			State.selectedPlayer = SelectedPlayer();
+			State.playerToFollow = SelectedPlayer();
 			State.NoClip = false;
 			State.FreeCam = false;
-			State.FollowPlayer = false;
 			State.InMeeting = false;
 			State.FollowerCam = nullptr;
 			State.EnableZoom = false;

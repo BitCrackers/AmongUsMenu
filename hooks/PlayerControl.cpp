@@ -29,7 +29,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		else
 			nameText->fields.Color = Palette__TypeInfo->static_fields->White;
 
-		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.FollowPlayer) {
+		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
@@ -104,14 +104,15 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
 		}
 
-		if (State.FollowPlayer && __this == *Game::pLocalPlayer)
+		if (State.playerToFollow.has_value() && __this == *Game::pLocalPlayer)
 		{
 			auto mainCamera = Camera_get_main(NULL);
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
+			Vector2 playerVector2 = PlayerControl_GetTruePosition((PlayerControl*)State.playerToFollow, NULL);
 
-			Transform_set_position(cameraTransform, { PlayerControl_GetTruePosition(&State.PlayerToFollow, NULL).x, PlayerControl_GetTruePosition(&State.PlayerToFollow, NULL).y, 100 }, NULL);
+			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
 		}
 
 		// TODO: Improve performance
@@ -120,7 +121,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!lastPosition.has_value() ||(lastPosition.has_value() && position.x != lastPosition->x && position.y != lastPosition->y))
 			State.events.push_back(new WalkEvent(GetEventPlayer(__this), position));*/
 	}
-	PlayerControl_FixedUpdate(__this, method);
+	app::PlayerControl_FixedUpdate(__this, method);
 }
 
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method) {

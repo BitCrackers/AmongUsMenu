@@ -17,6 +17,28 @@ struct CorrectedColor32 {
 	uint8_t a;
 };
 
+class SelectedPlayer {
+	bool hasValue;
+	uint8_t playerId;
+	int32_t clientId;
+
+public:
+	SelectedPlayer();
+	SelectedPlayer(PlayerControl* player);
+	SelectedPlayer(GameData_PlayerInfo* player);
+	SelectedPlayer(const SelectedPlayer& selectedPlayer);
+	explicit operator PlayerControl*();
+	explicit operator GameData_PlayerInfo*();
+	bool equals(PlayerControl* playerControl);
+	bool equals(GameData_PlayerInfo* playerDate);
+	bool equals(SelectedPlayer selectedPlayer);
+	bool has_value();
+	uint8_t get_PlayerId();
+	int32_t get_ClientId();
+	bool is_LocalPlayer();
+	bool is_Disconnected();
+};
+
 int randi(int lo, int hi);
 ImVec4 AmongUsColorToImVec4(Color color);
 ImVec4 AmongUsColorToImVec4(CorrectedColor32 color);
