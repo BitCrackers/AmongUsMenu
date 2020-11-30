@@ -85,6 +85,9 @@ public:
 	Camera* FollowerCam = nullptr;
 	bool EnableZoom = false;
 
+	ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
+	ImVec4 LastColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
+
 	PlayerSelection playerToFollow;
 
 	Vector3 camPos = { NULL, NULL, NULL };

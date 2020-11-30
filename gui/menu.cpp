@@ -4,11 +4,12 @@ using namespace app;
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(400, 270), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(435, 270), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
 	bool init = false;
+	bool firstRender = true;
 	void Render() {
 		if (!init)
 			Menu::Init();
@@ -16,6 +17,8 @@ namespace Menu {
 		ImGui::Begin("AmongUsMenu", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 		ImGui::BeginTabBar("AmongUs#TopBar", ImGuiTabBarFlags_NoTabListScrollingButtons);
 
+		if(!firstRender)
+			SettingsTab::Render();
 		GameTab::Render();
 		SelfTab::Render();
 		RadarTab::Render();
@@ -35,6 +38,9 @@ namespace Menu {
 			State.FollowerCam = nullptr;
 			State.EnableZoom = false;
 		}
+
+		if(firstRender)
+			firstRender = false;
 
 		ImGui::EndTabBar();
 		ImGui::End();
