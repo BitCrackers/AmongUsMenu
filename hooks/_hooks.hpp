@@ -52,7 +52,7 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method);
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method);
 void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, MethodInfo* method);
-
+void dHudManager_Update(HudManager* __this, MethodInfo* method);
 GameOptionsData* dGameOptionsData_Deserialize(BinaryReader* reader, MethodInfo* method);
 GameOptionsData* dGameOptionsData_Deserialize_1(MessageReader* reader, MethodInfo* method);
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method);

@@ -31,6 +31,8 @@ namespace Menu {
 			State.FreeCam = false;
 			State.FollowPlayer = false;
 			State.InMeeting = false;
+			State.FollowerCam = nullptr;
+			State.EnableZoom = false;
 		}
 
 		ImGui::EndTabBar();

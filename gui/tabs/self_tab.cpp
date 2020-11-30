@@ -1,4 +1,4 @@
-#include "self_tab.h"
+﻿#include "self_tab.h"
 
 namespace SelfTab {
 	void Render() {
@@ -16,7 +16,13 @@ namespace SelfTab {
 				}
 			}
 
-			SteppedSliderFloat("Freecam Speed", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
+			ImGui::SameLine(90.0f);
+			SteppedSliderFloat("  ", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx Speed", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
+
+			ImGui::Checkbox("Zoom", &State.EnableZoom);
+
+			ImGui::SameLine(90.0f);
+			SteppedSliderFloat("   ", &State.CameraHeight, 1.0f, 20.0f, 1.0f, "%.2fx Zoom", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
 
 			ImGui::Dummy(ImVec2(7, 7));
 			ImGui::Separator();
