@@ -18,8 +18,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
         
       - name: Echo dir
-        run: echo dir
+        run: dir
         
       - name: Build XInput Release
-        working-directory: src
-        run: '"%MSBUILD_PATH%\MSBuild.exe" AmongUsMenu.vcxproj /p:Platform=Win32 /p:Configuration=Release_Xinput'
+        run: msbuild AmongUsMenu.vcxproj /p:Platform=Win32 /p:Configuration=Release_Xinput'
