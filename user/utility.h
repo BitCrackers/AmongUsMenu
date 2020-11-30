@@ -18,13 +18,13 @@ struct CorrectedColor32 {
 
 class PlayerSelection {
 	bool hasValue;
-	uint8_t playerId;
 	int32_t clientId;
+	uint8_t playerId;
 
 public:
 	PlayerSelection();
-	PlayerSelection(PlayerControl* player);
-	PlayerSelection(GameData_PlayerInfo* player);
+	PlayerSelection(PlayerControl* playerControl);
+	PlayerSelection(GameData_PlayerInfo* playerData);
 	bool equals(PlayerControl* playerControl);
 	bool equals(GameData_PlayerInfo* playerDate);
 	bool equals(PlayerSelection selectedPlayer);
@@ -65,3 +65,4 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::optional<Vector2> GetLastWalkEventPosition(uint8_t playerId);
 std::vector<Camera*> GetAllCameras();
+std::vector<ClientData*> GetAllClients();

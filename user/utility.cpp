@@ -15,28 +15,27 @@ int randi(int lo, int hi) {
 PlayerSelection::PlayerSelection()
 {
 	this->hasValue = false;
-	this->playerId = 0;
 	this->clientId = 0;
+	this->playerId = 0;
 }
 
-PlayerSelection::PlayerSelection(PlayerControl* player)
+PlayerSelection::PlayerSelection(PlayerControl* playerControl)
 {
-	this->hasValue = true;
-	this->playerId = player->fields.PlayerId;
-	this->clientId = app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)player, NULL);
-}
-
-PlayerSelection::PlayerSelection(GameData_PlayerInfo* player)
-{
-	auto playerControl = player->fields._object;
 	if (playerControl != NULL) {
 		this->hasValue = true;
-		this->playerId = player->fields.PlayerId;
-		this->clientId = app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)player, NULL);
+		this->clientId = playerControl->fields._.OwnerId;
+		this->playerId = playerControl->fields.PlayerId;
 	} else {
-		this->hasValue = false;
-		this->playerId = 0;
-		this->clientId = 0;
+		*this = PlayerSelection();
+	}
+}
+
+PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData)
+{
+	if (playerData != NULL) {
+		*this = PlayerSelection(playerData->fields._object);
+	} else {
+		*this = PlayerSelection();
 	}
 }
 
@@ -60,37 +59,43 @@ bool PlayerSelection::equals(PlayerSelection selectedPlayer)
 
 PlayerControl* PlayerSelection::get_PlayerControl()
 {
-	if (!this->has_value()) return NULL;
-	auto playerControl = GetPlayerControlById(this->playerId);
-	if (playerControl == NULL) return NULL;
-	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
-	return playerControl;
+	if (!this->hasValue) return NULL;
+
+	if (clientId == -2) {
+		auto playerControl = GetPlayerControlById(this->playerId);
+		if (playerControl != NULL)
+			return playerControl;
+	}
+
+	for (auto client : GetAllClients()) {
+		if (client->fields.Id == this->clientId) {
+			return client->fields.Character;
+		}
+	}
+
+	*this = PlayerSelection();
+	return NULL;
 }
 
 GameData_PlayerInfo* PlayerSelection::get_PlayerData()
 {
-	if (!this->has_value()) return NULL;
-	auto playerControl = GetPlayerControlById(this->playerId);
-	if (playerControl == NULL) return NULL;
-	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
-	return playerControl->fields._cachedData;
+	if (!this->hasValue) return NULL;
+
+	auto playerControl = this->get_PlayerControl();
+	if (playerControl != NULL)
+		return playerControl->fields._cachedData;
+
+	*this = PlayerSelection();
+	return NULL;
 }
 
 bool PlayerSelection::has_value()
 {
-	if (!this->hasValue) {
-		this->playerId = 0;
-		this->clientId = 0;
+	if (!this->hasValue)
 		return false;
-	}
 
-	auto playerControl = this->get_PlayerControl();
-	if (playerControl == NULL) {
-		this->hasValue = false;
-		this->playerId = 0;
-		this->clientId = 0;
+	if (this->get_PlayerControl() == NULL)
 		return false;
-	}
 
 	return true;
 }
@@ -392,4 +397,19 @@ std::vector<Camera*> GetAllCameras() {
 		cameras.push_back(cameraArray->vector[i]);
 
 	return cameras;
+}
+
+std::vector<ClientData*> GetAllClients()
+{
+	static ClientData* (*getItem)(List_1_InnerNet_ClientData_*, int32_t, MethodInfo*) = decltype(getItem)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "InnerNet.ClientData", "get_Item", "System.Int32"));
+	static int32_t(*getCount)(List_1_InnerNet_ClientData_*, MethodInfo*) = decltype(getCount)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "System.Int32", "get_Count", ""));
+
+	std::vector<ClientData*> clients = std::vector<ClientData*>();
+	auto allClients = (*Game::pAmongUsClient)->fields._.allClients;
+
+	if (getItem != NULL && getCount != NULL)
+		for (int i = 0; i < getCount(allClients, NULL); i++)
+			clients.push_back(getItem(allClients, i, NULL));
+
+	return clients;
 }
