@@ -13,7 +13,7 @@ namespace PlayersTab {
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
-						State.selectedPlayer = playerData;
+						State.selectedPlayer = SelectedPlayer(playerData);
 					}
 					ImGui::SameLine();
 					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
@@ -47,7 +47,7 @@ namespace PlayersTab {
 							}
 							ImGui::NewLine();
 							if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, (GameData_PlayerInfo*)State.selectedPlayer, NULL);
+								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerData(), NULL);
 							}
 						}
 
@@ -68,7 +68,7 @@ namespace PlayersTab {
 
 					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
-							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition((PlayerControl*)State.selectedPlayer, NULL)));
+							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer.get_PlayerControl(), NULL)));
 						}
 					}
 
@@ -76,9 +76,9 @@ namespace PlayersTab {
 
 					if (!State.selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
 					{
-						auto tasks = GetNormalPlayerTasks((PlayerControl*)State.selectedPlayer);
+						auto tasks = GetNormalPlayerTasks(State.selectedPlayer.get_PlayerControl());
 
-						if (State.RevealImpostors && GetPlayerData((PlayerControl*)State.selectedPlayer)->fields.IsImpostor)
+						if (State.RevealImpostors && State.selectedPlayer.get_PlayerData()->fields.IsImpostor)
 						{
 							ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
 						}
@@ -89,7 +89,7 @@ namespace PlayersTab {
 
 						ImGui::ListBoxHeader("", ImVec2(181, 94));
 
-						if (((PlayerControl*)State.selectedPlayer)->fields.myTasks == NULL)
+						if (State.selectedPlayer.get_PlayerControl()->fields.myTasks == NULL)
 						{
 							ImGui::Text("ERROR: Could not load tasks.");
 						}

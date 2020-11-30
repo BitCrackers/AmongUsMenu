@@ -39,31 +39,6 @@ SelectedPlayer::SelectedPlayer(GameData_PlayerInfo* player)
 	}
 }
 
-SelectedPlayer::SelectedPlayer(const SelectedPlayer& selectedPlayer)
-{
-	this->hasValue = selectedPlayer.hasValue;
-	this->playerId = selectedPlayer.playerId;
-	this->clientId = selectedPlayer.clientId;
-}
-
-SelectedPlayer::operator PlayerControl* ()
-{
-	if (!this->has_value()) return NULL;
-	auto playerControl = GetPlayerControlById(this->playerId);
-	if (playerControl == NULL) return NULL;
-	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
-	return playerControl;
-}
-
-SelectedPlayer::operator GameData_PlayerInfo* ()
-{
-	if (!this->has_value()) return NULL;
-	auto playerControl = GetPlayerControlById(this->playerId);
-	if (playerControl == NULL) return NULL;
-	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
-	return playerControl->fields._cachedData;
-}
-
 bool SelectedPlayer::equals(PlayerControl* playerControl)
 {
 	if (!this->has_value()) return false;
@@ -81,6 +56,25 @@ bool SelectedPlayer::equals(SelectedPlayer selectedPlayer)
 	if (!this->has_value() || !selectedPlayer.has_value()) return false;
 	return (this->get_PlayerId() == selectedPlayer.get_PlayerId() && this->get_PlayerId() == selectedPlayer.get_PlayerId());
 }
+
+PlayerControl* SelectedPlayer::get_PlayerControl()
+{
+	if (!this->has_value()) return NULL;
+	auto playerControl = GetPlayerControlById(this->playerId);
+	if (playerControl == NULL) return NULL;
+	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
+	return playerControl;
+}
+
+GameData_PlayerInfo* SelectedPlayer::get_PlayerData()
+{
+	if (!this->has_value()) return NULL;
+	auto playerControl = GetPlayerControlById(this->playerId);
+	if (playerControl == NULL) return NULL;
+	if (this->clientId != app::InnerNetClient_GetClientIdFromCharacter((InnerNetClient*)*Game::pAmongUsClient, (InnerNetObject*)playerControl, NULL)) return NULL;
+	return playerControl->fields._cachedData;
+}
+
 bool SelectedPlayer::has_value()
 {
 	if (!this->hasValue) {
@@ -389,11 +383,11 @@ std::optional<Vector2> GetLastWalkEventPosition(uint8_t playerId) {
 std::vector<Camera*> GetAllCameras() {
 	auto cameras = std::vector<Camera*>();
 
-	int cameraCount = app::Camera_get_allCamerasCount(NULL);
+	int32_t cameraCount = app::Camera_get_allCamerasCount(NULL);
 	Camera__Array* cameraArray = (Camera__Array*)il2cpp_array_new((Il2CppClass*)app::Camera__TypeInfo, cameraCount);
-	int returnedCount = app::Camera_GetAllCameras(cameraArray, NULL);
+	int32_t returnedCount = app::Camera_GetAllCameras(cameraArray, NULL);
 
-	for (size_t i = 0; i < returnedCount; i++)
+	for (int32_t i = 0; i < returnedCount; i++)
 		cameras.push_back(cameraArray->vector[i]);
 
 	return cameras;

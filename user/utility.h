@@ -26,12 +26,11 @@ public:
 	SelectedPlayer();
 	SelectedPlayer(PlayerControl* player);
 	SelectedPlayer(GameData_PlayerInfo* player);
-	SelectedPlayer(const SelectedPlayer& selectedPlayer);
-	explicit operator PlayerControl*();
-	explicit operator GameData_PlayerInfo*();
 	bool equals(PlayerControl* playerControl);
 	bool equals(GameData_PlayerInfo* playerDate);
 	bool equals(SelectedPlayer selectedPlayer);
+	PlayerControl* get_PlayerControl();
+	GameData_PlayerInfo* get_PlayerData();
 	bool has_value();
 	uint8_t get_PlayerId();
 	int32_t get_ClientId();
