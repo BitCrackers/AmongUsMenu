@@ -49,8 +49,7 @@ public:
 
 	bool NoClip = false;
 
-	int selectedPlayerId = -1;
-	PlayerControl* selectedPlayer = NULL;
+	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 
 	bool ShowRadar = false;
@@ -89,8 +88,7 @@ public:
 	ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
 	ImVec4 LastColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
 
-	bool FollowPlayer = false;
-	PlayerControl PlayerToFollow;
+	PlayerSelection playerToFollow;
 
 	Vector3 camPos = { NULL, NULL, NULL };
 	Vector3 prevCamPos = { NULL, NULL, NULL };

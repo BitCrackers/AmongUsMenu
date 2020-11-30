@@ -7,7 +7,6 @@
 #include <vector>
 #include "game.hpp"
 #include <imgui/imgui.h>
-#include "state.hpp"
 #include "_events.h"
 
 struct CorrectedColor32 {
@@ -15,6 +14,27 @@ struct CorrectedColor32 {
 	uint8_t g;
 	uint8_t b;
 	uint8_t a;
+};
+
+class PlayerSelection {
+	bool hasValue;
+	int32_t clientId;
+	uint8_t playerId;
+
+public:
+	PlayerSelection();
+	PlayerSelection(PlayerControl* playerControl);
+	PlayerSelection(GameData_PlayerInfo* playerData);
+	bool equals(PlayerControl* playerControl);
+	bool equals(GameData_PlayerInfo* playerDate);
+	bool equals(PlayerSelection selectedPlayer);
+	PlayerControl* get_PlayerControl();
+	GameData_PlayerInfo* get_PlayerData();
+	bool has_value();
+	uint8_t get_PlayerId();
+	int32_t get_ClientId();
+	bool is_LocalPlayer();
+	bool is_Disconnected();
 };
 
 int randi(int lo, int hi);
@@ -45,3 +65,4 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::optional<Vector2> GetLastWalkEventPosition(uint8_t playerId);
 std::vector<Camera*> GetAllCameras();
+std::vector<ClientData*> GetAllClients();

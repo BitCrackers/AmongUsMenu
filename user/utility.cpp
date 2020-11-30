@@ -1,4 +1,5 @@
 #include "utility.h"
+#include "state.hpp"
 
 using namespace app;
 
@@ -9,6 +10,120 @@ int randi(int lo, int hi) {
 	int i = rand() % n;
 	if (i < 0) i = -i;
 	return lo + i;
+}
+
+PlayerSelection::PlayerSelection()
+{
+	this->hasValue = false;
+	this->clientId = 0;
+	this->playerId = 0;
+}
+
+PlayerSelection::PlayerSelection(PlayerControl* playerControl)
+{
+	if (playerControl != NULL) {
+		this->hasValue = true;
+		this->clientId = playerControl->fields._.OwnerId;
+		this->playerId = playerControl->fields.PlayerId;
+	} else {
+		*this = PlayerSelection();
+	}
+}
+
+PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData)
+{
+	if (playerData != NULL) {
+		*this = PlayerSelection(playerData->fields._object);
+	} else {
+		*this = PlayerSelection();
+	}
+}
+
+bool PlayerSelection::equals(PlayerControl* playerControl)
+{
+	if (!this->has_value()) return false;
+	return this->get_PlayerControl() == playerControl;
+}
+
+bool PlayerSelection::equals(GameData_PlayerInfo* playerData)
+{
+	if (!this->has_value()) return false;
+	return this->get_PlayerData() == playerData;
+}
+
+bool PlayerSelection::equals(PlayerSelection selectedPlayer)
+{
+	if (!this->has_value() || !selectedPlayer.has_value()) return false;
+	return (this->get_PlayerId() == selectedPlayer.get_PlayerId() && this->get_PlayerId() == selectedPlayer.get_PlayerId());
+}
+
+PlayerControl* PlayerSelection::get_PlayerControl()
+{
+	if (!this->hasValue) return NULL;
+
+	if (clientId == -2) {
+		auto playerControl = GetPlayerControlById(this->playerId);
+		if (playerControl != NULL)
+			return playerControl;
+	}
+
+	for (auto client : GetAllClients()) {
+		if (client->fields.Id == this->clientId) {
+			return client->fields.Character;
+		}
+	}
+
+	*this = PlayerSelection();
+	return NULL;
+}
+
+GameData_PlayerInfo* PlayerSelection::get_PlayerData()
+{
+	if (!this->hasValue) return NULL;
+
+	auto playerControl = this->get_PlayerControl();
+	if (playerControl != NULL)
+		return playerControl->fields._cachedData;
+
+	*this = PlayerSelection();
+	return NULL;
+}
+
+bool PlayerSelection::has_value()
+{
+	if (!this->hasValue)
+		return false;
+
+	if (this->get_PlayerControl() == NULL)
+		return false;
+
+	return true;
+}
+
+uint8_t PlayerSelection::get_PlayerId()
+{
+	if (!this->has_value()) return 0;
+	return this->playerId;
+}
+
+int32_t PlayerSelection::get_ClientId()
+{
+	if (!this->has_value()) return 0;
+	return this->clientId;
+}
+
+bool PlayerSelection::is_LocalPlayer()
+{
+	if (!this->has_value()) return false;
+	return this->get_PlayerControl() == *Game::pLocalPlayer;
+}
+
+bool PlayerSelection::is_Disconnected()
+{
+	// This is a sanity check, I don't think this is necessary as when a player.
+	// When a player disconnects their PlayerControl is destroyed and as such has_value() should return false
+	if (!this->has_value()) return true;
+	return this->get_PlayerData()->fields.Disconnected;
 }
 
 ImVec4 AmongUsColorToImVec4(Color color) {
@@ -274,12 +389,27 @@ std::optional<Vector2> GetLastWalkEventPosition(uint8_t playerId) {
 std::vector<Camera*> GetAllCameras() {
 	auto cameras = std::vector<Camera*>();
 
-	int cameraCount = app::Camera_get_allCamerasCount(NULL);
+	int32_t cameraCount = app::Camera_get_allCamerasCount(NULL);
 	Camera__Array* cameraArray = (Camera__Array*)il2cpp_array_new((Il2CppClass*)app::Camera__TypeInfo, cameraCount);
-	int returnedCount = app::Camera_GetAllCameras(cameraArray, NULL);
+	int32_t returnedCount = app::Camera_GetAllCameras(cameraArray, NULL);
 
-	for (size_t i = 0; i < returnedCount; i++)
+	for (int32_t i = 0; i < returnedCount; i++)
 		cameras.push_back(cameraArray->vector[i]);
 
 	return cameras;
+}
+
+std::vector<ClientData*> GetAllClients()
+{
+	static ClientData* (*getItem)(List_1_InnerNet_ClientData_*, int32_t, MethodInfo*) = decltype(getItem)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "InnerNet.ClientData", "get_Item", "System.Int32"));
+	static int32_t(*getCount)(List_1_InnerNet_ClientData_*, MethodInfo*) = decltype(getCount)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "System.Int32", "get_Count", ""));
+
+	std::vector<ClientData*> clients = std::vector<ClientData*>();
+	auto allClients = (*Game::pAmongUsClient)->fields._.allClients;
+
+	if (getItem != NULL && getCount != NULL)
+		for (int i = 0; i < getCount(allClients, NULL); i++)
+			clients.push_back(getItem(allClients, i, NULL));
+
+	return clients;
 }

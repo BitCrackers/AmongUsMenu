@@ -26,7 +26,7 @@ void Run(LPVOID lpParam) {
 
 	/*auto domain = il2cpp_domain_get();
 	auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
-	auto klass = il2cpp_class_from_name(assembly->image, "", "GPOHFPAIEMA");
+	auto klass = il2cpp_class_from_name(assembly->image, "", "FMJPJKCNIKM");
 	output_class_methods(klass);*/
 #endif
 

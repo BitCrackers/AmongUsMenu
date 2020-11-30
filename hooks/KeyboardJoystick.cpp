@@ -12,7 +12,7 @@ void dKeyboardJoystick_Update(KeyboardJoystick* __this, MethodInfo* method) {
 			delete rpc;
 		}
 	}
-	if (!State.FreeCam && !State.FollowPlayer) {
+	if (!State.FreeCam && !State.playerToFollow.has_value()) {
 		app::KeyboardJoystick_Update(__this, method);
 	}
 }
