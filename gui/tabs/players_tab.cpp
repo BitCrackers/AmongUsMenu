@@ -37,17 +37,20 @@ namespace PlayersTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
 
+				if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
+					if (ImGui::Button("Call Meeting")) {
+						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection(*Game::pLocalPlayer)));
+					}
+				}
+
 				if (State.selectedPlayer.has_value())
 				{
 
 					if (IsInMultiplayerGame() && !IsHost()) {
 						if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
-							if (ImGui::Button("Call Meeting")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, NULL, NULL);
-							}
 							ImGui::NewLine();
 							if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerData(), NULL);
+								State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
 							}
 						}
 
