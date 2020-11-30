@@ -14,5 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
       
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+        
+      - name: Echo dir
+        run: echo dir
+        
       - name: Build XInput Release
+        working-directory: src
         run: '"%MSBUILD_PATH%\MSBuild.exe" AmongUsMenu.vcxproj /p:Platform=Win32 /p:Configuration=Release_Xinput'
