@@ -37,31 +37,31 @@ namespace PlayersTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
 
+				if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
+					if (ImGui::Button("Call Meeting")) {
+						State.rpcQueue.push(new RpcReportPlayer(*Game::pLocalPlayer, NULL));
+					}
+				}
+
 				if (State.selectedPlayer.has_value())
 				{
-
-					if (IsInMultiplayerGame() && !IsHost()) {
-						if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
-							if (ImGui::Button("Call Meeting")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, NULL, NULL);
-							}
-							ImGui::NewLine();
-							if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
-								PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerData(), NULL);
-							}
+					if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+						ImGui::NewLine();
+						if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
+							State.rpcQueue.push(new RpcReportPlayer(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerData()));
 						}
+					}
 
-						if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
-						{
-							if (State.playerToFollow.equals(State.selectedPlayer)) {
-								if (ImGui::Button("Stop Spectating")) {
-									State.playerToFollow = PlayerSelection();
-								}
-							} else {
-								if (ImGui::Button("Spectate")) {
-									State.FreeCam = false;
-									State.playerToFollow = State.selectedPlayer;
-								}
+					if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
+					{
+						if (State.playerToFollow.equals(State.selectedPlayer)) {
+							if (ImGui::Button("Stop Spectating")) {
+								State.playerToFollow = PlayerSelection();
+							}
+						} else {
+							if (ImGui::Button("Spectate")) {
+								State.FreeCam = false;
+								State.playerToFollow = State.selectedPlayer;
 							}
 						}
 					}
@@ -69,6 +69,13 @@ namespace PlayersTab {
 					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
 							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer.get_PlayerControl(), NULL)));
+						}
+						
+						if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+							&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && !State.selectedPlayer.get_PlayerData()->fields.IsImpostor)
+						{	//Have not tested if murdering impostors is a ban
+							if (ImGui::Button("Warp To & Murder"))
+								State.rpcQueue.push(new RpcMurderPlayer(*Game::pLocalPlayer, State.selectedPlayer));
 						}
 					}
 
