@@ -7,7 +7,6 @@
 #include <vector>
 #include "game.hpp"
 #include <imgui/imgui.h>
-#include "state.hpp"
 #include "_events.h"
 
 struct CorrectedColor32 {
@@ -17,18 +16,18 @@ struct CorrectedColor32 {
 	uint8_t a;
 };
 
-class SelectedPlayer {
+class PlayerSelection {
 	bool hasValue;
 	uint8_t playerId;
 	int32_t clientId;
 
 public:
-	SelectedPlayer();
-	SelectedPlayer(PlayerControl* player);
-	SelectedPlayer(GameData_PlayerInfo* player);
+	PlayerSelection();
+	PlayerSelection(PlayerControl* player);
+	PlayerSelection(GameData_PlayerInfo* player);
 	bool equals(PlayerControl* playerControl);
 	bool equals(GameData_PlayerInfo* playerDate);
-	bool equals(SelectedPlayer selectedPlayer);
+	bool equals(PlayerSelection selectedPlayer);
 	PlayerControl* get_PlayerControl();
 	GameData_PlayerInfo* get_PlayerData();
 	bool has_value();

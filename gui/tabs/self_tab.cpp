@@ -11,7 +11,7 @@ namespace SelfTab {
 			{
 				if (IsInGame())
 				{
-					State.playerToFollow = SelectedPlayer();
+					State.playerToFollow = PlayerSelection();
 				}
 			}
 

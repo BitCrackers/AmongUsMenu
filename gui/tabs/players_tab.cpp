@@ -13,7 +13,7 @@ namespace PlayersTab {
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
-						State.selectedPlayer = SelectedPlayer(playerData);
+						State.selectedPlayer = PlayerSelection(playerData);
 					}
 					ImGui::SameLine();
 					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
@@ -55,7 +55,7 @@ namespace PlayersTab {
 						{
 							if (State.playerToFollow.equals(State.selectedPlayer)) {
 								if (ImGui::Button("Stop Spectating")) {
-									State.playerToFollow = SelectedPlayer();
+									State.playerToFollow = PlayerSelection();
 								}
 							} else {
 								if (ImGui::Button("Spectate")) {
