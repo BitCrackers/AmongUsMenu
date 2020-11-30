@@ -8,6 +8,7 @@
 #include <cmath>
 #include "state.hpp"
 #include "game.hpp"
+#include "tabs/settings_tab.h"
 #include "tabs/game_tab.h"
 #include "tabs/radar_tab.h"
 #include "tabs/players_tab.h"
