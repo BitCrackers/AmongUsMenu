@@ -73,7 +73,7 @@ namespace PlayersTab {
 							&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && !State.selectedPlayer.get_PlayerData()->fields.IsImpostor)
 						{	//Have not tested if murdering impostors is a ban
 							if (ImGui::Button("Warp To & Murder"))
-								State.rpcQueue.push(new RpcMurderPlayer(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerData()));
+								State.rpcQueue.push(new RpcMurderPlayer(*Game::pLocalPlayer, State.selectedPlayer.get_PlayerControl()));
 						}
 					}
 
