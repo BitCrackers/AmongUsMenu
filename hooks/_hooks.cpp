@@ -145,12 +145,13 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	}
 
 	if (IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings)) {
-		if (State.LastColor.x != State.SelectedColor.x || State.LastColor.y != State.SelectedColor.y || State.LastColor.z != State.SelectedColor.z) {
+		if ((State.LastColor.x != State.SelectedColor.x || State.LastColor.y != State.SelectedColor.y || State.LastColor.z != State.SelectedColor.z) || (*Game::pShipStatus)->fields.Type != State.previousMap) {
 			int MapType = (*Game::pShipStatus)->fields.Type;
 			LoadTextureFromFile(getModulePath().append("resources\\").append(maps[MapType].name).c_str(), &maps[MapType].buffer, &maps[MapType].width, &maps[MapType].height);
 			State.LastColor.x = State.SelectedColor.x;
 			State.LastColor.y = State.SelectedColor.y;
 			State.LastColor.z = State.SelectedColor.z;
+			State.previousMap = (*Game::pShipStatus)->fields.Type;
 		}
 		Radar::Render();
 	}

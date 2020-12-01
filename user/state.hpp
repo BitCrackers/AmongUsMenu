@@ -75,6 +75,7 @@ public:
 
 	std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
 	int map = -1;
+	ShipStatus_MapType__Enum previousMap = (ShipStatus_MapType__Enum) 0;
 	int impostors_amount = 0;
 
 	bool Wallhack = false;
