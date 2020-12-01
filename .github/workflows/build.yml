@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v2.3.4
         
       - name: Build XInput Release
+        shell: cmd
         run: '"%MSBUILD%" /p:Configuration=Release_Xinput /p:Platform=x86'
         
       #- name: Zip Release
