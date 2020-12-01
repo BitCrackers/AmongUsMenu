@@ -8,14 +8,13 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      VS_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\
-      MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\
+      MSBUILD: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
         
       - name: Build XInput Release
-        run: msbuild /p:Configuration=Release_Xinput /p:Platform=x86
+        run: '%MSBUILD% /p:Configuration=Release_Xinput /p:Platform=x86'
         
       #- name: Zip Release
       #  working-directory: Release_Xinput
