@@ -16,69 +16,7 @@ WNDPROC oWndProc;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-std::vector<MapTexture> maps{
-	{ "the_skald.png", NULL, NULL, NULL, 277.F, 77.F, 11.5F },
-	{ "mira_hq.png", NULL, NULL, NULL, 115.F, 240.F, 9.25F },
-	{ "polus.png", NULL, NULL, NULL, 8.F, 21.F, 10.F }
-};
-
-bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height) {
-	int image_width = 0;
-	int image_height = 0;
-	int channels = 0;
-	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, &channels, 4);
-	if (image_data == NULL)
-		return false;
-
-	for (int i = 0; i < (image_width * image_height * channels); i += channels) {
-		if (image_data[i] == 255 && image_data[i + 1] == 255 && image_data[i + 2] == 255) continue;
-		image_data[i] *= State.SelectedColor.x;
-		image_data[i + 1] *= State.SelectedColor.y;
-		image_data[i + 2] *= State.SelectedColor.z;
-	}
-
-	D3D11_TEXTURE2D_DESC desc;
-	ZeroMemory(&desc, sizeof(desc));
-	desc.Width = image_width;
-	desc.Height = image_height;
-	desc.MipLevels = 1;
-	desc.ArraySize = 1;
-	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	desc.SampleDesc.Count = 1;
-	desc.Usage = D3D11_USAGE_DEFAULT;
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	desc.CPUAccessFlags = 0;
-
-	ID3D11Texture2D* pTexture = NULL;
-	D3D11_SUBRESOURCE_DATA subResource;
-	subResource.pSysMem = image_data;
-	subResource.SysMemPitch = desc.Width * 4;
-	subResource.SysMemSlicePitch = 0;
-	pDevice->CreateTexture2D(&desc, &subResource, &pTexture);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	ZeroMemory(&srvDesc, sizeof(srvDesc));
-	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = desc.MipLevels;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	pDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
-	pTexture->Release();
-
-	*out_width = image_width;
-	*out_height = image_height;
-	stbi_image_free(image_data);
-
-	return true;
-}
-
-bool LoadTextures() {
-	HMODULE hModule = GetModuleHandle(NULL);
-	for (size_t i = 0; i < maps.size(); i++)
-		if (!LoadTextureFromFile(getModulePath().append("resources\\").append(maps[i].name).c_str(), &maps[i].buffer, &maps[i].width, &maps[i].height))
-			return false;
-	return true;
-}
+std::vector<MapTexture> maps = std::vector<MapTexture>();
 
 LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	if (!State.ImGuiInitialized)
@@ -124,7 +62,9 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			ImGui_ImplWin32_Init(window);
 			ImGui_ImplDX11_Init(pDevice, pContext);
 
-			LoadTextures();
+			maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
+			maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
+			maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
 
 			State.ImGuiInitialized = true;
 		}
@@ -145,13 +85,6 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	}
 
 	if (IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings)) {
-		if (State.LastColor.x != State.SelectedColor.x || State.LastColor.y != State.SelectedColor.y || State.LastColor.z != State.SelectedColor.z) {
-			int MapType = (*Game::pShipStatus)->fields.Type;
-			LoadTextureFromFile(getModulePath().append("resources\\").append(maps[MapType].name).c_str(), &maps[MapType].buffer, &maps[MapType].width, &maps[MapType].height);
-			State.LastColor.x = State.SelectedColor.x;
-			State.LastColor.y = State.SelectedColor.y;
-			State.LastColor.z = State.SelectedColor.z;
-		}
 		Radar::Render();
 	}
 

@@ -33,10 +33,10 @@
     <ClCompile Include="gui\tabs\players_tab.cpp" />
     <ClCompile Include="gui\tabs\radar_tab.cpp" />
     <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
-	<ClCompile Include="gui\tabs\settings_tab.cpp" />
+    <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
-    <ClCompile Include="HudManager.cpp" />
+    <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
     <ClCompile Include="framework\dllmain.cpp">
@@ -60,6 +60,7 @@
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
+    <ClCompile Include="user\resources.cpp" />
     <ClCompile Include="user\utility.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">NotUsing</PrecompiledHeader>
@@ -98,13 +99,15 @@
     <ClInclude Include="gui\tabs\players_tab.h" />
     <ClInclude Include="gui\tabs\radar_tab.h" />
     <ClInclude Include="gui\tabs\sabotage_tab.h" />
-	<ClInclude Include="gui\tabs\settings_tab.h" />
+    <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\_hooks.hpp" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="includes\imhotkeys.h" />
+    <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />
     <ClInclude Include="gui\tabs\self_tab.h" />
+    <ClInclude Include="user\resources.h" />
     <ClInclude Include="user\utility.h" />
     <ClInclude Include="framework\il2cpp-appdata.h" />
     <ClInclude Include="appdata\il2cpp-types.h" />
@@ -135,6 +138,17 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="includes\detours\detours.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\mira_hq.png" />
+    <Image Include="resources\polus.png" />
+    <Image Include="resources\the_skald.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\resource_data.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\resource_data.aps" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
@@ -217,7 +231,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)events</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -235,7 +249,8 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)resources" "$(OutDir)resources" /e /i /h /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">
@@ -248,7 +263,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)events</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -267,7 +282,8 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)resources" "$(OutDir)resources" /e /i /h /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -282,7 +298,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)events</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -303,7 +319,8 @@
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)resources" "$(OutDir)resources" /e /i /h /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">
@@ -318,7 +335,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)events</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -339,7 +356,8 @@
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)resources" "$(OutDir)resources" /e /i /h /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

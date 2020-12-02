@@ -13,14 +13,12 @@
 #include "menu.hpp"
 #include "radar.hpp"
 #include "console.hpp"
+#include "resources.h"
 
 typedef HRESULT(__stdcall* D3D_PRESENT_FUNCTION)(IDXGISwapChain*, UINT, UINT);
 
 struct MapTexture {
-	char name[32];
-	ID3D11ShaderResourceView* buffer;
-	int width;
-	int height;
+	D3D11Image mapImage;
 	float x_offset;
 	float y_offset;
 	float scale;
