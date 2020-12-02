@@ -10,5 +10,7 @@ RpcReportPlayer::RpcReportPlayer(PlayerSelection selected_player)
 void RpcReportPlayer::Process()
 {
 	if (reportedPlayer.has_value())
-		PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, reportedPlayer.get_PlayerData(), NULL);
+	{	//Conditional is to prevent you reporting yourself (as much as I enjoy that)
+		PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, (reportedPlayer.is_LocalPlayer()) ? NULL : reportedPlayer.get_PlayerData(), NULL);
+	}
 }
