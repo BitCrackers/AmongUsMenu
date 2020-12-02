@@ -1,0 +1,115 @@
+name: Build Project
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+  
+jobs:
+  Release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Build
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
+      
+      - name: Pack
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        working-directory: Release
+        run: 7z a Release.zip -tzip -mx9 AmongUsMenu.dll resources/*
+      
+      - name: Upload Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Release.zip
+          path: ./Release/Release.zip
+  
+  Release_Xinput:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Build
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Xinput'
+      
+      - name: Pack
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        working-directory: Release_Xinput
+        run: 7z a Release_Xinput.zip -tzip -mx9 xinput1_3.dll resources/*
+      
+      - name: Upload Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Release_Xinput.zip
+          path: ./Release_Xinput/Release_Xinput.zip
+
+  Debug:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Build
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
+      
+      - name: Pack
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        working-directory: Debug
+        run: 7z a Debug.zip -tzip -mx9 AmongUsMenu.dll resources/*
+      
+      - name: Upload Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Debug.zip
+          path: ./Debug/Debug.zip
+  
+  Debug_Xinput:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Build
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Xinput'
+      
+      - name: Pack
+        if: ${{ github.event_name == 'push' }}
+        shell: bash
+        working-directory: Debug_Xinput
+        run: 7z a Debug_Xinput.zip -tzip -mx9 xinput1_3.dll resources/*
+      
+      - name: Upload Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Debug_Xinput.zip
+          path: ./Debug_Xinput/Debug_Xinput.zip
+  
+  Notification:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    needs: [Release, Release_Xinput, Debug, Debug_Xinput]
+    steps:
+      - name: Discord Notification
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        with:
+          severity: info
+          description: "Project Build"
+          details: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          webhookUrl: ${{ secrets.DISCORD_BUILD_WEBHOOK }}
