@@ -32,7 +32,6 @@ bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_sr
 
 	for (int i = 0; i < (image_width * image_height * channels); i += channels) {
 		if (image_data[i] == 255 && image_data[i + 1] == 255 && image_data[i + 2] == 255) continue;
-		image_data[i] *= State.SelectedColor.x;
 		image_data[i] = (unsigned char) ((float) image_data[i] * State.SelectedColor.x);
 		image_data[i + 1] = (unsigned char) ((float) image_data[i + 1] * State.SelectedColor.y);
 		image_data[i + 2] = (unsigned char) ((float) image_data[i + 2] * State.SelectedColor.z);
