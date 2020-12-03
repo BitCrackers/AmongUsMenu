@@ -11,12 +11,12 @@ ImVec4 HI(float v) {
 
 ImVec4 MED(float v) {
 	ImVec4 vec = State.SelectedColor;
-	return ImVec4(vec.x / 1.5, vec.y / 1.5, vec.z / 1.5, v);
+	return ImVec4(vec.x / 1.5f, vec.y / 1.5f, vec.z / 1.5f, v);
 }
 
 ImVec4 LOW(float v) {
 	ImVec4 vec = State.SelectedColor;
-	return ImVec4(vec.x / 2, vec.y / 2, vec.z / 2, v);
+	return ImVec4(vec.x / 2.0f, vec.y / 2.0f, vec.z / 2.0f, v);
 }
 
 #define BG(v)   ImVec4(0.200f, 0.220f, 0.270f, v)

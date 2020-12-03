@@ -145,12 +145,18 @@
     <ClCompile Include="gui\tabs\self_tab.cpp">
       <Filter>gui\tabs</Filter>
     </ClCompile>
-    <ClCompile Include="HudManager.cpp">
+    <ClCompile Include="gui\tabs\settings_tab.cpp">
+      <Filter>gui\tabs</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\HudManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\settings_tab.cpp" />
-    <ClCompile Include="rpc\RpcReportPlayer.cpp">
+	<ClCompile Include="gui\tabs\settings_tab.cpp" />
+        <ClCompile Include="rpc\RpcReportPlayer.cpp">
       <Filter>rpc</Filter>
+    </ClCompile>
+        <ClCompile Include="user\resources.cpp">
+      <Filter>user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -286,7 +292,10 @@
     <ClInclude Include="gui\tabs\self_tab.h">
       <Filter>gui\tabs</Filter>
     </ClInclude>
-    <ClInclude Include="gui\tabs\settings_tab.h" />
+    <ClInclude Include="gui\tabs\settings_tab.h">
+      <Filter>gui\tabs</Filter>
+    </ClInclude>
+	<ClInclude Include="gui\tabs\settings_tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
@@ -325,6 +334,9 @@
     <Filter Include="events">
       <UniqueIdentifier>{d526527a-bee5-4ec3-ab45-73dcba5394b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{13bbd967-7fa2-4fab-8779-0f912dbbb311}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis" />
@@ -333,5 +345,26 @@
     <Library Include="includes\detours\detours.lib">
       <Filter>includes\detours</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\the_skald.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\mira_hq.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\polus.png">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\resource_data.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\resource_data.aps">
+      <Filter>resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

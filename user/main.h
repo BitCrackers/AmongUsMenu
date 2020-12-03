@@ -9,4 +9,6 @@
 #include "state.hpp"
 #include "version.h"
 
+extern HMODULE hModule;
+
 void Run(LPVOID lpParam);

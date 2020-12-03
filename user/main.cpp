@@ -2,7 +2,7 @@
 
 using namespace app;
 
-extern const LPCWSTR LOG_FILE = L"debug.txt";
+HMODULE hModule;
 
 void Run(LPVOID lpParam) {
 	if (getGameVersion().compare(GAME_VERSION) != 0) {
@@ -11,6 +11,7 @@ void Run(LPVOID lpParam) {
 		return;
 	}
 
+	hModule = (HMODULE)lpParam;
 #if _DEBUG
 	new_console();
 
