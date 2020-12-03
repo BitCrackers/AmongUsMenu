@@ -58,6 +58,7 @@ public:
 	bool ShowHud = true;
 	bool HideRadar_During_Meetings = false;
 	bool ShowRadar_RightClick_Teleport = false;
+	bool LockRadar = false;
 
 	bool InMeeting = false;
 
@@ -88,6 +89,7 @@ public:
 
 	ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
 	ImVec4 LastColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
+	ImVec4 DefaultColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
 
 	PlayerSelection playerToFollow;
 
