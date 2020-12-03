@@ -23,7 +23,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: bash
         working-directory: Release
-        run: 7z a Release.zip -tzip -mx9 AmongUsMenu.dll resources/*
+        run: 7z a Release.zip -tzip -mx9 AmongUsMenu.dll
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: bash
         working-directory: Release_Xinput
-        run: 7z a Release_Xinput.zip -tzip -mx9 xinput1_3.dll resources/*
+        run: 7z a Release_Xinput.zip -tzip -mx9 xinput1_3.dll
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
@@ -69,7 +69,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: bash
         working-directory: Debug
-        run: 7z a Debug.zip -tzip -mx9 AmongUsMenu.dll resources/*
+        run: 7z a Debug.zip -tzip -mx9 AmongUsMenu.dll
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
@@ -92,7 +92,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: bash
         working-directory: Debug_Xinput
-        run: 7z a Debug_Xinput.zip -tzip -mx9 xinput1_3.dll resources/*
+        run: 7z a Debug_Xinput.zip -tzip -mx9 xinput1_3.dll
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
