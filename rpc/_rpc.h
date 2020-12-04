@@ -1,5 +1,6 @@
 #pragma once
 #include "il2cpp-appdata.h"
+#include "utility.h"
 
 using namespace app;
 
@@ -36,5 +37,12 @@ class RpcCompleteTask : public RPCInterface {
 	uint32_t taskId;
 public:
 	RpcCompleteTask(uint32_t taskId);
+	virtual void Process() override;
+};
+
+class RpcReportPlayer : public RPCInterface {
+	PlayerSelection reportedPlayer;
+public:
+	RpcReportPlayer(PlayerSelection selected_player);
 	virtual void Process() override;
 };

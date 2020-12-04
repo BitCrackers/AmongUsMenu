@@ -14,5 +14,5 @@ void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, 
 void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	HudManager_Update(__this, method);
 
-	HudManager_SetHudActive(__this, State.ShowHud, NULL);
+	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 }

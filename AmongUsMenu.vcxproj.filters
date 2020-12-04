@@ -151,7 +151,11 @@
     <ClCompile Include="hooks\HudManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="user\resources.cpp">
+	<ClCompile Include="gui\tabs\settings_tab.cpp" />
+        <ClCompile Include="rpc\RpcReportPlayer.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
+        <ClCompile Include="user\resources.cpp">
       <Filter>user</Filter>
     </ClCompile>
   </ItemGroup>
@@ -291,12 +295,7 @@
     <ClInclude Include="gui\tabs\settings_tab.h">
       <Filter>gui\tabs</Filter>
     </ClInclude>
-    <ClInclude Include="resources\resource_data.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="user\resources.h">
-      <Filter>user</Filter>
-    </ClInclude>
+	<ClInclude Include="gui\tabs\settings_tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
