@@ -14,6 +14,7 @@
 #include "json.hpp"
 #include "imhotkeys.h"
 #include "utility.h"
+#include <bitset>
 
 using namespace app;
 using json = nlohmann::ordered_json;
@@ -72,7 +73,7 @@ public:
 	bool ShowConsole = false;
 	std::vector<EventInterface*> events;
 
-	std::map<uint8_t, bool> voteMonitor;
+	std::bitset<0xFF> voteMonitor;
 
 	std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
 	int map = -1;

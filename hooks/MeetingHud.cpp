@@ -3,16 +3,13 @@
 using namespace app;
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
-	for (auto playerData : GetAllPlayerData())
-		State.voteMonitor[playerData->fields.PlayerId] = false;
-
+	State.voteMonitor.reset();
 	State.InMeeting = true;
 
 	MeetingHud_Awake(__this, method);
 }
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
-	State.voteMonitor.clear();
 	State.InMeeting = false;
 
 	MeetingHud_Close(__this, method);
@@ -33,13 +30,11 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				playerVoteArea->fields.NameText->fields.Color = Palette__TypeInfo->static_fields->White;
 		}
 
-		if (__this->fields.state == MeetingHud_VoteStates__Enum_NotVoted || __this->fields.state == MeetingHud_VoteStates__Enum_Voted) {
-			if (!playerData->fields.IsDead) {
-				if (playerVoteArea->fields.didVote && !State.voteMonitor[playerData->fields.PlayerId]) {
-					State.events.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
-					State.voteMonitor[playerData->fields.PlayerId] = true;
-				}
-			}
+		// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
+		// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
+		if (playerVoteArea->fields.didVote && playerVoteArea->fields.votedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
+			State.events.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+			State.voteMonitor[playerData->fields.PlayerId] = true;
 		}
 	}
 	MeetingHud_Update(__this, method);
