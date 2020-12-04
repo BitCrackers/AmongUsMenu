@@ -80,6 +80,17 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::NewFrame();
 	ApplyTheme();
 
+	if (!IsInGame())
+	{
+		State.selectedPlayer = PlayerSelection();
+		State.playerToFollow = PlayerSelection();
+		State.NoClip = false;
+		State.FreeCam = false;
+		State.InMeeting = false;
+		State.FollowerCam = nullptr;
+		State.EnableZoom = false;
+	}
+
 	if (State.ShowMenu) {
 		Menu::Render();
 	}

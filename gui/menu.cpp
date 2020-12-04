@@ -28,17 +28,6 @@ namespace Menu {
 		DoorsTab::Render();
 		HostTab::Render();
 
-		if (!IsInGame())
-		{
-			State.selectedPlayer = PlayerSelection();
-			State.playerToFollow = PlayerSelection();
-			State.NoClip = false;
-			State.FreeCam = false;
-			State.InMeeting = false;
-			State.FollowerCam = nullptr;
-			State.EnableZoom = false;
-		}
-
 		if(firstRender)
 			firstRender = false;
 
