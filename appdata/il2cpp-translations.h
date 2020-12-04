@@ -30,6 +30,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "AutoOpenDoor"}, {"", "BIBGGEEEJLK"} },
 	{ {"", "ChatBubble"}, {"", "HDBFNJBMAMA"} },
 	{ {"", "ChatController"}, {"", "FLICDOHEDCM"} },
+	{ {"", "Constants"}, {"", "EGCHBLMHNCO"}},
 	{ {"", "CustomNetworkTransform"}, {"", "PPOKHKBILED"} },
 	{ {"", "DeadBody"}, {"", "EEEPAKPKIGA"} },
 	{ {"", "ElectricTask"}, {"", "LBCFMJDKEMP"} },
@@ -71,5 +72,6 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "Deserialize", "GOCFDAMBMLH" },
 	{ "EnterVent", "EKDCGJEACKM" },
 	{ "ExitVent", "PLMCPPAGKPH" },
-	{ "ReportDeadBody", "LFFBFCHAJFB" }
+	{ "ReportDeadBody", "LFFBFCHAJFB" },
+	{ "ShouldFlipSkeld", "FBNFKGDCOAI"}
 };
