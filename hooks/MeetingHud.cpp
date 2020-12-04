@@ -33,7 +33,9 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				playerVoteArea->fields.NameText->fields.Color = Palette__TypeInfo->static_fields->White;
 		}
 
-		if (__this->fields.state == MeetingHud_VoteStates__Enum_NotVoted || __this->fields.state == MeetingHud_VoteStates__Enum_Voted) {
+		if (__this->fields.state == MeetingHud_VoteStates__Enum_NotVoted || 
+			__this->fields.state == MeetingHud_VoteStates__Enum_Voted || 
+			__this->fields.state == MeetingHud_VoteStates__Enum_Results) {
 			if (!playerData->fields.IsDead) {
 				if (playerVoteArea->fields.didVote && !State.voteMonitor[playerData->fields.PlayerId]) {
 					State.events.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
