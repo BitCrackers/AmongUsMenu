@@ -19,18 +19,12 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
       
-      - name: Pack
-        if: ${{ github.event_name == 'push' }}
-        shell: bash
-        working-directory: Release
-        run: 7z a Release.zip -tzip -mx9 AmongUsMenu.dll
-      
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Release.zip
-          path: ./Release/Release.zip
+          name: Release
+          path: ./Release/AmongUsMenu.dll
   
   Release_Xinput:
     runs-on: windows-latest
@@ -42,18 +36,12 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Xinput'
       
-      - name: Pack
-        if: ${{ github.event_name == 'push' }}
-        shell: bash
-        working-directory: Release_Xinput
-        run: 7z a Release_Xinput.zip -tzip -mx9 xinput1_3.dll
-      
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Release_Xinput.zip
-          path: ./Release_Xinput/Release_Xinput.zip
+          name: Release_Xinput
+          path: ./Release_Xinput/xinput1_3.dll
 
   Debug:
     runs-on: windows-latest
@@ -65,18 +53,12 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
       
-      - name: Pack
-        if: ${{ github.event_name == 'push' }}
-        shell: bash
-        working-directory: Debug
-        run: 7z a Debug.zip -tzip -mx9 AmongUsMenu.dll
-      
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Debug.zip
-          path: ./Debug/Debug.zip
+          name: Debug
+          path: ./Debug/AmongUsMenu.dll
   
   Debug_Xinput:
     runs-on: windows-latest
@@ -88,18 +70,12 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Xinput'
       
-      - name: Pack
-        if: ${{ github.event_name == 'push' }}
-        shell: bash
-        working-directory: Debug_Xinput
-        run: 7z a Debug_Xinput.zip -tzip -mx9 xinput1_3.dll
-      
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Debug_Xinput.zip
-          path: ./Debug_Xinput/Debug_Xinput.zip
+          name: Debug_Xinput
+          path: ./Debug_Xinput/xinput1_3.dll
   
   Notification:
     if: ${{ github.event_name == 'push' }}
