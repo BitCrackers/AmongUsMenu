@@ -67,6 +67,7 @@ namespace HostTab {
 				if (CustomListBoxInt("Map", &State.map, MAP_NAMES, 75)) {
 					if (!IsInGame()) (*Game::pGameOptionsData)->fields.MapId = State.map;
 				}
+				ImGui::Checkbox("Flip Skeld", &State.FlipSkeld);
 				ImGui::EndChild();
 				ImGui::EndTabItem();
 			}

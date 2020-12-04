@@ -97,6 +97,8 @@ public:
 	Vector3 camPos = { NULL, NULL, NULL };
 	Vector3 prevCamPos = { NULL, NULL, NULL };
 
+	bool FlipSkeld = false;
+
 	void Load();
 	void Save();
 };
