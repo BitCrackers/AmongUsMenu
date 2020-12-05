@@ -3,6 +3,7 @@
 using namespace app;
 
 HMODULE hModule;
+HANDLE hUnloadEvent;
 
 void Run(LPVOID lpParam) {
 	if (getGameVersion().compare(GAME_VERSION) != 0) {
@@ -13,6 +14,7 @@ void Run(LPVOID lpParam) {
 
 	hModule = (HMODULE)lpParam;
 #if _DEBUG
+	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	new_console();
 
 	using namespace app;
@@ -39,4 +41,17 @@ void Run(LPVOID lpParam) {
 	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
 
 	DetourInitilization();
+#if _DEBUG
+	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
+	if (dwWaitResult != WAIT_OBJECT_0) {
+		std::cout << "Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError() << std::endl;
+		return;
+	}
+	
+	DetourUninitialization();
+	fclose(stdout);
+	FreeConsole();
+	CloseHandle(hUnloadEvent);
+	FreeLibraryAndExitThread(hModule, 0);
+#endif
 }

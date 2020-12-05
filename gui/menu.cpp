@@ -4,7 +4,7 @@ using namespace app;
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(435, 270), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(500, 270), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
@@ -27,6 +27,10 @@ namespace Menu {
 		SabotageTab::Render();
 		DoorsTab::Render();
 		HostTab::Render();
+#ifdef _DEBUG
+		if (State.showDebugTab)
+			DebugTab::Render();
+#endif
 
 		if(firstRender)
 			firstRender = false;

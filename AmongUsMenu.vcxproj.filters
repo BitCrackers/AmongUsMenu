@@ -161,6 +161,9 @@
     <ClCompile Include="hooks\Dleks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="gui\tabs\debug_tab.cpp">
+      <Filter>gui\tabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -301,6 +304,9 @@
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="user\resources.h" />
+    <ClInclude Include="gui\tabs\debug_tab.h">
+      <Filter>gui\tabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">

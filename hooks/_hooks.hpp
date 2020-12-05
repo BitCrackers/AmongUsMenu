@@ -27,6 +27,7 @@ struct MapTexture {
 extern std::vector<MapTexture> maps;
 
 void DetourInitilization();
+void DetourUninitialization();
 
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
 
