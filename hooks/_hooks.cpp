@@ -199,6 +199,7 @@ void DetourUninitialization()
 	if (DetourDetach(&(PVOID&)PlayerControl_RpcSetInfected, dPlayerControl_RpcSetInfected) != 0) return;
 	if (DetourDetach(&(PVOID&)MeetingHud_Awake, dMeetingHud_Awake) != 0) return;
 	if (DetourDetach(&(PVOID&)MeetingHud_Close, dMeetingHud_Close) != 0) return;
+	if (DetourDetach(&(PVOID&)Constants_ShouldFlipSkeld, dConstants_ShouldFlipSkeld) != 0) return;
 	if (DetourDetach(&(PVOID&)oPresent, hkPresent) != 0)
 		return;
 
