@@ -40,6 +40,20 @@ public:
 	virtual void Process() override;
 };
 
+class RpcPlayAnimation : public RPCInterface {
+	uint8_t animId;
+public:
+	RpcPlayAnimation(uint8_t taskId);
+	virtual void Process() override;
+};
+
+class RpcSetScanner : public RPCInterface {
+	bool playAnimation;
+public:
+	RpcSetScanner(bool playAnimation);
+	virtual void Process() override;
+};
+
 class RpcReportPlayer : public RPCInterface {
 	PlayerSelection reportedPlayer;
 public:
