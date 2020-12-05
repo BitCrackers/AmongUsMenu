@@ -28,7 +28,8 @@ namespace Menu {
 		DoorsTab::Render();
 		HostTab::Render();
 #ifdef _DEBUG
-		DebugTab::Render();
+		if (State.showDebugTab)
+			DebugTab::Render();
 #endif
 
 		if(firstRender)

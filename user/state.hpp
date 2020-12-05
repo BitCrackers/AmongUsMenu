@@ -35,6 +35,10 @@ public:
 	bool ImGuiInitialized = false;
 	bool ShowMenu = false;
 
+#ifdef _DEBUG
+	bool showDebugTab = false;
+#endif
+
 	std::string CurrentScene;
 
 	bool MaxVision = false;

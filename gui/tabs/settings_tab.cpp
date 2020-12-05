@@ -15,6 +15,7 @@ namespace SettingsTab {
 			if (ImGui::Button("Reset Theme Color")) {
 				State.SelectedColor = State.DefaultColor;
 			}
+			ImGui::Checkbox("Show Debug Tab", &State.showDebugTab);
 			ImGui::EndTabItem();
 		}
 	}
