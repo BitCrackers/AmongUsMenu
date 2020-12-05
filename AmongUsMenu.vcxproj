@@ -27,6 +27,7 @@
     <ClCompile Include="framework\x_input.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
+    <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
     <ClCompile Include="gui\tabs\game_tab.cpp" />
     <ClCompile Include="gui\tabs\host_tab.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="framework\x_input.h" />
     <ClInclude Include="gui\console.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />
+    <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
     <ClInclude Include="gui\tabs\game_tab.h" />
     <ClInclude Include="gui\tabs\host_tab.h" />
