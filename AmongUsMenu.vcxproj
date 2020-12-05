@@ -58,8 +58,10 @@
     <ClCompile Include="hooks\StatsManager.cpp" />
     <ClCompile Include="hooks\Vent.cpp" />
     <ClCompile Include="hooks\_hooks.cpp" />
+    <ClCompile Include="rpc\RpcPlayAnimation.cpp" />
     <ClCompile Include="rpc\RpcRepairSystem.cpp" />
     <ClCompile Include="rpc\RpcReportPlayer.cpp" />
+    <ClCompile Include="rpc\RpcSetScanner.cpp" />
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
