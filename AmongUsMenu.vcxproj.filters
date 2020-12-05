@@ -161,6 +161,9 @@
     <ClCompile Include="hooks\Dleks.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\RpcPlayAnimation.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
