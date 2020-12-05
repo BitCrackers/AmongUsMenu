@@ -21,6 +21,7 @@ void Settings::Load() {
 	if (j_object.contains("ShowMenu_Hotkey"))
 		Settings::Shortcuts[0].Combo.Keys = j_object["ShowMenu_Hotkey"].get<uint32_t>();
 
+
 	if (j_object.contains("ShowRadar"))
 		Settings::ShowRadar = j_object["ShowRadar"].get<bool>();
 	if (j_object.contains("ShowRadar_Hotkey"))
