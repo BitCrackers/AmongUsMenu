@@ -27,6 +27,7 @@ namespace Menu {
 		SabotageTab::Render();
 		DoorsTab::Render();
 		HostTab::Render();
+		DebugTab::Render();
 
 		if(firstRender)
 			firstRender = false;
