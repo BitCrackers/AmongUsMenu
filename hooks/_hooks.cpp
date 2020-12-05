@@ -199,4 +199,8 @@ void DetourUninitialization()
 	DetourTransactionCommit();
 
 	kiero::shutdown();
+	pDevice->Release();
+	pContext->Release();
+	pRenderTargetView->Release();
+	oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
 }

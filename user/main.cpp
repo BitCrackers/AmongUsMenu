@@ -49,11 +49,9 @@ void Run(LPVOID lpParam) {
 	}
 	
 	DetourUninitialization();
-	ImGui_ImplWin32_Shutdown();
-	ImGui_ImplDX11_Shutdown();
 	fclose(stdout);
-	CloseHandle(hUnloadEvent);
 	FreeConsole();
+	CloseHandle(hUnloadEvent);
 	FreeLibraryAndExitThread(hModule, 0);
 #endif
 }
