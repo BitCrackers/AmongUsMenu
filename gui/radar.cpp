@@ -81,8 +81,15 @@ namespace Radar {
 
 			Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
-			float radX = maps[MapType].x_offset + (playerPos.x * maps[MapType].scale) + winpos.x;
-			float radY = maps[MapType].y_offset - (playerPos.y * maps[MapType].scale) + winpos.y;
+			float xOffset = maps[MapType].x_offset;
+			float yOffset = maps[MapType].y_offset;
+
+			if (MapType == 0 && State.FlipSkeld) {
+				xOffset -= 50;
+			}
+
+			float radX = xOffset + (playerPos.x * maps[MapType].scale) + winpos.x;
+			float radY = yOffset - (playerPos.y * maps[MapType].scale) + winpos.y;
 
 			drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, GetRadarPlayerColor(playerData));
 			drawList->AddCircle(ImVec2(radX, radY), 4.5F + 0.5F, GetRadarPlayerColorStatus(playerData), 0, 2.0F);
