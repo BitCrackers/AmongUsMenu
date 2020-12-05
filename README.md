@@ -38,6 +38,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 * [OsOmE1](https://github.com/OsOmE1) (Contributor)
 * [RealMVC](https://github.com/RealMVC) (Contributor)
 * [Kyreus](https://github.com/KyreusR) (Contributor)
+* [manianac](https://github.com/manianac) (Contributor)
 
 ## Contributing
 
