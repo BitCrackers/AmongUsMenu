@@ -29,6 +29,10 @@ void Settings::Load() {
 		Settings::ShowRadar_DeadBodies = j_object["ShowRadar_DeadBodies"].get<bool>();
 	if (j_object.contains("ShowRadar_Ghosts"))
 		Settings::ShowRadar_Ghosts = j_object["ShowRadar_Ghosts"].get<bool>();
+	if (j_object.contains("HideRadar_During_Meetings"))
+		Settings::HideRadar_During_Meetings = j_object["HideRadar_During_Meetings"].get<bool>();
+	if (j_object.contains("LockRadar"))
+		Settings::LockRadar = j_object["LockRadar"].get<bool>();
 	if (j_object.contains("ShowRadar_RightClick_Teleport"))
 		Settings::ShowRadar_RightClick_Teleport = j_object["ShowRadar_RightClick_Teleport"].get<bool>();
 
