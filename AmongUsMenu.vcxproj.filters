@@ -163,6 +163,7 @@
     </ClCompile>
     <ClCompile Include="rpc\RpcPlayAnimation.cpp">
       <Filter>rpc</Filter>
+	</ClCompile>
     <ClCompile Include="gui\tabs\debug_tab.cpp">
       <Filter>gui\tabs</Filter>
     </ClCompile>
