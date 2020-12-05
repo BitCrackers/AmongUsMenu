@@ -89,6 +89,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		State.InMeeting = false;
 		State.FollowerCam = nullptr;
 		State.EnableZoom = false;
+		State.FlipSkeld = false;
 	}
 
 	if (State.ShowMenu) {
@@ -149,6 +150,7 @@ void DetourInitilization() {
 	if (DetourAttach(&(PVOID&)PlayerControl_RpcSetInfected, dPlayerControl_RpcSetInfected) != 0) return;
 	if (DetourAttach(&(PVOID&)MeetingHud_Awake, dMeetingHud_Awake) != 0) return;
 	if (DetourAttach(&(PVOID&)MeetingHud_Close, dMeetingHud_Close) != 0) return;
+	if (DetourAttach(&(PVOID&)Constants_ShouldFlipSkeld, dConstants_ShouldFlipSkeld) != 0) return;
 
 	if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
 		oPresent = (D3D_PRESENT_FUNCTION)kiero::getMethodsTable()[8];
