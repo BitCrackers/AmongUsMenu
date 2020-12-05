@@ -70,8 +70,8 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_AmBanned", "PCJCFCBHJDA" },
 	{ "get_BanPoints", "OBAPAPFDDHM" },
 	{ "Deserialize", "GOCFDAMBMLH" },
-	{ "EnterVent", "FLENNEBBHOK" },
-	{ "ExitVent", "EKDCGJEACKM" },
+	{ "EnterVent", "EKDCGJEACKM" },
+	{ "ExitVent", "PLMCPPAGKPH" },
 	{ "ReportDeadBody", "LFFBFCHAJFB" },
 	{ "ShouldFlipSkeld", "FBNFKGDCOAI"}
 };
