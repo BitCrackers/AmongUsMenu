@@ -47,6 +47,13 @@ public:
 	virtual void Process() override;
 };
 
+class RpcSetScanner : public RPCInterface {
+	bool playAnimation;
+public:
+	RpcSetScanner(bool playAnimation);
+	virtual void Process() override;
+};
+
 class RpcReportPlayer : public RPCInterface {
 	PlayerSelection reportedPlayer;
 public:

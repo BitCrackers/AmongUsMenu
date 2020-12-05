@@ -1,6 +1,9 @@
 #include "tasks_tab.h"
 
 namespace TasksTab {
+
+	bool playMedbayScan = false;
+
 	void Render() {
 		if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.Tasks != NULL) {
 			if (ImGui::BeginTabItem("Tasks")) {
@@ -47,6 +50,18 @@ namespace TasksTab {
 				if(ImGui::Button("Play Trash Animation"))
 				{
 					State.rpcQueue.push(new RpcPlayAnimation(10));
+				}
+
+				if (ImGui::Checkbox("Play Medbay Scan Animation", &playMedbayScan))
+				{
+					if (playMedbayScan)
+					{
+						State.rpcQueue.push(new RpcSetScanner(true));
+					}
+					else
+					{
+						State.rpcQueue.push(new RpcSetScanner(false));
+					}
 				}
 
 				ImGui::EndTabItem();
