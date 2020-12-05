@@ -75,6 +75,8 @@ void Settings::Save() {
 		{"ShowRadar_Hotkey", Settings::Shortcuts[1].Combo.Keys},
 		{"ShowRadar_DeadBodies", Settings::ShowRadar_DeadBodies},
 		{"ShowRadar_Ghosts", Settings::ShowRadar_Ghosts},
+		{"HideRadar_During_Meetings", Settings::HideRadar_During_Meetings},
+		{"LockRadar", Settings::LockRadar},
 		{"ShowRadar_RightClick_Teleport", Settings::ShowRadar_RightClick_Teleport},
 
 		{"RepairSabotage_Hotkey", Settings::Shortcuts[3].Combo.Keys},
