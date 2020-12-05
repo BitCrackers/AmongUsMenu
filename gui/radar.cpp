@@ -67,7 +67,7 @@ namespace Radar {
 		ImVec2 winsize = ImGui::GetWindowSize();
 
 		if (State.FlipSkeld && MapType == 0) {
-			// @RealmVC please flip radar here :3 <3
+			ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView, ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f), State.SelectedColor);
 		}
 		else {
 			ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView, ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), State.SelectedColor);
