@@ -9,5 +9,5 @@ RpcSetScanner::RpcSetScanner(bool playAnimation)
 
 void RpcSetScanner::Process()
 {
-	PlayerControl_RpcSetScanner(*Game::pLocalPlayer, true, NULL);
+	PlayerControl_RpcSetScanner(*Game::pLocalPlayer, playAnimation, NULL);
 }
