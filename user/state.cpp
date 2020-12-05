@@ -52,12 +52,20 @@ void Settings::Load() {
 		Settings::ShowConsole = j_object["ShowConsole"].get<bool>();
 	if (j_object.contains("Console_Hotkey"))
 		Settings::Shortcuts[2].Combo.Keys = j_object["Console_Hotkey"].get<uint32_t>();
+
+#ifdef _DEBUG
+	if (j_object.contains("showDebugTab"))
+		Settings::showDebugTab = j_object["showDebugTab"].get<uint32_t>();
+#endif
 }
 
 void Settings::Save() {
 	json j_object = json{
 		{"ShowMenu", Settings::ShowMenu},
 		{"ShowMenu_Hotkey", Settings::Shortcuts[0].Combo.Keys},
+#ifdef _DEBUG
+		{"showDebugTab", Settings::showDebugTab},
+#endif
 
 		{"ShowRadar", Settings::ShowRadar},
 		{"ShowRadar_Hotkey", Settings::Shortcuts[1].Combo.Keys},
