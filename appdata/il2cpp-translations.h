@@ -72,6 +72,6 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "Deserialize", "GOCFDAMBMLH" },
 	{ "EnterVent", "FLENNEBBHOK" },
 	{ "ExitVent", "EKDCGJEACKM" },
-	{ "ReportDeadBody", "LFFBFCHAJFB" },
+	{ "ReportDeadBody", "MAPFKCHFLHH" },
 	{ "ShouldFlipSkeld", "FBNFKGDCOAI"}
 };
