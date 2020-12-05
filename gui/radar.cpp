@@ -66,7 +66,12 @@ namespace Radar {
 		ImVec2 winpos = ImGui::GetWindowPos();
 		ImVec2 winsize = ImGui::GetWindowSize();
 
-		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView, ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), State.SelectedColor);
+		if (State.FlipSkeld && MapType == 0) {
+			ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView, ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F), ImVec2(1.0f, 0.0f), ImVec2(0.0f, 1.0f), State.SelectedColor);
+		}
+		else {
+			ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView, ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), State.SelectedColor);
+		}
 
 		for (auto player : GetAllPlayerControl()) {
 			auto playerData = GetPlayerData(player);
@@ -76,8 +81,15 @@ namespace Radar {
 
 			Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
-			float radX = maps[MapType].x_offset + (playerPos.x * maps[MapType].scale) + winpos.x;
-			float radY = maps[MapType].y_offset - (playerPos.y * maps[MapType].scale) + winpos.y;
+			float xOffset = maps[MapType].x_offset;
+			float yOffset = maps[MapType].y_offset;
+
+			if (MapType == 0 && State.FlipSkeld) {
+				xOffset -= 50;
+			}
+
+			float radX = xOffset + (playerPos.x * maps[MapType].scale) + winpos.x;
+			float radY = yOffset - (playerPos.y * maps[MapType].scale) + winpos.y;
 
 			drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, GetRadarPlayerColor(playerData));
 			drawList->AddCircle(ImVec2(radX, radY), 4.5F + 0.5F, GetRadarPlayerColorStatus(playerData), 0, 2.0F);

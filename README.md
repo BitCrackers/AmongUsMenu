@@ -11,13 +11,13 @@ This project is for Educational Use only. We do not condone this software being 
 You can compile two different versions of the menu. Normal or Xinput.
 
 ### Normal (AmongUsMenu.dll)
-Inject it with any injector you have. The ``resources`` folder needs to be in the same path as the dll.
+Inject it with any injector you have.
 
 - Debug (With Debug Information and can be attached to process)
 - Release (Optimized with all information stripped)
 
 ### Xinput (xinput1_3.dll)
-Will automatically be loaded by the Game itself if the dll is in the game directory. Make sure to include the ``resources`` folder into the same path as the game directory too.
+Will automatically be loaded by the Game itself if the dll is in the game directory.
 
 - Debug_Xinput (With Debug Information and can be attached to process)
 - Release_Xinput (Optimized with all information stripped)

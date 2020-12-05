@@ -158,8 +158,8 @@
     <ClCompile Include="user\resources.cpp">
       <Filter>user</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\debug_tab.cpp">
-      <Filter>gui\tabs</Filter>
+    <ClCompile Include="hooks\Dleks.cpp">
+      <Filter>hooks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

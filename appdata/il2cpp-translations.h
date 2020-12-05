@@ -30,6 +30,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "AutoOpenDoor"}, {"", "BIBGGEEEJLK"} },
 	{ {"", "ChatBubble"}, {"", "HDBFNJBMAMA"} },
 	{ {"", "ChatController"}, {"", "FLICDOHEDCM"} },
+	{ {"", "Constants"}, {"", "EGCHBLMHNCO"}},
 	{ {"", "CustomNetworkTransform"}, {"", "PPOKHKBILED"} },
 	{ {"", "DeadBody"}, {"", "EEEPAKPKIGA"} },
 	{ {"", "ElectricTask"}, {"", "LBCFMJDKEMP"} },
@@ -69,7 +70,8 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_AmBanned", "PCJCFCBHJDA" },
 	{ "get_BanPoints", "OBAPAPFDDHM" },
 	{ "Deserialize", "GOCFDAMBMLH" },
-	{ "EnterVent", "EKDCGJEACKM" },
-	{ "ExitVent", "PLMCPPAGKPH" },
-	{ "ReportDeadBody", "LFFBFCHAJFB" }
+	{ "EnterVent", "FLENNEBBHOK" },
+	{ "ExitVent", "EKDCGJEACKM" },
+	{ "ReportDeadBody", "LFFBFCHAJFB" },
+	{ "ShouldFlipSkeld", "FBNFKGDCOAI"}
 };

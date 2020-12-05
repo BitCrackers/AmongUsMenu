@@ -62,3 +62,5 @@ void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__A
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method);
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method);
+
+bool dConstants_ShouldFlipSkeld(MethodInfo* method);
