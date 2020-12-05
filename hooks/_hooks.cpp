@@ -89,6 +89,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		State.InMeeting = false;
 		State.FollowerCam = nullptr;
 		State.EnableZoom = false;
+		State.FlipSkeld = false;
 	}
 
 	if (State.ShowMenu) {
