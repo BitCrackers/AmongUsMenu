@@ -21,6 +21,13 @@ void Settings::Load() {
 	if (j_object.contains("ShowMenu_Hotkey"))
 		Settings::Shortcuts[0].Combo.Keys = j_object["ShowMenu_Hotkey"].get<uint32_t>();
 
+	if (j_object.contains("SelectedColor_x"))
+		Settings::SelectedColor.x = j_object["SelectedColor_x"].get<float>();
+	if (j_object.contains("SelectedColor_y"))
+		Settings::SelectedColor.y = j_object["SelectedColor_y"].get<float>();
+	if (j_object.contains("SelectedColor_z"))
+		Settings::SelectedColor.z = j_object["SelectedColor_z"].get<float>();
+
 	if (j_object.contains("ShowRadar"))
 		Settings::ShowRadar = j_object["ShowRadar"].get<bool>();
 	if (j_object.contains("ShowRadar_Hotkey"))
@@ -29,8 +36,14 @@ void Settings::Load() {
 		Settings::ShowRadar_DeadBodies = j_object["ShowRadar_DeadBodies"].get<bool>();
 	if (j_object.contains("ShowRadar_Ghosts"))
 		Settings::ShowRadar_Ghosts = j_object["ShowRadar_Ghosts"].get<bool>();
+	if (j_object.contains("HideRadar_During_Meetings"))
+		Settings::HideRadar_During_Meetings = j_object["HideRadar_During_Meetings"].get<bool>();
+	if (j_object.contains("LockRadar"))
+		Settings::LockRadar = j_object["LockRadar"].get<bool>();
 	if (j_object.contains("ShowRadar_RightClick_Teleport"))
 		Settings::ShowRadar_RightClick_Teleport = j_object["ShowRadar_RightClick_Teleport"].get<bool>();
+	if (j_object.contains("Radar_Opacity"))
+		Settings::SelectedColor.w = j_object["Radar_Opacity"].get<float>();
 
 	if (j_object.contains("RepairSabotage_Hotkey"))
 		Settings::Shortcuts[3].Combo.Keys = j_object["RepairSabotage_Hotkey"].get<uint32_t>();
@@ -66,12 +79,18 @@ void Settings::Save() {
 #ifdef _DEBUG
 		{"showDebugTab", Settings::showDebugTab},
 #endif
+		{"SelectedColor_x", Settings::SelectedColor.x},
+		{"SelectedColor_y", Settings::SelectedColor.y},
+		{"SelectedColor_z", Settings::SelectedColor.z},
 
 		{"ShowRadar", Settings::ShowRadar},
 		{"ShowRadar_Hotkey", Settings::Shortcuts[1].Combo.Keys},
 		{"ShowRadar_DeadBodies", Settings::ShowRadar_DeadBodies},
 		{"ShowRadar_Ghosts", Settings::ShowRadar_Ghosts},
+		{"HideRadar_During_Meetings", Settings::HideRadar_During_Meetings},
+		{"LockRadar", Settings::LockRadar},
 		{"ShowRadar_RightClick_Teleport", Settings::ShowRadar_RightClick_Teleport},
+		{"Radar_Opacity", Settings::SelectedColor.w},
 
 		{"RepairSabotage_Hotkey", Settings::Shortcuts[3].Combo.Keys},
 

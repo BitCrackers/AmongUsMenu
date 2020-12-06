@@ -10,7 +10,16 @@ namespace DebugTab {
 			{
 				SetEvent(hUnloadEvent);
 			}
+			ImGui::Dummy(ImVec2(4, 4));
 #endif
+			if (ImGui::Button("Force Load Settings"))
+			{
+				State.Load();
+			}
+			if (ImGui::Button("Force Save Settings"))
+			{
+				State.Save();
+			}
 			ImGui::EndTabItem();
 		}
 	}
