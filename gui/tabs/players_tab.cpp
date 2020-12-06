@@ -68,7 +68,7 @@ namespace PlayersTab {
 
 					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
-							State.rpcQueue.push(new RpcSnapTo(PlayerControl_GetTruePosition(State.selectedPlayer.get_PlayerControl(), NULL)));
+							State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
 						}
 					}
 
