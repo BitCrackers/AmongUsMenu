@@ -34,9 +34,16 @@ namespace Radar {
 				|| mouse.y > winpos.y + winsize.y)
 				return;
 
+			float xOffset = maps[MapType].x_offset;
+			float yOffset = maps[MapType].y_offset;
+
+			if (MapType == 0 && State.FlipSkeld) {
+				xOffset -= 50;
+			}
+
 			Vector2 target = {
-				(mouse.x - winpos.x - maps[MapType].x_offset) / maps[MapType].scale,
-				((mouse.y - winpos.y - maps[MapType].y_offset) * -1.F) / maps[MapType].scale
+				(mouse.x - winpos.x - xOffset) / maps[MapType].scale,
+				((mouse.y - winpos.y - yOffset) * -1.F) / maps[MapType].scale
 			};
 
 			State.rpcQueue.push(new RpcSnapTo(target));
