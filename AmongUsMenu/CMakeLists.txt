@@ -9,8 +9,13 @@ file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/*.aps"
 	"${CMAKE_CURRENT_SOURCE_DIR}/*.rc"
 )
+set(DEBUG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/NatvisFile.natvis") 
 
-add_library(AmongUsMenu MODULE ${FileList})
+IF(MSVC)
+	add_library(AmongUsMenu MODULE ${FileList} ${DEBUG_FILE})
+ELSE()
+	add_library(AmongUsMenu MODULE ${FileList})
+ENDIF()
 
 foreach(FileName IN ITEMS ${FileList})
     get_filename_component(File_Path "${FileName}" PATH)
