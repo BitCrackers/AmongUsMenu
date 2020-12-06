@@ -67,5 +67,10 @@ namespace TasksTab {
 				ImGui::EndTabItem();
 			}
 		}
+
+		if (!IsInGame() || State.InMeeting || GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)
+		{
+			playMedbayScan = false;
+		}
 	}
 }
