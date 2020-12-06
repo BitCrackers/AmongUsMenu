@@ -45,6 +45,13 @@ bool PlayerSelection::equals(PlayerControl* playerControl)
 	return this->get_PlayerControl() == playerControl;
 }
 
+Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
+{
+	Vector2 playerVector2 = PlayerControl_GetTruePosition(playerControl, NULL);
+	playerVector2.y += 0.36f;
+	return playerVector2;
+}
+
 bool PlayerSelection::equals(GameData_PlayerInfo* playerData)
 {
 	if (!this->has_value()) return false;
