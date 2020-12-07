@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug_Xinput|Win32">
-      <Configuration>Debug_Xinput</Configuration>
+    <ProjectConfiguration Include="Debug_Version|Win32">
+      <Configuration>Debug_Version</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release_Xinput|Win32">
-      <Configuration>Release_Xinput</Configuration>
+    <ProjectConfiguration Include="Release_Version|Win32">
+      <Configuration>Release_Version</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -24,7 +24,6 @@
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="events\WalkEvent.cpp" />
-    <ClCompile Include="framework\x_input.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
     <ClCompile Include="gui\tabs\debug_tab.cpp" />
@@ -43,9 +42,9 @@
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
     <ClCompile Include="framework\dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="hooks\Chat.cpp" />
     <ClCompile Include="hooks\Doors.cpp" />
@@ -68,9 +67,9 @@
     <ClCompile Include="user\resources.cpp" />
     <ClCompile Include="user\utility.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="framework\il2cpp-helpers.cpp" />
     <ClCompile Include="framework\il2cpp-init.cpp" />
@@ -85,9 +84,10 @@
     <ClCompile Include="user\game.cpp" />
     <ClCompile Include="user\main.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="user\state.cpp" />
+    <ClCompile Include="framework\version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h" />
@@ -95,7 +95,6 @@
     <ClInclude Include="appdata\il2cpp-functions.h" />
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
-    <ClInclude Include="framework\x_input.h" />
     <ClInclude Include="gui\console.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />
     <ClInclude Include="gui\tabs\debug_tab.h" />
@@ -137,7 +136,7 @@
     <ClInclude Include="user\game.hpp" />
     <ClInclude Include="user\main.h" />
     <ClInclude Include="user\state.hpp" />
-    <ClInclude Include="user\version.h" />
+    <ClInclude Include="framework\version.h" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis" />
@@ -155,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\resource_data.aps" />
+    <None Include="framework\version.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
@@ -173,7 +173,7 @@
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -188,7 +188,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -203,29 +203,29 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>xinput1_3</TargetName>
+    <TargetName>version</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>xinput1_3</TargetName>
+    <TargetName>version</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -253,17 +253,19 @@
       <OptimizeReferences>false</OptimizeReferences>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Xinput|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_DEBUG;_XINPUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_DEBUG;_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -286,6 +288,7 @@
       <OptimizeReferences>false</OptimizeReferences>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <ModuleDefinitionFile>framework/version.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -323,19 +326,21 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>includes/detours/detours.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;d3d11.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Xinput|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_XINPUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -360,6 +365,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>includes/detours/detours.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;d3d11.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <ModuleDefinitionFile>framework/version.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>

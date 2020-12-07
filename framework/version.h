@@ -5,7 +5,6 @@
 #include <chrono>
 #include "main.h"
 
-extern FARPROC p[7];
-extern HMODULE originalXINPUT;
+extern HMODULE version_dll;
 
 DWORD WINAPI Load(LPVOID lpParam);

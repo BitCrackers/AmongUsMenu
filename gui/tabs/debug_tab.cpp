@@ -5,7 +5,7 @@ namespace DebugTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Debug")) {
 			ImGui::Dummy(ImVec2(4, 4));
-#ifndef _XINPUT
+#ifndef _VERSION
 			if (ImGui::Button("Unload DLL"))
 			{
 				SetEvent(hUnloadEvent);

@@ -6,7 +6,7 @@ HMODULE hModule;
 HANDLE hUnloadEvent;
 
 void Run(LPVOID lpParam) {
-	if (getGameVersion().compare(GAME_VERSION) != 0) {
+	if (getGameVersion().compare("2020.10.5") != 0) {
 		MessageBox(NULL, L"This Game Version is not supported!", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 		return;
