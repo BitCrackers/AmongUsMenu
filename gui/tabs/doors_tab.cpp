@@ -8,9 +8,17 @@ namespace DoorsTab {
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
 				for (size_t i = 0; i < State.mapDoors.size(); i++) {
 					auto systemType = State.mapDoors[i];
+					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
-						ImGui::PushStyleColor(ImGuiCol_Text, *(new ImVec4(0.8f, 0.1f, 0.3f, 1.f)));
+						ImGui::PushStyleColor(ImGuiCol_Text, *(new ImVec4(0.9f, 0.1f, 0.25f, 1.f)));
+						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
+							State.selectedDoor = systemType;
+						ImGui::PopStyleColor(1);
+					}
+					else if (!plainDoor->fields.Open)
+					{
+						ImGui::PushStyleColor(ImGuiCol_Text, *(new ImVec4(0.85f, 0.2f, 0.5f, 1.f)));
 						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
 							State.selectedDoor = systemType;
 						ImGui::PopStyleColor(1);
@@ -33,6 +41,13 @@ namespace DoorsTab {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
 					}
 				}
+				if (ImGui::Button("Open All Doors"))
+				{
+					for (auto door : GetAllPlainDoors())
+					{
+						PlainDoor_SetDoorway(door, true, NULL);
+					}
+				}
 				if (ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)
@@ -49,8 +64,18 @@ namespace DoorsTab {
 				}
 				ImGui::NewLine();
 				if (State.selectedDoor != SystemTypes__Enum_Hallway) {
-					if (ImGui::Button("Close Door")) {
-						State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
+
+					if (State.selectedDoor != SystemTypes__Enum_Decontamination && State.selectedDoor != SystemTypes__Enum_Decontamination2) {
+						if (GetPlainDoorByRoom(State.selectedDoor)->fields.Open) {
+							if (ImGui::Button("Close Door")) {
+								State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
+							}
+						}
+						else {
+							if (ImGui::Button("Open Door")) {
+								PlainDoor_SetDoorway(GetPlainDoorByRoom(State.selectedDoor), true, NULL);
+							}
+						}
 					}
 
 					if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor) == State.pinnedDoors.end()) {

@@ -179,6 +179,42 @@ PlayerControl* GetPlayerControlById(uint8_t id) {
 	return NULL;
 }
 
+PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
+	static std::string deadBodyType = translate_type_name("PlainDoor, Assembly-CSharp");
+
+	std::vector<PlainDoor*> doors = std::vector<PlainDoor*>();
+
+	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
+	PlainDoor__Array* deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
+
+	for (il2cpp_array_size_t i = 0; i < deadBodyArray->max_length; i++)
+		doors.push_back(deadBodyArray->vector[i]);
+
+	for (PlainDoor* door : doors)
+	{
+		if (door->fields.Room == room)
+		{
+			return door;
+		}
+	}
+
+	return nullptr;
+}
+
+std::vector<PlainDoor*> GetAllPlainDoors() {
+	static std::string deadBodyType = translate_type_name("PlainDoor, Assembly-CSharp");
+
+	std::vector<PlainDoor*> doors = std::vector<PlainDoor*>();
+
+	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
+	PlainDoor__Array* deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
+
+	for (il2cpp_array_size_t i = 0; i < deadBodyArray->max_length; i++)
+		doors.push_back(deadBodyArray->vector[i]);
+
+	return doors;
+}
+
 std::vector<PlayerControl*> GetAllPlayerControl() {
 	static PlayerControl* (*getItem)(List_1_PlayerControl_*, int32_t, MethodInfo*);
 	static int32_t(*getCount)(List_1_PlayerControl_*, MethodInfo*);

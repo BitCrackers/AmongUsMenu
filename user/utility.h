@@ -48,6 +48,8 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
 PlayerControl* GetPlayerControlById(uint8_t id);
+PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
+std::vector<PlainDoor*> GetAllPlainDoors();
 std::vector<PlayerControl*> GetAllPlayerControl();
 std::vector<GameData_PlayerInfo*> GetAllPlayerData();
 std::vector<DeadBody*> GetAllDeadBodies();
