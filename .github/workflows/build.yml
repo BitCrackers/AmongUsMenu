@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: Release_Version
-          path: ./Release_Verion/version.dll
+          path: ./Release_Version/version.dll
 
   Debug:
     runs-on: windows-latest
