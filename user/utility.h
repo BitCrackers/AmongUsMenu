@@ -45,6 +45,7 @@ bool IsHost();
 bool IsInGame();
 bool IsInMultiplayerGame();
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
+Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
 PlayerControl* GetPlayerControlById(uint8_t id);
 std::vector<PlayerControl*> GetAllPlayerControl();

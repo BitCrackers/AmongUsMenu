@@ -110,7 +110,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
-			Vector2 playerVector2 = PlayerControl_GetTruePosition(State.playerToFollow.get_PlayerControl(), NULL);
+			Vector2 playerVector2 = GetTrueAdjustedPosition(State.playerToFollow.get_PlayerControl());
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
 		}
