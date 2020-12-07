@@ -30,6 +30,7 @@ namespace SabotageTab {
 				if (ImGui::Button("Sabotage Comms")) {
 					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Comms));
 				}
+
 				ImGui::EndTabItem();
 			}
 		}
