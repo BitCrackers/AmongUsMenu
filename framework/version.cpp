@@ -33,7 +33,14 @@ void load_version() {
 	char systemPath[MAX_PATH];
 	GetSystemDirectoryA(systemPath, MAX_PATH);
 	strcat_s(systemPath, "\\version.dll");
-	version_dll = LoadLibraryA(systemPath);
+	version_dll = LoadLibraryA(systemPath);	
+
+#if _DEBUG
+	if (!version_dll) {
+		std::string message = "Unable to load " + std::string(systemPath);
+		MessageBoxA(NULL, message.c_str(), "AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+	}
+#endif
 
 	if (!version_dll) return;
 
