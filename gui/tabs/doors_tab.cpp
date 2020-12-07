@@ -8,6 +8,7 @@ namespace DoorsTab {
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
 				for (size_t i = 0; i < State.mapDoors.size(); i++) {
 					auto systemType = State.mapDoors[i];
+					if (systemType == SystemTypes__Enum_Decontamination || systemType == SystemTypes__Enum_Decontamination2) continue;
 					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
@@ -34,6 +35,7 @@ namespace DoorsTab {
 
 				ImGui::SameLine();
 				ImGui::BeginChild("doors#options", ImVec2(200, 0));
+
 				if (ImGui::Button("Close All Doors"))
 				{
 					for(auto door : State.mapDoors)
@@ -41,11 +43,15 @@ namespace DoorsTab {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
 					}
 				}
-				if (ImGui::Button("Open All Doors"))
+				if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Pb)
 				{
-					for (auto door : GetAllPlainDoors())
+					if (ImGui::Button("Open All Doors"))
 					{
-						PlainDoor_SetDoorway(door, true, NULL);
+						for (auto door : GetAllPlainDoors())
+						{
+							if(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door->fields.Room) == State.pinnedDoors.end())
+							PlainDoor_SetDoorway(door, true, NULL);
+						}
 					}
 				}
 				if (ImGui::Button("Pin All Doors"))
@@ -54,7 +60,8 @@ namespace DoorsTab {
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
+							if(door != SystemTypes__Enum_Decontamination && door != SystemTypes__Enum_Decontamination2)
+								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}
 				}
@@ -64,18 +71,10 @@ namespace DoorsTab {
 				}
 				ImGui::NewLine();
 				if (State.selectedDoor != SystemTypes__Enum_Hallway) {
+					auto plainDoor = GetPlainDoorByRoom(State.selectedDoor);
 
-					if (State.selectedDoor != SystemTypes__Enum_Decontamination && State.selectedDoor != SystemTypes__Enum_Decontamination2) {
-						if (GetPlainDoorByRoom(State.selectedDoor)->fields.Open) {
-							if (ImGui::Button("Close Door")) {
-								State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
-							}
-						}
-						else {
-							if (ImGui::Button("Open Door")) {
-								PlainDoor_SetDoorway(GetPlainDoorByRoom(State.selectedDoor), true, NULL);
-							}
-						}
+					if (ImGui::Button("Close Door")) {
+						State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
 					}
 
 					if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor) == State.pinnedDoors.end()) {

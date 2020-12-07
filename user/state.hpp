@@ -53,6 +53,7 @@ public:
 	int TaskBarUpdates = 0;
 
 	bool NoClip = false;
+	bool DisableLightsRepair = false;
 
 	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;

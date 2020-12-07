@@ -89,10 +89,35 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		State.InMeeting = false;
 		State.FollowerCam = nullptr;
 		State.EnableZoom = false;
+		State.DisableLightsRepair = false;
 
 		if (!IsInLobby())
 		{
 			State.FlipSkeld = false;
+		}
+	}
+
+	if (IsInGame() && State.DisableLightsRepair)
+	{
+		auto sabotageTask = GetSabotageTask(*Game::pLocalPlayer);
+		if (sabotageTask != NULL && sabotageTask != nullptr)
+		{
+			if (translate_type_name("ElectricTask") == sabotageTask->klass->_0.name) {
+				auto electricTask = (ElectricTask*)sabotageTask;
+
+				auto switchSystem = electricTask->fields.system;
+				auto actualSwitches = switchSystem->fields.ActualSwitches;
+				auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
+
+				if (actualSwitches != ~expectedSwitches) {
+					for (auto i = 0; i < 5; i++) {
+						auto switchMask = 1 << (i & 0x1F);
+
+						if ((actualSwitches & switchMask) != (~expectedSwitches & switchMask))
+							State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, i));
+					}
+				}
+			}
 		}
 	}
 
