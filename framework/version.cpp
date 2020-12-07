@@ -30,7 +30,11 @@ WRAPPER_GENFUNC(VerQueryValueW)
 #define WRAPPER_FUNC(name) o##name = GetProcAddress(version_dll, ###name);
 
 void load_version() {
-	version_dll = LoadLibrary(L"C:\\Windows\\system32\\version.dll");
+	char systemPath[MAX_PATH];
+	GetSystemDirectoryA(systemPath, MAX_PATH);
+	strcat_s(systemPath, "\\version.dll");
+	version_dll = LoadLibraryA(systemPath);
+
 	if (!version_dll) return;
 
 	WRAPPER_FUNC(GetFileVersionInfoA);

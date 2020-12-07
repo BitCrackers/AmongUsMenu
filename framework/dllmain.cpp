@@ -14,7 +14,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	case DLL_PROCESS_ATTACH:
 		State.Load();
 		DisableThreadLibraryCalls(hModule);
-		init_il2cpp();
 #if _VERSION
 		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Load, hModule, NULL, NULL);
 #else
