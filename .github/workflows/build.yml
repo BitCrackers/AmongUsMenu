@@ -34,14 +34,14 @@ jobs:
       
       - name: Build
         shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Xinput'
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Release_Xinput
-          path: ./Release_Xinput/xinput1_3.dll
+          name: Release_Version
+          path: ./Release_Verion/version.dll
 
   Debug:
     runs-on: windows-latest
@@ -68,14 +68,14 @@ jobs:
       
       - name: Build
         shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Xinput'
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
         with:
-          name: Debug_Xinput
-          path: ./Debug_Xinput/xinput1_3.dll
+          name: Debug_Version
+          path: ./Debug_Version/version.dll
   
   Notification:
     if: ${{ github.event_name == 'push' }}
