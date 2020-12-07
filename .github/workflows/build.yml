@@ -26,7 +26,7 @@ jobs:
           name: Release
           path: ./Release/AmongUsMenu.dll
   
-  Release_Xinput:
+  Release_Version:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -60,7 +60,7 @@ jobs:
           name: Debug
           path: ./Debug/AmongUsMenu.dll
   
-  Debug_Xinput:
+  Debug_Version:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -80,7 +80,7 @@ jobs:
   Notification:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    needs: [Release, Release_Xinput, Debug, Debug_Xinput]
+    needs: [Release, Release_Version, Debug, Debug_Version]
     steps:
       - name: Discord Notification
         uses: rjstone/discord-webhook-notify@v1.0.4
