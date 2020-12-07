@@ -1,4 +1,5 @@
 #include "main.h"
+#include "il2cpp-init.h"
 
 using namespace app;
 
@@ -6,7 +7,9 @@ HMODULE hModule;
 HANDLE hUnloadEvent;
 
 void Run(LPVOID lpParam) {
-	if (getGameVersion().compare(GAME_VERSION) != 0) {
+	init_il2cpp();
+
+	if (getGameVersion().compare("2020.12.5") != 0) {
 		MessageBox(NULL, L"This Game Version is not supported!", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 		return;

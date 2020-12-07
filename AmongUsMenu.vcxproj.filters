@@ -76,9 +76,6 @@
     <ClCompile Include="hooks\SceneManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="framework\x_input.cpp">
-      <Filter>framework</Filter>
-    </ClCompile>
     <ClCompile Include="hooks\Doors.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     <ClCompile Include="rpc\RpcSetScanner.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+    <ClCompile Include="framework\version.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -256,12 +256,6 @@
     <ClInclude Include="rpc\_rpc.h">
       <Filter>rpc</Filter>
     </ClInclude>
-    <ClInclude Include="framework\x_input.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="user\version.h">
-      <Filter>user</Filter>
-    </ClInclude>
     <ClInclude Include="gui\tabs\game_tab.h">
       <Filter>gui\tabs</Filter>
     </ClInclude>
@@ -308,10 +302,17 @@
       <Filter>gui\tabs</Filter>
     </ClInclude>
     <ClInclude Include="gui\tabs\settings_tab.h" />
-    <ClInclude Include="resources\resource_data.h" />
-    <ClInclude Include="user\resources.h" />
     <ClInclude Include="gui\tabs\debug_tab.h">
       <Filter>gui\tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\version.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="user\resources.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\resource_data.h">
+      <Filter>resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +383,9 @@
   <ItemGroup>
     <None Include="resources\resource_data.aps">
       <Filter>resources</Filter>
+    </None>
+    <None Include="framework\version.def">
+      <Filter>framework</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -18,7 +18,9 @@ mono_crash.*
 
 # Build results
 [Rr]elease_[Xx]input/
+[Rr]elease_[Vv]ersion/
 [Dd]ebug_[Xx]input/
+[Dd]ebug_[Vv]ersion/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
