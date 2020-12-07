@@ -31,12 +31,6 @@ namespace SabotageTab {
 					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Comms));
 				}
 
-				ImGui::Dummy(ImVec2(7, 7));
-				ImGui::Separator();
-				ImGui::Dummy(ImVec2(7, 7));
-
-				ImGui::Checkbox("Disable Lights Repair", &State.DisableLightsRepair);
-
 				ImGui::EndTabItem();
 			}
 		}

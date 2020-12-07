@@ -43,17 +43,6 @@ namespace DoorsTab {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
 					}
 				}
-				if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Pb)
-				{
-					if (ImGui::Button("Open All Doors"))
-					{
-						for (auto door : GetAllPlainDoors())
-						{
-							if(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door->fields.Room) == State.pinnedDoors.end())
-							PlainDoor_SetDoorway(door, true, NULL);
-						}
-					}
-				}
 				if (ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)
