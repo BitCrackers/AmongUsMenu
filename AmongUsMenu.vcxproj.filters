@@ -49,9 +49,6 @@
     <ClCompile Include="hooks\Chat.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="includes\kiero\kiero.cpp">
-      <Filter>includes\kiero</Filter>
-    </ClCompile>
     <ClCompile Include="includes\imgui\imgui.cpp">
       <Filter>includes\imgui</Filter>
     </ClCompile>
@@ -170,6 +167,7 @@
     <ClCompile Include="framework\version.cpp">
       <Filter>framework</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\DirectX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -213,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="user\utility.h">
       <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\kiero\kiero.h">
-      <Filter>includes\kiero</Filter>
     </ClInclude>
     <ClInclude Include="includes\imgui\imconfig.h">
       <Filter>includes\imgui</Filter>
@@ -314,6 +309,7 @@
     <ClInclude Include="resources\resource_data.h">
       <Filter>resources</Filter>
     </ClInclude>
+    <ClInclude Include="hooks\DirectX.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">

@@ -1,5 +1,7 @@
 #include "resources.h"
 #include "main.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 Resource::Resource(int32_t id)
 {

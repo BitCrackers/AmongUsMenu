@@ -1,4 +1,5 @@
 #include "radar.hpp"
+#include "DirectX.h"
 
 using namespace app;
 
