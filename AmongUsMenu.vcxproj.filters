@@ -167,10 +167,18 @@
     <ClCompile Include="framework\version.cpp">
       <Filter>framework</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\DirectX.cpp" />
-    <ClCompile Include="includes\detours\detours.cpp" />
-    <ClCompile Include="includes\detours\disasm.cpp" />
-    <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="includes\detours\detours.cpp">
+      <Filter>includes\detours</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\detours\disasm.cpp">
+      <Filter>includes\detours</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\detours\modules.cpp">
+      <Filter>includes\detours</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\DirectX.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -312,7 +320,9 @@
     <ClInclude Include="resources\resource_data.h">
       <Filter>resources</Filter>
     </ClInclude>
-    <ClInclude Include="hooks\DirectX.h" />
+    <ClInclude Include="hooks\DirectX.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
