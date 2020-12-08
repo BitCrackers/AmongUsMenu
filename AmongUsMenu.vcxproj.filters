@@ -168,6 +168,9 @@
       <Filter>framework</Filter>
     </ClCompile>
     <ClCompile Include="hooks\DirectX.cpp" />
+    <ClCompile Include="includes\detours\detours.cpp" />
+    <ClCompile Include="includes\detours\disasm.cpp" />
+    <ClCompile Include="includes\detours\modules.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -354,11 +357,6 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="includes\detours\detours.lib">
-      <Filter>includes\detours</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\the_skald.png">
