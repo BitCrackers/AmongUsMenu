@@ -87,9 +87,37 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
         State.InMeeting = false;
         State.FollowerCam = nullptr;
         State.EnableZoom = false;
+        State.DisableLights = false;
 
         if (!IsInLobby()) {
             State.FlipSkeld = false;
+        }
+    }
+
+    if (State.DisableLights)
+    {
+        SwitchSystem* switchSystem = nullptr;
+        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = getEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
+
+        for (auto system : systems)
+        {
+            if (system.first == SystemTypes__Enum_Electrical)
+            {
+                switchSystem = (SwitchSystem*)system.second;
+            }
+        }
+
+        if (switchSystem != nullptr)
+        {
+            auto actualSwitches = switchSystem->fields.ActualSwitches;
+            auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
+
+            if (actualSwitches == expectedSwitches) {
+                auto switchMask = 1 << (0 & 0x1F);
+
+                if ((actualSwitches & switchMask) != (~expectedSwitches & switchMask))
+                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, randi(0, 4)));
+            }
         }
     }
 
