@@ -101,7 +101,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
     if (State.DisableLights)
     {
         SwitchSystem* switchSystem = nullptr;
-        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = getEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
+        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
 
         for (auto system : systems)
         {
