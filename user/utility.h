@@ -37,6 +37,20 @@ public:
 	bool is_Disconnected();
 };
 
+template < typename T, typename K, typename V >
+std::vector<std::pair<K, V>> getEntriesFromDictionary(T d) {
+	auto entries = d->fields.entries;
+	int length = d->fields.count;
+
+	std::vector<std::pair<K, V>> vec(length);
+	for (int i = 0; i < length; i++) {
+		K key = entries->vector[i].key;
+		V value = entries->vector[i].value;
+		vec[i] = { key, value };
+	}
+	return vec;
+}
+
 int randi(int lo, int hi);
 ImVec4 AmongUsColorToImVec4(Color color);
 ImVec4 AmongUsColorToImVec4(CorrectedColor32 color);

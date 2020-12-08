@@ -87,9 +87,37 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
         State.InMeeting = false;
         State.FollowerCam = nullptr;
         State.EnableZoom = false;
+        State.DisableLights = false;
 
         if (!IsInLobby()) {
             State.FlipSkeld = false;
+        }
+    }
+
+    if (State.DisableLights)
+    {
+        SwitchSystem* switchSystem = nullptr;
+        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = getEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
+
+        for (auto system : systems)
+        {
+            if (system.first == SystemTypes__Enum_Electrical)
+            {
+                switchSystem = (SwitchSystem*)system.second;
+            }
+        }
+
+        if (switchSystem != nullptr)
+        {
+            auto actualSwitches = switchSystem->fields.ActualSwitches;
+            auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
+
+            if (actualSwitches == expectedSwitches) {
+                auto switchMask = 1 << (0 & 0x1F);
+
+                if ((actualSwitches & switchMask) != (~expectedSwitches & switchMask))
+                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, randi(0, 4)));
+            }
         }
     }
 
@@ -121,22 +149,20 @@ void DirectX::Initialize()
     ID3D11Device* pDevice = NULL;
     IDXGISwapChain* pSwapchain = NULL;
 
-    D3D_FEATURE_LEVEL featureLevel;
     DXGI_SWAP_CHAIN_DESC swapChainDesc{ 0 };
 
     swapChainDesc.BufferCount = 1;
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    swapChainDesc.BufferDesc.Height = 800;
-    swapChainDesc.BufferDesc.Width = 600;
-    swapChainDesc.BufferDesc.RefreshRate = { 60, 1 };
-    swapChainDesc.OutputWindow = GetForegroundWindow();
+    swapChainDesc.OutputWindow = GetDesktopWindow();
     swapChainDesc.Windowed = TRUE;
     swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     swapChainDesc.SampleDesc.Count = 1;
-    swapChainDesc.SampleDesc.Quality = 0;
 
-    HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_REFERENCE, NULL, 0, NULL, 0, D3D11_SDK_VERSION, &swapChainDesc, &pSwapchain, &pDevice, &featureLevel, nullptr);
+    HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_REFERENCE, NULL, 0, NULL, 0, D3D11_SDK_VERSION, &swapChainDesc, &pSwapchain, &pDevice, NULL, NULL);
+
+    if (GetLastError() == 0x594) SetLastError(0); // Ignore any errors related to the output window
+
     if (FAILED(result)) return;
 
     void** pVMT = *(void***)pSwapchain;
@@ -145,11 +171,6 @@ void DirectX::Initialize()
     if (pDevice) {
         pDevice->Release();
         pDevice = NULL;
-    }
-
-    if (pSwapchain) {
-        pSwapchain->Release();
-        pSwapchain = NULL;
     }
 }
 

@@ -55,6 +55,8 @@ public:
 
 	bool NoClip = false;
 
+	bool DisableLights = false;
+
 	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 
