@@ -1,6 +1,9 @@
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include "_hooks.hpp"
-#include <fcntl.h>
+#include "detours/detours.h"
 #include "DirectX.h"
+#include <iostream>
 
 using namespace app;
 

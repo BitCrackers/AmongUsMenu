@@ -1,11 +1,7 @@
 #pragma once
 #include "il2cpp-appdata.h"
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <iostream>
-#include "detours/detours.h"
-#include "state.hpp"
 #include "game.hpp"
+#include "state.hpp"
 
 using namespace app;
 
