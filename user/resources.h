@@ -5,7 +5,6 @@
 #include <d3d11.h>
 #include <string>
 #include "resource_data.h"
-#include "stb_image.h"
 
 struct Resource {
     HRSRC hResInfo;

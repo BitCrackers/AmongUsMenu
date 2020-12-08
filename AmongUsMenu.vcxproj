@@ -35,6 +35,7 @@
     <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
+    <ClCompile Include="hooks\DirectX.cpp" />
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
@@ -80,7 +81,6 @@
     <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="includes\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="includes\kiero\kiero.cpp" />
     <ClCompile Include="user\game.cpp" />
     <ClCompile Include="user\main.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -106,6 +106,7 @@
     <ClInclude Include="gui\tabs\sabotage_tab.h" />
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
+    <ClInclude Include="hooks\DirectX.h" />
     <ClInclude Include="hooks\_hooks.hpp" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="includes\imhotkeys.h" />
@@ -131,7 +132,6 @@
     <ClInclude Include="includes\imgui\imstb_rectpack.h" />
     <ClInclude Include="includes\imgui\imstb_textedit.h" />
     <ClInclude Include="includes\imgui\imstb_truetype.h" />
-    <ClInclude Include="includes\kiero\kiero.h" />
     <ClInclude Include="includes\json.hpp" />
     <ClInclude Include="user\game.hpp" />
     <ClInclude Include="user\main.h" />

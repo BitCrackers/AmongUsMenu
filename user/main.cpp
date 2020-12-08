@@ -20,15 +20,15 @@ void Run(LPVOID lpParam) {
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	new_console();
 
-	using namespace app;
+	//using namespace app;
 
-	#define DO_APP_CLASS(n, s) printf("%s = %p\n", #n "__TypeInfo" , n ## __TypeInfo)
+	/*#define DO_APP_CLASS(n, s) printf("%s = %p\n", #n "__TypeInfo" , n ## __TypeInfo)
 	#include "il2cpp-classes.h"
 	#undef DO_APP_CLASS
 
 	#define DO_APP_FUNC(r, n, p, s) printf("%s = %p\n", #n, n)
 	#include "il2cpp-functions.h"
-	#undef DO_APP_FUNC
+	#undef DO_APP_FUNC*/
 
 	/*auto domain = il2cpp_domain_get();
 	auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
