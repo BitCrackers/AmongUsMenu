@@ -45,6 +45,7 @@ public:
 	float PrevPlayerSpeed = 1.f;
 	float PlayerSpeed = 1.f;
 	bool UnlockVents = false;
+	bool ShowGhosts = false;
 
 	bool RevealImpostors = false;
 	int PrevKillDistance = 0;
