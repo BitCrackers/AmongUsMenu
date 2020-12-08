@@ -19,6 +19,8 @@ ID3D11RenderTargetView* pRenderTargetView;
 D3D_PRESENT_FUNCTION oPresent;
 WNDPROC oWndProc;
 
+HANDLE hPresentMutex;
+
 std::vector<MapTexture> maps = std::vector<MapTexture>();
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -44,6 +46,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags) {
+    WaitForSingleObject(hPresentMutex, 0); //We're claiming ownership, but we'll be damned if we're going to wait
     if (!State.ImGuiInitialized) {
         if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
             pDevice->GetImmediateContext(&pContext);
@@ -68,6 +71,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
 
             State.ImGuiInitialized = true;
         } else {
+            ReleaseMutex(hPresentMutex);
             return oPresent(pSwapChain, syncInterval, flags);
         }
     }
@@ -141,6 +145,8 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
 
     il2cpp_gc_enable();
 
+    ReleaseMutex(hPresentMutex);
+
     return oPresent(pSwapChain, syncInterval, flags);
 }
 
@@ -150,6 +156,8 @@ void DirectX::Initialize()
     IDXGISwapChain* pSwapchain = NULL;
 
     DXGI_SWAP_CHAIN_DESC swapChainDesc{ 0 };
+
+    hPresentMutex = CreateMutex(NULL, FALSE, NULL);
 
     swapChainDesc.BufferCount = 1;
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -175,9 +183,11 @@ void DirectX::Initialize()
 }
 
 void DirectX::Shutdown() {
+    assert(WaitForSingleObject(hPresentMutex, INFINITE) == WAIT_OBJECT_0); //Since this is only used on debug builds, we'll leave this for now
+    oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-
-    oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
+    ReleaseMutex(hPresentMutex);
+    CloseHandle(hPresentMutex);
 }
