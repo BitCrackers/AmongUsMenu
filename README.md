@@ -1,4 +1,4 @@
-# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/nDqvKYvEu3)
+# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8)
 
 <p align="center">
    AmongUsMenu is a Cheat Menu for the popular Game Among Us.
