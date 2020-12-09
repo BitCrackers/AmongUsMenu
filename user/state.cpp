@@ -27,7 +27,8 @@ void Settings::Load() {
 		Settings::SelectedColor.y = j_object["SelectedColor_y"].get<float>();
 	if (j_object.contains("SelectedColor_z"))
 		Settings::SelectedColor.z = j_object["SelectedColor_z"].get<float>();
-
+	if (j_object.contains("ShowGhosts"))
+		Settings::ShowGhosts = j_object["ShowGhosts"].get<bool>();
 	if (j_object.contains("ShowRadar"))
 		Settings::ShowRadar = j_object["ShowRadar"].get<bool>();
 	if (j_object.contains("ShowRadar_Hotkey"))
@@ -83,6 +84,7 @@ void Settings::Save() {
 		{"SelectedColor_y", Settings::SelectedColor.y},
 		{"SelectedColor_z", Settings::SelectedColor.z},
 
+		{"ShowGhosts", Settings::ShowGhosts},
 		{"ShowRadar", Settings::ShowRadar},
 		{"ShowRadar_Hotkey", Settings::Shortcuts[1].Combo.Keys},
 		{"ShowRadar_DeadBodies", Settings::ShowRadar_DeadBodies},
