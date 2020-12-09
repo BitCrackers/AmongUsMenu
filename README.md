@@ -1,4 +1,4 @@
-# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/nDqvKYvEu3)
+# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8)
 
 <p align="center">
    AmongUsMenu is a Cheat Menu for the popular Game Among Us.
@@ -16,11 +16,11 @@ Inject it with any injector you have.
 - Debug (With Debug Information and can be attached to process)
 - Release (Optimized with all information stripped)
 
-### Xinput (xinput1_3.dll)
+### Version Proxy (version.dll)
 Will automatically be loaded by the Game itself if the dll is in the game directory.
 
-- Debug_Xinput (With Debug Information and can be attached to process)
-- Release_Xinput (Optimized with all information stripped)
+- Debug_Version (With Debug Information and can be attached to process)
+- Release_Version (Optimized with all information stripped)
 
 ### Default Hotkeys
 - Show Menu - DELETE

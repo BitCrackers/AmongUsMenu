@@ -24,7 +24,9 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: Release
-          path: ./Release/AmongUsMenu.dll
+          path: |
+            ./Release/AmongUsMenu.dll
+            ./LICENSE
   
   Release_Version:
     runs-on: windows-latest
@@ -41,7 +43,9 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: Release_Version
-          path: ./Release_Version/version.dll
+          path: |
+            ./Release_Version/version.dll
+            ./LICENSE
 
   Debug:
     runs-on: windows-latest
@@ -58,7 +62,9 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: Debug
-          path: ./Debug/AmongUsMenu.dll
+          path: |
+            ./Debug/AmongUsMenu.dll
+            ./LICENSE
   
   Debug_Version:
     runs-on: windows-latest
@@ -75,7 +81,9 @@ jobs:
         uses: actions/upload-artifact@v2.2.1
         with:
           name: Debug_Version
-          path: ./Debug_Version/version.dll
+          path: | 
+            ./Debug_Version/version.dll
+            ./LICENSE
   
   Notification:
     if: ${{ github.event_name == 'push' }}

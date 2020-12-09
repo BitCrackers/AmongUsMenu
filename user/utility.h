@@ -38,7 +38,7 @@ public:
 };
 
 template < typename T, typename K, typename V >
-std::vector<std::pair<K, V>> getEntriesFromDictionary(T d) {
+std::vector<std::pair<K, V>> GetEntriesFromDictionary(T d) {
 	auto entries = d->fields.entries;
 	int length = d->fields.count;
 
@@ -47,6 +47,30 @@ std::vector<std::pair<K, V>> getEntriesFromDictionary(T d) {
 		K key = entries->vector[i].key;
 		V value = entries->vector[i].value;
 		vec[i] = { key, value };
+	}
+	return vec;
+}
+
+template < typename T, typename E >
+std::vector<E> GetElementsFromList(T l) {
+	auto elements = l->fields._items;
+	int length = l->fields._size;
+
+	std::vector<E> vec(length);
+	for (int i = 0; i < length; i++) {
+		vec[i] = elements->vector[i];
+	}
+	return vec;
+}
+
+template < typename T, typename E >
+std::vector<E> GetElementsFromArray(T a) {
+	auto elements = a;
+	int length = a->max_length;
+
+	std::vector<E> vec(length);
+	for (int i = 0; i < length; i++) {
+		vec[i] = elements->vector[i];
 	}
 	return vec;
 }
