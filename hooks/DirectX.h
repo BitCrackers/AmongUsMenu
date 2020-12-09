@@ -1,5 +1,6 @@
 #pragma once
 #include "resources.h"
+#include "directx11.h"
 #include <vector>
 
 struct MapTexture {
@@ -9,14 +10,11 @@ struct MapTexture {
 	float scale;
 };
 
-typedef HRESULT(__stdcall* D3D_PRESENT_FUNCTION)(IDXGISwapChain* pThis, UINT SyncInterval, UINT Flags);
-
-extern D3D_PRESENT_FUNCTION oPresent;
 extern std::vector<MapTexture> maps;
 
-HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
+extern D3D_PRESENT_FUNCTION oPresent;
+HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags);
 
 namespace DirectX {
-	void Initialize();
 	void Shutdown();
 }
