@@ -106,6 +106,15 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         }
     }
 
+    if (!IsInGame() || State.InMeeting)
+    {
+        if (State.PlayMedbayScan)
+        {
+            State.PlayMedbayScan = false;
+            State.rpcQueue.push(new RpcSetScanner(false));
+        }
+    }
+
     if (State.DisableLights)
     {
         SwitchSystem* switchSystem = nullptr;
