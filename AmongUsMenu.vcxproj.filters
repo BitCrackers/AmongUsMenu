@@ -179,6 +179,7 @@
     <ClCompile Include="hooks\DirectX.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="includes\directx11.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -323,6 +324,7 @@
     <ClInclude Include="hooks\DirectX.h">
       <Filter>hooks</Filter>
     </ClInclude>
+    <ClInclude Include="includes\directx11.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
@@ -345,9 +347,6 @@
     </Filter>
     <Filter Include="includes\detours">
       <UniqueIdentifier>{166264ce-d359-420e-ba62-adba2279ff8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="includes\kiero">
-      <UniqueIdentifier>{20efd3a7-e4c8-4470-a08e-648e1abcd71e}</UniqueIdentifier>
     </Filter>
     <Filter Include="includes\imgui">
       <UniqueIdentifier>{0ea105ce-0c37-46f9-8a5e-b845cb40a743}</UniqueIdentifier>
