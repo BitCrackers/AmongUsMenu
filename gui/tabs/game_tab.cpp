@@ -26,12 +26,7 @@ namespace GameTab {
 				}
 			}
 			ImGui::NewLine();
-			/*if (ImGui::Button("Edit Hotkeys")) {
-				ImGui::OpenPopup("Hotkeys Editor");
-			}
-			ImGui::SameLine();*/
 			ImGui::Checkbox("Console", &State.ShowConsole);
-			//ImHotKey::Edit(State.Hotkeys.data(), State.Hotkeys.size(), "Hotkeys Editor");
 
 			ImGui::EndTabItem();
 		}

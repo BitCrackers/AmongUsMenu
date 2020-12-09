@@ -3,7 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
-#include "imhotkeys.h"
+#include "keyBindsConfig.h"
 #include "menu.hpp"
 #include "radar.hpp"
 #include "state.hpp"
@@ -27,20 +27,13 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (!State.ImGuiInitialized)
         return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 
-    ImHotkeys::WndProc(uMsg, wParam);
-
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
-    if (!ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopup)) {
-        auto shortcut = ImHotkeys::GetShortcut(&State.Shortcuts);
-        if (shortcut != -1) {
-            if (shortcut == 0) State.ShowMenu = !State.ShowMenu;
-            if (shortcut == 1) State.ShowRadar = !State.ShowRadar;
-            if (shortcut == 2) State.ShowConsole = !State.ShowConsole;
-            if (shortcut == 3 && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
-        }
-    }
+    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
+    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
+    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
+    if (ImGui::IsKeyReleased(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }

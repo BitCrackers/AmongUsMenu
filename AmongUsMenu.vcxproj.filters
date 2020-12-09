@@ -179,7 +179,12 @@
     <ClCompile Include="hooks\DirectX.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="includes\directx11.cpp" />
+    <ClCompile Include="includes\directx11.cpp">
+      <Filter>includes</Filter>
+    </ClCompile>
+    <ClCompile Include="user\keyBindsConfig.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -296,9 +301,6 @@
     <ClInclude Include="events\_events.h">
       <Filter>events</Filter>
     </ClInclude>
-    <ClInclude Include="includes\imhotkeys.h">
-      <Filter>includes</Filter>
-    </ClInclude>
     <ClInclude Include="gui\tabs\host_tab.h">
       <Filter>gui\tabs</Filter>
     </ClInclude>
@@ -324,7 +326,12 @@
     <ClInclude Include="hooks\DirectX.h">
       <Filter>hooks</Filter>
     </ClInclude>
-    <ClInclude Include="includes\directx11.h" />
+    <ClInclude Include="includes\directx11.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="user\keyBindsConfig.h">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
