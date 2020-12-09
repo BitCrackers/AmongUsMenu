@@ -59,6 +59,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_ReportDeadBody);
 	HOOKFUNC(PlayerControl_RpcSetInfected);
+	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
@@ -101,6 +102,7 @@ void DetourUninitialization()
 	if (DetourDetach(&(PVOID&)PlayerControl_CompleteTask, dPlayerControl_CompleteTask) != 0) return;
 	if (DetourDetach(&(PVOID&)PlayerControl_ReportDeadBody, dPlayerControl_ReportDeadBody) != 0) return;
 	if (DetourDetach(&(PVOID&)PlayerControl_RpcSetInfected, dPlayerControl_RpcSetInfected) != 0) return;
+	if (DetourDetach(&(PVOID&)Renderer_set_enabled, dRenderer_set_enabled) != 0) return;
 	if (DetourDetach(&(PVOID&)MeetingHud_Awake, dMeetingHud_Awake) != 0) return;
 	if (DetourDetach(&(PVOID&)MeetingHud_Close, dMeetingHud_Close) != 0) return;
 	if (DetourDetach(&(PVOID&)Constants_ShouldFlipSkeld, dConstants_ShouldFlipSkeld) != 0) return;
