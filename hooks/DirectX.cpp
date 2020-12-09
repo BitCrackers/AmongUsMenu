@@ -45,34 +45,42 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags) {
+bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
+    if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
+        pDevice->GetImmediateContext(&pContext);
+        DXGI_SWAP_CHAIN_DESC sd;
+        pSwapChain->GetDesc(&sd);
+        window = sd.OutputWindow;
+        ID3D11Texture2D* pBackBuffer = NULL;
+        pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+        pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+        pBackBuffer->Release();
+        oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
+
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+        ImGui_ImplWin32_Init(window);
+        ImGui_ImplDX11_Init(pDevice, pContext);
+
+        maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
+        maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
+        maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
+
+        return true;
+    }
+    
+    return false;
+}
+
+HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
     WaitForSingleObject(hPresentMutex, 0); //We're claiming ownership, but we'll be damned if we're going to wait
     if (!State.ImGuiInitialized) {
-        if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
-            pDevice->GetImmediateContext(&pContext);
-            DXGI_SWAP_CHAIN_DESC sd;
-            pSwapChain->GetDesc(&sd);
-            window = sd.OutputWindow;
-            ID3D11Texture2D* pBackBuffer;
-            pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-            pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
-            pBackBuffer->Release();
-            oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
-
-            ImGui::CreateContext();
-            ImGuiIO& io = ImGui::GetIO();
-            io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-            ImGui_ImplWin32_Init(window);
-            ImGui_ImplDX11_Init(pDevice, pContext);
-
-            maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
-            maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
-            maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
-
+        if (ImGuiInitialization(__this)) {
             State.ImGuiInitialized = true;
         } else {
             ReleaseMutex(hPresentMutex);
-            return oPresent(pSwapChain, syncInterval, flags);
+            return oPresent(__this, SyncInterval, Flags);
         }
     }
 
@@ -147,39 +155,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
 
     ReleaseMutex(hPresentMutex);
 
-    return oPresent(pSwapChain, syncInterval, flags);
-}
-
-void DirectX::Initialize()
-{
-    ID3D11Device* pDevice = NULL;
-    IDXGISwapChain* pSwapchain = NULL;
-
-    DXGI_SWAP_CHAIN_DESC swapChainDesc{ 0 };
-
-    hPresentMutex = CreateMutex(NULL, FALSE, NULL);
-
-    swapChainDesc.BufferCount = 1;
-    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    swapChainDesc.OutputWindow = GetDesktopWindow();
-    swapChainDesc.Windowed = TRUE;
-    swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    swapChainDesc.SampleDesc.Count = 1;
-
-    HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_REFERENCE, NULL, 0, NULL, 0, D3D11_SDK_VERSION, &swapChainDesc, &pSwapchain, &pDevice, NULL, NULL);
-
-    if (GetLastError() == 0x594) SetLastError(0); // Ignore any errors related to the output window
-
-    if (FAILED(result)) return;
-
-    void** pVMT = *(void***)pSwapchain;
-    oPresent = (D3D_PRESENT_FUNCTION)pVMT[8];
-
-    if (pDevice) {
-        pDevice->Release();
-        pDevice = NULL;
-    }
+    return oPresent(__this, SyncInterval, Flags);
 }
 
 void DirectX::Shutdown() {

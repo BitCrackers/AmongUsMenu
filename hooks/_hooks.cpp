@@ -12,7 +12,7 @@ bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 		std::cout << "Failed to hook " << functionName << std::endl;
 		return false;
 	}
-	std::cout << "Hooked " << functionName << std::endl;
+	//std::cout << "Hooked " << functionName << std::endl;
 	return true;
 }
 
@@ -21,6 +21,14 @@ bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 void DetourInitilization() {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
+
+	directx11 d3d11 = directx11();
+	if (!d3d11.presentFunction) {
+		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
+		return;
+	} else {
+		oPresent = d3d11.presentFunction;
+	}
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(HatManager_GetUnlockedHats);
@@ -54,8 +62,6 @@ void DetourInitilization() {
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
-
-	DirectX::Initialize();
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
 	DetourTransactionCommit();

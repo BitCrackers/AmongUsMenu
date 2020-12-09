@@ -39,6 +39,7 @@
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
+    <ClCompile Include="includes\directx11.cpp" />
     <ClCompile Include="includes\detours\detours.cpp" />
     <ClCompile Include="includes\detours\disasm.cpp" />
     <ClCompile Include="includes\detours\modules.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\DirectX.h" />
     <ClInclude Include="hooks\_hooks.hpp" />
+    <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="includes\imhotkeys.h" />
     <ClInclude Include="resources\resource_data.h" />
