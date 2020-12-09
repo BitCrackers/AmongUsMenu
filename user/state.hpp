@@ -68,6 +68,7 @@ public:
 	bool LockRadar = false;
 
 	bool InMeeting = false;
+	bool PlayMedbayScan = false;
 
 	bool ChatAlwaysActive = false;
 	bool ReadGhostMessages = false;

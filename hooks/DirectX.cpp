@@ -98,6 +98,15 @@ HRESULT __stdcall dPresent(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT f
         }
     }
 
+    if (!IsInGame() || State.InMeeting)
+    {
+        if (State.PlayMedbayScan)
+        {
+            State.PlayMedbayScan = false;
+            State.rpcQueue.push(new RpcSetScanner(false));
+        }
+    }
+
     if (State.DisableLights)
     {
         SwitchSystem* switchSystem = nullptr;
