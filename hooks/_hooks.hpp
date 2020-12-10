@@ -10,6 +10,7 @@ void DetourUninitialization();
 
 bool dAutoOpenDoor_DoUpdate(AutoOpenDoor* __this, float dt, MethodInfo* method);
 bool dConstants_ShouldFlipSkeld(MethodInfo* method);
+void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method);
 bool dStatsManager_get_AmBanned(StatsManager* __this, MethodInfo* method);
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method);
 float dStatsManager_get_BanPoints(StatsManager* __this, MethodInfo* method);

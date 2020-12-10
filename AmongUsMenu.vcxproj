@@ -39,6 +39,7 @@
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\GameOptionsData.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
+    <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="includes\directx11.cpp" />
     <ClCompile Include="includes\detours\detours.cpp" />
     <ClCompile Include="includes\detours\disasm.cpp" />
