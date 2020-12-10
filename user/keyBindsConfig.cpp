@@ -2,7 +2,6 @@
 #include <map>
 
 static const std::map<uint8_t, const char*> KeyMap = {
-    {0x01, "MOUSE 1"},
     {0x02, "MOUSE 2"},
     {0x04, "MOUSE 3"},
     {0x05, "MOUSE 4"},
