@@ -62,6 +62,7 @@ void DetourInitilization() {
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
+	HOOKFUNC(InnerNetClient_Update);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
