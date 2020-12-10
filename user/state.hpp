@@ -29,7 +29,10 @@ public:
 		VK_DELETE,
 		VK_INSERT,
 		VK_HOME,
-		VK_END
+		VK_END,
+		0x00,
+		0x00,
+		0x00
 	};
 
 	bool ImGuiInitialized = false;
@@ -54,6 +57,7 @@ public:
 	int TaskBarUpdates = 0;
 
 	bool NoClip = false;
+	bool HotkeyNoClip = false;
 
 	bool DisableLights = false;
 
@@ -77,6 +81,7 @@ public:
 	SystemTypes__Enum selectedDoor;
 	std::vector<SystemTypes__Enum> mapDoors;
 	std::vector<SystemTypes__Enum> pinnedDoors;
+	bool CloseAllDoors = false;
 
 	bool ShowConsole = false;
 	std::vector<EventInterface*> events;

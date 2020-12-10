@@ -1,7 +1,9 @@
 #include "keyBindsConfig.h"
 #include <map>
+#include "imgui/imgui.h"
 
 static const std::map<uint8_t, const char*> KeyMap = {
+    
     {0x02, "MOUSE 2"},
     {0x04, "MOUSE 3"},
     {0x05, "MOUSE 4"},
@@ -10,10 +12,12 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x09, "TAB"},
     {0x0C, "CLEAR"},
     {0x0D, "RETURN"},
+    {0x10, "SHIFT"},
     {0x11, "CTRL"},
     {0x12, "ALT"},
     {0x13, "PAUSE"},
     {0x14, "CAPS LOCK"},
+    {0x1B, "ESC"},
     {0x20, "SPACE"},
     {0x21, "PG UP"},
     {0x22, "PG DN"},
@@ -53,22 +57,22 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x5A, "Z"},
     {0x5B, "WINDOWS"},
     {0x5C, "WINDOWS"},
-    {0x60, "NUMPAD 0"},
-    {0x61, "NUMPAD 1"},
-    {0x62, "NUMPAD 2"},
-    {0x63, "NUMPAD 3"},
-    {0x64, "NUMPAD 4"},
-    {0x65, "NUMPAD 5"},
-    {0x66, "NUMPAD 6"},
-    {0x67, "NUMPAD 7"},
-    {0x68, "NUMPAD 8"},
-    {0x69, "NUMPAD 9"},
+    {0x60, "NUM 0"},
+    {0x61, "NUM 1"},
+    {0x62, "NUM 2"},
+    {0x63, "NUM 3"},
+    {0x64, "NUM 4"},
+    {0x65, "NUM 5"},
+    {0x66, "NUM 6"},
+    {0x67, "NUM 7"},
+    {0x68, "NUM 8"},
+    {0x69, "NUM 9"},
     {0x6A, "MULTIPLY"},
     {0x6B, "ADD"},
     {0x6C, "SEPARATOR"},
     {0x6D, "SUBTRACT"},
     {0x6E, "DECIMAL"},
-    {0x6F, "DEVIDE"},
+    {0x6F, "DIVIDE"},
     {0x70, "F1"},
     {0x71, "F2"},
     {0x72, "F3"},
@@ -81,10 +85,10 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x79, "F10"},
     {0x7A, "F11"},
     {0x7B, "F12"},
-    {0xA0, "LEFT SHIFT"},
-    {0xA1, "RIGHT SHIFT"},
-    {0xA2, "LEFT CTRL"},
-    {0xA3, "RIGHT CTRL"},
+    {0xA0, "L SHIFT"},
+    {0xA1, "R SHIFT"},
+    {0xA2, "L CTRL"},
+    {0xA3, "R CTRL"},
 };
 
 KeyBindsConfig KeyBindsConfig::fromJson(nlohmann::ordered_json json)
@@ -95,6 +99,9 @@ KeyBindsConfig KeyBindsConfig::fromJson(nlohmann::ordered_json json)
     keyBinds.Toggle_Radar = json["Toggle_Radar"].get<uint8_t>();
     keyBinds.Toggle_Console = json["Toggle_Console"].get<uint8_t>();
     keyBinds.Repair_Sabotage = json["Repair_Sabotage"].get<uint8_t>();
+    keyBinds.Repair_Sabotage = json["Toggle_Noclip"].get<uint8_t>();
+    keyBinds.Close_All_Doors = json["Close_All_Doors"].get<uint8_t>();
+    keyBinds.Toggle_Zoom = json["Toggle_Zoom"].get<uint8_t>();
 
     return keyBinds;
 }
@@ -107,6 +114,9 @@ nlohmann::ordered_json KeyBindsConfig::toJson(KeyBindsConfig keyBinds)
     json["Toggle_Radar"] = keyBinds.Toggle_Radar;
     json["Toggle_Console"] = keyBinds.Toggle_Console;
     json["Repair_Sabotage"] = keyBinds.Repair_Sabotage;
+    json["Toggle_Noclip"] = keyBinds.Toggle_Noclip;
+    json["Close_All_Doors"] = keyBinds.Close_All_Doors;
+    json["Toggle_Zoom"] = keyBinds.Toggle_Zoom;
 
     return json;
 }
@@ -128,4 +138,18 @@ std::vector<uint8_t> KeyBindsConfig::getValidKeys()
         validKeys.push_back(key);
 
     return validKeys;
+}
+
+bool KeyBindsConfig::IsReleased(uint8_t key)
+{
+    if (key == 0x02)
+        return ImGui::IsMouseReleased(1);
+    else if (key == 0x04)
+        return ImGui::IsMouseReleased(2);
+    else if (key == 0x05)
+        return ImGui::IsMouseReleased(3);
+    else if (key == 0x06)
+        return ImGui::IsMouseReleased(4);
+    else
+        return ImGui::IsKeyReleased(key);
 }

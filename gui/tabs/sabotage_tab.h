@@ -5,6 +5,7 @@
 #include "state.hpp"
 #include "game.hpp"
 #include "utility.h"
+#include "gui-helpers.hpp"
 
 namespace SabotageTab {
 	void Render();

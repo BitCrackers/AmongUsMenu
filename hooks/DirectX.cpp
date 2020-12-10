@@ -30,10 +30,13 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
-    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
-    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
-    if (ImGui::IsKeyReleased(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
-    if (ImGui::IsKeyReleased(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Noclip) && IsInGame()) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Zoom) && IsInGame()) State.EnableZoom = !State.EnableZoom;
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -93,6 +96,8 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         State.FollowerCam = nullptr;
         State.EnableZoom = false;
         State.DisableLights = false;
+        State.CloseAllDoors = false;
+        State.HotkeyNoClip = false;
 
         if (!IsInLobby()) {
             State.FlipSkeld = false;
@@ -106,6 +111,26 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
             State.PlayMedbayScan = false;
             State.rpcQueue.push(new RpcSetScanner(false));
         }
+    }
+
+    if (IsInGame() && State.CloseAllDoors)
+    {
+        for (auto door : State.mapDoors)
+        {
+            State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
+        }
+        State.CloseAllDoors = false;
+    }
+
+    if (IsInGame() && State.HotkeyNoClip)
+    {
+        if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
+            if (State.NoClip)
+                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+            else
+                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
+        }
+        State.HotkeyNoClip = false;
     }
 
     if (State.DisableLights)
