@@ -78,7 +78,7 @@ void ApplyTheme() {
 	style.GrabRounding = 2.0f;
 
 	style.WindowTitleAlign.x = 0.50f;
-
+	style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	style.Colors[ImGuiCol_Border] = ImVec4(0.539f, 0.479f, 0.255f, 0.162f);
 	style.FrameBorderSize = 0.0f;
 	style.WindowBorderSize = 0.0f;

@@ -185,6 +185,9 @@
     <ClCompile Include="user\keyBindsConfig.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="includes\imgui\imgui_tables.cpp">
+      <Filter>includes\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">

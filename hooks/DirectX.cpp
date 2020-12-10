@@ -52,7 +52,9 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
 
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+        //io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pContext);
 
@@ -152,6 +154,9 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     pContext->OMSetRenderTargets(1, &pRenderTargetView, NULL);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	ImGui::UpdatePlatformWindows();
+	ImGui::RenderPlatformWindowsDefault();
 
     il2cpp_gc_enable();
 

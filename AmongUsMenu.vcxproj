@@ -43,6 +43,7 @@
     <ClCompile Include="includes\detours\detours.cpp" />
     <ClCompile Include="includes\detours\disasm.cpp" />
     <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="user\keyBindsConfig.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
