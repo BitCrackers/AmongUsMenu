@@ -11,6 +11,7 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x09, "TAB"},
     {0x0C, "CLEAR"},
     {0x0D, "RETURN"},
+    {0x10, "SHIFT"},
     {0x11, "CTRL"},
     {0x12, "ALT"},
     {0x13, "PAUSE"},
