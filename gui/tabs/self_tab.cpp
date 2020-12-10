@@ -37,7 +37,7 @@ namespace SelfTab {
 			ImGui::Dummy(ImVec2(7, 7));
 
 			ImGui::Checkbox("Reveal Impostors", &State.RevealImpostors);
-			ImGui::Checkbox("Show Ghosts", &State.ShowGhosts);
+			ImGui::Checkbox("See Ghosts", &State.ShowGhosts);
 			ImGui::Checkbox("Unlock Vents", &State.UnlockVents);
 
 			if (ImGui::Checkbox("No Clip", &State.NoClip)) {
