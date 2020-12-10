@@ -15,9 +15,13 @@ namespace SettingsTab {
 			if (ImGui::Button("Reset Theme Color")) {
 				State.SelectedColor = State.DefaultColor;
 			}
-			ImGui::Text("Show Menu Keybind: ");
+			ImGui::Text("Show/Hide Menu Keybind: ");
 			ImGui::SameLine();
 			HotKey(State.KeyBinds.Toggle_Menu);
+
+			ImGui::Text("Show/Hide Console Keybind:");
+			ImGui::SameLine();
+			HotKey(State.KeyBinds.Toggle_Console);
 #ifdef _DEBUG
 			ImGui::Dummy(ImVec2(7, 7));
 			ImGui::Separator();

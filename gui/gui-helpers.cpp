@@ -65,7 +65,11 @@ void HotKey(uint8_t& key)
 		return;
 
 	ImGui::SetTooltip("Press any key to change the keybind");
-	for(uint8_t vKey : KeyBindsConfig::getValidKeys())
-		if(ImGui::IsKeyReleased(vKey))
-			key = vKey != VK_ESCAPE ? vKey : 0;
+	for (uint8_t vKey : KeyBindsConfig::getValidKeys())
+		if (ImGui::IsKeyReleased(vKey))
+			key = (vKey != VK_ESCAPE ? vKey : 0x00);
+		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+			key = 0x02;
+		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Middle))
+			key = 0x04;
 }

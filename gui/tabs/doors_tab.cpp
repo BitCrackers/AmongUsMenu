@@ -43,6 +43,8 @@ namespace DoorsTab {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
 					}
 				}
+				ImGui::SameLine();
+				HotKey(State.KeyBinds.Close_All_Doors);
 				if (ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)
