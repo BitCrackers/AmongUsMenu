@@ -18,8 +18,8 @@ void Settings::Load() {
 
 	if (j_object.contains("ShowMenu"))
 		Settings::ShowMenu = j_object["ShowMenu"].get<bool>();
-	if (j_object.contains("ShowMenu_Hotkey"))
-		Settings::Shortcuts[0].Combo.Keys = j_object["ShowMenu_Hotkey"].get<uint32_t>();
+	if (j_object.contains("KeyBinds"))
+		KeyBinds = KeyBindsConfig::fromJson(j_object["KeyBinds"].get<json>());
 
 	if (j_object.contains("SelectedColor_x"))
 		Settings::SelectedColor.x = j_object["SelectedColor_x"].get<float>();
@@ -31,8 +31,6 @@ void Settings::Load() {
 		Settings::ShowGhosts = j_object["ShowGhosts"].get<bool>();
 	if (j_object.contains("ShowRadar"))
 		Settings::ShowRadar = j_object["ShowRadar"].get<bool>();
-	if (j_object.contains("ShowRadar_Hotkey"))
-		Settings::Shortcuts[1].Combo.Keys = j_object["ShowRadar_Hotkey"].get<uint32_t>();
 	if (j_object.contains("ShowRadar_DeadBodies"))
 		Settings::ShowRadar_DeadBodies = j_object["ShowRadar_DeadBodies"].get<bool>();
 	if (j_object.contains("ShowRadar_Ghosts"))
@@ -45,9 +43,6 @@ void Settings::Load() {
 		Settings::ShowRadar_RightClick_Teleport = j_object["ShowRadar_RightClick_Teleport"].get<bool>();
 	if (j_object.contains("Radar_Opacity"))
 		Settings::SelectedColor.w = j_object["Radar_Opacity"].get<float>();
-
-	if (j_object.contains("RepairSabotage_Hotkey"))
-		Settings::Shortcuts[3].Combo.Keys = j_object["RepairSabotage_Hotkey"].get<uint32_t>();
 
 	if (j_object.contains("MaxVision"))
 		Settings::MaxVision = j_object["MaxVision"].get<bool>();
@@ -64,8 +59,6 @@ void Settings::Load() {
 
 	if (j_object.contains("ShowConsole"))
 		Settings::ShowConsole = j_object["ShowConsole"].get<bool>();
-	if (j_object.contains("Console_Hotkey"))
-		Settings::Shortcuts[2].Combo.Keys = j_object["Console_Hotkey"].get<uint32_t>();
 
 #ifdef _DEBUG
 	if (j_object.contains("showDebugTab"))
@@ -76,7 +69,7 @@ void Settings::Load() {
 void Settings::Save() {
 	json j_object = json{
 		{"ShowMenu", Settings::ShowMenu},
-		{"ShowMenu_Hotkey", Settings::Shortcuts[0].Combo.Keys},
+		{"KeyBinds", KeyBindsConfig::toJson(KeyBinds)},
 #ifdef _DEBUG
 		{"showDebugTab", Settings::showDebugTab},
 #endif
@@ -86,15 +79,12 @@ void Settings::Save() {
 
 		{"ShowGhosts", Settings::ShowGhosts},
 		{"ShowRadar", Settings::ShowRadar},
-		{"ShowRadar_Hotkey", Settings::Shortcuts[1].Combo.Keys},
 		{"ShowRadar_DeadBodies", Settings::ShowRadar_DeadBodies},
 		{"ShowRadar_Ghosts", Settings::ShowRadar_Ghosts},
 		{"HideRadar_During_Meetings", Settings::HideRadar_During_Meetings},
 		{"LockRadar", Settings::LockRadar},
 		{"ShowRadar_RightClick_Teleport", Settings::ShowRadar_RightClick_Teleport},
 		{"Radar_Opacity", Settings::SelectedColor.w},
-
-		{"RepairSabotage_Hotkey", Settings::Shortcuts[3].Combo.Keys},
 
 		{"MaxVision", Settings::MaxVision},
 		{"Wallhack", Settings::Wallhack},
@@ -104,7 +94,6 @@ void Settings::Save() {
 		{"ReadGhostMessages", Settings::ReadGhostMessages},
 
 		{"ShowConsole", Settings::ShowConsole},
-		{"Console_Hotkey", Settings::Shortcuts[2].Combo.Keys}
 	};
 
 	std::ofstream outSettings(pSettings);

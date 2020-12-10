@@ -1,4 +1,5 @@
 #include "gui-helpers.hpp"
+#include "keyBindsConfig.h"
 
 bool CustomListBoxInt(const char* label, int* value, const std::vector<const char*> list, float width, ImGuiComboFlags flags) {
 	auto comboLabel = "##" + std::string(label);
@@ -54,4 +55,17 @@ bool SteppedSliderFloat(const char* label, float* v, float v_min, float v_max, f
 
 	*v = v_min + float(v_i) * v_step;
 	return valueChanged;
+}
+
+void HotKey(uint8_t& key)
+{
+	ImGui::Text("[ %s ]", KeyBindsConfig::toString(key));
+
+	if (!ImGui::IsItemHovered())
+		return;
+
+	ImGui::SetTooltip("Press any key to change the keybind");
+	for(uint8_t vKey : KeyBindsConfig::getValidKeys())
+		if(ImGui::IsKeyReleased(vKey))
+			key = vKey != VK_ESCAPE ? vKey : 0;
 }
