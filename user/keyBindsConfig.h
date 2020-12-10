@@ -17,4 +17,5 @@ struct KeyBindsConfig {
     static nlohmann::ordered_json toJson(KeyBindsConfig keyBinds);
     static const char* toString(uint8_t key);
     static std::vector<uint8_t> getValidKeys();
+    static bool IsReleased(uint8_t key);
 };

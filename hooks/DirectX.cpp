@@ -30,13 +30,13 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
-    if (IsButtonReleased(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
-    if (IsButtonReleased(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
-    if (IsButtonReleased(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
-    if (IsButtonReleased(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
-    if (IsButtonReleased(State.KeyBinds.Toggle_Noclip) && IsInGame()) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
-    if (IsButtonReleased(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
-    if (IsButtonReleased(State.KeyBinds.Toggle_Zoom) && IsInGame()) State.EnableZoom = !State.EnableZoom;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Noclip) && IsInGame()) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Zoom) && IsInGame()) State.EnableZoom = !State.EnableZoom;
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }

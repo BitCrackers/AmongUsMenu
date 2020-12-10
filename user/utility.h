@@ -76,7 +76,6 @@ std::vector<E> GetElementsFromArray(T a) {
 }
 
 int randi(int lo, int hi);
-bool IsButtonReleased(int key);
 ImVec4 AmongUsColorToImVec4(Color color);
 ImVec4 AmongUsColorToImVec4(CorrectedColor32 color);
 bool IsInLobby();

@@ -1,5 +1,6 @@
 #include "keyBindsConfig.h"
 #include <map>
+#include "imgui/imgui.h"
 
 static const std::map<uint8_t, const char*> KeyMap = {
     
@@ -137,4 +138,18 @@ std::vector<uint8_t> KeyBindsConfig::getValidKeys()
         validKeys.push_back(key);
 
     return validKeys;
+}
+
+bool KeyBindsConfig::IsReleased(uint8_t key)
+{
+    if (key == 0x02)
+        return ImGui::IsMouseReleased(1);
+    else if (key == 0x04)
+        return ImGui::IsMouseReleased(2);
+    else if (key == 0x05)
+        return ImGui::IsMouseReleased(3);
+    else if (key == 0x06)
+        return ImGui::IsMouseReleased(4);
+    else
+        return ImGui::IsKeyReleased(key);
 }
