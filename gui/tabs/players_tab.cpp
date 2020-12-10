@@ -33,6 +33,37 @@ namespace PlayersTab {
 					ImGui::TextColored(nameColor, playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
+
+				auto allPlayers = GetAllPlayerControl();
+				std::vector<NormalPlayerTask*> allTasks = std::vector<NormalPlayerTask*>();
+
+				for (auto player : allPlayers)
+				{
+					if (PlayerSelection(player).has_value() && !GetPlayerData(player)->fields.IsImpostor)
+					{
+						for (auto task : GetNormalPlayerTasks(player))
+						{
+							allTasks.push_back(task);
+						}
+					}
+				}
+
+				float tasksComplete = 0.0f;
+				float totalTasks = 0.0f;
+
+				for (auto task : allTasks)
+				{
+					totalTasks++;
+					if (task->fields.taskStep == task->fields.MaxStep)
+					{
+						tasksComplete++;
+					}
+				}
+
+				float taskPercentage = tasksComplete / totalTasks;
+
+				ImGui::TextColored(ImVec4(1.0f - taskPercentage, 1.0f, 1.0f - taskPercentage, 1.0f), "%.1f%% Total Tasks Completed", taskPercentage * 100);
+
 				ImGui::EndChild();
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
@@ -106,6 +137,7 @@ namespace PlayersTab {
 						ImGui::ListBoxFooter();
 					}
 				}
+
 				ImGui::EndChild();
 				ImGui::EndTabItem();
 			}
