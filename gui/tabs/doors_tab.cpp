@@ -45,6 +45,14 @@ namespace DoorsTab {
 				}
 				ImGui::SameLine();
 				HotKey(State.KeyBinds.Close_All_Doors);
+
+				if (ImGui::Button("Close Room Door"))
+				{
+					State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
+				}
+				ImGui::SameLine();
+				HotKey(State.KeyBinds.Close_Current_Room_Door);
+
 				if (ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)

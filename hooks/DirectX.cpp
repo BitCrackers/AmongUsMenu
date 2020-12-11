@@ -37,6 +37,8 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Noclip) && IsInGame()) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
     if (KeyBindsConfig::IsReleased(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
     if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Zoom) && IsInGame()) State.EnableZoom = !State.EnableZoom;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Freecam) && IsInGame()) State.FreeCam = !State.FreeCam;
+    if (KeyBindsConfig::IsReleased(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }

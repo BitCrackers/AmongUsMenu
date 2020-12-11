@@ -12,6 +12,8 @@ struct KeyBindsConfig {
     uint8_t Toggle_Noclip;
     uint8_t Close_All_Doors;
     uint8_t Toggle_Zoom;
+    uint8_t Toggle_Freecam;
+    uint8_t Close_Current_Room_Door;
 
     static KeyBindsConfig fromJson(nlohmann::ordered_json json);
     static nlohmann::ordered_json toJson(KeyBindsConfig keyBinds);

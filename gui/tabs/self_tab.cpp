@@ -14,6 +14,8 @@ namespace SelfTab {
 					State.playerToFollow = PlayerSelection();
 				}
 			}
+			ImGui::SameLine();
+			HotKey(State.KeyBinds.Toggle_Freecam);
 
 			ImGui::SameLine(145.0f);
 			SteppedSliderFloat("  ", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx Speed", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
