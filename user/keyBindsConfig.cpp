@@ -102,6 +102,8 @@ KeyBindsConfig KeyBindsConfig::fromJson(nlohmann::ordered_json json)
     keyBinds.Repair_Sabotage = json["Toggle_Noclip"].get<uint8_t>();
     keyBinds.Close_All_Doors = json["Close_All_Doors"].get<uint8_t>();
     keyBinds.Toggle_Zoom = json["Toggle_Zoom"].get<uint8_t>();
+    keyBinds.Toggle_Freecam = json["Toggle_Freecam"].get<uint8_t>();
+    keyBinds.Close_Current_Room_Door = json["Close_Current_Room_Door"].get<uint8_t>();
 
     return keyBinds;
 }
@@ -117,6 +119,8 @@ nlohmann::ordered_json KeyBindsConfig::toJson(KeyBindsConfig keyBinds)
     json["Toggle_Noclip"] = keyBinds.Toggle_Noclip;
     json["Close_All_Doors"] = keyBinds.Close_All_Doors;
     json["Toggle_Zoom"] = keyBinds.Toggle_Zoom;
+    json["Toggle_Freecam"] = keyBinds.Toggle_Freecam;
+    json["Close_Current_Room_Door"] = keyBinds.Close_Current_Room_Door;
 
     return json;
 }
