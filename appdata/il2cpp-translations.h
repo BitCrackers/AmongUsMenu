@@ -70,7 +70,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_BanMinutesLeft", "GALKJBNDNJO" },
 	{ "get_AmBanned", "OKPJOODJHID" },
-	{ "get_BanPoints", "NDJDCBDPMHE" },
+	{ "get_BanPoints", "INDPECBGFNO" },
 	{ "Deserialize", "FEJLLGGCJCC" },
 	{ "EnterVent", "JBNFMBNNPJB" },
 	{ "ExitVent", "ENCPOOAFILD" },
