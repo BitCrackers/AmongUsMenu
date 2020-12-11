@@ -34,35 +34,10 @@ namespace PlayersTab {
 				}
 				ImGui::ListBoxFooter();
 
-				auto allPlayers = GetAllPlayerControl();
-				std::vector<NormalPlayerTask*> allTasks = std::vector<NormalPlayerTask*>();
-
-				for (auto player : allPlayers)
-				{
-					if (PlayerSelection(player).has_value() && !GetPlayerData(player)->fields.IsImpostor)
-					{
-						for (auto task : GetNormalPlayerTasks(player))
-						{
-							allTasks.push_back(task);
-						}
-					}
+				if (IsInMultiplayerGame()) {
+					float taskPercentage = (float) (*Game::pGameData)->fields.CompletedTasks / (float) (*Game::pGameData)->fields.TotalTasks;
+					ImGui::TextColored(ImVec4(1.0f - taskPercentage, 1.0f, 1.0f - taskPercentage, 1.0f), "%.1f%% Total Tasks Completed", taskPercentage * 100);
 				}
-
-				float tasksComplete = 0.0f;
-				float totalTasks = 0.0f;
-
-				for (auto task : allTasks)
-				{
-					totalTasks++;
-					if (task->fields.taskStep == task->fields.MaxStep)
-					{
-						tasksComplete++;
-					}
-				}
-
-				float taskPercentage = tasksComplete / totalTasks;
-
-				ImGui::TextColored(ImVec4(1.0f - taskPercentage, 1.0f, 1.0f - taskPercentage, 1.0f), "%.1f%% Total Tasks Completed", taskPercentage * 100);
 
 				ImGui::EndChild();
 				ImGui::SameLine();
