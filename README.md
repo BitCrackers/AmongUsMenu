@@ -8,7 +8,7 @@
 This project is for Educational Use only. We do not condone this software being used to gain an advantage against other people. I made this project for my university project to show how cheating software works and how it is possible to block these manipulations in the future.
 
 ## Compile (Configurations)
-You can compile two different versions of the menu. Normal or Xinput.
+You can compile two different versions of the menu. Normal or Version Proxy.
 
 ### Normal (AmongUsMenu.dll)
 Inject it with any injector you have.
