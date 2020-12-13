@@ -8,6 +8,7 @@
 #include "game.hpp"
 #include <imgui/imgui.h>
 #include "_events.h"
+#include <filesystem>
 
 struct CorrectedColor32 {
 	uint8_t r;
@@ -99,7 +100,7 @@ void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
 const char* TranslateSystemTypes(SystemTypes__Enum systemType);
 CorrectedColor32 GetPlayerColor(uint8_t colorId);
-std::string getModulePath();
+std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(Vector2 vector);
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);

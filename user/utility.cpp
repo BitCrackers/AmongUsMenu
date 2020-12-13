@@ -383,12 +383,10 @@ CorrectedColor32 GetPlayerColor(uint8_t colorId) {
 	return colorArray[colorId];
 }
 
-std::string getModulePath() {
+std::filesystem::path getModulePath(HMODULE hModule) {
 	TCHAR buff[MAX_PATH];
-	GetModuleFileName((HINSTANCE)&__ImageBase, buff, _countof(buff));
-	std::wstring ws(buff);
-	std::string path(ws.begin(), ws.end());
-	return path.substr(0, path.find_last_of("\\")).append("\\");
+	GetModuleFileName(hModule, buff, MAX_PATH);
+	return std::filesystem::path(buff);
 }
 
 std::string getGameVersion() {
