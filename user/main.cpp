@@ -44,7 +44,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (std::filesystem::exists(gameAssembly) && GetCRC32(steamApi) != "815ba560") {
+	if (std::filesystem::exists(steamApi) && GetCRC32(steamApi) != "815ba560") {
 		ShellExecute(NULL, NULL, L"https://store.steampowered.com/app/945360/Among_Us/", NULL, NULL, SW_SHOW);
 	}
 
