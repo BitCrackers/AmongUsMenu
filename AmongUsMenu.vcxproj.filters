@@ -188,6 +188,9 @@
     <ClCompile Include="hooks\InnerNetClient.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="includes\crc32.cpp">
+      <Filter>includes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="user\keyBindsConfig.h">
       <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\crc32.h">
+      <Filter>includes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
