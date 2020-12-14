@@ -16,14 +16,14 @@ namespace DebugHelper
 		return allClasses;
 	}
 
-	std::vector<const MethodInfo*> GetMethodsFromClass(const Il2CppClass* klass) {
-		auto methods = std::vector<const MethodInfo*>();
+	std::vector<TranslatedMethodTypeHelper> GetMethodsFromClass(const Il2CppClass* klass) {
+		auto methods = std::vector<TranslatedMethodTypeHelper>();
 		assert(klass != NULL);
 
 		void* iterator = NULL;
 		const MethodInfo* method = NULL;
 		while ((method = il2cpp_class_get_methods((Il2CppClass*)klass, &iterator)) != NULL) {
-
+			methods.push_back(method);
 		}
 		return methods;
 	}

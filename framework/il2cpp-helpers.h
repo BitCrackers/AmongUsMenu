@@ -22,3 +22,5 @@ void output_class_methods(Il2CppClass* klass);
 void output_assembly_methods(const Il2CppAssembly* assembly);
 KLASS translate_klass(KLASS klass_input);
 std::string get_type_name(const Il2CppType* type);
+std::string translate_method_name(std::string input);
+std::string get_method_params(const MethodInfo* methodInfo);

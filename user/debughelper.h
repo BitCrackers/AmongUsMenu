@@ -35,8 +35,23 @@ namespace DebugHelper
 		}
 	};
 
+	struct TranslatedMethodTypeHelper
+	{
+		const MethodInfo* methodReference;
+		std::string translatedName;
+		TranslatedMethodTypeHelper()
+		{
+			this->methodReference = NULL;
+		}
+		TranslatedMethodTypeHelper(const MethodInfo* ref)
+		{
+			this->methodReference = ref;
+			this->translatedName = translate_method_name(il2cpp_method_get_name(ref));
+		}
+	};
+
 	std::vector<TranslatedClassHelper> GetClassesFromImage(const Il2CppImage* image);
-	std::vector<const MethodInfo*> GetMethodsFromClass(const Il2CppClass* klass);
+	std::vector<TranslatedMethodTypeHelper> GetMethodsFromClass(const Il2CppClass* klass);
 	std::vector<TranslatedFieldTypeHelper> GetFieldTypesFromClass(const Il2CppClass* klass);
 	
 }
