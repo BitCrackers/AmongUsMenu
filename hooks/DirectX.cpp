@@ -61,6 +61,8 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pContext);
 
+        hPresentMutex = CreateMutex(NULL, false, NULL);
+
         maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
