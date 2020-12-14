@@ -17,7 +17,7 @@ namespace DebugGui
 
 		MainDebugTab::Render();
 		ClassDebugTab::Render();
-
+		TranslationsDebugTab::Render();
 		
 
 		ImGui::EndTabBar();

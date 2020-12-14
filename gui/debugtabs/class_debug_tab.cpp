@@ -63,7 +63,7 @@ namespace ClassDebugTab
 				}
 				if (selectedMethod.methodReference != NULL && ImGui::Button("Output method to console"))
 				{
-					std::cout << get_method_description(selectedMethod.methodReference) << std::endl;
+					std::cout << "\"" << get_method_description(selectedMethod.methodReference) << "\"" << std::endl;
 				}
 				ImGui::Text("Fields");
 				if (ImGui::ListBoxHeader("##fieldlist", ImVec2(-1, -1)))

@@ -15,18 +15,10 @@ namespace MainDebugTab {
 			{
 				State.Load();
 			}
-			ImGui::SameLine(0.0f, 1.0f);
+			ImGui::SameLine(0.0f, 8.0f);
 			if (ImGui::Button("Force Save Settings"))
 			{
 				State.Save();
-			}
-			if (ImGui::Button("Dump PlayerControl methods"))
-			{
-				auto domain = il2cpp_domain_get();
-				auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
-				
-				auto klass = il2cpp_class_from_name(assembly->image, "", "BHHCHKFKPOE");
-				output_class_methods(klass);
 			}
 
 			ImGui::EndTabItem();

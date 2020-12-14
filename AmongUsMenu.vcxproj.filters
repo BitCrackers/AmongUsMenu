@@ -200,6 +200,9 @@
     <ClCompile Include="user\debughelper.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="gui\debugtabs\translations_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="user\debughelper.h">
       <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debugtabs\translations_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
