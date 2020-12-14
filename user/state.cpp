@@ -59,20 +59,12 @@ void Settings::Load() {
 
 	if (j_object.contains("ShowConsole"))
 		Settings::ShowConsole = j_object["ShowConsole"].get<bool>();
-
-#ifdef _DEBUG
-	if (j_object.contains("showDebugTab"))
-		Settings::showDebugTab = j_object["showDebugTab"].get<uint32_t>();
-#endif
 }
 
 void Settings::Save() {
 	json j_object = json{
 		{"ShowMenu", Settings::ShowMenu},
 		{"KeyBinds", KeyBindsConfig::toJson(KeyBinds)},
-#ifdef _DEBUG
-		{"showDebugTab", Settings::showDebugTab},
-#endif
 		{"SelectedColor_x", Settings::SelectedColor.x},
 		{"SelectedColor_y", Settings::SelectedColor.y},
 		{"SelectedColor_z", Settings::SelectedColor.z},

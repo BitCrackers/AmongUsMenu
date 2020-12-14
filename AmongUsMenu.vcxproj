@@ -25,6 +25,9 @@
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="events\WalkEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
+    <ClCompile Include="gui\debug.cpp" />
+    <ClCompile Include="gui\debugtabs\class_debug_tab.cpp" />
+    <ClCompile Include="gui\debugtabs\main_debug_tab.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
     <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
@@ -45,6 +48,7 @@
     <ClCompile Include="includes\detours\detours.cpp" />
     <ClCompile Include="includes\detours\disasm.cpp" />
     <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="user\debughelper.cpp" />
     <ClCompile Include="user\keyBindsConfig.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
@@ -103,6 +107,9 @@
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
     <ClInclude Include="gui\console.hpp" />
+    <ClInclude Include="gui\debug.hpp" />
+    <ClInclude Include="gui\debugtabs\class_debug_tab.h" />
+    <ClInclude Include="gui\debugtabs\main_debug_tab.h" />
     <ClInclude Include="gui\gui-helpers.hpp" />
     <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
@@ -118,6 +125,7 @@
     <ClInclude Include="includes\crc32.h" />
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
+    <ClInclude Include="user\debughelper.h" />
     <ClInclude Include="user\keyBindsConfig.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />

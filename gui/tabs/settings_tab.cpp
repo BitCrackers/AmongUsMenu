@@ -27,12 +27,10 @@ namespace SettingsTab {
 			ImGui::Text("Show/Hide Console Keybind:");
 			ImGui::SameLine();
 			HotKey(State.KeyBinds.Toggle_Console);
-#ifdef _DEBUG
-			ImGui::Dummy(ImVec2(7, 7));
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
-			ImGui::Checkbox("Show Debug Tab", &State.showDebugTab);
-#endif
+
+			if (ImGui::Button("Open Debug Window")) {
+				State.ShowDebugWindow = true;
+			}
 			ImGui::EndTabItem();
 		}
 	}

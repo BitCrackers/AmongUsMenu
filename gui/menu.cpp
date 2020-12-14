@@ -31,10 +31,6 @@ namespace Menu {
 		SabotageTab::Render();
 		DoorsTab::Render();
 		HostTab::Render();
-#ifdef _DEBUG
-		if (State.showDebugTab)
-			DebugTab::Render();
-#endif
 
 		if(firstRender)
 			firstRender = false;

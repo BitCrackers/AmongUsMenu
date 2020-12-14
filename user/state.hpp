@@ -41,7 +41,7 @@ public:
 	bool ShowMenu = false;
 
 #ifdef _DEBUG
-	bool showDebugTab = false;
+	bool ShowDebugWindow = false;
 #endif
 
 	std::string CurrentScene;

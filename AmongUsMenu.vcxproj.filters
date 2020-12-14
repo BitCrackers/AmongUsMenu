@@ -191,6 +191,18 @@
     <ClCompile Include="includes\crc32.cpp">
       <Filter>includes</Filter>
     </ClCompile>
+    <ClCompile Include="gui\debug.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\debugtabs\class_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\debugtabs\main_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
+    <ClCompile Include="user\debughelper.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -341,6 +353,18 @@
     <ClInclude Include="includes\crc32.h">
       <Filter>includes</Filter>
     </ClInclude>
+    <ClInclude Include="gui\debug.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debugtabs\class_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debugtabs\main_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
+    </ClInclude>
+    <ClInclude Include="user\debughelper.h">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="user">
@@ -378,6 +402,9 @@
     </Filter>
     <Filter Include="resources">
       <UniqueIdentifier>{13bbd967-7fa2-4fab-8779-0f912dbbb311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\debugtabs">
+      <UniqueIdentifier>{42691de9-4ebf-4002-9bb2-7d925f0b7f13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

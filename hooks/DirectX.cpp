@@ -8,6 +8,7 @@
 #include "radar.hpp"
 #include "state.hpp"
 #include "theme.hpp"
+#include "debug.hpp"
 #include <iostream>
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -99,6 +100,10 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     if (State.ShowConsole) {
         ConsoleGui::Render();
+    }
+    
+    if (State.ShowDebugWindow) {
+        DebugGui::Render();
     }
 
     ImGui::EndFrame();
