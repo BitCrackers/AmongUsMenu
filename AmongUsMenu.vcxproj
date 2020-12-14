@@ -29,7 +29,6 @@
     <ClCompile Include="gui\debugtabs\class_debug_tab.cpp" />
     <ClCompile Include="gui\debugtabs\main_debug_tab.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
-    <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
     <ClCompile Include="gui\tabs\game_tab.cpp" />
     <ClCompile Include="gui\tabs\host_tab.cpp" />
@@ -111,7 +110,6 @@
     <ClInclude Include="gui\debugtabs\class_debug_tab.h" />
     <ClInclude Include="gui\debugtabs\main_debug_tab.h" />
     <ClInclude Include="gui\gui-helpers.hpp" />
-    <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
     <ClInclude Include="gui\tabs\game_tab.h" />
     <ClInclude Include="gui\tabs\host_tab.h" />

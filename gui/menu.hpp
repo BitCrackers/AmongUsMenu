@@ -17,9 +17,6 @@
 #include "tabs/doors_tab.h"
 #include "tabs/host_tab.h"
 #include "tabs/self_tab.h"
-#ifdef _DEBUG
-#include "tabs/debug_tab.h"
-#endif
 
 namespace Menu {
 	void Init();

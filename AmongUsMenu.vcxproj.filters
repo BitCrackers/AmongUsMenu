@@ -158,9 +158,6 @@
     <ClCompile Include="rpc\RpcPlayAnimation.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\debug_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
     <ClCompile Include="rpc\RpcSetScanner.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
@@ -329,9 +326,6 @@
       <Filter>gui\tabs</Filter>
     </ClInclude>
     <ClInclude Include="gui\tabs\settings_tab.h" />
-    <ClInclude Include="gui\tabs\debug_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
     <ClInclude Include="framework\version.h">
       <Filter>framework</Filter>
     </ClInclude>
