@@ -61,11 +61,11 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         ImGui_ImplWin32_Init(window);
         ImGui_ImplDX11_Init(pDevice, pContext);
 
-        hPresentMutex = CreateMutex(NULL, false, NULL);
-
         maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
+
+        hPresentMutex = CreateMutex(NULL, false, NULL);
 
         return true;
     }
@@ -74,7 +74,6 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
 }
 
 HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
-    WaitForSingleObject(hPresentMutex, 0); //We're claiming ownership, but we'll be damned if we're going to wait
     if (!State.ImGuiInitialized) {
         if (ImGuiInitialization(__this)) {
             State.ImGuiInitialized = true;
@@ -83,6 +82,8 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
             return oPresent(__this, SyncInterval, Flags);
         }
     }
+
+    WaitForSingleObject(hPresentMutex, 0); //We're claiming ownership, but we'll be damned if we're going to wait
 
     il2cpp_gc_disable();
 
@@ -111,12 +112,15 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     il2cpp_gc_enable();
 
+    HRESULT result = oPresent(__this, SyncInterval, Flags);
+
     ReleaseMutex(hPresentMutex);
 
-    return oPresent(__this, SyncInterval, Flags);
+    return result;
 }
 
 void DirectX::Shutdown() {
+    assert(hPresentMutex != NULL); //Initialization is now in a hook, so we might as well guard against this
     assert(WaitForSingleObject(hPresentMutex, INFINITE) == WAIT_OBJECT_0); //Since this is only used on debug builds, we'll leave this for now
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
     ImGui_ImplDX11_Shutdown();
