@@ -16,6 +16,15 @@ namespace SettingsTab {
 				State.SelectedColor = State.DefaultColor;
 			}
 
+#ifdef _DEBUG
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+			if (ImGui::Button("Open Debug Window")) {
+				State.ShowDebugWindow = true;
+			}
+#endif
+
 			ImGui::Dummy(ImVec2(7, 7));
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
@@ -28,9 +37,6 @@ namespace SettingsTab {
 			ImGui::SameLine();
 			HotKey(State.KeyBinds.Toggle_Console);
 
-			if (ImGui::Button("Open Debug Window")) {
-				State.ShowDebugWindow = true;
-			}
 			ImGui::EndTabItem();
 		}
 	}
