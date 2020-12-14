@@ -59,6 +59,8 @@ void Run(LPVOID lpParam) {
 	init_il2cpp();
 
 	if (!GameVersionCheck()) {
+		fclose(stdout);
+		FreeConsole();
 		FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 		return;
 	}
