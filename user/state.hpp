@@ -40,9 +40,7 @@ public:
 	bool ImGuiInitialized = false;
 	bool ShowMenu = false;
 
-#ifdef _DEBUG
 	bool ShowDebugWindow = false;
-#endif
 
 	std::string CurrentScene;
 

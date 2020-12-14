@@ -104,6 +104,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     if (State.ShowConsole) {
         ConsoleGui::Render();
     }
+
 #ifdef _DEBUG
     if (State.ShowDebugWindow) {
         DebugGui::Render();
