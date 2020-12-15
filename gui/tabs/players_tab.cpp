@@ -76,9 +76,10 @@ namespace PlayersTab {
 						}
 					}
 
-					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead)
+					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
 					{
-						if (((*Game::pLocalPlayer)->fields.killTimer <= 0.0f) && ImGui::Button("Kill Player"))
+						if (ImGui::Button("Kill Player"))
 						{
 							previousPlayerPosition = GetTrueAdjustedPosition(*Game::pLocalPlayer);
 							State.rpcQueue.push(new RpcMurderPlayer(State.selectedPlayer));
