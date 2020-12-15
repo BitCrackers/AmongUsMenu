@@ -78,7 +78,7 @@ namespace PlayersTab {
 
 					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead)
 					{
-						if (ImGui::Button("Kill Player"))
+						if (State.KillCooldownExpired && ImGui::Button("Kill Player"))
 						{
 							previousPlayerPosition = GetTrueAdjustedPosition(*Game::pLocalPlayer);
 							State.rpcQueue.push(new RpcMurderPlayer(State.selectedPlayer));

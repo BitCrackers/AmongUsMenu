@@ -76,6 +76,7 @@ public:
 
 	bool InMeeting = false;
 	bool PlayMedbayScan = false;
+	bool KillCooldownExpired = true;
 
 	bool ChatAlwaysActive = false;
 	bool ReadGhostMessages = false;

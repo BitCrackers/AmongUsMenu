@@ -40,6 +40,7 @@
     <ClCompile Include="hooks\GameOptionsData.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />
+    <ClCompile Include="hooks\KillButtonManager.cpp" />
     <ClCompile Include="includes\crc32.cpp" />
     <ClCompile Include="includes\directx11.cpp" />
     <ClCompile Include="includes\detours\detours.cpp" />

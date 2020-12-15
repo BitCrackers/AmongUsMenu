@@ -42,3 +42,4 @@ void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
+void dKillButtonManager_SetCoolDown(KillButtonManager* __this, float timer, float maxTimer, MethodInfo* method);
