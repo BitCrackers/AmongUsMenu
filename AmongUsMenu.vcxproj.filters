@@ -191,6 +191,9 @@
     <ClCompile Include="includes\crc32.cpp">
       <Filter>includes</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\SaveManager.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">

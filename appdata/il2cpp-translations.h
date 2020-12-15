@@ -56,6 +56,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "PlayerTask"}, {"", "PILBGHDHJLH"} },
 	{ {"", "ReactorTask"}, {"", "PMNHCPJEPJH"} },
 	{ {"", "SabotageTask"}, {"", "MOKGEPINKEH"} },
+	{ {"", "SaveManager"}, {"", "IANFCOGHJMJ"} },
 	{ {"", "ScreenJoystick"}, {"", "OAJOCHMLEDJ"} },
 	{ {"", "ShipStatus"}, {"", "HLBNNHFCNAJ"} },
 	{ {"", "SomeKindaDoor"}, {"", "NBEJDLGKDGA"} },
@@ -64,7 +65,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "TextRenderer"}, {"", "AELDHKGBIFD"} },
 	{ {"", "Vent"}, {"", "OPPMFCFACJB"} },
 	{ {"InnerNet", "InnerNetClient"}, {"", "KHNHJFFECBP"} },
-	{ {"InnerNet", "InnerNetObject"}, {"", "NJAHILONGKN"} },
+	{ {"InnerNet", "InnerNetObject"}, {"", "EKDECEPHHGP"} },
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
@@ -75,5 +76,7 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "EnterVent", "JBNFMBNNPJB" },
 	{ "ExitVent", "ENCPOOAFILD" },
 	{ "ReportDeadBody", "MKAIDPJOJFP" },
-	{ "ShouldFlipSkeld", "LKHNHNEEOOJ"}
+	{ "ShouldFlipSkeld", "LKHNHNEEOOJ"},
+	{ "set_BodyColor", "LBBABKKKFAJ"},
+	{ "get_BodyColor", "GMJIBKDIKAI"}
 };

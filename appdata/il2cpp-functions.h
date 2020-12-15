@@ -62,6 +62,9 @@ DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl*__this, GameData_
 DO_APP_FUNC(void, PlayerControl_RpcSetInfected, (PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetInfected(GameData.PlayerInfo[])");
 DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetScanner(System.Boolean)");
 
+DO_APP_FUNC(void, SaveManager_set_BodyColor, (uint8_t value, MethodInfo* method), "Assembly-CSharp, System.Void SaveManager::set_BodyColor(System.Byte)");
+DO_APP_FUNC(uint8_t, SaveManager_get_BodyColor, (MethodInfo* method), "Assembly-CSharp, System.Byte SaveManager::get_BodyColor()");
+
 DO_APP_FUNC(float, ShipStatus_CalculateLightRadius, (ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method), "Assembly-CSharp, System.Single ShipStatus::CalculateLightRadius(GameData.PlayerInfo)");
 DO_APP_FUNC(void, ShipStatus_OnEnable, (ShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void ShipStatus::OnEnable()");
 DO_APP_FUNC(void, ShipStatus_RpcCloseDoorsOfType, (ShipStatus* __this, SystemTypes__Enum type, MethodInfo* method), "Assembly-CSharp, System.Void ShipStatus::RpcCloseDoorsOfType(SystemTypes)");
