@@ -9,5 +9,5 @@ RpcMurderPlayer::RpcMurderPlayer(PlayerSelection target)
 
 void RpcMurderPlayer::Process()
 {
-	PlayerControl_MurderPlayer(*Game::pLocalPlayer, target.get_PlayerControl(), NULL);
+	PlayerControl_RpcMurderPlayer(*Game::pLocalPlayer, target.get_PlayerControl(), NULL);
 }
