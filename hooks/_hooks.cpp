@@ -75,7 +75,6 @@ void DetourInitilization() {
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
-	HOOKFUNC(KillButtonManager_SetCoolDown);
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
 	DetourTransactionCommit();
@@ -120,7 +119,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
-	UNHOOKFUNC(KillButtonManager_SetCoolDown);
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
 	DetourTransactionCommit();
