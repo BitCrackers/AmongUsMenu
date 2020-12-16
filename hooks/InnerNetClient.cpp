@@ -7,17 +7,17 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if (!IsInGame()) {
         State.selectedPlayer = PlayerSelection();
         State.playerToFollow = PlayerSelection();
-        State.NoClip = false;
         State.FreeCam = false;
         State.InMeeting = false;
         State.FollowerCam = nullptr;
         State.EnableZoom = false;
         State.DisableLights = false;
         State.CloseAllDoors = false;
-        State.HotkeyNoClip = false;
 
         if (!IsInLobby()) {
             State.FlipSkeld = false;
+            State.NoClip = false;
+            State.HotkeyNoClip = false;
         }
     }
 
@@ -39,7 +39,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         State.CloseAllDoors = false;
     }
 
-    if (IsInGame() && State.HotkeyNoClip)
+    if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip)
     {
         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
             if (State.NoClip)
