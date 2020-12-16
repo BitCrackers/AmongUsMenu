@@ -43,7 +43,7 @@ namespace SelfTab {
 			ImGui::Checkbox("Unlock Vents", &State.UnlockVents);
 
 			if (ImGui::Checkbox("No Clip", &State.NoClip)) {
-				if (State.LobbyTimer <= 0)
+				if (State.LobbyTimer == 0 || !IsInLobby())
 				{
 					if (!IsInGame() && !IsInLobby()) State.NoClip = false;
 					else {

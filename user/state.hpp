@@ -118,7 +118,7 @@ public:
 
 	bool FlipSkeld = false;
 
-	int LobbyTimer = 0;
+	int LobbyTimer = -1;
 
 	void Load();
 	void Save();

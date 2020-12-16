@@ -6,7 +6,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
     if (!IsInLobby())
     {
-        State.LobbyTimer = 0;
+        State.LobbyTimer = -1;
     }
 
     if (IsInLobby() && State.LobbyTimer > 0)
