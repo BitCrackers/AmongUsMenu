@@ -37,7 +37,6 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method);
 void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method);
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method);
-void dPlayerControl_SetColor(PlayerControl* __this, uint8_t bodyColor, MethodInfo* method);
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);

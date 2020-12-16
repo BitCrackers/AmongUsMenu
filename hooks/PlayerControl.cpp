@@ -165,9 +165,3 @@ void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {
 	}
 	Renderer_set_enabled(__this, value, method);
 }
-
-void dPlayerControl_SetColor(PlayerControl* __this, uint8_t bodyColor, MethodInfo* method)
-{
-	std::cout << "PlayerControl::SetColor " << +bodyColor << std::endl;
-	PlayerControl_SetColor(__this, bodyColor, method);
-}
