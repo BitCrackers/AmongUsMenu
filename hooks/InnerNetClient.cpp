@@ -21,6 +21,16 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
     }
 
+    if (!IsInLobby())
+    {
+        State.LobbyTimer = 0;
+    }
+
+    if (IsInLobby() && State.LobbyTimer > 0)
+    {
+        State.LobbyTimer--;
+    }
+
     if (!IsInGame() || State.InMeeting)
     {
         if (State.PlayMedbayScan)
