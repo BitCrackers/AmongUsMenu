@@ -18,7 +18,7 @@ std::string GetCRC32(std::filesystem::path filePath) {
 	while (!fin.eof()) {
 		fin.read(&buffer[0], 4096);
 		auto readSize = fin.gcount();
-		crc32.add(&buffer[0], readSize);
+		crc32.add(&buffer[0], (size_t) readSize);
 	}
 
 	return crc32.getHash();
