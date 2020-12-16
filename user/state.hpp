@@ -65,6 +65,8 @@ public:
 
 	bool AntiBan = false;
 
+	bool MoveInVent = false;
+
 	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 

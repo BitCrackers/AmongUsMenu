@@ -60,6 +60,14 @@ namespace SelfTab {
 			ImGui::SameLine();
 			HotKey(State.KeyBinds.Toggle_Noclip);
 
+			if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent) && IsInGame())
+			{
+				if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent))
+				{
+					(*Game::pLocalPlayer)->fields.moveable = false;
+				}
+			}
+
 			ImGui::EndTabItem();
 		}
 	}

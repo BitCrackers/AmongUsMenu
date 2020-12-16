@@ -73,6 +73,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             }
             State.CloseAllDoors = false;
         }
+
+        if ((*Game::pLocalPlayer)->fields.inVent)
+        {
+            (*Game::pLocalPlayer)->fields.moveable = true;
+        }
     }
 
 	InnerNetClient_Update(__this, method);
