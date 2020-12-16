@@ -7,7 +7,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if (!IsInGame()) {
         State.selectedPlayer = PlayerSelection();
         State.playerToFollow = PlayerSelection();
-        State.NoClip = false;
         State.FreeCam = false;
         State.InMeeting = false;
         State.FollowerCam = nullptr;
