@@ -4,23 +4,6 @@ using namespace app;
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
-    if (!IsInGame()) {
-        State.selectedPlayer = PlayerSelection();
-        State.playerToFollow = PlayerSelection();
-        State.FreeCam = false;
-        State.InMeeting = false;
-        State.FollowerCam = nullptr;
-        State.EnableZoom = false;
-        State.DisableLights = false;
-        State.CloseAllDoors = false;
-
-        if (!IsInLobby()) {
-            State.FlipSkeld = false;
-            State.NoClip = false;
-            State.HotkeyNoClip = false;
-        }
-    }
-
     if (!IsInLobby())
     {
         State.LobbyTimer = 0;
@@ -40,15 +23,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
     }
 
-    if (IsInGame() && State.CloseAllDoors)
-    {
-        for (auto door : State.mapDoors)
-        {
-            State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
-        }
-        State.CloseAllDoors = false;
-    }
-
     if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip)
     {
         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
@@ -63,6 +37,42 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan)
     {
         PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
+    }
+
+    if (!IsInGame()) {
+        State.selectedPlayer = PlayerSelection();
+        State.playerToFollow = PlayerSelection();
+        State.FreeCam = false;
+        State.InMeeting = false;
+        State.FollowerCam = nullptr;
+        State.EnableZoom = false;
+        State.DisableLights = false;
+        State.CloseAllDoors = false;
+
+        if (!IsInLobby()) {
+            State.FlipSkeld = false;
+            State.NoClip = false;
+            State.HotkeyNoClip = false;
+        }
+    }
+    else
+    {
+        if (!State.rpcQueue.empty()) {
+            auto rpc = State.rpcQueue.front();
+            State.rpcQueue.pop();
+
+            rpc->Process();
+            delete rpc;
+        }
+
+        if (State.CloseAllDoors)
+        {
+            for (auto door : State.mapDoors)
+            {
+                State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
+            }
+            State.CloseAllDoors = false;
+        }
     }
 
 	InnerNetClient_Update(__this, method);
