@@ -2,15 +2,19 @@
 #include "utility.h"
 #include "_rpc.h"
 
-RpcReportPlayer::RpcReportPlayer(PlayerSelection selected_player)
+RpcReportPlayer::RpcReportPlayer(PlayerSelection target)
 {
-	this->reportedPlayer = selected_player;
+	this->reportedPlayer = target;
 }
 
 void RpcReportPlayer::Process()
 {
 	if (reportedPlayer.has_value())
-	{	//Conditional is to prevent you reporting yourself (as much as I enjoy that)
-		PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, (reportedPlayer.is_LocalPlayer()) ? NULL : reportedPlayer.get_PlayerData(), NULL);
+	{
+		PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, reportedPlayer.get_PlayerData(), NULL);
+	}
+	else
+	{
+		PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, NULL, NULL);
 	}
 }

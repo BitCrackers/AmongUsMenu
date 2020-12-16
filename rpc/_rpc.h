@@ -57,7 +57,7 @@ public:
 class RpcReportPlayer : public RPCInterface {
 	PlayerSelection reportedPlayer;
 public:
-	RpcReportPlayer(PlayerSelection selected_player);
+	RpcReportPlayer(PlayerSelection target);
 	virtual void Process() override;
 };
 
