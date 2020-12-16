@@ -191,6 +191,9 @@
     <ClCompile Include="includes\crc32.cpp">
       <Filter>includes</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">

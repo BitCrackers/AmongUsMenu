@@ -65,6 +65,7 @@
     <ClCompile Include="hooks\StatsManager.cpp" />
     <ClCompile Include="hooks\Vent.cpp" />
     <ClCompile Include="hooks\_hooks.cpp" />
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp" />
     <ClCompile Include="rpc\RpcPlayAnimation.cpp" />
     <ClCompile Include="rpc\RpcRepairSystem.cpp" />
     <ClCompile Include="rpc\RpcReportPlayer.cpp" />
