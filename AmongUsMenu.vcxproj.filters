@@ -202,6 +202,8 @@
     </ClCompile>
     <ClCompile Include="gui\debugtabs\translations_debug_tab.cpp">
       <Filter>gui\debugtabs</Filter>
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp">
+      <Filter>rpc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

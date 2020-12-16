@@ -60,3 +60,10 @@ public:
 	RpcReportPlayer(PlayerSelection selected_player);
 	virtual void Process() override;
 };
+
+class RpcMurderPlayer : public RPCInterface {
+	PlayerSelection target;
+public:
+	RpcMurderPlayer(PlayerSelection target);
+	virtual void Process() override;
+};
