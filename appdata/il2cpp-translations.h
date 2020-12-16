@@ -45,7 +45,6 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "HudOverrideTask"}, {"", "LFOILEODBMA"} },
 	{ {"", "ImportantTextTask"}, {"", "ABFBCNBODMA"} },
 	{ {"", "KeyboardJoystick"}, {"", "ADEHDODPMHJ"} },
-	{ {"", "KillButtonManager"}, {"", "MLPJGKEACMM"} },
 	{ {"", "MapBehaviour"}, {"", "CBAGIJCCEGG"} },
 	{ {"", "MeetingHud"}, {"", "OOCJALPKPEP"} },
 	{ {"", "NoOxyTask"}, {"", "FBIJCIMFFJP"} },
