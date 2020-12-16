@@ -63,6 +63,8 @@ public:
 
 	bool DisableLights = false;
 
+	bool AntiBan = false;
+
 	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 
