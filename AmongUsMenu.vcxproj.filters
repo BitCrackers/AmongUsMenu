@@ -193,6 +193,8 @@
     </ClCompile>
     <ClCompile Include="hooks\SaveManager.cpp">
       <Filter>hooks</Filter>
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp">
+      <Filter>rpc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

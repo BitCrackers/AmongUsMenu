@@ -1,6 +1,10 @@
 #include "players_tab.h"
 
 namespace PlayersTab {
+
+	int framesPassed = -1;
+	Vector2 previousPlayerPosition;
+
 	void Render() {
 		if (IsInGame()) {
 			if (ImGui::BeginTabItem("Players")) {
@@ -71,6 +75,24 @@ namespace PlayersTab {
 							}
 						}
 					}
+
+					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
+					{
+						if (ImGui::Button("Kill Player"))
+						{
+							previousPlayerPosition = GetTrueAdjustedPosition(*Game::pLocalPlayer);
+							State.rpcQueue.push(new RpcMurderPlayer(State.selectedPlayer));
+							framesPassed = 14;
+						}
+					}
+
+					if (framesPassed == 0)
+					{
+						State.rpcQueue.push(new RpcSnapTo(previousPlayerPosition));
+						framesPassed--;
+					}
+					else framesPassed--;
 
 					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
