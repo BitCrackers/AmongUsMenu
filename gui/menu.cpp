@@ -5,7 +5,7 @@ using namespace app;
 namespace Menu {
 	void Init() {
 #ifdef _DEBUG
-		ImGui::SetNextWindowSize(ImVec2(500, 270), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(500, 280), ImGuiCond_Once);
 #else
 		ImGui::SetNextWindowSize(ImVec2(440, 280), ImGuiCond_Once);
 #endif
