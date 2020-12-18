@@ -236,7 +236,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>version</TargetName>
-    <OutDir>D:\SteamLibrary\steamapps\common\Among Us\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
