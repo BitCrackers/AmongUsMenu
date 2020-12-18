@@ -25,7 +25,12 @@ namespace GameTab {
 					State.PrevTaskBarUpdates = State.TaskBarUpdates;
 				}
 			}
-			ImGui::NewLine();
+
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+			
+			ImGui::Checkbox("Anti Kick/Ban", &State.AntiBan);
 			ImGui::Checkbox("Console", &State.ShowConsole);
 
 			ImGui::EndTabItem();

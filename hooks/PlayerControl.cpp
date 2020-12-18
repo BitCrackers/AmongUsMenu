@@ -1,4 +1,5 @@
 #include "_hooks.hpp"
+#include "game.hpp"
 
 using namespace app;
 
