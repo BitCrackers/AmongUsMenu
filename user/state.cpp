@@ -58,6 +58,7 @@ void Settings::Load() {
 		Settings::ReadGhostMessages = j_object["ReadGhostMessages"].get<bool>();
 	if (j_object.contains("MoveInVent"))
 			Settings::MoveInVent = j_object["MoveInVent"].get<bool>();
+	
 	if (j_object.contains("ShowConsole"))
 		Settings::ShowConsole = j_object["ShowConsole"].get<bool>();
 
