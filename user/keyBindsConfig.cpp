@@ -99,7 +99,7 @@ KeyBindsConfig KeyBindsConfig::fromJson(nlohmann::ordered_json json)
     keyBinds.Toggle_Radar = json["Toggle_Radar"].get<uint8_t>();
     keyBinds.Toggle_Console = json["Toggle_Console"].get<uint8_t>();
     keyBinds.Repair_Sabotage = json["Repair_Sabotage"].get<uint8_t>();
-    keyBinds.Repair_Sabotage = json["Toggle_Noclip"].get<uint8_t>();
+    keyBinds.Toggle_Noclip = json["Toggle_Noclip"].get<uint8_t>();
     keyBinds.Close_All_Doors = json["Close_All_Doors"].get<uint8_t>();
     keyBinds.Toggle_Zoom = json["Toggle_Zoom"].get<uint8_t>();
     keyBinds.Toggle_Freecam = json["Toggle_Freecam"].get<uint8_t>();
