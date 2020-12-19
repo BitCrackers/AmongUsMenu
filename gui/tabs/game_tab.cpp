@@ -32,11 +32,23 @@ namespace GameTab {
 			
 			if (ImGui::Button("Set Color"))
 			{
+				bool colorAvailable = true;
+
+				for (PlayerControl* player : GetAllPlayerControl())
+				{
+					if (State.SelectedColorId == GetPlayerData(player)->fields.ColorId)
+					{
+						colorAvailable = false;
+						break;
+					}
+				}
+
+				if(colorAvailable)
 				State.rpcQueue.push(new RpcSetColor(State.SelectedColorId));
 			}
 
 			ImGui::SameLine(85);
-			CustomListBoxInt(" ", &State.SelectedColorId, COLORS, 80.0f);
+			CustomListBoxInt(" ", &State.SelectedColorId, COLORS, 85.0f);
 
 			if (ImGui::Checkbox("Anti Kick/Ban", &State.AntiBan))
 			{
