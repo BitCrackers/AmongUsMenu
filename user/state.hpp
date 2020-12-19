@@ -65,6 +65,8 @@ public:
 
 	bool AntiBan = false;
 
+	bool MoveInVent = false;
+
 	PlayerSelection selectedPlayer;
 	std::queue<RPCInterface*> rpcQueue;
 
@@ -115,6 +117,8 @@ public:
 	Vector3 prevCamPos = { NULL, NULL, NULL };
 
 	bool FlipSkeld = false;
+
+	int LobbyTimer = -1;
 
 	void Load();
 	void Save();

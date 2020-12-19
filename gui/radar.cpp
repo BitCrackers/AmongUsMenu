@@ -23,7 +23,7 @@ namespace Radar {
 	}
 
 	void OnClick() {
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && !(*Game::pLocalPlayer)->fields.inVent) {
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();

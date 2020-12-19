@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Natvis Include="NatvisFile.natvis" />
     <ClCompile Include="framework\dllmain.cpp">
       <Filter>framework</Filter>
     </ClCompile>
@@ -193,6 +194,7 @@
     </ClCompile>
     <ClCompile Include="hooks\SaveManager.cpp">
       <Filter>hooks</Filter>
+	</ClCompile>
     <ClCompile Include="rpc\RpcMurderPlayer.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
@@ -348,68 +350,134 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="user">
-      <UniqueIdentifier>{a6379efa-a0e3-4cca-8fc1-26c9a9d711d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework">
-      <UniqueIdentifier>{5171b04e-e103-4beb-8fc6-39a56e5bed75}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hooks">
-      <UniqueIdentifier>{33323a38-be2c-4868-8d12-a2eaf9169f3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="gui">
-      <UniqueIdentifier>{26a3c830-f0ea-46fc-ab04-9e43e67d9efd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="appdata">
-      <UniqueIdentifier>{80c78902-affc-43fb-9c81-cd744244e6f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="includes">
-      <UniqueIdentifier>{b5d4530e-2fca-4836-8e90-5e55f5445e39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="includes\detours">
-      <UniqueIdentifier>{166264ce-d359-420e-ba62-adba2279ff8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="includes\imgui">
-      <UniqueIdentifier>{0ea105ce-0c37-46f9-8a5e-b845cb40a743}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="rpc">
-      <UniqueIdentifier>{34796e1f-0eb0-4048-8a58-92b9eed2b812}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="gui\tabs">
-      <UniqueIdentifier>{adf8506d-c5ae-43ab-a084-b809640a34aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="events">
-      <UniqueIdentifier>{d526527a-bee5-4ec3-ab45-73dcba5394b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources">
-      <UniqueIdentifier>{13bbd967-7fa2-4fab-8779-0f912dbbb311}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="events\CastVoteEvent.cpp" />
+    <ClCompile Include="events\KillEvent.cpp" />
+    <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
+    <ClCompile Include="events\VentEvent.cpp" />
+    <ClCompile Include="events\WalkEvent.cpp" />
+    <ClCompile Include="gui\console.cpp" />
+    <ClCompile Include="gui\gui-helpers.cpp" />
+    <ClCompile Include="gui\tabs\debug_tab.cpp" />
+    <ClCompile Include="gui\tabs\doors_tab.cpp" />
+    <ClCompile Include="gui\tabs\game_tab.cpp" />
+    <ClCompile Include="gui\tabs\host_tab.cpp" />
+    <ClCompile Include="gui\tabs\players_tab.cpp" />
+    <ClCompile Include="gui\tabs\radar_tab.cpp" />
+    <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
+    <ClCompile Include="gui\tabs\settings_tab.cpp" />
+    <ClCompile Include="gui\tabs\tasks_tab.cpp" />
+    <ClCompile Include="hooks\DirectX.cpp" />
+    <ClCompile Include="hooks\Dleks.cpp" />
+    <ClCompile Include="hooks\GameOptionsData.cpp" />
+    <ClCompile Include="hooks\HudManager.cpp" />
+    <ClCompile Include="hooks\InnerNetClient.cpp" />
+    <ClCompile Include="hooks\SaveManager.cpp" />
+    <ClCompile Include="includes\crc32.cpp" />
+    <ClCompile Include="includes\directx11.cpp" />
+    <ClCompile Include="includes\detours\detours.cpp" />
+    <ClCompile Include="includes\detours\disasm.cpp" />
+    <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="user\keyBindsConfig.cpp" />
+    <ClCompile Include="rpc\RpcCompleteTask.cpp" />
+    <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
+    <ClCompile Include="framework\dllmain.cpp" />
+    <ClCompile Include="hooks\Chat.cpp" />
+    <ClCompile Include="hooks\Doors.cpp" />
+    <ClCompile Include="hooks\HatManager.cpp" />
+    <ClCompile Include="hooks\KeyboardJoystick.cpp" />
+    <ClCompile Include="hooks\MeetingHud.cpp" />
+    <ClCompile Include="hooks\PlayerControl.cpp" />
+    <ClCompile Include="hooks\SceneManager.cpp" />
+    <ClCompile Include="hooks\ShipStatus.cpp" />
+    <ClCompile Include="hooks\StatsManager.cpp" />
+    <ClCompile Include="hooks\Vent.cpp" />
+    <ClCompile Include="hooks\_hooks.cpp" />
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp" />
+    <ClCompile Include="rpc\RpcPlayAnimation.cpp" />
+    <ClCompile Include="rpc\RpcRepairSystem.cpp" />
+    <ClCompile Include="rpc\RpcReportPlayer.cpp" />
+    <ClCompile Include="rpc\RpcSetScanner.cpp" />
+    <ClCompile Include="rpc\RpcSnapTo.cpp" />
+    <ClCompile Include="events\TaskCompletedEvent.cpp" />
+    <ClCompile Include="gui\tabs\self_tab.cpp" />
+    <ClCompile Include="user\resources.cpp" />
+    <ClCompile Include="user\utility.cpp" />
+    <ClCompile Include="framework\il2cpp-helpers.cpp" />
+    <ClCompile Include="framework\il2cpp-init.cpp" />
+    <ClCompile Include="gui\menu.cpp" />
+    <ClCompile Include="gui\radar.cpp" />
+    <ClCompile Include="includes\imgui\imgui.cpp" />
+    <ClCompile Include="includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="user\game.cpp" />
+    <ClCompile Include="user\main.cpp" />
+    <ClCompile Include="user\state.cpp" />
+    <ClCompile Include="framework\version.cpp" />
+    <ClCompile Include="hooks\LobbyBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="NatvisFile.natvis" />
+    <ClInclude Include="appdata\il2cpp-api-functions.h" />
+    <ClInclude Include="appdata\il2cpp-classes.h" />
+    <ClInclude Include="appdata\il2cpp-functions.h" />
+    <ClInclude Include="appdata\il2cpp-translations.h" />
+    <ClInclude Include="events\_events.h" />
+    <ClInclude Include="gui\console.hpp" />
+    <ClInclude Include="gui\gui-helpers.hpp" />
+    <ClInclude Include="gui\tabs\debug_tab.h" />
+    <ClInclude Include="gui\tabs\doors_tab.h" />
+    <ClInclude Include="gui\tabs\game_tab.h" />
+    <ClInclude Include="gui\tabs\host_tab.h" />
+    <ClInclude Include="gui\tabs\players_tab.h" />
+    <ClInclude Include="gui\tabs\radar_tab.h" />
+    <ClInclude Include="gui\tabs\sabotage_tab.h" />
+    <ClInclude Include="gui\tabs\settings_tab.h" />
+    <ClInclude Include="gui\tabs\tasks_tab.h" />
+    <ClInclude Include="hooks\DirectX.h" />
+    <ClInclude Include="hooks\_hooks.hpp" />
+    <ClInclude Include="includes\crc32.h" />
+    <ClInclude Include="includes\directx11.h" />
+    <ClInclude Include="includes\detours\detours.h" />
+    <ClInclude Include="user\keyBindsConfig.h" />
+    <ClInclude Include="resources\resource_data.h" />
+    <ClInclude Include="rpc\_rpc.h" />
+    <ClInclude Include="gui\tabs\self_tab.h" />
+    <ClInclude Include="user\resources.h" />
+    <ClInclude Include="user\utility.h" />
+    <ClInclude Include="framework\il2cpp-appdata.h" />
+    <ClInclude Include="appdata\il2cpp-types.h" />
+    <ClInclude Include="framework\il2cpp-helpers.h" />
+    <ClInclude Include="framework\il2cpp-init.h" />
+    <ClInclude Include="includes\signature.hpp" />
+    <ClInclude Include="gui\menu.hpp" />
+    <ClInclude Include="gui\radar.hpp" />
+    <ClInclude Include="gui\theme.hpp" />
+    <ClInclude Include="includes\stb_image.h" />
+    <ClInclude Include="includes\imgui\imconfig.h" />
+    <ClInclude Include="includes\imgui\imgui.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="includes\imgui\imgui_internal.h" />
+    <ClInclude Include="includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="includes\json.hpp" />
+    <ClInclude Include="user\game.hpp" />
+    <ClInclude Include="user\main.h" />
+    <ClInclude Include="user\state.hpp" />
+    <ClInclude Include="framework\version.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\the_skald.png">
-      <Filter>resources</Filter>
-    </Image>
-    <Image Include="resources\mira_hq.png">
-      <Filter>resources</Filter>
-    </Image>
-    <Image Include="resources\polus.png">
-      <Filter>resources</Filter>
-    </Image>
+    <ResourceCompile Include="resources\resource_data.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\resource_data.rc">
-      <Filter>resources</Filter>
-    </ResourceCompile>
+    <Image Include="resources\mira_hq.png" />
+    <Image Include="resources\polus.png" />
+    <Image Include="resources\the_skald.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\resource_data.aps">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="framework\version.def">
-      <Filter>framework</Filter>
-    </None>
+    <None Include="resources\resource_data.aps" />
+    <None Include="framework\version.def" />
   </ItemGroup>
 </Project>

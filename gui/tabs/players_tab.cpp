@@ -49,7 +49,7 @@ namespace PlayersTab {
 
 				if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
 					if (ImGui::Button("Call Meeting")) {
-						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection(*Game::pLocalPlayer)));
+						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
 				}
 
@@ -57,7 +57,7 @@ namespace PlayersTab {
 				{
 					if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 						ImGui::NewLine();
-						if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Report Body")) {
+						if (ImGui::Button("Report Body")) {
 							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
 						}
 					}
@@ -95,7 +95,7 @@ namespace PlayersTab {
 					else framesPassed--;
 
 					if (!State.selectedPlayer.is_LocalPlayer()) {
-						if (ImGui::Button("Teleport To") && !(*Game::pLocalPlayer)->fields.inVent) {
+						if (ImGui::Button("Teleport To")) {
 							State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
 						}
 					}
