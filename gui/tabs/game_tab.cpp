@@ -30,6 +30,14 @@ namespace GameTab {
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
 			
+			if (ImGui::Button("Set Color"))
+			{
+				State.rpcQueue.push(new RpcSetColor(State.SelectedColorId));
+			}
+
+			ImGui::SameLine(85);
+			CustomListBoxInt(" ", &State.SelectedColorId, COLORS, 80.0f);
+
 			if (ImGui::Checkbox("Anti Kick/Ban", &State.AntiBan))
 			{
 				if (IsInLobby() || IsInGame())

@@ -76,6 +76,14 @@ namespace PlayersTab {
 						}
 					}
 
+					if (!State.selectedPlayer.is_LocalPlayer() && ImGui::Button("Steal Name"))
+					{
+						if(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10)
+							State.rpcQueue.push(new RpcSetName(convert_to_string(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " ")));
+						else
+							State.rpcQueue.push(new RpcSetName(State.selectedPlayer.get_PlayerData()->fields.PlayerName));
+					}
+
 					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
 					{

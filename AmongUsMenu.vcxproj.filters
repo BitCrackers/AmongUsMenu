@@ -2,352 +2,59 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis" />
-    <ClCompile Include="framework\dllmain.cpp">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="user\main.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="user\state.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\menu.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\radar.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="user\game.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="framework\il2cpp-helpers.cpp">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="framework\il2cpp-init.cpp">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="user\utility.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\_hooks.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\HatManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\KeyboardJoystick.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\PlayerControl.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\ShipStatus.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\StatsManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\Chat.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\imgui\imgui.cpp">
-      <Filter>includes\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\imgui\imgui_draw.cpp">
-      <Filter>includes\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp">
-      <Filter>includes\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp">
-      <Filter>includes\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\imgui\imgui_widgets.cpp">
-      <Filter>includes\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\MeetingHud.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\Vent.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\SceneManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\Doors.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcSnapTo.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcRepairSystem.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\GameOptionsData.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\gui-helpers.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\game_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\doors_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\players_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\radar_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\sabotage_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\tasks_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\console.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="events\VentEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\TaskCompletedEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\ReportDeadBodyEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\KillEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\CastVoteEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcCompleteTask.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="events\WalkEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\host_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\self_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\settings_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\HudManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
-    <ClCompile Include="rpc\RpcReportPlayer.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="user\resources.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\Dleks.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcPlayAnimation.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\debug_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
-    <ClCompile Include="rpc\RpcSetScanner.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
-    <ClCompile Include="framework\version.cpp">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\detours\detours.cpp">
-      <Filter>includes\detours</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\detours\disasm.cpp">
-      <Filter>includes\detours</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\detours\modules.cpp">
-      <Filter>includes\detours</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\DirectX.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\directx11.cpp">
-      <Filter>includes</Filter>
-    </ClCompile>
-    <ClCompile Include="user\keyBindsConfig.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\InnerNetClient.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="includes\crc32.cpp">
-      <Filter>includes</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks\SaveManager.cpp">
-      <Filter>hooks</Filter>
-	</ClCompile>
-    <ClCompile Include="rpc\RpcMurderPlayer.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="user\main.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="user\state.hpp">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\radar.hpp">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\menu.hpp">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\il2cpp-appdata.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="user\game.hpp">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\il2cpp-helpers.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\il2cpp-init.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="appdata\il2cpp-api-functions.h">
-      <Filter>appdata</Filter>
-    </ClInclude>
-    <ClInclude Include="appdata\il2cpp-classes.h">
-      <Filter>appdata</Filter>
-    </ClInclude>
-    <ClInclude Include="appdata\il2cpp-functions.h">
-      <Filter>appdata</Filter>
-    </ClInclude>
-    <ClInclude Include="appdata\il2cpp-translations.h">
-      <Filter>appdata</Filter>
-    </ClInclude>
-    <ClInclude Include="appdata\il2cpp-types.h">
-      <Filter>appdata</Filter>
-    </ClInclude>
-    <ClInclude Include="user\utility.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imconfig.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imgui.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imgui_impl_dx11.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imgui_impl_win32.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imgui_internal.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imstb_rectpack.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imstb_textedit.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\imgui\imstb_truetype.h">
-      <Filter>includes\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\stb_image.h">
-      <Filter>includes</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\json.hpp">
-      <Filter>includes</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\signature.hpp">
-      <Filter>includes</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\detours\detours.h">
-      <Filter>includes\detours</Filter>
-    </ClInclude>
-    <ClInclude Include="rpc\_rpc.h">
-      <Filter>rpc</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\game_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\doors_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\players_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\radar_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\sabotage_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\tasks_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\console.hpp">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\gui-helpers.hpp">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\theme.hpp">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks\_hooks.hpp">
-      <Filter>hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="events\_events.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\host_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\self_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\settings_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
     <ClInclude Include="gui\tabs\settings_tab.h" />
-    <ClInclude Include="gui\tabs\debug_tab.h">
-      <Filter>gui\tabs</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\version.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="user\resources.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="resources\resource_data.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks\DirectX.h">
-      <Filter>hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\directx11.h">
-      <Filter>includes</Filter>
-    </ClInclude>
-    <ClInclude Include="user\keyBindsConfig.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\crc32.h">
-      <Filter>includes</Filter>
-    </ClInclude>
+    <ClInclude Include="appdata\il2cpp-api-functions.h" />
+    <ClInclude Include="appdata\il2cpp-classes.h" />
+    <ClInclude Include="appdata\il2cpp-functions.h" />
+    <ClInclude Include="appdata\il2cpp-translations.h" />
+    <ClInclude Include="events\_events.h" />
+    <ClInclude Include="gui\console.hpp" />
+    <ClInclude Include="gui\gui-helpers.hpp" />
+    <ClInclude Include="gui\tabs\debug_tab.h" />
+    <ClInclude Include="gui\tabs\doors_tab.h" />
+    <ClInclude Include="gui\tabs\game_tab.h" />
+    <ClInclude Include="gui\tabs\host_tab.h" />
+    <ClInclude Include="gui\tabs\players_tab.h" />
+    <ClInclude Include="gui\tabs\radar_tab.h" />
+    <ClInclude Include="gui\tabs\sabotage_tab.h" />
+    <ClInclude Include="gui\tabs\settings_tab.h" />
+    <ClInclude Include="gui\tabs\tasks_tab.h" />
+    <ClInclude Include="hooks\DirectX.h" />
+    <ClInclude Include="hooks\_hooks.hpp" />
+    <ClInclude Include="includes\crc32.h" />
+    <ClInclude Include="includes\directx11.h" />
+    <ClInclude Include="includes\detours\detours.h" />
+    <ClInclude Include="user\keyBindsConfig.h" />
+    <ClInclude Include="resources\resource_data.h" />
+    <ClInclude Include="rpc\_rpc.h" />
+    <ClInclude Include="gui\tabs\self_tab.h" />
+    <ClInclude Include="user\resources.h" />
+    <ClInclude Include="user\utility.h" />
+    <ClInclude Include="framework\il2cpp-appdata.h" />
+    <ClInclude Include="appdata\il2cpp-types.h" />
+    <ClInclude Include="framework\il2cpp-helpers.h" />
+    <ClInclude Include="framework\il2cpp-init.h" />
+    <ClInclude Include="includes\signature.hpp" />
+    <ClInclude Include="gui\menu.hpp" />
+    <ClInclude Include="gui\radar.hpp" />
+    <ClInclude Include="gui\theme.hpp" />
+    <ClInclude Include="includes\stb_image.h" />
+    <ClInclude Include="includes\imgui\imconfig.h" />
+    <ClInclude Include="includes\imgui\imgui.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="includes\imgui\imgui_internal.h" />
+    <ClInclude Include="includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="includes\json.hpp" />
+    <ClInclude Include="user\game.hpp" />
+    <ClInclude Include="user\main.h" />
+    <ClInclude Include="user\state.hpp" />
+    <ClInclude Include="framework\version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="events\CastVoteEvent.cpp" />
@@ -416,6 +123,73 @@
     <ClCompile Include="user\state.cpp" />
     <ClCompile Include="framework\version.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
+    <ClCompile Include="events\CastVoteEvent.cpp" />
+    <ClCompile Include="events\KillEvent.cpp" />
+    <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
+    <ClCompile Include="events\VentEvent.cpp" />
+    <ClCompile Include="events\WalkEvent.cpp" />
+    <ClCompile Include="gui\console.cpp" />
+    <ClCompile Include="gui\gui-helpers.cpp" />
+    <ClCompile Include="gui\tabs\debug_tab.cpp" />
+    <ClCompile Include="gui\tabs\doors_tab.cpp" />
+    <ClCompile Include="gui\tabs\game_tab.cpp" />
+    <ClCompile Include="gui\tabs\host_tab.cpp" />
+    <ClCompile Include="gui\tabs\players_tab.cpp" />
+    <ClCompile Include="gui\tabs\radar_tab.cpp" />
+    <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
+    <ClCompile Include="gui\tabs\settings_tab.cpp" />
+    <ClCompile Include="gui\tabs\tasks_tab.cpp" />
+    <ClCompile Include="hooks\DirectX.cpp" />
+    <ClCompile Include="hooks\Dleks.cpp" />
+    <ClCompile Include="hooks\GameOptionsData.cpp" />
+    <ClCompile Include="hooks\HudManager.cpp" />
+    <ClCompile Include="hooks\InnerNetClient.cpp" />
+    <ClCompile Include="hooks\SaveManager.cpp" />
+    <ClCompile Include="includes\crc32.cpp" />
+    <ClCompile Include="includes\directx11.cpp" />
+    <ClCompile Include="includes\detours\detours.cpp" />
+    <ClCompile Include="includes\detours\disasm.cpp" />
+    <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="user\keyBindsConfig.cpp" />
+    <ClCompile Include="rpc\RpcCompleteTask.cpp" />
+    <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
+    <ClCompile Include="framework\dllmain.cpp" />
+    <ClCompile Include="hooks\Chat.cpp" />
+    <ClCompile Include="hooks\Doors.cpp" />
+    <ClCompile Include="hooks\HatManager.cpp" />
+    <ClCompile Include="hooks\KeyboardJoystick.cpp" />
+    <ClCompile Include="hooks\MeetingHud.cpp" />
+    <ClCompile Include="hooks\PlayerControl.cpp" />
+    <ClCompile Include="hooks\SceneManager.cpp" />
+    <ClCompile Include="hooks\ShipStatus.cpp" />
+    <ClCompile Include="hooks\StatsManager.cpp" />
+    <ClCompile Include="hooks\Vent.cpp" />
+    <ClCompile Include="hooks\_hooks.cpp" />
+    <ClCompile Include="rpc\RpcMurderPlayer.cpp" />
+    <ClCompile Include="rpc\RpcPlayAnimation.cpp" />
+    <ClCompile Include="rpc\RpcRepairSystem.cpp" />
+    <ClCompile Include="rpc\RpcReportPlayer.cpp" />
+    <ClCompile Include="rpc\RpcSetScanner.cpp" />
+    <ClCompile Include="rpc\RpcSnapTo.cpp" />
+    <ClCompile Include="events\TaskCompletedEvent.cpp" />
+    <ClCompile Include="gui\tabs\self_tab.cpp" />
+    <ClCompile Include="user\resources.cpp" />
+    <ClCompile Include="user\utility.cpp" />
+    <ClCompile Include="framework\il2cpp-helpers.cpp" />
+    <ClCompile Include="framework\il2cpp-init.cpp" />
+    <ClCompile Include="gui\menu.cpp" />
+    <ClCompile Include="gui\radar.cpp" />
+    <ClCompile Include="includes\imgui\imgui.cpp" />
+    <ClCompile Include="includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="user\game.cpp" />
+    <ClCompile Include="user\main.cpp" />
+    <ClCompile Include="user\state.cpp" />
+    <ClCompile Include="framework\version.cpp" />
+    <ClCompile Include="rpc\RpcSetColor.cpp" />
+    <ClCompile Include="rpc\RpcSetName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h" />

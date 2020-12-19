@@ -47,6 +47,8 @@
     <ClCompile Include="includes\detours\detours.cpp" />
     <ClCompile Include="includes\detours\disasm.cpp" />
     <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="rpc\RpcSetColor.cpp" />
+    <ClCompile Include="rpc\RpcSetName.cpp" />
     <ClCompile Include="user\keyBindsConfig.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />

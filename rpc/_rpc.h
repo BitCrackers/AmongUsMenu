@@ -67,3 +67,17 @@ public:
 	RpcMurderPlayer(PlayerSelection target);
 	virtual void Process() override;
 };
+
+class RpcSetColor : public RPCInterface {
+	uint8_t bodyColor;
+public:
+	RpcSetColor(uint8_t colorId);
+	virtual void Process() override;
+};
+
+class RpcSetName : public RPCInterface {
+	String* name;
+public:
+	RpcSetName(String* name);
+	virtual void Process() override;
+};
