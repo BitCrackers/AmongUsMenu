@@ -56,7 +56,8 @@ void Settings::Load() {
 		Settings::ChatAlwaysActive = j_object["ChatAlwaysActive"].get<bool>();
 	if (j_object.contains("ReadGhostMessages"))
 		Settings::ReadGhostMessages = j_object["ReadGhostMessages"].get<bool>();
-
+	if (j_object.contains("MoveInVent"))
+			Settings::MoveInVent = j_object["MoveInVent"].get<bool>();
 	if (j_object.contains("ShowConsole"))
 		Settings::ShowConsole = j_object["ShowConsole"].get<bool>();
 
@@ -92,6 +93,7 @@ void Settings::Save() {
 		{"RevealImpostors", Settings::RevealImpostors},
 		{"ChatAlwaysActive", Settings::ChatAlwaysActive},
 		{"ReadGhostMessages", Settings::ReadGhostMessages},
+		{"MoveInVent", Settings::MoveInVent},
 
 		{"ShowConsole", Settings::ShowConsole},
 	};
