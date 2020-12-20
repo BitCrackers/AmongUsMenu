@@ -21,7 +21,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 #endif
 		break;
 	case DLL_PROCESS_DETACH:
-		State.Save();
 #if _VERSION
 		FreeLibrary(version_dll);
 #endif

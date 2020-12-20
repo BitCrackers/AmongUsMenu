@@ -14,6 +14,7 @@
 #include "json.hpp"
 #include "keyBindsConfig.h"
 #include "utility.h"
+#include "crc32.h"
 #include <bitset>
 
 using namespace app;
@@ -116,11 +117,15 @@ public:
 	Vector3 camPos = { NULL, NULL, NULL };
 	Vector3 prevCamPos = { NULL, NULL, NULL };
 
+	uint8_t savedStateCrc[4];
+
 	bool FlipSkeld = false;
 
 	int LobbyTimer = -1;
 
 	void Load();
+	json GetJson();
+	void GetChecksum(uint8_t* crcBuffer);
 	void Save();
 };
 

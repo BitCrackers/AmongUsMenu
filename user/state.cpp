@@ -64,10 +64,13 @@ void Settings::Load() {
 	if (j_object.contains("showDebugTab"))
 		Settings::showDebugTab = j_object["showDebugTab"].get<uint32_t>();
 #endif
+
+	Settings::GetChecksum(Settings::savedStateCrc);
 }
 
-void Settings::Save() {
-	json j_object = json{
+json Settings::GetJson()
+{
+	return json{
 		{"ShowMenu", Settings::ShowMenu},
 		{"KeyBinds", KeyBindsConfig::toJson(KeyBinds)},
 #ifdef _DEBUG
@@ -95,7 +98,20 @@ void Settings::Save() {
 
 		{"ShowConsole", Settings::ShowConsole},
 	};
+}
 
+void Settings::Save() {
+	json j_object = Settings::GetJson();
+
+	Settings::GetChecksum(Settings::savedStateCrc);
 	std::ofstream outSettings(pSettings);
 	outSettings << std::setw(4) << j_object << std::endl;
+}
+
+void Settings::GetChecksum(uint8_t* crcBuffer) {
+	CRC32 crc32;
+	std::string serialized_json = Settings::GetJson().dump();
+
+	crc32.add(serialized_json.c_str(), serialized_json.size());
+	crc32.getHash(crcBuffer);
 }

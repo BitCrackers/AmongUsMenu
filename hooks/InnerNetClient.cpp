@@ -85,5 +85,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
     }
 
+    uint8_t currentStateCrc[4];
+    State.GetChecksum(currentStateCrc);
+
+    if (memcmp(currentStateCrc, State.savedStateCrc, 4))
+        State.Save();
+
 	InnerNetClient_Update(__this, method);
 }
