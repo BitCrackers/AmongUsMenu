@@ -57,23 +57,32 @@ bool SteppedSliderFloat(const char* label, float* v, float v_min, float v_max, f
 	return valueChanged;
 }
 
-void HotKey(uint8_t& key)
+bool HotKey(uint8_t& key)
 {
 	ImGui::Text("[ %s ]", KeyBindsConfig::toString(key));
 
 	if (!ImGui::IsItemHovered())
-		return;
+		return false;
 
 	ImGui::SetTooltip("Press any key to change the keybind, ESC to reset");
-	for (uint8_t vKey : KeyBindsConfig::getValidKeys())
-		if (ImGui::IsKeyReleased(vKey))
+	for (uint8_t vKey : KeyBindsConfig::getValidKeys()) {
+		if (ImGui::IsKeyReleased(vKey)) {
 			key = (vKey != VK_ESCAPE ? vKey : 0x00);
-		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+			return true;
+		} else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
 			key = 0x02;
-		else if (ImGui::IsMouseReleased(ImGuiMouseButton_Middle))
+			return true;
+		} else if (ImGui::IsMouseReleased(ImGuiMouseButton_Middle)) {
 			key = 0x04;
-		else if (ImGui::IsMouseReleased(3))
+			return true;
+		} else if (ImGui::IsMouseReleased(3)) {
 			key = 0x05;
-		else if (ImGui::IsMouseReleased(4))
+			return true;
+		} else if (ImGui::IsMouseReleased(4)) {
 			key = 0x06;
+			return true;
+		}
+	}
+
+	return false;
 }

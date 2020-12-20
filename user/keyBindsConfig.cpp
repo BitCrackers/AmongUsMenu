@@ -3,7 +3,6 @@
 #include "imgui/imgui.h"
 
 static const std::map<uint8_t, const char*> KeyMap = {
-    
     {0x02, "MOUSE 2"},
     {0x04, "MOUSE 3"},
     {0x05, "MOUSE 4"},
@@ -90,40 +89,6 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0xA2, "L CTRL"},
     {0xA3, "R CTRL"},
 };
-
-KeyBindsConfig KeyBindsConfig::fromJson(nlohmann::ordered_json json)
-{
-    KeyBindsConfig keyBinds = KeyBindsConfig();
-
-    keyBinds.Toggle_Menu = json["Toggle_Menu"].get<uint8_t>();
-    keyBinds.Toggle_Radar = json["Toggle_Radar"].get<uint8_t>();
-    keyBinds.Toggle_Console = json["Toggle_Console"].get<uint8_t>();
-    keyBinds.Repair_Sabotage = json["Repair_Sabotage"].get<uint8_t>();
-    keyBinds.Toggle_Noclip = json["Toggle_Noclip"].get<uint8_t>();
-    keyBinds.Close_All_Doors = json["Close_All_Doors"].get<uint8_t>();
-    keyBinds.Toggle_Zoom = json["Toggle_Zoom"].get<uint8_t>();
-    keyBinds.Toggle_Freecam = json["Toggle_Freecam"].get<uint8_t>();
-    keyBinds.Close_Current_Room_Door = json["Close_Current_Room_Door"].get<uint8_t>();
-
-    return keyBinds;
-}
-
-nlohmann::ordered_json KeyBindsConfig::toJson(KeyBindsConfig keyBinds)
-{
-    nlohmann::ordered_json json = nlohmann::ordered_json();
-
-    json["Toggle_Menu"] = keyBinds.Toggle_Menu;
-    json["Toggle_Radar"] = keyBinds.Toggle_Radar;
-    json["Toggle_Console"] = keyBinds.Toggle_Console;
-    json["Repair_Sabotage"] = keyBinds.Repair_Sabotage;
-    json["Toggle_Noclip"] = keyBinds.Toggle_Noclip;
-    json["Close_All_Doors"] = keyBinds.Close_All_Doors;
-    json["Toggle_Zoom"] = keyBinds.Toggle_Zoom;
-    json["Toggle_Freecam"] = keyBinds.Toggle_Freecam;
-    json["Close_Current_Room_Door"] = keyBinds.Close_Current_Room_Door;
-
-    return json;
-}
 
 const char* KeyBindsConfig::toString(uint8_t key)
 {
