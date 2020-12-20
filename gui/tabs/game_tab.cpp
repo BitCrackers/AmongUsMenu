@@ -37,7 +37,9 @@ namespace GameTab {
 					State.AntiBan = !State.AntiBan;
 				}
 			}
-			ImGui::Checkbox("Console", &State.ShowConsole);
+			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
+				State.Save();
+			}
 
 			ImGui::EndTabItem();
 		}
