@@ -30,7 +30,7 @@ namespace GameTab {
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
 			
-			if (ImGui::Button("Set Color") && !State.AntiBan)
+			if (ImGui::Button("Set Color") && !State.AntiBan && IsInGame())
 			{
 				bool colorAvailable = true;
 
