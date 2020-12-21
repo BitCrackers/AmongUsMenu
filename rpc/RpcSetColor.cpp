@@ -1,6 +1,6 @@
-#include "il2cpp-appdata.h"
+#include "pch-il2cpp.h"
 #include "_rpc.h"
-#include "utility.h"
+#include "game.h"
 
 RpcSetColor::RpcSetColor(uint8_t bodyColor)
 {

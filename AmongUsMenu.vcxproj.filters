@@ -208,7 +208,7 @@
     <ClCompile Include="framework\pch-il2cpp.cpp">
       <Filter>framework</Filter>
     </ClCompile>
-    <ClCompile Include="theme.cpp">
+    <ClCompile Include="gui\theme.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>

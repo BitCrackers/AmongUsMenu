@@ -119,7 +119,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="theme.cpp" />
+    <ClCompile Include="gui\theme.cpp" />
     <ClCompile Include="user\keyBindsConfig.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
