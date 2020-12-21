@@ -75,6 +75,6 @@ public:
 class RpcSetName : public RPCInterface {
 	String* name;
 public:
-	RpcSetName(String* name);
+	RpcSetName(std::string name);
 	virtual void Process() override;
 };

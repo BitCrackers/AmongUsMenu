@@ -2,9 +2,9 @@
 #include "_rpc.h"
 #include "game.h"
 
-RpcSetName::RpcSetName(String* name)
+RpcSetName::RpcSetName(std::string name)
 {
-	this->name = name;
+	this->name = convert_to_string(name);
 }
 
 void RpcSetName::Process()
