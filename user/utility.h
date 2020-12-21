@@ -1,11 +1,7 @@
 #pragma once
-#include "il2cpp-appdata.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <iostream>
-#include <string>
 #include <vector>
-#include "game.hpp"
 #include <imgui/imgui.h>
 #include "_events.h"
 #include <filesystem>
@@ -105,6 +101,5 @@ std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(Vector2 vector);
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
-std::optional<Vector2> GetLastWalkEventPosition(uint8_t playerId);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();

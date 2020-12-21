@@ -1,4 +1,5 @@
-#include "game.hpp"
+#include "pch-il2cpp.h"
+#include "game.h"
 
 namespace Game {
 	AmongUsClient** pAmongUsClient;

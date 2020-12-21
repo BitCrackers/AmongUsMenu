@@ -1,6 +1,6 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
 
 void dLobbyBehaviour_Start(LobbyBehaviour* __this, MethodInfo* method)
 {

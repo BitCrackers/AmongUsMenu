@@ -1,6 +1,6 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
 
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
 	if (State.UnlockVents) {

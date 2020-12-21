@@ -1,4 +1,7 @@
-#include "_hooks.hpp"
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
+#include "game.h"
 
 void dSaveManager_set_BodyColor(uint8_t value, MethodInfo* method)
 {

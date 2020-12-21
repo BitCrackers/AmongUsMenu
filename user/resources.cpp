@@ -1,3 +1,4 @@
+#include "pch-il2cpp.h"
 #include "resources.h"
 #include "main.h"
 #define STB_IMAGE_IMPLEMENTATION

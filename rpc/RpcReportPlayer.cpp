@@ -1,6 +1,6 @@
-#include "il2cpp-appdata.h"
-#include "utility.h"
+#include "pch-il2cpp.h"
 #include "_rpc.h"
+#include "game.h"
 
 RpcReportPlayer::RpcReportPlayer(PlayerSelection target)
 {

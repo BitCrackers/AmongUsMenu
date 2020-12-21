@@ -1,7 +1,8 @@
-#include "_hooks.hpp"
-#include "game.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "game.h"
+#include "utility.h"
+#include "state.hpp"
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;

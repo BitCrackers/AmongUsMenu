@@ -1,7 +1,9 @@
+#include "pch-il2cpp.h"
 #include "radar.hpp"
 #include "DirectX.h"
-
-using namespace app;
+#include "utility.h"
+#include "game.h"
+#include "state.hpp"
 
 namespace Radar {
 	ImU32 GetRadarPlayerColor(GameData_PlayerInfo* playerData) {

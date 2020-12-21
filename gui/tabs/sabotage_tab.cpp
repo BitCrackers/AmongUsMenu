@@ -1,4 +1,10 @@
+#include "pch-il2cpp.h"
 #include "sabotage_tab.h"
+#include "utility.h"
+#include "gui-helpers.hpp"
+#include "_rpc.h"
+#include "game.h"
+#include "state.hpp"
 
 namespace SabotageTab {
     void Render() {

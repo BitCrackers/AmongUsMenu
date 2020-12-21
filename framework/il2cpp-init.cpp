@@ -1,8 +1,6 @@
-#pragma once
+#include "pch-il2cpp.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include <iostream>
-#include "il2cpp-appdata.h"
 #include "il2cpp-init.h"
 #include "il2cpp-helpers.h"
 

@@ -1,4 +1,8 @@
 #include "version.h"
+#include <thread>
+#include <chrono>
+#include "main.h"
+#include <filesystem>
 
 HMODULE version_dll;
 
@@ -63,10 +67,20 @@ void load_version() {
 	WRAPPER_FUNC(VerQueryValueW);
 }
 
+std::filesystem::path getApplicationPath() {
+	TCHAR buff[MAX_PATH];
+	GetModuleFileName(NULL, buff, MAX_PATH);
+	return std::filesystem::path(buff);
+}
+
 DWORD WINAPI Load(LPVOID lpParam) {
+	auto applicationPath = getApplicationPath();
+
 	load_version();
 	if (!version_dll)
 		return 0;
+
+	if (applicationPath.filename() != "Among Us.exe") return 0;
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	Run(lpParam);

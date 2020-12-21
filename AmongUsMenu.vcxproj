@@ -23,7 +23,6 @@
     <ClCompile Include="events\KillEvent.cpp" />
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
-    <ClCompile Include="events\WalkEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
     <ClCompile Include="gui\tabs\debug_tab.cpp" />
@@ -42,11 +41,83 @@
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\SaveManager.cpp" />
-    <ClCompile Include="includes\crc32.cpp" />
-    <ClCompile Include="includes\directx11.cpp" />
-    <ClCompile Include="includes\detours\detours.cpp" />
-    <ClCompile Include="includes\detours\disasm.cpp" />
-    <ClCompile Include="includes\detours\modules.cpp" />
+    <ClCompile Include="includes\crc32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\directx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\detours\detours.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\detours\disasm.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\detours\modules.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="framework\pch-il2cpp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="theme.cpp" />
     <ClCompile Include="user\keyBindsConfig.cpp" />
     <ClCompile Include="rpc\RpcCompleteTask.cpp" />
     <ClCompile Include="rpc\RpcCloseDoorsOfType.cpp" />
@@ -55,6 +126,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="hooks\Chat.cpp" />
     <ClCompile Include="hooks\Doors.cpp" />
@@ -82,22 +161,109 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="framework\il2cpp-helpers.cpp" />
+    <ClCompile Include="framework\il2cpp-helpers.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch-il2cpp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">pch-il2cpp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch-il2cpp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">pch-il2cpp.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="framework\il2cpp-init.cpp" />
     <ClCompile Include="gui\menu.cpp" />
     <ClCompile Include="gui\radar.cpp" />
-    <ClCompile Include="includes\imgui\imgui.cpp" />
-    <ClCompile Include="includes\imgui\imgui_draw.cpp" />
-    <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="includes\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="includes\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="user\game.cpp" />
     <ClCompile Include="user\main.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">$(ProjectDir)framework;$(ProjectDir)imgui;$(ProjectDir)Detours;$(ProjectDir)appdata;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="user\state.cpp" />
-    <ClCompile Include="framework\version.cpp" />
+    <ClCompile Include="framework\version.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h" />
@@ -117,10 +283,11 @@
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\DirectX.h" />
-    <ClInclude Include="hooks\_hooks.hpp" />
+    <ClInclude Include="hooks\_hooks.h" />
     <ClInclude Include="includes\crc32.h" />
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
+    <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="user\keyBindsConfig.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />
@@ -131,7 +298,6 @@
     <ClInclude Include="appdata\il2cpp-types.h" />
     <ClInclude Include="framework\il2cpp-helpers.h" />
     <ClInclude Include="framework\il2cpp-init.h" />
-    <ClInclude Include="includes\signature.hpp" />
     <ClInclude Include="gui\menu.hpp" />
     <ClInclude Include="gui\radar.hpp" />
     <ClInclude Include="gui\theme.hpp" />
@@ -145,7 +311,7 @@
     <ClInclude Include="includes\imgui\imstb_textedit.h" />
     <ClInclude Include="includes\imgui\imstb_truetype.h" />
     <ClInclude Include="includes\json.hpp" />
-    <ClInclude Include="user\game.hpp" />
+    <ClInclude Include="user\game.h" />
     <ClInclude Include="user\main.h" />
     <ClInclude Include="user\state.hpp" />
     <ClInclude Include="framework\version.h" />
@@ -162,7 +328,6 @@
     <ResourceCompile Include="resources\resource_data.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\resource_data.aps" />
     <None Include="framework\version.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -244,9 +409,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -278,9 +442,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_DEBUG;_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -314,9 +477,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -353,9 +515,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>

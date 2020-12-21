@@ -1,30 +1,27 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "utility.h"
+#include "state.hpp"
+#include "game.h"
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
-    if (!IsInLobby())
-    {
+    if (!IsInLobby()) {
         State.LobbyTimer = -1;
     }
 
-    if (IsInLobby() && State.LobbyTimer > 0)
-    {
+    if (IsInLobby() && State.LobbyTimer > 0) {
         State.LobbyTimer--;
     }
 
-    if (!IsInGame() || State.InMeeting)
-    {
-        if (State.PlayMedbayScan)
-        {
+    if (!IsInGame() || State.InMeeting) {
+        if (State.PlayMedbayScan) {
             State.PlayMedbayScan = false;
             State.rpcQueue.push(new RpcSetScanner(false));
         }
     }
 
-    if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip)
-    {
+    if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip) {
         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
             if (State.NoClip)
                 app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
@@ -34,8 +31,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         State.HotkeyNoClip = false;
     }
 
-    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan)
-    {
+    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan) {
         PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
     }
 
@@ -54,9 +50,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             State.NoClip = false;
             State.HotkeyNoClip = false;
         }
-    }
-    else
-    {
+    } else {
         if (!State.rpcQueue.empty()) {
             auto rpc = State.rpcQueue.front();
             State.rpcQueue.pop();
@@ -65,25 +59,21 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             delete rpc;
         }
 
-        if (State.CloseAllDoors)
-        {
-            for (auto door : State.mapDoors)
-            {
+        if (State.CloseAllDoors) {
+            for (auto door : State.mapDoors) {
                 State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
             }
             State.CloseAllDoors = false;
         }
 
-        if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent)
-        {
+        if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent) {
             (*Game::pLocalPlayer)->fields.moveable = true;
         }
     }
 
-    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan)
-    {
+    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan) {
         PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
     }
 
-	InnerNetClient_Update(__this, method);
+    InnerNetClient_Update(__this, method);
 }

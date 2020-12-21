@@ -1,11 +1,8 @@
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include "_hooks.hpp"
+#include "pch-il2cpp.h"
+#include "_hooks.h"
 #include "detours/detours.h"
 #include "DirectX.h"
 #include <iostream>
-
-using namespace app;
 
 bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (DetourAttach(ppPointer, pDetour) != 0) {

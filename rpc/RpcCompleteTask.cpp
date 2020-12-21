@@ -1,5 +1,6 @@
+#include "pch-il2cpp.h"
 #include "_rpc.h"
-#include "utility.h"
+#include "game.h"
 #include "state.hpp"
 
 RpcCompleteTask::RpcCompleteTask(uint32_t taskId)

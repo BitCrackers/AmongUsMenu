@@ -1,4 +1,8 @@
+#include "pch-il2cpp.h"
 #include "console.hpp"
+#include "imgui/imgui.h"
+#include "gui-helpers.hpp"
+#include "state.hpp"
 
 namespace ConsoleGui {
 	int selectedType = 0;

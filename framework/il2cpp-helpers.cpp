@@ -1,4 +1,10 @@
+#include "pch-il2cpp.h"
 #include "il2cpp-helpers.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <codecvt>
+#include <optional>
+#include <iostream>
 
 void new_console() {
 	AllocConsole();
