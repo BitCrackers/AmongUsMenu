@@ -1,6 +1,8 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "utility.h"
+#include "game.h"
+#include "state.hpp"
 
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
 	if (State.ReadGhostMessages) {

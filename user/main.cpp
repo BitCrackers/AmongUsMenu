@@ -1,10 +1,15 @@
+#include "pch-il2cpp.h"
 #include "main.h"
 #include "il2cpp-init.h"
 #include <VersionHelpers.h>
 #include "crc32.h"
 #include <shellapi.h>
-
-using namespace app;
+#include <iostream>
+#include "game.h"
+#include "_hooks.h"
+#include "state.hpp"
+#include "version.h"
+#include <fstream>
 
 HMODULE hModule;
 HANDLE hUnloadEvent;
@@ -55,9 +60,6 @@ void Run(LPVOID lpParam) {
 #if _DEBUG
 	new_console();
 #endif
-
-	init_il2cpp();
-
 	if (!GameVersionCheck()) {
 		fclose(stdout);
 		FreeConsole();
@@ -66,6 +68,8 @@ void Run(LPVOID lpParam) {
 	}
 
 	hModule = (HMODULE)lpParam;
+	init_il2cpp();
+	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	

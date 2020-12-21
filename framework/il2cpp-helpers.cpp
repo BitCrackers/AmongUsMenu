@@ -1,4 +1,8 @@
+#include "pch-il2cpp.h"
 #include "il2cpp-helpers.h"
+#include <codecvt>
+#include <optional>
+#include <iostream>
 
 void new_console() {
 	AllocConsole();

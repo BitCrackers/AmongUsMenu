@@ -1,6 +1,5 @@
 #pragma once
-#include "il2cpp-appdata.h"
-#include <iostream>
+#include <optional>
 
 using namespace app;
 
@@ -106,12 +105,3 @@ public:
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
-
-class WalkEvent : public EventInterface {
-public:
-	Vector2 position;
-	WalkEvent(EVENT_PLAYER source, Vector2 position);
-	virtual void Output() override;
-	virtual void ColoredEventOutput() override;
-};
-

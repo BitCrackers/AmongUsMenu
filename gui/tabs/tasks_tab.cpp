@@ -1,4 +1,8 @@
+#include "pch-il2cpp.h"
 #include "tasks_tab.h"
+#include "game.h"
+#include "state.hpp"
+#include "utility.h"
 
 namespace TasksTab {
 	void Render() {

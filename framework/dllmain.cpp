@@ -2,7 +2,6 @@
 #include <windows.h>
 #include "il2cpp-init.h"
 #include "main.h"
-#include "state.hpp"
 #if _VERSION
 #include "version.h"
 #endif
@@ -12,7 +11,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		State.Load();
 		DisableThreadLibraryCalls(hModule);
 #if _VERSION
 		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Load, hModule, NULL, NULL);
@@ -21,7 +19,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 #endif
 		break;
 	case DLL_PROCESS_DETACH:
-		State.Save();
 #if _VERSION
 		FreeLibrary(version_dll);
 #endif

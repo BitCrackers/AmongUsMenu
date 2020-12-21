@@ -1,4 +1,9 @@
-﻿#include "self_tab.h"
+﻿#include "pch-il2cpp.h"
+#include "self_tab.h"
+#include "game.h"
+#include "gui-helpers.hpp"
+#include "utility.h"
+#include "state.hpp"
 
 namespace SelfTab {
     void Render() {

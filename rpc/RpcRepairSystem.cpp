@@ -1,6 +1,6 @@
-#include "il2cpp-appdata.h"
+#include "pch-il2cpp.h"
 #include "_rpc.h"
-#include "utility.h"
+#include "game.h"
 
 RpcRepairSystem::RpcRepairSystem(SystemTypes__Enum selectedSystem, int32_t amount)
 {

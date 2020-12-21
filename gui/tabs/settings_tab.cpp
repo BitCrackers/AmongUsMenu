@@ -1,28 +1,13 @@
+#include "pch-il2cpp.h"
 #include "settings_tab.h"
+#include "utility.h"
+#include "gui-helpers.hpp"
+#include "state.hpp"
 
 namespace SettingsTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Settings")) {
-
 			ImGui::Dummy(ImVec2(4, 4));
-			ImGui::Text("Change Theme Color:");
-			ImGui::Dummy(ImVec2(4, 4));
-			ImGui::PushItemWidth(ImGui::GetWindowWidth() / 3.5f);
-			if (ImGui::ColorPicker4("##picker", (float*)&State.SelectedColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_PickerHueWheel)) {
-				State.Save();
-			}
-			ImGui::PopItemWidth();
-			ImGui::Dummy(ImVec2(4, 4));
-
-			if (ImGui::Button("Reset Theme Color")) {
-				State.SelectedColor = State.DefaultColor;
-				State.Save();
-			}
-
-			ImGui::Dummy(ImVec2(7, 7));
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
-
 			ImGui::Text("Show/Hide Menu Keybind:");
 			ImGui::SameLine();
 			if (HotKey(State.KeyBinds.Toggle_Menu)) {

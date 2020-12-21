@@ -1,6 +1,4 @@
 #include "directx11.h"
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
 
 directx11::directx11()
 {

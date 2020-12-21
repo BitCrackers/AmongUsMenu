@@ -1,6 +1,5 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
 
 bool dStatsManager_get_AmBanned(StatsManager* __this, MethodInfo* method) {
 	return false;

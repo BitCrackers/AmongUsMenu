@@ -1,6 +1,7 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
+#include "game.h"
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.reset();

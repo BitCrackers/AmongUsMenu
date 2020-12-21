@@ -1,6 +1,5 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
 
 HatBehaviour__Array* dHatManager_GetUnlockedHats(HatManager* __this, MethodInfo* method) {
 	return __this->fields.AllHats->fields._items;

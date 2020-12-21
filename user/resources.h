@@ -1,10 +1,5 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <cstdint>
 #include <d3d11.h>
-#include <string>
-#include "resource_data.h"
 
 struct Resource {
     HRSRC hResInfo;

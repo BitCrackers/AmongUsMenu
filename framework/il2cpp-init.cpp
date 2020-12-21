@@ -1,10 +1,5 @@
-#pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <iostream>
-#include "il2cpp-appdata.h"
+#include "pch-il2cpp.h"
 #include "il2cpp-init.h"
-#include "il2cpp-helpers.h"
 
 #define DO_API(r, n, p) r (*n) p
 #include "il2cpp-api-functions.h"

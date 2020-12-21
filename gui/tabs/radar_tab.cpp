@@ -1,4 +1,8 @@
+#include "pch-il2cpp.h"
 #include "radar_tab.h"
+#include "gui-helpers.hpp"
+#include "state.hpp"
+#include "utility.h"
 
 namespace RadarTab {
 	void Render() {
@@ -36,7 +40,7 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Lock Radar Position", &State.LockRadar)) {
 				State.Save();
 			}
-			if (SteppedSliderFloat("Radar Opacity", &State.SelectedColor.w, 0.0f, 1.0f, 0.01f, "%.2f Opacity", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
+			if (ImGui::ColorEdit4("Radar Color", (float*)&State.SelectedColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
 				State.Save();
 			}
 

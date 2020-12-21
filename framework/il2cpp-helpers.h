@@ -1,13 +1,4 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <iostream>
-#include <codecvt>
-#include <optional>
-#include "il2cpp-appdata.h"
-#include <string>
-#include <sstream>
-#include <iomanip>
 
 void new_console();
 std::string convert_from_string(Il2CppString* input);
