@@ -65,6 +65,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "SystemTypes"}, {"", "LJFDDJHBOGF"} },
 	{ {"", "TextRenderer"}, {"", "AELDHKGBIFD"} },
 	{ {"", "Vent"}, {"", "OPPMFCFACJB"} },
+	{ {"", "SecurityCameraSystemType"}, {"", "IEOJNICCEFA"} },
 	{ {"InnerNet", "InnerNetClient"}, {"", "KHNHJFFECBP"} },
 	{ {"InnerNet", "InnerNetObject"}, {"", "EKDECEPHHGP"} },
 };

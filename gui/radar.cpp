@@ -121,6 +121,25 @@ namespace Radar {
 		if (State.ShowRadar_RightClick_Teleport)
 			OnClick();
 
+		if (State.CameraWarning)
+		{
+			std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
+			SecurityCameraSystemType* securitySystem = nullptr;
+
+			for (auto system : systems) {
+				if (system.first == SystemTypes__Enum_Security) {
+					securitySystem = (SecurityCameraSystemType*)system.second;
+					break;
+				}
+			}
+
+			if (securitySystem != nullptr)
+			{
+				if (securitySystem->fields.PlayersUsing->fields._count > 0)
+					drawList->AddText(ImGui::GetFont(), 16, winpos, ImGui::ColorConvertFloat4ToU32(ImVec4(255, 0, 0, 255)), "  CAMERAS IN USE!");
+			}
+		}
+
 		ImGui::End();
 	}
 }
