@@ -1,6 +1,5 @@
 #pragma once
 #include "il2cpp-appdata.h"
-#include <cstdint>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
