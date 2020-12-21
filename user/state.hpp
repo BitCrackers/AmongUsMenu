@@ -36,6 +36,8 @@ public:
         0x00
     };
 
+    uint8_t LastKeyPressed = 0;
+
     bool ImGuiInitialized = false;
     bool ShowMenu = false;
 

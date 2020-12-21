@@ -1,6 +1,7 @@
 #include "keyBindsConfig.h"
 #include <map>
 #include "imgui/imgui.h"
+#include "state.hpp"
 
 static const std::map<uint8_t, const char*> KeyMap = {
     {0x02, "MOUSE 2"},
@@ -111,14 +112,34 @@ std::vector<uint8_t> KeyBindsConfig::getValidKeys()
 
 bool KeyBindsConfig::IsReleased(uint8_t key)
 {
+    bool keyReleased = false, keyPressed = false;
+
     if (key == 0x02)
-        return ImGui::IsMouseReleased(1);
+        keyPressed = ImGui::IsMouseClicked(1);
     else if (key == 0x04)
-        return ImGui::IsMouseReleased(2);
+        keyPressed = ImGui::IsMouseClicked(2);
     else if (key == 0x05)
-        return ImGui::IsMouseReleased(3);
+        keyPressed = ImGui::IsMouseClicked(3);
     else if (key == 0x06)
-        return ImGui::IsMouseReleased(4);
+        keyPressed = ImGui::IsMouseClicked(4);
     else
-        return ImGui::IsKeyReleased(key);
+        keyPressed = ImGui::IsKeyPressed(key);
+
+    if (keyPressed) State.LastKeyPressed = keyPressed;
+
+    if (key != State.LastKeyPressed)
+    {
+        if (key == 0x02)
+            keyReleased = ImGui::IsMouseReleased(1);
+        else if (key == 0x04)
+            keyReleased = ImGui::IsMouseReleased(2);
+        else if (key == 0x05)
+            keyReleased = ImGui::IsMouseReleased(3);
+        else if (key == 0x06)
+            keyReleased = ImGui::IsMouseReleased(4);
+        else
+            keyReleased = ImGui::IsKeyReleased(key);
+    }
+
+    return keyReleased || keyPressed;
 }
