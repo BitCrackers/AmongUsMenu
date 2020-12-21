@@ -1,5 +1,7 @@
+#include "pch-il2cpp.h"
 #include "gui-helpers.hpp"
 #include "keyBindsConfig.h"
+#include "imgui/imgui_internal.h"
 
 bool CustomListBoxInt(const char* label, int* value, const std::vector<const char*> list, float width, ImGuiComboFlags flags) {
 	auto comboLabel = "##" + std::string(label);

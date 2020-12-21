@@ -1,4 +1,8 @@
+#include "pch-il2cpp.h"
 #include "debug_tab.h"
+#include "imgui/imgui.h"
+#include "state.hpp"
+#include "main.h"
 
 namespace DebugTab {
 

@@ -1,6 +1,6 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
 
 GameOptionsData* dGameOptionsData_Deserialize(BinaryReader* reader, MethodInfo* method) {
 	auto gameOptions = GameOptionsData_Deserialize(reader, method);

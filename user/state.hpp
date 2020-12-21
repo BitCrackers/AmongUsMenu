@@ -1,27 +1,11 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include "il2cpp-appdata.h"
+#include <bitset>
 #include <queue>
-#include <optional>
-#include <string>
-#include <sys/stat.h>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 #include "_events.h"
 #include "_rpc.h"
-#include "json.hpp"
 #include "keyBindsConfig.h"
-#include "utility.h"
-#include <bitset>
-
-using namespace app;
 
 class Settings {
-private:
-    inline bool Exists(const std::string& name);
-
 public:
 
     KeyBindsConfig KeyBinds = {
@@ -108,9 +92,7 @@ public:
     Camera* FollowerCam = nullptr;
     bool EnableZoom = false;
 
-    ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
-    ImVec4 LastColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
-    ImVec4 DefaultColor = ImVec4(0.502f, 0.075f, 0.256f, 1);
+    ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 
 	int SelectedColorId = 0;
 

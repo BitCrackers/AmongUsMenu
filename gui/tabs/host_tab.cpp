@@ -1,4 +1,9 @@
+#include "pch-il2cpp.h"
 #include "host_tab.h"
+#include "utility.h"
+#include "game.h"
+#include "state.hpp"
+#include "gui-helpers.hpp"
 
 namespace HostTab {
 	void Render() {

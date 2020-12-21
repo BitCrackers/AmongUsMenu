@@ -1,3 +1,4 @@
+#include "pch-il2cpp.h"
 #include "DirectX.h"
 #include "console.hpp"
 #include "imgui/imgui.h"
@@ -9,6 +10,8 @@
 #include "state.hpp"
 #include "theme.hpp"
 #include <iostream>
+#include "resource_data.h"
+#include "game.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

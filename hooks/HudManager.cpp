@@ -1,6 +1,5 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
 
 void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, MethodInfo* method) {
 	HudManager_ShowMap(__this, mapAction, method);

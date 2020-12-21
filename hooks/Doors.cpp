@@ -1,6 +1,7 @@
-#include "_hooks.hpp"
-
-using namespace app;
+#include "pch-il2cpp.h"
+#include "_hooks.h"
+#include "state.hpp"
+#include "_rpc.h"
 
 void dPlainDoor_SetDoorway(PlainDoor* __this, bool open, MethodInfo* method) {
 	if (open && (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), __this->fields.Room) != State.pinnedDoors.end())) {

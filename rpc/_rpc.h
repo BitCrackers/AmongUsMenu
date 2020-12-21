@@ -1,8 +1,5 @@
 #pragma once
-#include "il2cpp-appdata.h"
 #include "utility.h"
-
-using namespace app;
 
 class RPCInterface {
 public:

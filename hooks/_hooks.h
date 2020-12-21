@@ -1,9 +1,4 @@
 #pragma once
-#include "il2cpp-appdata.h"
-#include "game.hpp"
-#include "state.hpp"
-
-using namespace app;
 
 void DetourInitilization();
 void DetourUninitialization();
