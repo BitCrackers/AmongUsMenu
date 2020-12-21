@@ -4,10 +4,10 @@
 
 RpcSetName::RpcSetName(std::string name)
 {
-	this->name = convert_to_string(name);
+	this->name = name;
 }
 
 void RpcSetName::Process()
 {
-	PlayerControl_CmdCheckName(*Game::pLocalPlayer, name, NULL);
+	PlayerControl_CmdCheckName(*Game::pLocalPlayer, convert_to_string(name), NULL);
 }
