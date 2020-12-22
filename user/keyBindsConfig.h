@@ -12,6 +12,16 @@ struct KeyBindsConfig {
     uint8_t Toggle_Zoom;
     uint8_t Toggle_Freecam;
     uint8_t Close_Current_Room_Door;
+    uint8_t Complete_Task_0;
+    uint8_t Complete_Task_1;
+    uint8_t Complete_Task_2;
+    uint8_t Complete_Task_3;
+    uint8_t Complete_Task_4;
+    uint8_t Complete_Task_5;
+    uint8_t Complete_Task_6;
+    uint8_t Complete_Task_7;
+    uint8_t Complete_Task_8;
+    uint8_t Complete_Task_9;
 
     static const char* toString(uint8_t key);
     static std::vector<uint8_t> getValidKeys();

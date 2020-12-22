@@ -43,7 +43,33 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (KeyBindsConfig::IsReleased(State.KeyBinds.Toggle_Freecam) && IsInGame()) State.FreeCam = !State.FreeCam;
     if (KeyBindsConfig::IsReleased(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
 
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_0, 0);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_1, 1);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_2, 2);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_3, 3);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_4, 4);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_5, 5);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_6, 6);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_7, 7);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_8, 8);
+    CompleteTaskIfReleased(State.KeyBinds.Complete_Task_9, 9);
+
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+}
+
+void CompleteTaskIfReleased(uint8_t keybind, int index)
+{
+    if (!KeyBindsConfig::IsReleased(keybind) || !IsInGame())
+        return;
+
+    auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
+    if (index >= tasks.size())
+        return;
+
+    if (NormalPlayerTask_get_IsComplete(tasks.at(index), NULL))
+        return;
+
+    State.rpcQueue.push(new RpcCompleteTask(tasks.at(index)->fields._._Id_k__BackingField));
 }
 
 bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {

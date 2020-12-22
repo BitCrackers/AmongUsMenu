@@ -18,3 +18,5 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 namespace DirectX {
 	void Shutdown();
 }
+
+void CompleteTaskIfReleased(uint8_t keybind, int index);

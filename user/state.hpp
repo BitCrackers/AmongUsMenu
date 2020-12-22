@@ -17,7 +17,17 @@ public:
         0x00,
         0x00,
         0x00,
-        0x00
+        0x00,
+        VK_NUMPAD0,
+        VK_NUMPAD1,
+        VK_NUMPAD2,
+        VK_NUMPAD3,
+        VK_NUMPAD4,
+        VK_NUMPAD5,
+        VK_NUMPAD6,
+        VK_NUMPAD7,
+        VK_NUMPAD8,
+        VK_NUMPAD9
     };
 
     bool ImGuiInitialized = false;
