@@ -36,6 +36,57 @@ namespace GameTab {
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
 			
+			if (ImGui::Button("Set Color") && !State.AntiBan && IsInGame())
+			{
+				bool colorAvailable = true;
+
+				for (PlayerControl* player : GetAllPlayerControl())
+				{
+					if (State.SelectedColorId == GetPlayerData(player)->fields.ColorId)
+					{
+						colorAvailable = false;
+						break;
+					}
+				}
+
+				if(colorAvailable)
+				State.rpcQueue.push(new RpcSetColor(State.SelectedColorId));
+			}
+
+			ImGui::SameLine(87);
+			CustomListBoxInt(" ", &State.SelectedColorId, COLORS, 85.0f);
+
+			ImGui::SameLine(215);
+			if (ImGui::Button("Random Color"))
+			{
+				if (IsInGame() || IsInLobby())
+				{
+					auto players = GetAllPlayerControl();
+					std::vector<int> availableColors = { };
+					for (int i = 0; i < 12; i++)
+					{
+						bool colorAvailable = true;
+						for (PlayerControl* player : players)
+						{
+							if (i == GetPlayerData(player)->fields.ColorId)
+							{
+								colorAvailable = false;
+								break;
+							}
+						}
+
+						if (colorAvailable)
+							availableColors.push_back(i);
+					}
+
+					State.SelectedColorId = availableColors.at(randi(0, availableColors.size() - 1));
+				}
+				else
+				{
+					State.SelectedColorId = randi(0, 11);
+				}
+			}
+
 			if (ImGui::Checkbox("Anti Kick/Ban", &State.AntiBan))
 			{
 				if (IsInLobby() || IsInGame())

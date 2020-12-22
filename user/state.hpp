@@ -92,7 +92,9 @@ public:
 
     ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 
-    PlayerSelection playerToFollow;
+	int SelectedColorId = 0;
+
+	PlayerSelection playerToFollow;
 
     Vector3 camPos = { NULL, NULL, NULL };
     Vector3 prevCamPos = { NULL, NULL, NULL };
