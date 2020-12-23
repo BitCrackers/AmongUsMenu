@@ -3,12 +3,12 @@
 #include <queue>
 #include "_events.h"
 #include "_rpc.h"
-#include "keyBindsConfig.h"
+#include "keybinds.h"
 
 class Settings {
 public:
 
-    KeyBindsConfig KeyBinds = {
+    KeyBinds::Config KeyBinds = {
         VK_DELETE,
         VK_INSERT,
         VK_HOME,

@@ -1,6 +1,6 @@
 #include "pch-il2cpp.h"
 #include "gui-helpers.hpp"
-#include "keyBindsConfig.h"
+#include "keybinds.h"
 #include "imgui/imgui_internal.h"
 
 bool CustomListBoxInt(const char* label, int* value, const std::vector<const char*> list, float width, ImGuiComboFlags flags) {
@@ -61,27 +61,15 @@ bool SteppedSliderFloat(const char* label, float* v, float v_min, float v_max, f
 
 bool HotKey(uint8_t& key)
 {
-	ImGui::Text("[ %s ]", KeyBindsConfig::toString(key));
+	ImGui::Text("[ %s ]", KeyBinds::ToString(key));
 
 	if (!ImGui::IsItemHovered())
 		return false;
 
 	ImGui::SetTooltip("Press any key to change the keybind, ESC to reset");
-	for (uint8_t vKey : KeyBindsConfig::getValidKeys()) {
-		if (ImGui::IsKeyReleased(vKey)) {
+	for (uint8_t vKey : KeyBinds::GetValidKeys()) {
+		if (KeyBinds::IsKeyPressed(vKey)) {
 			key = (vKey != VK_ESCAPE ? vKey : 0x00);
-			return true;
-		} else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
-			key = 0x02;
-			return true;
-		} else if (ImGui::IsMouseReleased(ImGuiMouseButton_Middle)) {
-			key = 0x04;
-			return true;
-		} else if (ImGui::IsMouseReleased(3)) {
-			key = 0x05;
-			return true;
-		} else if (ImGui::IsMouseReleased(4)) {
-			key = 0x06;
 			return true;
 		}
 	}
