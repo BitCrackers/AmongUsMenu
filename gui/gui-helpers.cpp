@@ -68,7 +68,7 @@ bool HotKey(uint8_t& key)
 
 	ImGui::SetTooltip("Press any key to change the keybind, ESC to reset");
 	for (uint8_t vKey : KeyBinds::GetValidKeys()) {
-		if (KeyBinds::IsKeyPressed(vKey)) {
+		if (KeyBinds::IsKeyDown(vKey)) {
 			key = (vKey != VK_ESCAPE ? vKey : 0x00);
 			return true;
 		}
