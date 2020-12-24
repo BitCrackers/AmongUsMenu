@@ -3,12 +3,12 @@
 #include <queue>
 #include "_events.h"
 #include "_rpc.h"
-#include "keyBindsConfig.h"
+#include "keybinds.h"
 
 class Settings {
 public:
 
-    KeyBindsConfig KeyBinds = {
+    KeyBinds::Config KeyBinds = {
         VK_DELETE,
         VK_INSERT,
         VK_HOME,
@@ -93,7 +93,9 @@ public:
 
     ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 
-    PlayerSelection playerToFollow;
+	int SelectedColorId = 0;
+
+	PlayerSelection playerToFollow;
 
     Vector3 camPos = { NULL, NULL, NULL };
     Vector3 prevCamPos = { NULL, NULL, NULL };

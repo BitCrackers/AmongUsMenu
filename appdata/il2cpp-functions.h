@@ -63,6 +63,8 @@ DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl*__this, GameData_
 DO_APP_FUNC(void, PlayerControl_RpcSetInfected, (PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetInfected(GameData.PlayerInfo[])");
 DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetScanner(System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, uint8_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetColor(System.Byte)");
+DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
+DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
 
 DO_APP_FUNC(void, SaveManager_set_BodyColor, (uint8_t value, MethodInfo* method), "Assembly-CSharp, System.Void SaveManager::set_BodyColor(System.Byte)");
 DO_APP_FUNC(uint8_t, SaveManager_get_BodyColor, (MethodInfo* method), "Assembly-CSharp, System.Byte SaveManager::get_BodyColor()");

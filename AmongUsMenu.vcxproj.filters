@@ -175,13 +175,16 @@
     <ClCompile Include="rpc\RpcSetScanner.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\RpcSetColor.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="rpc\RpcSetName.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
     <ClCompile Include="rpc\RpcSnapTo.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
     <ClCompile Include="user\game.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="user\keyBindsConfig.cpp">
       <Filter>user</Filter>
     </ClCompile>
     <ClCompile Include="user\main.cpp">
@@ -202,8 +205,11 @@
     <ClCompile Include="framework\pch-il2cpp.cpp">
       <Filter>framework</Filter>
     </ClCompile>
-    <ClCompile Include="theme.cpp">
+    <ClCompile Include="gui\theme.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="user\keybinds.cpp">
+      <Filter>user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -327,9 +333,6 @@
     <ClInclude Include="rpc\_rpc.h">
       <Filter>rpc</Filter>
     </ClInclude>
-    <ClInclude Include="user\keyBindsConfig.h">
-      <Filter>user</Filter>
-    </ClInclude>
     <ClInclude Include="user\main.h">
       <Filter>user</Filter>
     </ClInclude>
@@ -353,6 +356,9 @@
     </ClInclude>
     <ClInclude Include="hooks\_hooks.h">
       <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="user\keybinds.h">
+      <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
