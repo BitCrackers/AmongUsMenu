@@ -44,6 +44,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         State.EnableZoom = false;
         State.DisableLights = false;
         State.CloseAllDoors = false;
+        State.SecurityCamerasInUse = false;
 
         if (!IsInLobby()) {
             State.FlipSkeld = false;
@@ -68,6 +69,12 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
         if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent) {
             (*Game::pLocalPlayer)->fields.moveable = true;
+        }
+
+        SecurityCameraSystemType* securitySystem = GetSecurityCameraSystem();
+        if (securitySystem != nullptr)
+        {
+            State.SecurityCamerasInUse = (securitySystem->fields.PlayersUsing->fields._count > 0);
         }
     }
 

@@ -101,3 +101,4 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
+SecurityCameraSystemType* GetSecurityCameraSystem();

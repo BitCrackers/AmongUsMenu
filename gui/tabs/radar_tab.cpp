@@ -40,7 +40,7 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Lock Radar Position", &State.LockRadar)) {
 				State.Save();
 			}
-			if (ImGui::Checkbox("Show Camera Warning", &State.CameraWarning)) {
+			if (ImGui::Checkbox("Show Camera Warning", &State.SecurityCameraWarning)) {
 				State.Save();
 			}
 			if (ImGui::ColorEdit4("Radar Color", (float*)&State.SelectedColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {

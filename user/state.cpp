@@ -34,6 +34,7 @@ void Settings::Load() {
         j.at("RadarColor_G").get_to(this->SelectedColor.y);
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
         j.at("RadarColor_A").get_to(this->SelectedColor.w);
+        j.at("SecurityCameraWarning").get_to(this->SecurityCameraWarning);
 
         j.at("MaxVision").get_to(this->MaxVision);
         j.at("Wallhack").get_to(this->Wallhack);
@@ -71,6 +72,7 @@ void Settings::Save() {
             {"RadarColor_G", this->SelectedColor.y},
             {"RadarColor_B", this->SelectedColor.z},
             {"RadarColor_A", this->SelectedColor.w},
+            {"SecurityCameraWarning", this->SecurityCameraWarning},
 
             {"MaxVision", this->MaxVision},
             {"Wallhack", this->Wallhack},

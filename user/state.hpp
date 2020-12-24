@@ -60,7 +60,9 @@ public:
     bool HideRadar_During_Meetings = false;
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
-    bool CameraWarning = false;
+    bool SecurityCameraWarning = false;
+
+    bool SecurityCamerasInUse = false;
 
     bool InMeeting = false;
     bool PlayMedbayScan = false;

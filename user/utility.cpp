@@ -442,3 +442,16 @@ std::vector<ClientData*> GetAllClients()
 
 	return clients;
 }
+
+SecurityCameraSystemType* GetSecurityCameraSystem()
+{
+	std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
+
+	for (auto system : systems) {
+		if (system.first == SystemTypes__Enum_Security) {
+			return (SecurityCameraSystemType*)system.second;
+		}
+	}
+
+	return nullptr;
+}
