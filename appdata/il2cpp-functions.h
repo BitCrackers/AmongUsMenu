@@ -97,5 +97,3 @@ DO_APP_FUNC(void, InnerNetClient_Update, (InnerNetClient* __this, MethodInfo* me
 DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
 
 DO_APP_FUNC(void, LobbyBehaviour_Start, (LobbyBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void LobbyBehaviour::Start()");
-
-DO_APP_FUNC(bool, SecurityCameraSystemType_get_InUse, (SecurityCameraSystemType* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean SecurityCameraSystemType::get_InUse()");
