@@ -36,7 +36,7 @@ namespace GameTab {
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
 			
-			if (ImGui::Button("Set Color") && !State.AntiBan && IsInGame())
+			if (ImGui::Button("Set Color") && !State.AntiBan && (IsInGame() || IsInLobby()))
 			{
 				bool colorAvailable = true;
 
@@ -49,8 +49,12 @@ namespace GameTab {
 					}
 				}
 
-				if(colorAvailable)
-				State.rpcQueue.push(new RpcSetColor(State.SelectedColorId));
+				if (colorAvailable) {
+					if (IsInGame())
+						State.rpcQueue.push(new RpcSetColor(State.SelectedColorId));
+					else if (IsInLobby())
+						State.lobbyRpcQueue.push(new RpcSetColor(State.SelectedColorId));
+				}
 			}
 
 			ImGui::SameLine(87);
