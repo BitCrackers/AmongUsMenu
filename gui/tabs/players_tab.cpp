@@ -123,7 +123,10 @@ namespace PlayersTab {
 
 					if (!State.selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To")) {
-							State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
+							if(IsInGame())
+								State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
+							else if (IsInLobby())
+								State.lobbyRpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
 						}
 					}
 
