@@ -32,19 +32,21 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     }
 
     if (!IsInGame()) {
-        State.selectedPlayer = PlayerSelection();
-        State.playerToFollow = PlayerSelection();
+
         State.FreeCam = false;
         State.InMeeting = false;
-        State.FollowerCam = nullptr;
         State.EnableZoom = false;
         State.DisableLights = false;
         State.CloseAllDoors = false;
+        State.playerToFollow = PlayerSelection();
+        State.FollowerCam = nullptr;
 
         if (!IsInLobby()) {
+            State.selectedPlayer = PlayerSelection();
             State.FlipSkeld = false;
             State.NoClip = false;
             State.HotkeyNoClip = false;
+            State.originalName = "-";
         }
     } else {
         if (!State.rpcQueue.empty()) {
@@ -65,6 +67,24 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent) {
             (*Game::pLocalPlayer)->fields.moveable = true;
         }
+    }
+
+    if (IsInLobby()) {
+        if (State.originalName == "-") {
+            State.originalName = convert_from_string(GetPlayerData(*Game::pLocalPlayer)->fields.PlayerName);
+        }
+
+        if (!State.lobbyRpcQueue.empty()) {
+            auto rpc = State.lobbyRpcQueue.front();
+            State.lobbyRpcQueue.pop();
+
+            rpc->Process();
+            delete rpc;
+        }
+    }
+
+    if ((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) {
+        PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
     }
 
     InnerNetClient_Update(__this, method);

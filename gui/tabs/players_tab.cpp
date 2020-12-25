@@ -10,7 +10,7 @@ namespace PlayersTab {
 	Vector2 previousPlayerPosition;
 
 	void Render() {
-		if (IsInGame()) {
+		if (IsInGame() || IsInLobby()) {
 			if (ImGui::BeginTabItem("Players")) {
 				ImGui::BeginChild("players#list", ImVec2(200, 0), true);
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
@@ -42,7 +42,7 @@ namespace PlayersTab {
 				}
 				ImGui::ListBoxFooter();
 
-				if (IsInMultiplayerGame()) {
+				if (IsInMultiplayerGame() && IsInGame()) {
 					float taskPercentage = (float) (*Game::pGameData)->fields.CompletedTasks / (float) (*Game::pGameData)->fields.TotalTasks;
 					ImGui::TextColored(ImVec4(1.0f - taskPercentage, 1.0f, 1.0f - taskPercentage, 1.0f), "%.1f%% Total Tasks Completed", taskPercentage * 100);
 				}
@@ -51,7 +51,7 @@ namespace PlayersTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
 
-				if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
+				if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
 					if (ImGui::Button("Call Meeting")) {
 						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
@@ -59,7 +59,7 @@ namespace PlayersTab {
 
 				if (State.selectedPlayer.has_value())
 				{
-					if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 						ImGui::NewLine();
 						if (ImGui::Button("Report Body")) {
 							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
@@ -67,7 +67,7 @@ namespace PlayersTab {
 					}
 					ImGui::NewLine();
 
-					if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
+					if (IsInGame() && !State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
 					{
 						if (State.playerToFollow.equals(State.selectedPlayer)) {
 							if (ImGui::Button("Stop Spectating")) {
@@ -81,14 +81,29 @@ namespace PlayersTab {
 						}
 					}
 
-					if (!State.selectedPlayer.is_LocalPlayer() && IsInMultiplayerGame() && ImGui::Button("Steal Name"))
-					{						if(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10)
-							State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
-						else
-							State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
+					if (State.selectedPlayer.is_LocalPlayer() && State.originalName != "-") {
+						if (ImGui::Button("Reset Name")) {
+							State.rpcQueue.push(new RpcSetName(State.originalName));
+						}
+					}
+					else if(!State.selectedPlayer.is_LocalPlayer()) {
+						if (!State.selectedPlayer.is_LocalPlayer() && IsInMultiplayerGame() && ImGui::Button("Steal Name")) {
+							if (convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10) {
+								if(IsInGame())
+									State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
+								else if (IsInLobby())
+									State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
+							}
+							else {
+								if(IsInGame())
+									State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
+								else if(IsInLobby())
+									State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
+							}
+						}
 					}
 
-					if (GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+					if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
 					{
 						if (ImGui::Button("Kill Player"))
@@ -114,7 +129,7 @@ namespace PlayersTab {
 
 					ImGui::NewLine();
 
-					if (!State.selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
+					if (IsInGame() && !State.selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
 					{
 						auto tasks = GetNormalPlayerTasks(State.selectedPlayer.get_PlayerControl());
 
