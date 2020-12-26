@@ -83,7 +83,10 @@ namespace PlayersTab {
 
 					if (State.selectedPlayer.is_LocalPlayer() && State.originalName != "-") {
 						if (ImGui::Button("Reset Name")) {
-							State.rpcQueue.push(new RpcSetName(State.originalName));
+							if (IsInGame())
+								State.rpcQueue.push(new RpcSetName(State.originalName));
+							else if (IsInLobby())
+								State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
 						}
 					}
 					else if(!State.selectedPlayer.is_LocalPlayer()) {
