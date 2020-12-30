@@ -44,7 +44,9 @@ namespace DebugHelper
 		for (size_t classidx = 0; classidx < classCount; classidx++)
 		{
 			auto il2class = il2cpp_image_get_class(image, classidx);
-			allClasses.push_back(TranslatedClassHelper(il2class));
+			auto classType = TranslatedClassHelper(il2class);
+			if (!classType.translatedName.empty() && classType.translatedName != "<>c")
+				allClasses.push_back(classType);
 		}
 		return allClasses;
 	}
