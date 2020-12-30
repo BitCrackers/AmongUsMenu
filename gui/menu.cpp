@@ -10,9 +10,6 @@
 #include "tabs/self_tab.h"
 #include "tabs/settings_tab.h"
 #include "tabs/tasks_tab.h"
-#ifdef _DEBUG
-#include "tabs/debug_tab.h"
-#endif
 #include "state.hpp"
 
 namespace Menu {
@@ -44,10 +41,6 @@ namespace Menu {
 		SabotageTab::Render();
 		DoorsTab::Render();
 		HostTab::Render();
-#ifdef _DEBUG
-		if (State.showDebugTab)
-			DebugTab::Render();
-#endif
 
 		if(firstRender)
 			firstRender = false;

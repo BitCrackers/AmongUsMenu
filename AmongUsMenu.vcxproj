@@ -24,8 +24,11 @@
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
+    <ClCompile Include="gui\debuggui.cpp" />
+    <ClCompile Include="gui\debugtabs\class_debug_tab.cpp" />
+    <ClCompile Include="gui\debugtabs\main_debug_tab.cpp" />
+    <ClCompile Include="gui\debugtabs\translations_debug_tab.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
-    <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
     <ClCompile Include="gui\tabs\game_tab.cpp" />
     <ClCompile Include="gui\tabs\host_tab.cpp" />
@@ -41,6 +44,7 @@
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\SaveManager.cpp" />
+    <ClCompile Include="user\debughelper.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -289,8 +293,11 @@
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
     <ClInclude Include="gui\console.hpp" />
+    <ClInclude Include="gui\debuggui.hpp" />
+    <ClInclude Include="gui\debugtabs\class_debug_tab.h" />
+    <ClInclude Include="gui\debugtabs\main_debug_tab.h" />
+    <ClInclude Include="gui\debugtabs\translations_debug_tab.h" />
     <ClInclude Include="gui\gui-helpers.hpp" />
-    <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
     <ClInclude Include="gui\tabs\game_tab.h" />
     <ClInclude Include="gui\tabs\host_tab.h" />
@@ -305,6 +312,7 @@
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
+    <ClInclude Include="user\debughelper.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />

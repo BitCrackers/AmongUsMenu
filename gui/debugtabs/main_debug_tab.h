@@ -1,5 +1,5 @@
 #pragma once
 
-namespace DebugTab {
+namespace MainDebugTab {
 	void Render();
 }

@@ -1,10 +1,12 @@
 #include "pch-il2cpp.h"
-#include "debug_tab.h"
-#include "imgui/imgui.h"
-#include "state.hpp"
+#include "main_debug_tab.h"
+#include <imgui/imgui.h>
+#include "imgui/imgui_internal.h"
+#include "_hooks.h"
 #include "main.h"
+#include "state.hpp"
 
-namespace DebugTab {
+namespace MainDebugTab {
 
 	void Render() {
 		if (ImGui::BeginTabItem("Debug")) {
@@ -20,10 +22,12 @@ namespace DebugTab {
 			{
 				State.Load();
 			}
+			ImGui::SameLine(0.0f, 8.0f);
 			if (ImGui::Button("Force Save Settings"))
 			{
 				State.Save();
 			}
+
 			ImGui::EndTabItem();
 		}
 	}

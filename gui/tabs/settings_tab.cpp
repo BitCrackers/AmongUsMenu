@@ -23,8 +23,9 @@ namespace SettingsTab {
 			ImGui::Dummy(ImVec2(7, 7));
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7));
-			if (ImGui::Checkbox("Show Debug Tab", &State.showDebugTab)) {
-				State.Save();
+			if (ImGui::Button("Show Debug Window"))
+			{
+				State.showDebugWindow = true;
 			}
 #endif
 			ImGui::EndTabItem();

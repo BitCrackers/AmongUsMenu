@@ -20,9 +20,6 @@ void Settings::Load() {
 
         j.at("ShowMenu").get_to(this->ShowMenu);
         j.at("KeyBinds").get_to(this->KeyBinds);
-#ifdef _DEBUG
-        j.at("ShowDebug").get_to(this->showDebugTab);
-#endif
 
         j.at("ShowGhosts").get_to(this->ShowGhosts);
         j.at("ShowRadar").get_to(this->ShowRadar);
@@ -56,9 +53,6 @@ void Settings::Save() {
         nlohmann::ordered_json j = nlohmann::ordered_json{
             {"ShowMenu", this->ShowMenu},
             {"KeyBinds", this->KeyBinds},
-    #ifdef _DEBUG
-            {"ShowDebug", this->showDebugTab},
-    #endif
 
             {"ShowGhosts", this->ShowGhosts},
             {"ShowRadar", this->ShowRadar},

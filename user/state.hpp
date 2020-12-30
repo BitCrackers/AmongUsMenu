@@ -24,7 +24,7 @@ public:
     bool ShowMenu = false;
 
 #ifdef _DEBUG
-    bool showDebugTab = false;
+    bool showDebugWindow = false;
 #endif
 
     std::string CurrentScene;

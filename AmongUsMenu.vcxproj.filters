@@ -40,9 +40,6 @@
     <ClCompile Include="gui\radar.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\debug_tab.cpp">
-      <Filter>gui\tabs</Filter>
-    </ClCompile>
     <ClCompile Include="gui\tabs\doors_tab.cpp">
       <Filter>gui\tabs</Filter>
     </ClCompile>
@@ -211,6 +208,21 @@
     <ClCompile Include="user\keybinds.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="gui\debugtabs\class_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\debugtabs\main_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\debugtabs\translations_debug_tab.cpp">
+      <Filter>gui\debugtabs</Filter>
+    </ClCompile>
+    <ClCompile Include="user\debughelper.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\debuggui.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -257,9 +269,6 @@
     </ClInclude>
     <ClInclude Include="gui\theme.hpp">
       <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\tabs\debug_tab.h">
-      <Filter>gui\tabs</Filter>
     </ClInclude>
     <ClInclude Include="gui\tabs\doors_tab.h">
       <Filter>gui\tabs</Filter>
@@ -360,6 +369,21 @@
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="gui\debugtabs\class_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debugtabs\main_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debugtabs\translations_debug_tab.h">
+      <Filter>gui\debugtabs</Filter>
+    </ClInclude>
+    <ClInclude Include="user\debughelper.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\debuggui.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">
@@ -413,6 +437,9 @@
     </Filter>
     <Filter Include="user">
       <UniqueIdentifier>{c598f5c4-711e-4883-91b4-c7a35d7110bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\debugtabs">
+      <UniqueIdentifier>{fea181a1-1b40-4995-a5ae-adc9b5c793ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
