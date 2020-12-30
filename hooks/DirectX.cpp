@@ -12,7 +12,9 @@
 #include <iostream>
 #include "resource_data.h"
 #include "game.h"
+#ifdef _DEBUG
 #include "debuggui.hpp"
+#endif
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -109,10 +111,11 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     if (State.ShowConsole) {
         ConsoleGui::Render();
     }
-
+#ifdef _DEBUG
     if (State.showDebugWindow) {
         DebugGui::Render();
     }
+#endif
 
     ImGui::EndFrame();
     ImGui::Render();
