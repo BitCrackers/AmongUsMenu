@@ -35,7 +35,11 @@ void DetourInitilization() {
 		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
 		return;
 	} else {
-		oPresent = d3d11.presentFunction;
+		//oPresent = d3d11.presentFunction;
+
+		const auto renderer_handle = reinterpret_cast<uintptr_t>(GetModuleHandleA("GameOverlayRenderer.dll"));
+		const auto function_to_hook = renderer_handle + 0x78AC0;
+		oPresent = reinterpret_cast<D3D_PRESENT_FUNCTION>(function_to_hook);
 	}
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
