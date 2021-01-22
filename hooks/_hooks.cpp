@@ -3,6 +3,7 @@
 #include "detours/detours.h"
 #include "DirectX.h"
 #include <iostream>
+#include "sigscan.h"
 
 bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (DetourAttach(ppPointer, pDetour) != 0) {
@@ -35,11 +36,15 @@ void DetourInitilization() {
 		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
 		return;
 	} else {
-		//oPresent = d3d11.presentFunction;
-
-		const auto renderer_handle = reinterpret_cast<uintptr_t>(GetModuleHandleA("GameOverlayRenderer.dll"));
-		const auto function_to_hook = renderer_handle + 0x78AC0;
-		oPresent = reinterpret_cast<D3D_PRESENT_FUNCTION>(function_to_hook);
+		const auto function_to_hook = sigscan("GameOverlayRenderer.dll", "55 8B EC 53 8B 5D ? F6 C3 01 74 ? 53 FF 75 ? FF 75 ? FF 15 ? ? ? ? 5B 5D C2");
+		if (function_to_hook != NULL)
+			oPresent = reinterpret_cast<D3D_PRESENT_FUNCTION>(function_to_hook);
+		else
+		{
+			if (MessageBox(0, L"Failed to hook the Steam overlay D3DPresent function.  This may cause the menu to be visible to streaming applications.  Do you wish to continue?", L"Error", MB_YESNO | MB_ICONERROR) == IDNO)
+				return;
+			oPresent = d3d11.presentFunction;
+		}
 	}
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);

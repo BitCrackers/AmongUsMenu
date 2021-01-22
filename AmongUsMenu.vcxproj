@@ -41,6 +41,7 @@
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\SaveManager.cpp" />
+    <ClCompile Include="hooks\sigscan.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -300,6 +301,7 @@
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\DirectX.h" />
+    <ClInclude Include="hooks\sigscan.h" />
     <ClInclude Include="hooks\_hooks.h" />
     <ClInclude Include="includes\crc32.h" />
     <ClInclude Include="includes\directx11.h" />

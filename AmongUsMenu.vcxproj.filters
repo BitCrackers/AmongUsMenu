@@ -211,6 +211,9 @@
     <ClCompile Include="user\keybinds.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\sigscan.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -359,6 +362,9 @@
     </ClInclude>
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\sigscan.h">
+      <Filter>hooks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
