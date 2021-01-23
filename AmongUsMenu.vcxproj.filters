@@ -372,6 +372,9 @@
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="hooks\SignatureScan.hpp">
+      <Filter>hooks</Filter>
+    </ClInclude>
     <ClInclude Include="gui\esp.hpp">
       <Filter>gui</Filter>
     </ClInclude>
