@@ -360,6 +360,9 @@
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="hooks\SignatureScan.hpp">
+      <Filter>hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">

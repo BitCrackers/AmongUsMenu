@@ -10,6 +10,8 @@
 #include "state.hpp"
 #include "theme.hpp"
 #include <iostream>
+#include <mutex>
+
 #include "resource_data.h"
 #include "game.h"
 
@@ -78,8 +80,13 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
     return false;
 }
 
+std::once_flag init_d3d;
 HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
-    if (!State.ImGuiInitialized) {
+    std::call_once(init_d3d, [&] {
+        __this->GetDevice(__uuidof(pDevice), reinterpret_cast<void**>(&pDevice));
+        pDevice->GetImmediateContext(&pContext);
+    });
+	if (!State.ImGuiInitialized) {
         if (ImGuiInitialization(__this)) {
             State.ImGuiInitialized = true;
         } else {

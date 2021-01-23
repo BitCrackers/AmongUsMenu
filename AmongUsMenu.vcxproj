@@ -300,6 +300,7 @@
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />
     <ClInclude Include="hooks\DirectX.h" />
+    <ClInclude Include="hooks\SignatureScan.hpp" />
     <ClInclude Include="hooks\_hooks.h" />
     <ClInclude Include="includes\crc32.h" />
     <ClInclude Include="includes\directx11.h" />
