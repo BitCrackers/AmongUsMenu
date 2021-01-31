@@ -43,7 +43,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 
 ## Contributing
 
-1. Fork it (<https://github.com/std-nullptr/AmongUsMenu/fork>)
+1. Fork it (<https://github.com/BitCrackers/AmongUsMenu/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
