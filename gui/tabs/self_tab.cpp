@@ -77,14 +77,26 @@ namespace SelfTab {
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Noclip);
 
-            if (ImGui::Button("Invisibility"))
+            if (IsInGame())
             {
-                State.rpcQueue.push(new RpcEnterVent((*Game::pLocalPlayer)->fields.PlayerId));
-            }
-
-            if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent) && IsInGame()) {
-                if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
-                    (*Game::pLocalPlayer)->fields.moveable = false;
+                if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent)) {
+                    if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
+                        (*Game::pLocalPlayer)->fields.moveable = false;
+                    }
+                }
+                if (State.MoveInVent)
+                {
+                    ImGui::SameLine(160.0f);
+                    if (ImGui::Button("Enter Closest Vent"))
+                    {
+                        State.rpcQueue.push(new RpcEnterVent(1));
+                        
+                    }
+                    ImGui::SameLine(270.0f);
+                    if (ImGui::Button("Exit Vents"))
+                    {
+                        State.rpcQueue.push(new RpcExitVent(1));
+                    }
                 }
             }
 

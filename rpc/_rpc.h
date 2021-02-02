@@ -80,8 +80,15 @@ public:
 };
 
 class RpcEnterVent : public RPCInterface {
-	int32_t playerId;
+	int32_t ventId;
 public:
 	RpcEnterVent(int32_t id);
+	virtual void Process() override;
+};
+
+class RpcExitVent : public RPCInterface {
+	int32_t ventId;
+public:
+	RpcExitVent(int32_t id);
 	virtual void Process() override;
 };

@@ -42,6 +42,7 @@
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\SaveManager.cpp" />
     <ClCompile Include="rpc\RpcEnterVent.cpp" />
+    <ClCompile Include="rpc\RpcExitVent.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

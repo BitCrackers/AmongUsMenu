@@ -4,10 +4,10 @@
 
 RpcEnterVent::RpcEnterVent(int32_t id)
 {
-	this->playerId = id;
+	this->ventId = id;
 }
 
 void RpcEnterVent::Process()
 {
-	PlayerPhysics_RpcEnterVent((*Game::pLocalPlayer)->fields.MyPhysics, (*Game::pLocalPlayer)->fields.PlayerId, NULL);
+	PlayerPhysics_RpcEnterVent((*Game::pLocalPlayer)->fields.MyPhysics, this->ventId, NULL);
 }
