@@ -66,6 +66,8 @@ DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, uint8_t colorI
 DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
 
+DO_APP_FUNC(void, PlayerPhysics_RpcEnterVent, (PlayerPhysics* __this, int32_t id, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcEnterVent(PlayersPhysics, System.Int32)");
+
 DO_APP_FUNC(void, SaveManager_set_BodyColor, (uint8_t value, MethodInfo* method), "Assembly-CSharp, System.Void SaveManager::set_BodyColor(System.Byte)");
 DO_APP_FUNC(uint8_t, SaveManager_get_BodyColor, (MethodInfo* method), "Assembly-CSharp, System.Byte SaveManager::get_BodyColor()");
 

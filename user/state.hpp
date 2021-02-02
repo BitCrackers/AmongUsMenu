@@ -48,6 +48,7 @@ public:
 
     bool AntiBan = false;
 
+    bool Invisibility = false;
     bool MoveInVent = false;
 
     PlayerSelection selectedPlayer;

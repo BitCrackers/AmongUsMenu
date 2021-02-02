@@ -77,6 +77,11 @@ namespace SelfTab {
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Noclip);
 
+            if (ImGui::Button("Invisibility"))
+            {
+                State.rpcQueue.push(new RpcEnterVent((*Game::pLocalPlayer)->fields.PlayerId));
+            }
+
             if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent) && IsInGame()) {
                 if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
                     (*Game::pLocalPlayer)->fields.moveable = false;

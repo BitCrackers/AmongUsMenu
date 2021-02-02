@@ -78,3 +78,10 @@ public:
 	RpcSetName(std::string name);
 	virtual void Process() override;
 };
+
+class RpcEnterVent : public RPCInterface {
+	int32_t playerId;
+public:
+	RpcEnterVent(int32_t id);
+	virtual void Process() override;
+};

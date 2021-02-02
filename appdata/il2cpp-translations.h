@@ -54,6 +54,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "PetBehaviour"}, {"", "DLMDFGBMGPC"} },
 	{ {"", "PlainDoor"}, {"", "EEHJPJEBAGP"} },
 	{ {"", "PlayerControl"}, {"", "FFGALNAPKCD"} },
+	{ {"", "PlayerPhysics"}, {"", "LIMNONMAAFA"} },
 	{ {"", "PlayerTask"}, {"", "PILBGHDHJLH"} },
 	{ {"", "ReactorTask"}, {"", "PMNHCPJEPJH"} },
 	{ {"", "SabotageTask"}, {"", "MOKGEPINKEH"} },
