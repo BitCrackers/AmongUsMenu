@@ -2,7 +2,6 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
-#include <iostream>
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -275,7 +274,7 @@ Vent* GetClosestVent() {
 			auto playerPosition = app::PlayerControl_GetTruePosition(*Game::pLocalPlayer, NULL);
 
 			float ventDistance = app::Vector2_Distance(playerPosition, { ventVector.x, ventVector.y }, NULL);
-			std::cout << "Vent " << thisVent->fields.Id << " found with distance of " << ventDistance << std::endl;
+
 			if (ventDistance < closestVentDistance)
 			{
 				closestVent = thisVent;
@@ -283,7 +282,6 @@ Vent* GetClosestVent() {
 			}
 		}
 	}
-	std::cout << "Returning Vent " << closestVent->fields.Id << " found with distance of " << closestVentDistance << std::endl;
 	return closestVent;
 }
 
