@@ -2,6 +2,7 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
+#include <iostream>
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -259,6 +260,31 @@ std::vector<DeadBody*> GetAllDeadBodies() {
 		deadBodies.push_back(deadBodyArray->vector[i]);
 
 	return deadBodies;
+}
+
+Vent* GetClosestVent() {
+	float closestVentDistance = 9999.0f;
+	Vent* closestVent = NULL;
+	if (*Game::pShipStatus) {
+		auto allvents = ShipStatus_get_AllVents(*Game::pShipStatus, NULL);
+
+		for (size_t i = 0; i < allvents->max_length; i++)
+		{
+			auto thisVent = allvents->vector[i];
+			auto ventVector = Transform_get_position(Component_get_transform((Component*)thisVent, NULL), NULL);
+			auto playerPosition = app::PlayerControl_GetTruePosition(*Game::pLocalPlayer, NULL);
+
+			float ventDistance = app::Vector2_Distance(playerPosition, { ventVector.x, ventVector.y }, NULL);
+			std::cout << "Vent " << thisVent->fields.Id << " found with distance of " << ventDistance << std::endl;
+			if (ventDistance < closestVentDistance)
+			{
+				closestVent = thisVent;
+				closestVentDistance = ventDistance;
+			}
+		}
+	}
+	std::cout << "Returning Vent " << closestVent->fields.Id << " found with distance of " << closestVentDistance << std::endl;
+	return closestVent;
 }
 
 std::vector<PlayerTask*> GetPlayerTasks(PlayerControl* player) {

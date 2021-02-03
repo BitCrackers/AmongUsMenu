@@ -89,13 +89,13 @@ namespace SelfTab {
                     ImGui::SameLine(160.0f);
                     if (ImGui::Button("Enter Closest Vent"))
                     {
-                        State.rpcQueue.push(new RpcEnterVent(1));
+                        State.rpcQueue.push(new RpcEnterVent(GetClosestVent()->fields.Id));
                         
                     }
-                    ImGui::SameLine(270.0f);
+                    ImGui::SameLine(300.0f);
                     if (ImGui::Button("Exit Vents"))
                     {
-                        State.rpcQueue.push(new RpcExitVent(1));
+                        State.rpcQueue.push(new RpcExitVent(GetClosestVent()->fields.Id));
                     }
                 }
             }

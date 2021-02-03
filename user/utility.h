@@ -88,6 +88,7 @@ std::vector<GameData_PlayerInfo*> GetAllPlayerData();
 std::vector<DeadBody*> GetAllDeadBodies();
 std::vector<PlayerTask*> GetPlayerTasks(PlayerControl* player);
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player);
+Vent* GetClosestVent();
 SabotageTask* GetSabotageTask(PlayerControl* player);
 void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
