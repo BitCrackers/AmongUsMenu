@@ -77,7 +77,7 @@ namespace SelfTab {
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Noclip);
 
-            if (IsInGame())
+            if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)
             {
                 if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent)) {
                     if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
