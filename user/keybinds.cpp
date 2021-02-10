@@ -163,7 +163,7 @@ std::vector<uint8_t> KeyBinds::GetValidKeys()
 
 bool KeyBinds::IsKeyDown(uint8_t key)
 {
-    return KeyState[key];
+    return GetAsyncKeyState(key);
 }
 
 bool KeyBinds::IsKeyPressed(uint8_t key)
