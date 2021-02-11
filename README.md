@@ -1,4 +1,4 @@
-# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8)
+# AmongUsMenu [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
 
 <p align="center">
    AmongUsMenu is a Cheat Menu for the popular Game Among Us.
@@ -34,6 +34,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 </p>
 
 ## Credits
+* [void*](https://github.com/v0idp) (Maintainer & Creator)
 * [std-nullptr](https://github.com/std-nullptr) (Maintainer & IL2CPP Madman)
 * [OsOmE1](https://github.com/OsOmE1) (Contributor)
 * [RealMVC](https://github.com/RealMVC) (Contributor)
@@ -42,7 +43,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 
 ## Contributing
 
-1. Fork it (<https://github.com/std-nullptr/AmongUsMenu/fork>)
+1. Fork it (<https://github.com/BitCrackers/AmongUsMenu/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
