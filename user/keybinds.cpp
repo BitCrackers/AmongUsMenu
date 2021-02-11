@@ -139,6 +139,9 @@ void KeyBinds::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 KeyState[wParam] = false;
             return;
         }
+        case WM_KILLFOCUS:
+            KeyState.reset();
+            break;
     }
 }
 
@@ -163,7 +166,7 @@ std::vector<uint8_t> KeyBinds::GetValidKeys()
 
 bool KeyBinds::IsKeyDown(uint8_t key)
 {
-    return GetAsyncKeyState(key);
+    return KeyState[key];
 }
 
 bool KeyBinds::IsKeyPressed(uint8_t key)
