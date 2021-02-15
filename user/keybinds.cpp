@@ -139,6 +139,9 @@ void KeyBinds::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 KeyState[wParam] = false;
             return;
         }
+        case WM_KILLFOCUS:
+            KeyState.reset();
+            break;
     }
 }
 
