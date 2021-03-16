@@ -65,6 +65,10 @@ namespace PlayersTab {
 							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
 						}
 					}
+					ImGui::NewLine();
+					ImGui::Text("ColorId: ");
+					ImGui::SameLine();
+					ImGui::Text(std::to_string(+State.selectedPlayer.get_PlayerData()->fields.ColorId).c_str());
 
 					if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
 					{
