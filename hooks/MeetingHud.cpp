@@ -20,7 +20,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 	PlayerVoteArea__Array* playerStates = __this->fields.playerStates;
 	for (size_t i = 0; i < playerStates->max_length; i++) {
 		PlayerVoteArea* playerVoteArea = playerStates->vector[i];
-		auto playerData = GetPlayerDataById(playerVoteArea->fields._TargetPlayerId_k__BackingField);
+		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		if (playerData && localData) {
 			if (State.RevealImpostors || localData->fields.IsImpostor)
