@@ -30,6 +30,7 @@ void Settings::Load() {
         j.at("ShowRadar_Ghosts").get_to(this->ShowRadar_Ghosts);
         j.at("HideRadar_During_Meetings").get_to(this->HideRadar_During_Meetings);
         j.at("ShowRadar_RightClick_Teleport").get_to(this->ShowRadar_RightClick_Teleport);
+        j.at("LockRadar").get_to(this->LockRadar);
         j.at("RadarColor_R").get_to(this->SelectedColor.x);
         j.at("RadarColor_G").get_to(this->SelectedColor.y);
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
