@@ -1,17 +1,22 @@
 #include "pch-il2cpp.h"
 #include "DirectX.h"
+#include "Renderer.hpp"
 #include "console.hpp"
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 #include "keybinds.h"
 #include "menu.hpp"
 #include "radar.hpp"
+#include "esp.hpp"
 #include "state.hpp"
 #include "theme.hpp"
 #include <iostream>
 #include "resource_data.h"
 #include "game.h"
+
+#include <future>
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -25,6 +30,24 @@ WNDPROC oWndProc;
 HANDLE hPresentMutex;
 
 std::vector<MapTexture> maps = std::vector<MapTexture>();
+
+typedef struct Cache
+{
+	ImGuiWindow* Window;		//Window instance
+	ImVec2		 Winsize;		//Size of the window
+} cache_t;
+
+static cache_t s_Cache;
+
+static bool CanDrawEsp()
+{
+	return IsInGame() && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
+}
+
+static bool CanDrawRadar()
+{
+	return IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
+}
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (!State.ImGuiInitialized)
@@ -97,17 +120,52 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     ImGui::NewFrame();
     ApplyTheme();
 
-    if (State.ShowMenu) {
-        Menu::Render();
+    if (State.ShowMenu)
+    {
+        ImGuiRenderer::Submit([]() { Menu::Render(); });
     }
 
-    if (IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings)) {
-        Radar::Render();
+    if (State.ShowConsole)
+    {
+        ImGuiRenderer::Submit([]() { ConsoleGui::Render(); });
     }
 
-    if (State.ShowConsole) {
-        ConsoleGui::Render();
-    }
+	if (CanDrawEsp())
+	{
+		ImGuiRenderer::Submit([&]()
+		{
+			//Push ImGui flags
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, { 0.0f, 0.0f, 0.0f, 0.0f });
+
+			//Setup BackBuffer
+			ImGui::Begin("BackBuffer", reinterpret_cast<bool*>(true),
+				ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoScrollbar);
+
+			s_Cache.Winsize = { (float)app::Screen_get_width(nullptr), (float)app::Screen_get_height(nullptr) };
+			s_Cache.Window = ImGui::GetCurrentWindow();
+
+			//Set window properties
+			ImGui::SetWindowPos({ 0, 0 }, ImGuiCond_Always);
+			ImGui::SetWindowSize(s_Cache.Winsize, ImGuiCond_Always);
+
+			Esp::Render();
+
+			s_Cache.Window->DrawList->PushClipRectFullScreen();
+
+			ImGui::PopStyleColor();
+			ImGui::PopStyleVar();
+			ImGui::End();
+		});
+	}
+
+	if (CanDrawRadar())
+	{
+		ImGuiRenderer::Submit([]() { Radar::Render(); });
+	}
+
+    // Render in a separate thread
+	std::async(std::launch::async, ImGuiRenderer::ExecuteQueue);
 
     ImGui::EndFrame();
     ImGui::Render();

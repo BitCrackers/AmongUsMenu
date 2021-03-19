@@ -24,9 +24,19 @@
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
+    <ClCompile Include="gui\esp.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
+    <ClCompile Include="gui\RenderCmd.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="gui\Renderer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
+    <ClCompile Include="gui\tabs\esp_tab.cpp" />
     <ClCompile Include="gui\tabs\game_tab.cpp" />
     <ClCompile Include="gui\tabs\host_tab.cpp" />
     <ClCompile Include="gui\tabs\players_tab.cpp" />
@@ -289,9 +299,13 @@
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
     <ClInclude Include="gui\console.hpp" />
+    <ClInclude Include="gui\esp.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />
+    <ClInclude Include="gui\RenderCmd.hpp" />
+    <ClInclude Include="gui\Renderer.hpp" />
     <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
+    <ClInclude Include="gui\tabs\esp_tab.h" />
     <ClInclude Include="gui\tabs\game_tab.h" />
     <ClInclude Include="gui\tabs\host_tab.h" />
     <ClInclude Include="gui\tabs\players_tab.h" />

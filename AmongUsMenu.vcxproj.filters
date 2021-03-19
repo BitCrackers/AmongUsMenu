@@ -211,6 +211,10 @@
     <ClCompile Include="user\keybinds.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="gui\Renderer.cpp" />
+    <ClCompile Include="gui\RenderCmd.cpp" />
+    <ClCompile Include="gui\esp.cpp" />
+    <ClCompile Include="gui\tabs\esp_tab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -360,6 +364,10 @@
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="gui\Renderer.hpp" />
+    <ClInclude Include="gui\RenderCmd.hpp" />
+    <ClInclude Include="gui\esp.hpp" />
+    <ClInclude Include="gui\tabs\esp_tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">

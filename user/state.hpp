@@ -61,6 +61,13 @@ public:
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
 
+	bool ShowEsp = false;
+	bool ShowEsp_Ghosts = true;
+    bool ShowEsp_Box = true;
+    bool ShowEsp_Tracers = true;
+    bool ShowEsp_Distance = true;
+    bool HideEsp_During_Meetings = false;
+
     bool InMeeting = false;
     bool PlayMedbayScan = false;
 
