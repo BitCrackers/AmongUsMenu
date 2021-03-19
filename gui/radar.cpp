@@ -118,8 +118,6 @@ namespace Radar {
 			}
 		}
 
-		if (State.ShowRadar_RightClick_Teleport)
-			OnClick();
 
 		ImGui::End();
 	}
