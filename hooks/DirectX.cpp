@@ -33,8 +33,8 @@ std::vector<MapTexture> maps = std::vector<MapTexture>();
 
 typedef struct Cache
 {
-	ImGuiWindow* Window;		//Window instance
-	ImVec2		 Winsize;		//Size of the window
+	ImGuiWindow* Window;  //Window instance
+	ImVec2       Winsize; //Size of the window
 } cache_t;
 
 static cache_t s_Cache;
