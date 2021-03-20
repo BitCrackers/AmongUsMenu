@@ -69,9 +69,6 @@ DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, uint8_t colorI
 DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
 
-DO_APP_FUNC(void, SaveManager_set_BodyColor, (uint8_t value, MethodInfo* method), "Assembly-CSharp, System.Void SaveManager::set_BodyColor(System.Byte)");
-DO_APP_FUNC(uint8_t, SaveManager_get_BodyColor, (MethodInfo* method), "Assembly-CSharp, System.Byte SaveManager::get_BodyColor()");
-
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");
 
 DO_APP_FUNC(float, ShipStatus_CalculateLightRadius, (ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method), "Assembly-CSharp, System.Single ShipStatus::CalculateLightRadius(GameData.PlayerInfo)");

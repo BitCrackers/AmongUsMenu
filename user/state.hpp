@@ -46,8 +46,6 @@ public:
 
     bool DisableLights = false;
 
-    bool AntiBan = false;
-
     bool MoveInVent = false;
 
     PlayerSelection selectedPlayer;

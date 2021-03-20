@@ -73,8 +73,6 @@ void DetourInitilization() {
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
-	HOOKFUNC(SaveManager_set_BodyColor);
-	HOOKFUNC(SaveManager_get_BodyColor);
 	HOOKFUNC(LobbyBehaviour_Start);
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -121,8 +119,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
-	UNHOOKFUNC(SaveManager_set_BodyColor);
-	UNHOOKFUNC(SaveManager_get_BodyColor);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

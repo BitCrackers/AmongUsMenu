@@ -84,7 +84,7 @@ namespace PlayersTab {
 						}
 					}
 
-					if (!State.selectedPlayer.is_LocalPlayer() && (!State.AntiBan || !IsInMultiplayerGame()) && ImGui::Button("Steal Name"))
+					if (!State.selectedPlayer.is_LocalPlayer() && (!IsInMultiplayerGame()) && ImGui::Button("Steal Name"))
 					{
 						if(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10)
 							State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
