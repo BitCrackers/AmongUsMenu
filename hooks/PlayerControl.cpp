@@ -31,6 +31,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		else
 			nameText->fields.Color = Palette__TypeInfo->static_fields->White;
 
+		if (playerData->fields.IsDead && State.ShowGhosts)
+		{
+			Renderer* nameTextRenderer = (Renderer*)nameText->fields.render;
+			Material* material = Renderer_GetMaterial(nameTextRenderer, NULL);
+			Material_SetInt(material, convert_to_string("_Mask"), 0, NULL);
+		}
+
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
