@@ -4,9 +4,7 @@
 #include "utility.h"
 #include "game.h"
 
-#include <../includes/imgui/imgui_internal.h> // TODO : Fix this dir mess
-
-#include <iostream>
+#include <imgui/imgui_internal.h>
 
 drawing_t* Esp::s_Instance = new drawing_t();
 ImGuiWindow* Window = nullptr;
