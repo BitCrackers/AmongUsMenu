@@ -35,7 +35,6 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);
-void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method);
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method);
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
