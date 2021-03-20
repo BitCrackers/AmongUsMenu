@@ -36,12 +36,12 @@ void Settings::Load() {
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
         j.at("RadarColor_A").get_to(this->SelectedColor.w);
 
-		j.at("ShowEsp").get_to(this->ShowEsp);
-		j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
-		j.at("ShowEsp_Box").get_to(this->ShowEsp_Box);
-		j.at("ShowEsp_Tracers").get_to(this->ShowEsp_Tracers);
-		j.at("ShowEsp_Distance").get_to(this->ShowEsp_Distance);
-		j.at("HideEsp_During_Meetings").get_to(this->HideEsp_During_Meetings);
+        j.at("ShowEsp").get_to(this->ShowEsp);
+        j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
+        j.at("ShowEsp_Box").get_to(this->ShowEsp_Box);
+        j.at("ShowEsp_Tracers").get_to(this->ShowEsp_Tracers);
+        j.at("ShowEsp_Distance").get_to(this->ShowEsp_Distance);
+        j.at("HideEsp_During_Meetings").get_to(this->HideEsp_During_Meetings);
 
         j.at("MaxVision").get_to(this->MaxVision);
         j.at("Wallhack").get_to(this->Wallhack);
@@ -80,12 +80,12 @@ void Settings::Save() {
             {"RadarColor_B", this->SelectedColor.z},
             {"RadarColor_A", this->SelectedColor.w},
 
-			{"ShowEsp", this->ShowEsp},
-			{"ShowEsp_Ghosts", this->ShowEsp_Ghosts},
-			{"ShowEsp_Box", this->ShowEsp_Box},
-			{"ShowEsp_Tracers", this->ShowEsp_Tracers},
-			{"ShowEsp_Distance", this->ShowEsp_Distance},
-			{"HideEsp_During_Meetings", this->HideEsp_During_Meetings},
+            {"ShowEsp", this->ShowEsp},
+            {"ShowEsp_Ghosts", this->ShowEsp_Ghosts},
+            {"ShowEsp_Box", this->ShowEsp_Box},
+            {"ShowEsp_Tracers", this->ShowEsp_Tracers},
+            {"ShowEsp_Distance", this->ShowEsp_Distance},
+            {"HideEsp_During_Meetings", this->HideEsp_During_Meetings},
 
             {"MaxVision", this->MaxVision},
             {"Wallhack", this->Wallhack},
