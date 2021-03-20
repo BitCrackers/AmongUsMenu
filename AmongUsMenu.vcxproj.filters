@@ -211,6 +211,12 @@
     <ClCompile Include="user\keybinds.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\AirshipStatus.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\PolusShipStatus.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
