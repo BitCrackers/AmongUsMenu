@@ -5,7 +5,7 @@
 
 #include "state.hpp"
 
-#include <../includes/imgui/imgui.h>
+#include <imgui/imgui.h>
 
 static bool IsWithinScreenBounds(Vector2& pos)
 {
@@ -36,7 +36,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
-	value.x = (((pos.x - cameraPosition.x) * view + winsize.x * 0.5f) / (State.CameraHeight / 3));
+	value.x = (((pos.x - cameraPosition.x) * view + winsize.x * 0.5f));
 	value.y = ((cameraPosition.y - pos.y) * view + winsize.y * 0.5f);
 
 	return value;
