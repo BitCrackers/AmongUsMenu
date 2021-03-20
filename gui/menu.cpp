@@ -6,6 +6,7 @@
 #include "tabs/host_tab.h"
 #include "tabs/players_tab.h"
 #include "tabs/radar_tab.h"
+#include "tabs/esp_tab.h"
 #include "tabs/sabotage_tab.h"
 #include "tabs/self_tab.h"
 #include "tabs/settings_tab.h"
@@ -39,6 +40,7 @@ namespace Menu {
 		GameTab::Render();
 		SelfTab::Render();
 		RadarTab::Render();
+		EspTab::Render();
 		PlayersTab::Render();
 		TasksTab::Render();
 		SabotageTab::Render();

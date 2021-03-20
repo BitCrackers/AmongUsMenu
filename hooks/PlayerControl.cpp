@@ -1,8 +1,8 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "game.h"
-#include "utility.h"
 #include "state.hpp"
+#include "esp.hpp"
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -61,7 +61,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			}
 		}
 
-		if (!State.FreeCam  && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
+		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
@@ -115,6 +115,32 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Vector2 playerVector2 = GetTrueAdjustedPosition(State.playerToFollow.get_PlayerControl());
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
+		}
+
+		Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
+		ImVec2 localScreenPosition = WorldToScreen(localPos);
+
+		size_t playerIndex = 0;
+		for (auto& player : GetAllPlayerControl())
+		{
+			auto data = GetPlayerData(player);
+			if (!data || (!State.ShowEsp_Ghosts && data->fields.IsDead)) continue;
+			if (player == *Game::pLocalPlayer) continue;
+
+			Vector2 playerPos = PlayerControl_GetTruePosition(player, nullptr);
+
+			PlayerData playerData;
+			playerData.Position = WorldToScreen(playerPos);
+			playerData.Color = AmongUsColorToImVec4(GetPlayerColor(data->fields.ColorId));
+			playerData.Name = convert_from_string(data->fields.PlayerName);
+			playerData.OnScreen = IsWithinScreenBounds(playerPos);
+			playerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
+
+			drawing_t& instance = Esp::GetDrawing();
+			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
+			instance.LocalPosition = localScreenPosition;
+			instance.m_Players[playerIndex] = playerData;
+			playerIndex++;
 		}
 
 		// TODO: Improve performance

@@ -61,6 +61,13 @@ public:
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
 
+    bool ShowEsp = false;
+    bool ShowEsp_Ghosts = true;
+    bool ShowEsp_Box = true;
+    bool ShowEsp_Tracers = true;
+    bool ShowEsp_Distance = true;
+    bool HideEsp_During_Meetings = false;
+
     bool InMeeting = false;
     bool PlayMedbayScan = false;
 
@@ -92,9 +99,9 @@ public:
 
     ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 
-	int SelectedColorId = 0;
+    int SelectedColorId = 0;
 
-	PlayerSelection playerToFollow;
+    PlayerSelection playerToFollow;
 
     Vector3 camPos = { NULL, NULL, NULL };
     Vector3 prevCamPos = { NULL, NULL, NULL };

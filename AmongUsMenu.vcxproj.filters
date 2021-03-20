@@ -211,6 +211,18 @@
     <ClCompile Include="user\keybinds.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="gui\esp.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\tabs\esp_tab.cpp">
+      <Filter>gui\tabs</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\RenderCmd.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\Renderer.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
     <ClCompile Include="hooks\PolusShipStatus.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -362,6 +374,18 @@
     </ClInclude>
     <ClInclude Include="user\keybinds.h">
       <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\esp.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\tabs\esp_tab.h">
+      <Filter>gui\tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\RenderCmd.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\Renderer.hpp">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
