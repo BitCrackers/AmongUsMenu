@@ -35,6 +35,8 @@ DO_APP_FUNC(Vector2, DeadBody_get_TruePosition, (DeadBody* __this, MethodInfo* m
 
 DO_APP_FUNC(GameData_PlayerInfo*, GameData_GetPlayerById, (GameData* __this, uint8_t id, MethodInfo* method), "Assembly-CSharp, GameData.PlayerInfo GameData::GetPlayerById(System.Byte)");
 
+DO_APP_FUNC(void, GameObject_SetActive, (GameObject* __this, bool value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.GameObject::SetActive(System.Boolean)");
+
 DO_APP_FUNC(GameOptionsData*, GameOptionsData_Deserialize, (BinaryReader* reader, MethodInfo* method), "Assembly-CSharp, GameOptionsData GameOptionsData::Deserialize(System.IO.BinaryReader)");
 DO_APP_FUNC(GameOptionsData*, GameOptionsData_Deserialize_1, (MessageReader* reader, MethodInfo* method), "Assembly-CSharp, GameOptionsData GameOptionsData::Deserialize(Hazel.MessageReader)");
 
@@ -68,6 +70,7 @@ DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool valu
 DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, uint8_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
+DO_APP_FUNC(void, PlayerControl_set_Visible, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::set_Visible(System.Boolean)");
 
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");
 
@@ -99,6 +102,3 @@ DO_APP_FUNC(void, InnerNetClient_Update, (InnerNetClient* __this, MethodInfo* me
 DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
 
 DO_APP_FUNC(void, LobbyBehaviour_Start, (LobbyBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void LobbyBehaviour::Start()");
-
-DO_APP_FUNC(void, Material_SetInt, (Material* __this, String* name, int32_t value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Material::SetInt(System.String, System.Int32)");
-DO_APP_FUNC(Material*, Renderer_GetMaterial, (Renderer* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Material UnityEngine.Renderer::GetMaterial()");

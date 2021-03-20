@@ -74,6 +74,7 @@ void DetourInitilization() {
 	HOOKFUNC(InnerNetClient_Update);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
+	HOOKFUNC(GameObject_SetActive);
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
 	DetourTransactionCommit();
@@ -83,7 +84,7 @@ void DetourUninitialization()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-
+	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(HatManager_GetUnlockedHats);
 	UNHOOKFUNC(HatManager_GetUnlockedPets);

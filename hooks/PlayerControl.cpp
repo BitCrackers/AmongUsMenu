@@ -31,13 +31,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		else
 			nameText->fields.Color = Palette__TypeInfo->static_fields->White;
 
-		if (playerData->fields.IsDead && State.ShowGhosts)
-		{
-			Renderer* nameTextRenderer = (Renderer*)nameText->fields.render;
-			Material* material = Renderer_GetMaterial(nameTextRenderer, NULL);
-			Material_SetInt(material, convert_to_string("_Mask"), 0, NULL);
-		}
-
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
@@ -192,11 +185,31 @@ void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__A
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {
 	if (IsInGame() && !value) { //If we're already rendering it, lets skip checking if we should
 		for (auto player : GetAllPlayerControl()) {
-			if (((Renderer*)player->fields.MyPhysics->fields.rend) == __this && GetPlayerData(player)->fields.IsDead && State.ShowGhosts) {
-				value = true;
+			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
+			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+			{
+				if (((Renderer*)player->fields.MyPhysics->fields.rend) == __this) {
+					value = true;
+				}
 			}
 		}
-
 	}
 	Renderer_set_enabled(__this, value, method);
+}
+
+void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
+{
+	if (IsInGame() && !value) { //If we're already rendering it, lets skip checking if we should
+		for (auto player : GetAllPlayerControl()) {
+			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
+			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+			{
+				auto nameObject = Component_get_gameObject((Component*)player->fields.nameText, NULL);
+				if (nameObject == __this) {
+					value = true;
+				}
+			}
+		}
+	}
+	GameObject_SetActive(__this, value, method);
 }
