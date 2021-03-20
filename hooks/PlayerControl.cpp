@@ -183,12 +183,13 @@ void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__A
 }
 
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {
-	if (IsInGame()) {
+	if (IsInGame() && !value) { //If we're already rendering it, lets skip checking if we should
 		for (auto player : GetAllPlayerControl()) {
 			if (((Renderer*)player->fields.MyPhysics->fields.rend) == __this && GetPlayerData(player)->fields.IsDead && State.ShowGhosts) {
 				value = true;
 			}
 		}
+
 	}
 	Renderer_set_enabled(__this, value, method);
 }
