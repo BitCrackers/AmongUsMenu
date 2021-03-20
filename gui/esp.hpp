@@ -4,6 +4,7 @@
 #include <mutex>
 
 #include "state.hpp"
+#include "game.h"
 
 #include <imgui/imgui.h>
 
@@ -22,8 +23,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	// NOTE : We always need to divide the camera height by 3
 	// since 3 is the default zoom in the menu for some reason
 
-	PlayerControl* localPlayer = PlayerControl__TypeInfo->static_fields->LocalPlayer;
-	Vector2 localPos = PlayerControl_GetTruePosition(localPlayer, nullptr);
+	Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
 
 	/*Camera->GetMain() function*/
 	auto mainCamera = Camera_get_main(nullptr);
