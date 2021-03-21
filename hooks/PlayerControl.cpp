@@ -144,15 +144,16 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		}
 
 		if (State.RainbowName && __this == *Game::pLocalPlayer) {
-			// update rainbow
-			// State.RainbowNameColor = State.RainbowNameColor + ImVec4(.05f, .05f, .05f, 0.f); // using overloaded function (config : IMGUI_DEFINE_MATH_OPERATORS)
-			State.RainbowNameColor.x += State.RainbowSpeed;
-			State.RainbowNameColor.y += State.RainbowSpeed;
-			State.RainbowNameColor.z += State.RainbowSpeed;
-			// apply colour
-			__this->fields.nameText->fields.Color.r = std::sin(State.RainbowNameColor.x) * 0.5 + 0.5;
-			__this->fields.nameText->fields.Color.g = std::sin(State.RainbowNameColor.y) * 0.5 + 0.5;
-			__this->fields.nameText->fields.Color.b = std::sin(State.RainbowNameColor.z) * 0.5 + 0.5;
+			// update rainbow colour
+			State.RainbowNameColor += State.RainbowSpeed;
+			constexpr auto d_pi = 2.f * 3.14159265358979323846f;
+			while (State.RainbowNameColor > d_pi) State.RainbowNameColor -= d_pi;
+			// apply rainbow colour
+			const auto calculate = [](float value) {return std::sin(value) * .5f + .5f; };
+			__this->fields.nameText->fields.Color.r = calculate(State.RainbowNameColor + 0.f);
+			__this->fields.nameText->fields.Color.g = calculate(State.RainbowNameColor + 2.f);
+			__this->fields.nameText->fields.Color.b = calculate(State.RainbowNameColor + 4.f);
+			// TODO: add speed slider to State.RainbowSpeed;
 		}
 
 		// TODO: Improve performance

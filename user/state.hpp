@@ -109,7 +109,7 @@ public:
     int LobbyTimer = -1;
 
     bool RainbowName = false;
-    ImVec4 RainbowNameColor = { 0.f, 2.f, 4.f, 1.f };
+    float RainbowNameColor = 0.f;
     float RainbowSpeed = .05f;
 
     void Load();
