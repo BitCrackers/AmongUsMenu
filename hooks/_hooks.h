@@ -38,6 +38,5 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method);
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
-void dSaveManager_set_BodyColor(uint8_t value, MethodInfo* method);
-uint8_t dSaveManager_get_BodyColor(MethodInfo* method);
 void dLobbyBehaviour_Start(LobbyBehaviour* __this, MethodInfo* method);
+void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method);
