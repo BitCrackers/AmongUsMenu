@@ -102,3 +102,5 @@ DO_APP_FUNC(void, InnerNetClient_Update, (InnerNetClient* __this, MethodInfo* me
 DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
 
 DO_APP_FUNC(void, LobbyBehaviour_Start, (LobbyBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void LobbyBehaviour::Start()");
+
+DO_APP_FUNC(Vector3, MedScannerBehaviour_get_Position, (MedScannerBehaviour* __this, MethodInfo* method), "Assembly-CSharp, UnityEngine.Vector3 MedScannerBehaviour::get_Position()");
