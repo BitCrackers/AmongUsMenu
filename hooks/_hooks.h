@@ -21,6 +21,7 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method);
 void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, MethodInfo* method);
 void dHudManager_Update(HudManager* __this, MethodInfo* method);
+Vector3 dCamera_ScreenToWorldPoint(Camera* __this, Vector3 position, MethodInfo* method);
 void dKeyboardJoystick_Update(KeyboardJoystick* __this, MethodInfo* method);
 void dScreenJoystick_FixedUpdate(ScreenJoystick* __this, MethodInfo* method);
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method);

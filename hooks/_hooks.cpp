@@ -73,6 +73,7 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_SetVisible);
 	HOOKFUNC(HudManager_ShowMap);
 	HOOKFUNC(HudManager_Update);
+	HOOKFUNC(Camera_ScreenToWorldPoint);
 	HOOKFUNC(KeyboardJoystick_Update);
 	HOOKFUNC(ScreenJoystick_FixedUpdate);
 	HOOKFUNC(PlainDoor_SetDoorway);
@@ -123,6 +124,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(HudManager_Update);
 	UNHOOKFUNC(ScreenJoystick_FixedUpdate);
 	UNHOOKFUNC(KeyboardJoystick_Update);
+	UNHOOKFUNC(Camera_ScreenToWorldPoint);
 	UNHOOKFUNC(PlainDoor_SetDoorway);
 	UNHOOKFUNC(GameOptionsData_Deserialize);
 	UNHOOKFUNC(GameOptionsData_Deserialize_1);
