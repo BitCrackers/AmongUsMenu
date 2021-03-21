@@ -51,6 +51,8 @@ struct PlayerData
 
 	float Distance = 0.0f;
 	bool OnScreen = false;
+
+	PlayerSelection playerData;
 };
 
 typedef struct Drawing

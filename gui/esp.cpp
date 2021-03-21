@@ -69,7 +69,11 @@ void Esp::Render()
 
 	for (auto& it : instance.m_Players)
 	{
-		if (!it.Name.empty() && it.OnScreen)
+		if (it.playerData.has_value()				//Verify PlayerControl hasn't been destroyed (happens when disconnected)
+			&& !it.playerData.is_Disconnected()		//Sanity check, shouldn't ever be true
+			&& !it.playerData.is_LocalPlayer()		//Don't highlight yourself, you're ugly
+			&& (!it.playerData.get_PlayerData()->fields.IsDead || State.ShowEsp_Ghosts)
+			&& it.OnScreen)
 		{
 			/////////////////////////////////
 			//// Box ////////////////////////

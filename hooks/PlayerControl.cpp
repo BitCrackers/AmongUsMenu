@@ -120,31 +120,20 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
 		ImVec2 localScreenPosition = WorldToScreen(localPos);
 
-		if ((!playerData->fields.Disconnected) &&
-			(State.ShowEsp_Ghosts || !playerData->fields.IsDead) &&
-			(__this != *Game::pLocalPlayer))
-		{
-			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
+		Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 
-			PlayerData espPlayerData;
-			espPlayerData.Position = WorldToScreen(playerPos);
-			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
-			espPlayerData.Name = convert_from_string(playerData->fields.PlayerName);
-			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
-			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
+		PlayerData espPlayerData;
+		espPlayerData.Position = WorldToScreen(playerPos);
+		espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
+		espPlayerData.Name = convert_from_string(playerData->fields.PlayerName);
+		espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
+		espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
+		espPlayerData.playerData = PlayerSelection(__this);
 
-			drawing_t& instance = Esp::GetDrawing();
-			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
-			instance.LocalPosition = localScreenPosition;
-			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
-		}
-		else {
-			PlayerData espPlayerData; //blank
-			drawing_t& instance = Esp::GetDrawing();
-			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
-			instance.LocalPosition = localScreenPosition;
-			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
-		}
+		drawing_t& instance = Esp::GetDrawing();
+		std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
+		instance.LocalPosition = localScreenPosition;
+		instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
 
 		// TODO: Improve performance
 		/*Vector2 position = PlayerControl_GetTruePosition(__this, NULL);
