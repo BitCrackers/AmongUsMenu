@@ -143,6 +143,18 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			playerIndex++;
 		}
 
+		if (State.RainbowName && __this == *Game::pLocalPlayer) {
+			// update rainbow
+			// State.RainbowNameColor = State.RainbowNameColor + ImVec4(.05f, .05f, .05f, 0.f); // using overloaded function (config : IMGUI_DEFINE_MATH_OPERATORS)
+			State.RainbowNameColor.x += State.RainbowSpeed;
+			State.RainbowNameColor.y += State.RainbowSpeed;
+			State.RainbowNameColor.z += State.RainbowSpeed;
+			// apply colour
+			__this->fields.nameText->fields.Color.r = std::sin(State.RainbowNameColor.x) * 0.5 + 0.5;
+			__this->fields.nameText->fields.Color.g = std::sin(State.RainbowNameColor.y) * 0.5 + 0.5;
+			__this->fields.nameText->fields.Color.b = std::sin(State.RainbowNameColor.z) * 0.5 + 0.5;
+		}
+
 		// TODO: Improve performance
 		/*Vector2 position = PlayerControl_GetTruePosition(__this, NULL);
 		std::optional<Vector2> lastPosition = GetLastWalkEventPosition(__this->fields.PlayerId);

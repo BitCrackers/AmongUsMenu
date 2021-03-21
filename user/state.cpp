@@ -50,6 +50,9 @@ void Settings::Load() {
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
 
+        j.at("RainbowName").get_to(this->RainbowName);
+        j.at("RainbowSpeed").get_to(this->RainbowSpeed);
+
         j.at("ShowConsole").get_to(this->ShowConsole);
     } catch (...) {
         std::cout << "Unable to load settings.json" << std::endl;
@@ -93,6 +96,9 @@ void Settings::Save() {
             {"RevealImpostors", this->RevealImpostors},
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
+
+            {"RainbowName", this->RainbowName},
+            {"RainbowSpeed", this->RainbowSpeed},
 
             {"ShowConsole", this->ShowConsole}
         };

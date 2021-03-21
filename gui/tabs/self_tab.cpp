@@ -83,6 +83,10 @@ namespace SelfTab {
                 }
             }
 
+            if (ImGui::Checkbox("Rainbow Name", &State.RainbowName)) {
+                State.Save();
+            }
+
             ImGui::EndTabItem();
         }
     }
