@@ -31,10 +31,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         State.HotkeyNoClip = false;
     }
 
-    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan) {
-        PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
-    }
-
     if (!IsInGame()) {
         State.selectedPlayer = PlayerSelection();
         State.playerToFollow = PlayerSelection();
@@ -69,10 +65,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent) {
             (*Game::pLocalPlayer)->fields.moveable = true;
         }
-    }
-
-    if (((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) && State.AntiBan) {
-        PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
     }
 
     InnerNetClient_Update(__this, method);
