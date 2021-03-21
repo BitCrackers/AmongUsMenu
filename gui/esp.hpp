@@ -19,10 +19,10 @@ static float GetScaleFromValue(float value)
 	// We always need to divide the camera height by 3
 	// since 3 is the default zoom in the menu for some reason.
 	// We offset from 1080 since the w2s scale is defaulted to that.
-	float scale = (float)app::Screen_get_height(nullptr) / 1080.0f;
+	float scale = (float)Screen_get_height(nullptr) / 1080.0f;
 
 	// If we enable zoom then we scale but otherwise don't
-	float cameraHeight = State.EnableZoom ? (State.CameraHeight / 3.0f) : 1.0f;
+	float cameraHeight = State.EnableZoom ? State.CameraHeight / 3.0f : 1.0f;
 	return (value * scale) / cameraHeight;
 }
 
@@ -44,8 +44,8 @@ static ImVec2 WorldToScreen(Vector2 pos)
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
-	value.x = (((pos.x - cameraPosition.x) * view + winsize.x * 0.5f));
-	value.y = ((cameraPosition.y - pos.y) * view + winsize.y * 0.5f);
+	value.x = (pos.x - cameraPosition.x) * view + winsize.x * 0.5f;
+	value.y = (cameraPosition.y - pos.y) * view + winsize.y * 0.5f;
 
 	return value;
 }
