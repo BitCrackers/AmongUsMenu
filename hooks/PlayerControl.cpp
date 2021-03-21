@@ -116,31 +116,26 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
 		}
-
-		Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
-		ImVec2 localScreenPosition = WorldToScreen(localPos);
-
-		size_t playerIndex = 0;
-		for (auto& player : GetAllPlayerControl())
+    
+		// We should have this in a scope so that the lock guard only locks the right things
 		{
-			auto data = GetPlayerData(player);
-			if (!data || (!State.ShowEsp_Ghosts && data->fields.IsDead)) continue;
-			if (player == *Game::pLocalPlayer) continue;
+			Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
+			ImVec2 localScreenPosition = WorldToScreen(localPos);
 
-			Vector2 playerPos = PlayerControl_GetTruePosition(player, nullptr);
+			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 
-			PlayerData playerData;
-			playerData.Position = WorldToScreen(playerPos);
-			playerData.Color = AmongUsColorToImVec4(GetPlayerColor(data->fields.ColorId));
-			playerData.Name = convert_from_string(data->fields.PlayerName);
-			playerData.OnScreen = IsWithinScreenBounds(playerPos);
-			playerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
+			PlayerData espPlayerData;
+			espPlayerData.Position = WorldToScreen(playerPos);
+			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
+			espPlayerData.Name = convert_from_string(playerData->fields.PlayerName);
+			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
+			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
+			espPlayerData.playerData = PlayerSelection(__this);
 
 			drawing_t& instance = Esp::GetDrawing();
 			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
 			instance.LocalPosition = localScreenPosition;
-			instance.m_Players[playerIndex] = playerData;
-			playerIndex++;
+			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
 		}
 
 		if (State.RainbowName && __this == *Game::pLocalPlayer) {

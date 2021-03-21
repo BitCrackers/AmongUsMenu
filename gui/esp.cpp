@@ -69,21 +69,19 @@ void Esp::Render()
 
 	for (auto& it : instance.m_Players)
 	{
-		if (!it.Name.empty() && it.OnScreen)
+		if (it.playerData.has_value()				//Verify PlayerControl hasn't been destroyed (happens when disconnected)
+			&& !it.playerData.is_Disconnected()		//Sanity check, shouldn't ever be true
+			&& !it.playerData.is_LocalPlayer()		//Don't highlight yourself, you're ugly
+			&& (!it.playerData.get_PlayerData()->fields.IsDead || State.ShowEsp_Ghosts)
+			&& it.OnScreen)
 		{
 			/////////////////////////////////
 			//// Box ////////////////////////
 			/////////////////////////////////
 			if (State.ShowEsp_Box)
 			{
-				// NOTE : The res of the game can not be lower than the desktop res if the game is in fullscreen
-				const ImVec2 winsize{ (float)app::Screen_get_width(nullptr), (float)app::Screen_get_height(nullptr) };
-				float scale = winsize.y / 1080.0f; // We offset from 1080 since the w2s scale is defaulted to that
-
-				// NOTE : We always need to divide the camera height by 3
-				// since 3 is the default zoom in the menu for some reason
-				float width = (35.0f * scale) / (State.CameraHeight / 3);
-				float height = (120.0f * scale) / (State.CameraHeight / 3);
+				float width = GetScaleFromValue(35.0f);
+				float height = GetScaleFromValue(120.0f);
 
 				ImVec2 top{ it.Position.x + width, it.Position.y };
 				ImVec2 bottom{ it.Position.x - width, it.Position.y - height };
@@ -110,7 +108,5 @@ void Esp::Render()
 				RenderLine(instance.LocalPosition, it.Position, it.Color, true);
 			}
 		}
-
-		instance.m_Players.empty();
 	}
 }
