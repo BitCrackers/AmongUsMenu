@@ -66,9 +66,6 @@ namespace PlayersTab {
 						}
 					}
 					ImGui::NewLine();
-					ImGui::Text("ColorId: ");
-					ImGui::SameLine();
-					ImGui::Text(std::to_string(+State.selectedPlayer.get_PlayerData()->fields.ColorId).c_str());
 
 					if (!State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
 					{
@@ -84,9 +81,8 @@ namespace PlayersTab {
 						}
 					}
 
-					if (!State.selectedPlayer.is_LocalPlayer() && (!IsInMultiplayerGame()) && ImGui::Button("Steal Name"))
-					{
-						if(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10)
+					if (!State.selectedPlayer.is_LocalPlayer() && IsInMultiplayerGame() && ImGui::Button("Steal Name"))
+					{						if(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10)
 							State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
 						else
 							State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
