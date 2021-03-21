@@ -87,6 +87,8 @@ namespace GameTab {
 				}
 			}
 
+			ImGui::Dummy(ImVec2(4, 4));
+
 			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
 				State.Save();
 			}
