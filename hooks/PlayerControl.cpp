@@ -116,7 +116,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
 		}
-
+    
 		// We should have this in a scope so that the lock guard only locks the right things
 		{
 			Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
