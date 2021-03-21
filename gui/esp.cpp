@@ -110,7 +110,5 @@ void Esp::Render()
 				RenderLine(instance.LocalPosition, it.Position, it.Color, true);
 			}
 		}
-
-		instance.m_Players.empty();
 	}
 }

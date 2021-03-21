@@ -138,6 +138,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			instance.LocalPosition = localScreenPosition;
 			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
 		}
+		else {
+			PlayerData espPlayerData; //blank
+			drawing_t& instance = Esp::GetDrawing();
+			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
+			instance.LocalPosition = localScreenPosition;
+			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
+		}
 
 		// TODO: Improve performance
 		/*Vector2 position = PlayerControl_GetTruePosition(__this, NULL);
