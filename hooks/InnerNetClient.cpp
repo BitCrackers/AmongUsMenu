@@ -83,9 +83,5 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
     }
 
-    if ((IsInGame() && IsInMultiplayerGame()) || IsInLobby()) {
-        PlayerControl_SetColor(*Game::pLocalPlayer, 0, NULL);
-    }
-
     InnerNetClient_Update(__this, method);
 }

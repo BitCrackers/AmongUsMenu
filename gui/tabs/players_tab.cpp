@@ -90,7 +90,7 @@ namespace PlayersTab {
 						}
 					}
 					else if(!State.selectedPlayer.is_LocalPlayer()) {
-						if (!State.selectedPlayer.is_LocalPlayer() && IsInMultiplayerGame() && ImGui::Button("Steal Name")) {
+						if ((IsInMultiplayerGame() || IsInLobby()) && ImGui::Button("Steal Name")) {
 							if (convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10) {
 								if(IsInGame())
 									State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
