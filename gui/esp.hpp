@@ -31,8 +31,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	auto mainCamera = Camera_get_main(nullptr);
 	Transform* cameraTransform = Component_get_transform(reinterpret_cast<Component*>(mainCamera), nullptr);
 	Vector3 cameraPosition = Transform_get_position(cameraTransform, nullptr);
-	PlayerControl* localPlayer = PlayerControl__TypeInfo->static_fields->LocalPlayer;
-	Vector2 localPos = PlayerControl_GetTruePosition(localPlayer, nullptr);
+	Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
 
 	// Calculation to compensate for Camera movement
 	cameraPosition.x = localPos.x - (localPos.x - cameraPosition.x);
