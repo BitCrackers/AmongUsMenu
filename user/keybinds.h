@@ -15,6 +15,7 @@ namespace KeyBinds {
         uint8_t Toggle_Zoom;
         uint8_t Toggle_Freecam;
         uint8_t Close_Current_Room_Door;
+        uint8_t Toggle_Reveal_Imposter;
     };
 
     void WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
