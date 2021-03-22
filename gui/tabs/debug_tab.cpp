@@ -16,6 +16,9 @@ namespace DebugTab {
 			}
 			ImGui::Dummy(ImVec2(4, 4));
 #endif
+			ImGui::Checkbox("Enable Occlusion Culling", &State.OcclusionCulling);
+			ImGui::Dummy(ImVec2(4, 4));
+
 			if (ImGui::Button("Force Load Settings"))
 			{
 				State.Load();

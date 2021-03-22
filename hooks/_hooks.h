@@ -42,3 +42,4 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dLobbyBehaviour_Start(LobbyBehaviour* __this, MethodInfo* method);
 void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method);
+void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method);

@@ -108,6 +108,8 @@ public:
 
     bool FlipSkeld = false;
 
+	bool OcclusionCulling = false;
+
     int LobbyTimer = -1;
 
     void Load();

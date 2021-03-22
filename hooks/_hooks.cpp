@@ -90,6 +90,8 @@ void DetourInitilization() {
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
+	HOOKFUNC(NoShadowBehaviour_LateUpdate);
+
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
 	DetourTransactionCommit();
@@ -138,6 +140,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(InnerNetClient_Update);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
+	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
+
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
 	DetourTransactionCommit();
