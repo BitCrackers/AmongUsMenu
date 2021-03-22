@@ -81,6 +81,11 @@ namespace HostTab {
 						}
 					}
 				}
+				ImGui::Dummy(ImVec2(7, 7));
+				if (IsInLobby() && ImGui::Button("Force Start of Game"))
+				{
+					app::InnerNetClient_SendStartGame((InnerNetClient*)(*Game::pAmongUsClient), NULL);
+				}
 				ImGui::EndChild();
 				ImGui::EndTabItem();
 			}

@@ -50,6 +50,7 @@ public:
 
     PlayerSelection selectedPlayer;
     std::queue<RPCInterface*> rpcQueue;
+    std::queue<RPCInterface*> lobbyRpcQueue;
 
     bool ShowRadar = false;
     bool ShowRadar_DeadBodies = false;
@@ -97,7 +98,8 @@ public:
 
     ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 
-    int SelectedColorId = 0;
+	int SelectedColorId = 0;
+    std::string originalName = "-";
 
     PlayerSelection playerToFollow;
 

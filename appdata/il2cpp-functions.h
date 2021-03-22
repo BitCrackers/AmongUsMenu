@@ -45,6 +45,7 @@ DO_APP_FUNC(PetBehaviour__Array*, HatManager_GetUnlockedPets, (HatManager* __thi
 DO_APP_FUNC(SkinData__Array*, HatManager_GetUnlockedSkins, (HatManager* __this, MethodInfo* method), "Assembly-CSharp, SkinData[] HatManager::GetUnlockedSkins()");
 
 DO_APP_FUNC(void, KeyboardJoystick_Update, (KeyboardJoystick* __this, MethodInfo* method), "Assembly-CSharp, System.Void KeyboardJoystick::Update()");
+DO_APP_FUNC(void, ScreenJoystick_FixedUpdate, (ScreenJoystick* __this, MethodInfo* method), "Assembly-CSharp, System.Void ScreenJoystick::FixedUpdate()");
 
 DO_APP_FUNC(void, MeetingHud_Awake, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Awake()");
 DO_APP_FUNC(void, MeetingHud_Close, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Close()");
@@ -97,6 +98,7 @@ DO_APP_FUNC(void, ChatController_SetVisible, (ChatController* __this, bool visib
 DO_APP_FUNC(void, ChatBubble_SetName, (ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method), "Assembly-CSharp, System.Void ChatBubble::SetName(System.String, System.Boolean, System.Boolean, UnityEngine.Color)");
 
 DO_APP_FUNC(bool, InnerNetClient_get_AmHost, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean InnerNet.InnerNetClient::get_AmHost()");
+DO_APP_FUNC(void, InnerNetClient_SendStartGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::SendStartGame()");
 DO_APP_FUNC(void, InnerNetClient_Update, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::Update()");
 
 DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");

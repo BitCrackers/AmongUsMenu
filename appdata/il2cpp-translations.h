@@ -46,5 +46,6 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "ReportDeadBody", "AMPIGFMHGBM" },
 	{ "ShouldFlipSkeld", "HOFPIHJFIGI"},
 	{ "set_BodyColor", "GJJMKCLFAAA"},
-	{ "get_BodyColor", "PDNHBJIIOCP"}
+	{ "get_BodyColor", "PDNHBJIIOCP"},
+	{ "SendStartGame", "KFBAMPOABEN"}
 };
