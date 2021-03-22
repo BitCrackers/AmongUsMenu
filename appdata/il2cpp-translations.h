@@ -44,8 +44,9 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "EnterVent", "AAFOLJNFDOH" },
 	{ "ExitVent", "KJAPJGIAEDD" },
 	{ "ReportDeadBody", "AMPIGFMHGBM" },
-	{ "ShouldFlipSkeld", "HOFPIHJFIGI"},
-	{ "set_BodyColor", "GJJMKCLFAAA"},
-	{ "get_BodyColor", "PDNHBJIIOCP"},
-	{ "SendStartGame", "KFBAMPOABEN"}
+	{ "ShouldFlipSkeld", "HOFPIHJFIGI" },
+	{ "set_BodyColor", "GJJMKCLFAAA" },
+	{ "get_BodyColor", "PDNHBJIIOCP" },
+	{ "SendStartGame", "KFBAMPOABEN" },
+	{ "SetMaskFunction", "OGHEGEOFGNP" }
 };
