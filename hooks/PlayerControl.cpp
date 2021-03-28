@@ -3,6 +3,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "esp.hpp"
+#include "_rpc.h"
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -16,6 +17,12 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 }
 
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
+	if (__this == *Game::pLocalPlayer) {
+		MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
+		MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
+		MessageWriter_EndMessage(rpcMessage, NULL);
+	}
+
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
@@ -175,6 +182,11 @@ void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__A
 		}
 	}
 	PlayerControl_RpcSetInfected(__this, infected, method);
+}
+
+void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
+	HandleRpc(callId, reader);
+	PlayerControl_HandleRpc(__this, callId, reader, NULL);
 }
 
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {

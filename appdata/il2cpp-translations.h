@@ -34,6 +34,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "SaveManager"}, {"", "BNAOOLKPIBG"} },
 	{ {"", "StatsManager"}, {"", "HHCMEENGBEI"} },
 	{ {"", "SystemTypes"}, {"", "GOODOHMJKLN"} },
+	{ {"", "DisconnectReasons"}, {"", "CFIKHGJAEKN"} },
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
@@ -46,5 +47,6 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "ReportDeadBody", "AMPIGFMHGBM" },
 	{ "ShouldFlipSkeld", "HOFPIHJFIGI" },
 	{ "SendStartGame", "KFBAMPOABEN" },
-	{ "SetMaskFunction", "OGHEGEOFGNP" }
+	{ "SetMaskFunction", "OGHEGEOFGNP" },
+	{ "OnPlayerLeft", "AIIOJMCLEJB" }
 };

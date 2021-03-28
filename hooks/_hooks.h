@@ -6,6 +6,7 @@ void DetourUninitialization();
 bool dAutoOpenDoor_DoUpdate(AutoOpenDoor* __this, float dt, MethodInfo* method);
 bool dConstants_ShouldFlipSkeld(MethodInfo* method);
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method);
+void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method);
 bool dStatsManager_get_AmBanned(StatsManager* __this, MethodInfo* method);
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method);
 float dStatsManager_get_BanPoints(StatsManager* __this, MethodInfo* method);
@@ -34,6 +35,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method);
 void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method);
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method);
+void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method);
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);

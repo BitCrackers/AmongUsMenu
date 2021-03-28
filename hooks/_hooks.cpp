@@ -83,10 +83,12 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_ReportDeadBody);
 	HOOKFUNC(PlayerControl_RpcSetInfected);
+	HOOKFUNC(PlayerControl_HandleRpc);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
+	HOOKFUNC(AmongUsClient_OnPlayerLeft);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
@@ -134,10 +136,12 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	UNHOOKFUNC(PlayerControl_ReportDeadBody);
 	UNHOOKFUNC(PlayerControl_RpcSetInfected);
+	UNHOOKFUNC(PlayerControl_HandleRpc);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
+	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);

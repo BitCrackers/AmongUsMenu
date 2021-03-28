@@ -85,3 +85,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     InnerNetClient_Update(__this, method);
 }
+
+void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
+    auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
+
+    if (it != State.aumUsers.end())
+        State.aumUsers.erase(it);
+    AmongUsClient_OnPlayerLeft(__this, data, reason, method);
+}

@@ -41,6 +41,11 @@ namespace PlayersTab {
 					ImGui::TextColored(nameColor, playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
+				bool aum = State.selectedPlayer.is_LocalPlayer();
+				if (!aum) {
+					aum = std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerId());
+				}
+				ImGui::Text("Is using AUM: %s", aum ? "Yes" : "No");
 
 				if (IsInMultiplayerGame() && IsInGame()) {
 					float taskPercentage = (float) (*Game::pGameData)->fields.CompletedTasks / (float) (*Game::pGameData)->fields.TotalTasks;

@@ -83,6 +83,8 @@ public:
 
     std::bitset<0xFF> voteMonitor;
 
+    std::vector<int32_t> aumUsers;
+
     std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
     int map = -1;
     ShipStatus_MapType__Enum previousMap = (ShipStatus_MapType__Enum)0;

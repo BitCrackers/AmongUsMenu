@@ -57,6 +57,7 @@
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\NoShadowBehaviour.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
+    <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

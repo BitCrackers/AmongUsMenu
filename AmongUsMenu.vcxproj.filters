@@ -229,6 +229,9 @@
     <ClCompile Include="hooks\Camera.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\CustomRpcHandler.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
