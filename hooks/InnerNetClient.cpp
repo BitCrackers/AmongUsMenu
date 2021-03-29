@@ -94,28 +94,40 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
+bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
+{
+#ifdef _DEBUG
+    assert(player.has_value());
+#endif
+    if (!player.has_value()) return false; //Error getting playercontroller
+    if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
+    if (player.get_PlayerControl()->fields.inVent) return false; //Vent buttons are warps
+    if (player.get_PlayerData()->fields.IsDead) return false; //The dead do as they please
+    if (Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true), newPosition) ||
+        Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false), newPosition))
+        return false;  //You are warped to your spawn at meetings and start of games
+    if (player.get_PlayerData()->fields.IsImpostor &&
+        Vector2_Distance(PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL), newPosition, NULL) > (*Game::pGameOptionsData)->fields.KillDistance) return false;
+    return true; //We have ruled out all possible scenarios.  Off with his head!
+}
+
 void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 position, uint16_t minSid, MethodInfo* method) {
     if (!IsInGame()) {
         CustomNetworkTransform_SnapTo(__this, position, minSid, method);
         return;
     }
 
-    PlayerControl* player = nullptr;
+    PlayerSelection player;
     for (auto p : GetAllPlayerControl()) {
         if (p->fields.NetTransform == __this) {
-            player = p;
+            player = PlayerSelection(p);
             break;
         }
     }
 
-    if (!player->fields.inVent && 
-        player != *Game::pLocalPlayer &&
-        !(GameObject_get_layer(app::Component_get_gameObject((Component*)player, NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL)) &&
-        !(GetPlayerData(player)->fields.IsImpostor && player->fields.killTimer == (*Game::pGameOptionsData)->fields.KillCooldown) &&
-        !Equals(GetSpawnLocation(player->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true), position) &&
-        !Equals(GetSpawnLocation(player->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false), position)
-        ) {
-        State.events.push_back(new CheatDetectedEvent(GetEventPlayer(player), CHEAT_TELEPORT));
+    if (bogusTransformSnap(player, position))
+    {
+        State.events.push_back(new CheatDetectedEvent(GetEventPlayer(player.get_PlayerControl()), CHEAT_TELEPORT));
     }
 
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
