@@ -93,6 +93,7 @@ void Run(LPVOID lpParam) {
 	Game::pAllPlayerControls = &(app::PlayerControl__TypeInfo->static_fields->AllPlayerControls);
 	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
 	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
+	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
 
 	DetourInitilization();
 #if _DEBUG

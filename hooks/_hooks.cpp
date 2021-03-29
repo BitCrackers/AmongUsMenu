@@ -88,7 +88,9 @@ void DetourInitilization() {
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
+	HOOKFUNC(InnerNetObject_Despawn);
 	HOOKFUNC(AmongUsClient_OnPlayerLeft);
+	HOOKFUNC(CustomNetworkTransform_SnapTo);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
@@ -141,7 +143,9 @@ void DetourUninitialization()
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
+	UNHOOKFUNC(InnerNetObject_Despawn);
 	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
+	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);

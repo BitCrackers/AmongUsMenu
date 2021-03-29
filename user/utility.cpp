@@ -442,3 +442,36 @@ std::vector<ClientData*> GetAllClients()
 
 	return clients;
 }
+
+Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
+{
+	ShipStatus_MapType__Enum type = (*Game::pShipStatus)->fields.Type;
+	if (type == ShipStatus_MapType__Enum_Ship || type != ShipStatus_MapType__Enum_Pb || initialSpawn)
+	{
+		Vector2 vector = { 0, 1 };
+		vector = Rotate(vector, (float)(playerId - 1) * (360.f / (float)numPlayer));
+		float radius = (*Game::pShipStatus)->fields.SpawnRadius;
+		vector = { vector.x * radius, vector.y * radius };
+		Vector2 spawncenter = (initialSpawn ? (*Game::pShipStatus)->fields.InitialSpawnCenter : (*Game::pShipStatus)->fields.MeetingSpawnCenter);
+		return { spawncenter.x + vector.x, spawncenter.y + vector.y + 0.3636f };
+	}
+	if (playerId < 5)
+	{
+		Vector2 spawncenter = (*Game::pShipStatus)->fields.MeetingSpawnCenter;
+		return { (spawncenter.x + 1) * (float)playerId, spawncenter.y * (float)playerId };
+	}
+	Vector2 spawncenter = (*Game::pShipStatus)->fields.MeetingSpawnCenter2;
+	return { (spawncenter.x + 1) * (float)(playerId - 5), spawncenter.y * (float)(playerId - 5) };
+}
+
+Vector2 Rotate(Vector2 vec, float degrees)
+{
+	float f = 0.017453292f * degrees;
+	float num = cos(f);
+	float num2 = sin(f);
+	return { vec.x * num - num2 * vec.y, vec.x * num2 + num * vec.y };
+}
+
+bool Equals(Vector2 vec1, Vector2 vec2) {
+	return vec1.x == vec2.x && vec1.y == vec2.y;
+}

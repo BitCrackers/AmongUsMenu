@@ -8,4 +8,5 @@ namespace Game {
 	List_1_PlayerControl_** pAllPlayerControls;
 	PlayerControl** pLocalPlayer;
 	ShipStatus** pShipStatus;
+	LobbyBehaviour** pLobbyBehaviour;
 }

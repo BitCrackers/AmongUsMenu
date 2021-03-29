@@ -101,3 +101,6 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
+Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
+Vector2 Rotate(Vector2 vec, float degrees);
+bool Equals(Vector2 vec1, Vector2 vec2);

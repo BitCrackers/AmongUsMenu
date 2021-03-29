@@ -18,9 +18,15 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (__this == *Game::pLocalPlayer) {
-		MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
-		MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
-		MessageWriter_EndMessage(rpcMessage, NULL);
+		if (State.rpcCooldown == 0) {
+			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
+			MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
+			MessageWriter_EndMessage(rpcMessage, NULL);
+			State.rpcCooldown = 15;
+		}
+		else {
+			State.rpcCooldown--;
+		}
 	}
 
 	if (IsInGame()) {
@@ -176,6 +182,10 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
+	if (GetPlayerData(__this)->fields.IsImpostor && GetPlayerData(target)->fields.IsImpostor) {
+		State.events.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
+	}
+
 	State.events.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_MurderPlayer(__this, target, method);
 }

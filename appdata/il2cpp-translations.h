@@ -48,5 +48,6 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "ShouldFlipSkeld", "HOFPIHJFIGI" },
 	{ "SendStartGame", "KFBAMPOABEN" },
 	{ "SetMaskFunction", "OGHEGEOFGNP" },
-	{ "OnPlayerLeft", "AIIOJMCLEJB" }
+	{ "OnPlayerLeft", "AIIOJMCLEJB" },
+	{ "SnapTo", "BNMAONBNIBD" }
 };

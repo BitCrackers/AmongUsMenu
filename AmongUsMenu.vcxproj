@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="events\CastVoteEvent.cpp" />
+    <ClCompile Include="events\CheatDetectedEvent.cpp" />
     <ClCompile Include="events\KillEvent.cpp" />
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />

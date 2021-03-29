@@ -11,13 +11,21 @@ enum EVENT_TYPES {
 	EVENT_REPORT = 0x4,
 	EVENT_MEETING = 0x5,
 	EVENT_VOTE = 0x6,
-	EVENT_WALK = 0x7
+	EVENT_CHEAT = 0x7,
+	EVENT_WALK = 0x8,
 };
 
 enum VENT_ACTION {
 	VENT_ENTER = 0x0,
 	VENT_EXIT = 0x1
 };
+
+enum CHEAT_ACTION {
+	CHEAT_TELEPORT = 0x0,
+	CHEAT_KILL_IMPOSTOR = 0x1
+};
+
+const std::vector<const char*> CHEAT_ACTION_NAMES = { "Teleporting", "Killed impostor" };
 
 struct EVENT_PLAYER {
 	uint8_t playerId;
@@ -102,6 +110,15 @@ private:
 	std::optional<EVENT_PLAYER> target;
 public:
 	CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target);
+	virtual void Output() override;
+	virtual void ColoredEventOutput() override;
+};
+
+class CheatDetectedEvent : public EventInterface {
+private:
+	CHEAT_ACTION action;
+public:
+	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

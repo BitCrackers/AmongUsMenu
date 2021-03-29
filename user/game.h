@@ -9,4 +9,5 @@ namespace Game {
 	extern List_1_PlayerControl_** pAllPlayerControls;
 	extern PlayerControl** pLocalPlayer;
 	extern ShipStatus** pShipStatus;
+	extern LobbyBehaviour** pLobbyBehaviour;
 }

@@ -41,6 +41,7 @@ namespace PlayersTab {
 					ImGui::TextColored(nameColor, playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
+
 				bool aum = State.selectedPlayer.is_LocalPlayer();
 				if (!aum) {
 					aum = std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerId());

@@ -84,6 +84,8 @@ public:
     std::bitset<0xFF> voteMonitor;
 
     std::vector<int32_t> aumUsers;
+    int32_t rpcCooldown = 15;
+    int32_t playerKilledId = 0;
 
     std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
     int map = -1;
