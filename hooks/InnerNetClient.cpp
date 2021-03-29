@@ -111,7 +111,6 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
     if (!player->fields.inVent && 
         player != *Game::pLocalPlayer &&
         !(GameObject_get_layer(app::Component_get_gameObject((Component*)player, NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL)) &&
-        State.events.back()->getType() == EVENT_KILL &&
         !(GetPlayerData(player)->fields.IsImpostor && player->fields.killTimer == (*Game::pGameOptionsData)->fields.KillCooldown) &&
         !Equals(GetSpawnLocation(player->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true), position) &&
         !Equals(GetSpawnLocation(player->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false), position)
