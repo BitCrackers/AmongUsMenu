@@ -123,6 +123,16 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
 		}
+
+		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
+		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);
+
+		if (State.Wallhack || State.FreeCam || State.EnableZoom) {
+			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -105 }, NULL);
+		}
+		else {
+			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -106 }, NULL);
+		}
     
 		// We should have this in a scope so that the lock guard only locks the right things
 		{
