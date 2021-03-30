@@ -107,16 +107,20 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (GameObject_get_layer(app::Component_get_gameObject((Component*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
-    auto distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL);
-    if (Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true), newPosition) ||
-        Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false), newPosition))
-        return false;  //You are warped to your spawn at meetings and start of games
+    int32_t distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
+    auto killDistance = std::clamp((*Game::pGameOptionsData)->fields.KillDistance, 0, 2);
+    auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true);
+    auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false);
+    if (Equals(initialSpawnLocation, newPosition)) return false;
+    if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
+    if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
+        return false;
 #ifdef _DEBUG
     std::cout << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
-    std::cout << "Range to target " << +distanceToTarget << " versus " << +(*Game::pGameOptionsData)->fields.KillDistance << std::endl;
+    std::cout << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
+    std::cout << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
+    std::cout << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
 #endif
-    if (player.get_PlayerData()->fields.IsImpostor &&
-        distanceToTarget >= (float)((*Game::pGameOptionsData)->fields.KillDistance)) return false;
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }
 
