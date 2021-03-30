@@ -3,6 +3,7 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
+#include <iostream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -97,17 +98,25 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
 bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 {
 #ifdef _DEBUG
-    assert(player.has_value());
+    if (!player.has_value())
+        std::cout << __func__ << " received invalid player!" << std::endl;
 #endif
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
     if (player.get_PlayerControl()->fields.inVent) return false; //Vent buttons are warps
-    if (player.get_PlayerData()->fields.IsDead) return false; //The dead do as they please
+    if (GameObject_get_layer(app::Component_get_gameObject((Component*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
+        return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
+    auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
+    auto distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL);
     if (Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true), newPosition) ||
         Equals(GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false), newPosition))
         return false;  //You are warped to your spawn at meetings and start of games
+#ifdef _DEBUG
+    std::cout << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
+    std::cout << "Range to target " << +distanceToTarget << " versus " << +(*Game::pGameOptionsData)->fields.KillDistance << std::endl;
+#endif
     if (player.get_PlayerData()->fields.IsImpostor &&
-        Vector2_Distance(PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL), newPosition, NULL) > (*Game::pGameOptionsData)->fields.KillDistance) return false;
+        distanceToTarget >= (float)((*Game::pGameOptionsData)->fields.KillDistance)) return false;
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }
 
