@@ -141,9 +141,9 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
-#define LocalInGame (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInGame (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInLobby (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
+#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {

@@ -26,28 +26,30 @@ struct KLASS_PAIR {
 };
 
 const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
-	{ {"", "Constants"}, {"", "DPHADHMAPCB"}},	
-	{ {"", "GameData.PlayerInfo"}, {"", "GameData.GOOIGLGKMCE"} },
-	{ {"", "GameData.TaskInfo"}, {"", "GameData.HKFJOIBBOBD"} },
-	{ {"", "GameOptionsData"}, {"", "PAMOPBEDCNI"} },
-	{ {"", "Palette"}, {"", "KOBANOHPIIA"} },
-	{ {"", "SaveManager"}, {"", "BNAOOLKPIBG"} },
-	{ {"", "StatsManager"}, {"", "HHCMEENGBEI"} },
-	{ {"", "SystemTypes"}, {"", "GOODOHMJKLN"} },
-	{ {"", "DisconnectReasons"}, {"", "CFIKHGJAEKN"} },
+	{ {"", "Constants"}, {"", "GOPHKPFLLBH"}},
+	{ {"", "GameData.PlayerInfo"}, {"", "GameData.JBDOMGNBCBH"} },
+	{ {"", "GameData.TaskInfo"}, {"", "GameData.EOAGFELAMIM"} },
+	{ {"", "GameOptionsData"}, {"", "ILHBIMBOFDI"} },
+	{ {"", "Palette"}, {"", "GBHEJGBDGPJ"} },
+	{ {"", "SaveManager"}, {"", "PKKCMGKHOJA"} },
+	{ {"", "StatsManager"}, {"", "HLBPBMGBNGE"} },
+	{ {"", "SystemTypes"}, {"", "LPKBKECNKLP"} },
+	{ {"", "DisconnectReasons"}, {"", "HGANHCACPJM"} },
+	{ {"", "ISystemType"}, {"", "IMDFAGKELHM"} },
+	{ {"", "SwitchSystem"}, {"", "FFIMOMHKGBE"} },
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
-	{ "get_BanMinutesLeft", "MBFOPPGNFAF" },
-	{ "get_AmBanned", "HLEKGEFELJO" },
-	{ "get_BanPoints", "FHELDINHHMJ" },
-	{ "Deserialize", "OBBPKOCNPDG" },
-	{ "EnterVent", "AAFOLJNFDOH" },
-	{ "ExitVent", "KJAPJGIAEDD" },
-	{ "ReportDeadBody", "AMPIGFMHGBM" },
-	{ "ShouldFlipSkeld", "HOFPIHJFIGI" },
-	{ "SendStartGame", "KFBAMPOABEN" },
-	{ "SetMaskFunction", "OGHEGEOFGNP" },
-	{ "OnPlayerLeft", "AIIOJMCLEJB" },
-	{ "SnapTo", "BNMAONBNIBD" }
+	{ "get_BanMinutesLeft", "JHCNMDBJOPL" },
+	{ "get_AmBanned", "KPPPEDMNOAN" }, 
+	{ "get_BanPoints", "GOCAPJKBFKG" },
+	{ "Deserialize", "BMDKAMACEKH" },
+	{ "EnterVent", "FOBALHHMNHP" },  // MIKKBFDJNFP - BIHNHHPGBPN - CHEEOCFIEPG 
+	{ "ExitVent", "BIDJOGAPJHO" }, // NCHHIFHFIBA - IADEGJKGOHO - DDIKNENMFEJ - BMDFMJBGABF - BBJNFIACACA - AGBGLJBIDED - MDCMHFFPHKE
+	{ "ReportDeadBody", "LFFPFIJGHKC" },
+	{ "ShouldFlipSkeld", "MBOCPHKHNBG" },
+	{ "SendStartGame", "ANCFEECEHKP" },
+	{ "SetMaskFunction", "BGLIPIMPNFH" },
+	{ "OnPlayerLeft", "CJDKFLEBMLI" },
+	{ "SnapTo", "GOBEJFMLNNE" },
 };

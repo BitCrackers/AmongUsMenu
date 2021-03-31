@@ -76,7 +76,7 @@ DO_APP_FUNC(void, PlayerControl_RpcMurderPlayer, (PlayerControl* __this, PlayerC
 DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method), "Assembly-CSharp, System.Void PlayerControl::ReportDeadBody(GameData.PlayerInfo)");
 DO_APP_FUNC(void, PlayerControl_RpcSetInfected, (PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetInfected(GameData.PlayerInfo[])");
 DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetScanner(System.Boolean)");
-DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, uint8_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetColor(System.Byte)");
+DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetColor(System.Int32)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
 DO_APP_FUNC(void, PlayerControl_set_Visible, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::set_Visible(System.Boolean)");
@@ -118,6 +118,10 @@ DO_APP_FUNC(void, InnerNetObject_Despawn, (InnerNetObject* __this, MethodInfo* m
 DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
 
 DO_APP_FUNC(void, LobbyBehaviour_Start, (LobbyBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void LobbyBehaviour::Start()");
+
+DO_APP_FUNC(MessageWriter*, MessageWriter_Get, (SendOption__Enum sendOption, MethodInfo* method), "Hazel, Hazel.MessageWriter Hazel.MessageWriter::Get(Hazel.SendOption)");
+DO_APP_FUNC(void, MessageWriter_StartMessage, (MessageWriter* __this, uint8_t typeFlag, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::StartMessage(System.Byte)");
+DO_APP_FUNC(void, MessageWriter_WritePacked, (MessageWriter* __this, int32_t value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::WritePacked(System.Int32)");
 
 DO_APP_FUNC(bool, MessageReader_ReadBoolean, (MessageReader* __this, MethodInfo* method), "Hazel, System.Boolean Hazel.MessageReader::ReadBoolean()");
 DO_APP_FUNC(uint8_t, MessageReader_ReadByte, (MessageReader* __this, MethodInfo* method), "Hazel, System.Byte Hazel.MessageReader::ReadByte()");

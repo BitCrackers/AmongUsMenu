@@ -62,7 +62,6 @@ namespace PlayersTab {
 						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
 				}
-
 				if (State.selectedPlayer.has_value())
 				{
 					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
