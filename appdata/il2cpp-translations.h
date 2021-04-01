@@ -44,12 +44,13 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_AmBanned", "OOPPAGDFJIP" }, //done
 	{ "get_BanPoints", "NDKIBBHCHPN" }, //done
 	{ "Deserialize", "BBEAAOOCKOP" }, //done
-	{ "EnterVent", "FIIAMNBHLAH" }, // CACKHNHMCPM - LNLNBNLNDLM - MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
-	{ "ExitVent", "HLODAMFBHDL" }, // ^
+	{ "EnterVent", "MGFMILKCEIN" }, // CACKHNHMCPM - LNLNBNLNDLM - MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
+	{ "ExitVent", "HFHOHEBHKOI" }, // ^
 	{ "ReportDeadBody", "AGANIGJHGNB" }, //done
 	{ "ShouldFlipSkeld", "DECMMJMOCKM" }, //done
 	{ "SendStartGame", "OFMEGDEDGOK" }, //done
 	{ "SetMaskFunction", "NDMKNGFHFJO" }, //done
 	{ "OnPlayerLeft", "NBDIGLAODOA" }, //done FBJJGMOIHOI
 	{ "SnapTo", "BNNEAMEFHIG" }, //done
+	{ "DrawOcclusion", "OGILAKHGLMJ" }
 };

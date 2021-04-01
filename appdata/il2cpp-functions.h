@@ -138,3 +138,14 @@ DO_APP_FUNC(void, MessageWriter_WriteString, (MessageWriter* __this, String* val
 DO_APP_FUNC(void, MessageWriter_WriteBytesAndSize, (MessageWriter* __this, Byte__Array* bytes, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Byte[])");
 DO_APP_FUNC(void, MessageWriter_WriteByteArray, (MessageWriter* __this, Byte__Array* bytes, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Byte[])");
 DO_APP_FUNC(void, MessageWriter_EndMessage, (MessageWriter* __this, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::EndMessage()");
+
+DO_APP_FUNC(void, AccountTab_Open, (AccountTab* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountTab::Open()");
+DO_APP_FUNC(void, FullAccount_CanSetCustomName, (FullAccount* __this, bool canSetName, MethodInfo* method), "Assembly-CSharp, System.Void FullAccount::CanSetCustomName(System.Boolean)");
+DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* method), "Assembly-CSharp, System.Void FollowerCamera::Update()");
+DO_APP_FUNC(void, LightSource_DrawOcclusion, (LightSource* __this, float effectiveRadius, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::DrawOcclusion(System.Single)");
+DO_APP_FUNC(void, LightSource_Start, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::Start()");
+DO_APP_FUNC(void, LightSource_Update, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::Update()");
+DO_APP_FUNC(void, LightSource_ClearEdges, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::ClearEdges()");
+DO_APP_FUNC(void, LightSource_GenerateShadowmap, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::GenerateShadowmap()");
+DO_APP_FUNC(void, LightSource_UpdateOccMesh, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::UpdateOccMesh()");
+DO_APP_FUNC(void, LightSource_GPUShadows, (LightSource* __this, Vector2 myPos, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::GPUShadows(UnityEngine.Vector2)");

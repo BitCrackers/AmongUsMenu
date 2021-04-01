@@ -119,7 +119,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
 		}
 
-		if (State.playerToFollow.has_value() && __this == *Game::pLocalPlayer)
+		/*if (State.playerToFollow.has_value() && __this == *Game::pLocalPlayer)
 		{
 			auto mainCamera = Camera_get_main(NULL);
 
@@ -128,7 +128,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Vector2 playerVector2 = GetTrueAdjustedPosition(State.playerToFollow.get_PlayerControl());
 
 			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
-		}
+		}*/
 
 		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
 		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);

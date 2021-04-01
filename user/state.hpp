@@ -116,7 +116,7 @@ public:
 
     int LobbyTimer = -1;
     
-    std::string userName;
+    std::string userName = "";
 
     void Load();
     void Save();

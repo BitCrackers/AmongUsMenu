@@ -17,3 +17,14 @@ Vector3 dCamera_ScreenToWorldPoint(Camera* __this, Vector3 position, MethodInfo*
 
 	return Camera_ScreenToWorldPoint(__this, position, method);
 }
+
+void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method) {
+	if (State.playerToFollow.has_value())
+	{
+		__this->fields.Target = (MonoBehaviour*)State.playerToFollow.get_PlayerControl();
+	}
+	else if (__this->fields.Target != (MonoBehaviour*)(*Game::pLocalPlayer)) {
+		__this->fields.Target = (MonoBehaviour*)(*Game::pLocalPlayer);
+	}
+	FollowerCamera_Update(__this, method);
+}

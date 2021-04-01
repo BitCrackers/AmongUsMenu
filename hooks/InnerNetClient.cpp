@@ -84,6 +84,14 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
     }
 
+    if (convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) {
+        SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
+        if (IsInGame())
+            State.rpcQueue.push(new RpcSetName(State.userName));
+        else if (IsInLobby())
+            State.lobbyRpcQueue.push(new RpcSetName(State.userName));
+    }
+
     InnerNetClient_Update(__this, method);
 }
 
