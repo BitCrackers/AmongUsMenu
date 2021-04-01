@@ -49,7 +49,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
-			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100}, NULL);
+			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
 		}
 
 		if (__this == *Game::pLocalPlayer) {

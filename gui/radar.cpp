@@ -29,7 +29,7 @@ namespace Radar {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
-			int MapType = (*Game::pShipStatus)->fields.Type;
+			int MapType = GetMapId();
 
 			if (mouse.x < winpos.x
 				|| mouse.x > winpos.x + winsize.x

@@ -29,10 +29,7 @@ namespace DebugTab {
 			{
 				State.Save();
 			}
-			if (ImGui::Button("Log")) {
-				Vector2 spawn = (*Game::pShipStatus)->fields.InitialSpawnCenter;
-				std::cout << spawn.x << ", " << spawn.y << "\n";
-			}
+
 			ImGui::EndTabItem();
 		}
 	}

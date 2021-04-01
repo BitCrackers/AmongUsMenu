@@ -95,6 +95,7 @@ void DetourInitilization() {
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
 	HOOKFUNC(NoShadowBehaviour_LateUpdate);
+	HOOKFUNC(ChatController_Update);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -149,6 +150,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
+	UNHOOKFUNC(ChatController_Update);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
