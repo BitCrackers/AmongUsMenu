@@ -115,6 +115,8 @@ public:
 	bool OcclusionCulling = false;
 
     int LobbyTimer = -1;
+    
+    std::string userName;
 
     void Load();
     void Save();
