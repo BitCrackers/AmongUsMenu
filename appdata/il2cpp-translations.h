@@ -26,30 +26,30 @@ struct KLASS_PAIR {
 };
 
 const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
-	{ {"", "Constants"}, {"", "GOPHKPFLLBH"}},
-	{ {"", "GameData.PlayerInfo"}, {"", "GameData.JBDOMGNBCBH"} },
-	{ {"", "GameData.TaskInfo"}, {"", "GameData.EOAGFELAMIM"} },
-	{ {"", "GameOptionsData"}, {"", "ILHBIMBOFDI"} },
-	{ {"", "Palette"}, {"", "GBHEJGBDGPJ"} },
-	{ {"", "SaveManager"}, {"", "PKKCMGKHOJA"} },
-	{ {"", "StatsManager"}, {"", "HLBPBMGBNGE"} },
-	{ {"", "SystemTypes"}, {"", "LPKBKECNKLP"} },
-	{ {"", "DisconnectReasons"}, {"", "HGANHCACPJM"} },
-	{ {"", "ISystemType"}, {"", "IMDFAGKELHM"} },
-	{ {"", "SwitchSystem"}, {"", "FFIMOMHKGBE"} },
+	{ {"", "Constants"}, {"", "NFONDPLFBCP"}}, //done
+	{ {"", "GameData.PlayerInfo"}, {"", "GameData.OFKOJOKOOAK"} }, //done
+	{ {"", "GameData.TaskInfo"}, {"", "GameData.FPNIHBANCDO"} }, //done
+	{ {"", "GameOptionsData"}, {"", "IGDMNKLDEPI"} }, //done
+	{ {"", "Palette"}, {"", "GLNPIJPGGNJ"} }, //done
+	{ {"", "SaveManager"}, {"", "ALOOOIHKCAC"} }, //done
+	{ {"", "StatsManager"}, {"", "MOJBJJPEFPG"} }, //done
+	{ {"", "SystemTypes"}, {"", "LGBKLKNAINN"} }, //done
+	{ {"", "DisconnectReasons"}, {"", "ECELNFALKOB"} }, //done
+	{ {"", "ISystemType"}, {"", "CBFMKGACLNE"} }, //done
+	{ {"", "SwitchSystem"}, {"", "FNEHFOPHPJO"} }, //done
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
-	{ "get_BanMinutesLeft", "JHCNMDBJOPL" },
-	{ "get_AmBanned", "KPPPEDMNOAN" }, 
-	{ "get_BanPoints", "GOCAPJKBFKG" },
-	{ "Deserialize", "BMDKAMACEKH" },
-	{ "EnterVent", "FOBALHHMNHP" },  // MIKKBFDJNFP - BIHNHHPGBPN - CHEEOCFIEPG 
-	{ "ExitVent", "BIDJOGAPJHO" }, // NCHHIFHFIBA - IADEGJKGOHO - DDIKNENMFEJ - BMDFMJBGABF - BBJNFIACACA - AGBGLJBIDED - MDCMHFFPHKE
-	{ "ReportDeadBody", "LFFPFIJGHKC" },
-	{ "ShouldFlipSkeld", "MBOCPHKHNBG" },
-	{ "SendStartGame", "ANCFEECEHKP" },
-	{ "SetMaskFunction", "BGLIPIMPNFH" },
-	{ "OnPlayerLeft", "CJDKFLEBMLI" },
-	{ "SnapTo", "GOBEJFMLNNE" },
+	{ "get_BanMinutesLeft", "CHAKNIAAIDE" }, //done
+	{ "get_AmBanned", "OOPPAGDFJIP" }, //done
+	{ "get_BanPoints", "NDKIBBHCHPN" }, //done
+	{ "Deserialize", "BBEAAOOCKOP" }, //done
+	{ "EnterVent", "FIIAMNBHLAH" }, // CACKHNHMCPM - LNLNBNLNDLM - MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
+	{ "ExitVent", "HLODAMFBHDL" }, // ^
+	{ "ReportDeadBody", "AGANIGJHGNB" }, //done
+	{ "ShouldFlipSkeld", "DECMMJMOCKM" }, //done
+	{ "SendStartGame", "OFMEGDEDGOK" }, //done
+	{ "SetMaskFunction", "NDMKNGFHFJO" }, //done
+	{ "OnPlayerLeft", "NBDIGLAODOA" }, //done FBJJGMOIHOI
+	{ "SnapTo", "BNNEAMEFHIG" }, //done
 };

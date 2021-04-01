@@ -63,7 +63,7 @@ namespace Radar {
 		if (!init)
 			Radar::Init();
 
-		int MapType = (*Game::pGameOptionsData)->fields.MapId;
+		int MapType = GetMapId();
 		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F + 10, (float)maps[MapType].mapImage.imageHeight * 0.5F + 10), ImGuiCond_None);
 
 		if(State.LockRadar)

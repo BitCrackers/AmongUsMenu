@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include "state.hpp"
 #include "main.h"
+#include "game.h"
+#include <iostream>
 
 namespace DebugTab {
 
@@ -26,6 +28,10 @@ namespace DebugTab {
 			if (ImGui::Button("Force Save Settings"))
 			{
 				State.Save();
+			}
+			if (ImGui::Button("Log")) {
+				Vector2 spawn = (*Game::pShipStatus)->fields.InitialSpawnCenter;
+				std::cout << spawn.x << ", " << spawn.y << "\n";
 			}
 			ImGui::EndTabItem();
 		}

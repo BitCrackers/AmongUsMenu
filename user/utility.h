@@ -104,3 +104,4 @@ std::vector<ClientData*> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
 Vector2 Rotate(Vector2 vec, float degrees);
 bool Equals(Vector2 vec1, Vector2 vec2);
+int32_t GetMapId();
