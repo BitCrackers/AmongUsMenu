@@ -44,8 +44,8 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_AmBanned", "OOPPAGDFJIP" }, //done
 	{ "get_BanPoints", "NDKIBBHCHPN" }, //done
 	{ "Deserialize", "BBEAAOOCKOP" }, //done
-	{ "EnterVent", "CACKHNHMCPM" }, // MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
-	{ "ExitVent", "LNLNBNLNDLM" }, // ^
+	{ "EnterVent", "AFIBGDGMNEA" }, // done
+	{ "ExitVent", "NFFLCEOEGNF" }, // done
 	{ "ReportDeadBody", "AGANIGJHGNB" }, //done
 	{ "ShouldFlipSkeld", "DECMMJMOCKM" }, //done
 	{ "SendStartGame", "OFMEGDEDGOK" }, //done
