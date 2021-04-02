@@ -98,13 +98,7 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
-	HOOKFUNC(LightSource_DrawOcclusion);
-	HOOKFUNC(LightSource_Start);
 	HOOKFUNC(LightSource_Update);
-	HOOKFUNC(LightSource_ClearEdges);
-	HOOKFUNC(LightSource_GenerateShadowmap);
-	HOOKFUNC(LightSource_UpdateOccMesh);
-	HOOKFUNC(LightSource_GPUShadows);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -162,13 +156,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
-	UNHOOKFUNC(LightSource_DrawOcclusion);
-	UNHOOKFUNC(LightSource_Start);
 	UNHOOKFUNC(LightSource_Update);
-	UNHOOKFUNC(LightSource_ClearEdges);
-	UNHOOKFUNC(LightSource_GenerateShadowmap);
-	UNHOOKFUNC(LightSource_UpdateOccMesh);
-	UNHOOKFUNC(LightSource_GPUShadows);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

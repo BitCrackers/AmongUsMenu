@@ -3,7 +3,7 @@
 #include "state.hpp"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
-	if (State.MaxVision && IsInGame())
+	if (State.MaxVision || State.EnableZoom || State.FreeCam)
 		return 10.F;
 	else
 		return ShipStatus_CalculateLightRadius(__this, player, method);

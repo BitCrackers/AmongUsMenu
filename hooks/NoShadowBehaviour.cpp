@@ -12,51 +12,14 @@ void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method
 	return;
 }
 
-void dLightSource_DrawOcclusion(LightSource* __this, float effectiveRadius, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_DrawOcclusion(__this, effectiveRadius, method);
-}
-
-void dLightSource_Start(LightSource* __this, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_Start(__this, method);
-}
-
 void dLightSource_Update(LightSource* __this, MethodInfo* method) {
 	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
+		Mesh_Clear(__this->fields.myMesh, NULL);
+		Mesh_Clear(__this->fields.occluderMesh, NULL);
+		CommandBuffer_Clear(__this->fields.cb, NULL);
+		RenderTexture_Release(__this->fields.shadowTexture, NULL);
+		Material_set_color(__this->fields.shadowCasterMaterial, Color_get_clear(NULL), NULL);
 		return;
 	}
 	LightSource_Update(__this, method);
-}
-
-void dLightSource_ClearEdges(LightSource* __this, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_ClearEdges(__this, method);
-}
-
-void dLightSource_GenerateShadowmap(LightSource* __this, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_GenerateShadowmap(__this, method);
-}
-
-void dLightSource_UpdateOccMesh(LightSource* __this, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_UpdateOccMesh(__this, method);
-}
-
-void dLightSource_GPUShadows(LightSource* __this, Vector2 myPos, MethodInfo* method) {
-	if (State.FreeCam || State.Wallhack || State.EnableZoom) {
-		return;
-	}
-	LightSource_GPUShadows(__this, myPos, method);
 }

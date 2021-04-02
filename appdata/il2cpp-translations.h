@@ -44,13 +44,15 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "get_AmBanned", "OOPPAGDFJIP" }, //done
 	{ "get_BanPoints", "NDKIBBHCHPN" }, //done
 	{ "Deserialize", "BBEAAOOCKOP" }, //done
-	{ "EnterVent", "MGFMILKCEIN" }, // CACKHNHMCPM - LNLNBNLNDLM - MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
-	{ "ExitVent", "HFHOHEBHKOI" }, // ^
+	{ "EnterVent", "CACKHNHMCPM" }, // MGFMILKCEIN - HFHOHEBHKOI - HAOGIFBEGFC
+	{ "ExitVent", "LNLNBNLNDLM" }, // ^
 	{ "ReportDeadBody", "AGANIGJHGNB" }, //done
 	{ "ShouldFlipSkeld", "DECMMJMOCKM" }, //done
 	{ "SendStartGame", "OFMEGDEDGOK" }, //done
 	{ "SetMaskFunction", "NDMKNGFHFJO" }, //done
 	{ "OnPlayerLeft", "NBDIGLAODOA" }, //done FBJJGMOIHOI
 	{ "SnapTo", "BNNEAMEFHIG" }, //done
-	{ "DrawOcclusion", "OGILAKHGLMJ" }
+	{ "DrawOcclusion", "OGILAKHGLMJ" }, //done
+	{ "GenerateShadowmap", "NHBAHJHENFP" }, //done
+	{ "GPUShadows", "PMGHICOFNCH" } //done
 };

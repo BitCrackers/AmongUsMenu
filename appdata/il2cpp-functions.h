@@ -142,10 +142,9 @@ DO_APP_FUNC(void, MessageWriter_EndMessage, (MessageWriter* __this, MethodInfo* 
 DO_APP_FUNC(void, AccountTab_Open, (AccountTab* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountTab::Open()");
 DO_APP_FUNC(void, FullAccount_CanSetCustomName, (FullAccount* __this, bool canSetName, MethodInfo* method), "Assembly-CSharp, System.Void FullAccount::CanSetCustomName(System.Boolean)");
 DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* method), "Assembly-CSharp, System.Void FollowerCamera::Update()");
-DO_APP_FUNC(void, LightSource_DrawOcclusion, (LightSource* __this, float effectiveRadius, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::DrawOcclusion(System.Single)");
-DO_APP_FUNC(void, LightSource_Start, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::Start()");
 DO_APP_FUNC(void, LightSource_Update, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::Update()");
-DO_APP_FUNC(void, LightSource_ClearEdges, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::ClearEdges()");
-DO_APP_FUNC(void, LightSource_GenerateShadowmap, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::GenerateShadowmap()");
-DO_APP_FUNC(void, LightSource_UpdateOccMesh, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::UpdateOccMesh()");
-DO_APP_FUNC(void, LightSource_GPUShadows, (LightSource* __this, Vector2 myPos, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::GPUShadows(UnityEngine.Vector2)");
+DO_APP_FUNC(void, Mesh_Clear, (Mesh* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Mesh::Clear()");
+DO_APP_FUNC(void, CommandBuffer_Clear, (CommandBuffer* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Rendering.CommandBuffer::Clear()");
+DO_APP_FUNC(Color, Color_get_clear, (MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Color UnityEngine.Color::get_clear()");
+DO_APP_FUNC(void, Material_set_color, (Material* __this, Color value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Material::set_color(UnityEngine.Color)");
+DO_APP_FUNC(void, RenderTexture_Release, (RenderTexture* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.RenderTexture::Release()");
