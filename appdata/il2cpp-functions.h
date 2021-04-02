@@ -142,9 +142,6 @@ DO_APP_FUNC(void, MessageWriter_EndMessage, (MessageWriter* __this, MethodInfo* 
 DO_APP_FUNC(void, AccountTab_Open, (AccountTab* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountTab::Open()");
 DO_APP_FUNC(void, FullAccount_CanSetCustomName, (FullAccount* __this, bool canSetName, MethodInfo* method), "Assembly-CSharp, System.Void FullAccount::CanSetCustomName(System.Boolean)");
 DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* method), "Assembly-CSharp, System.Void FollowerCamera::Update()");
-DO_APP_FUNC(void, LightSource_Update, (LightSource* __this, MethodInfo* method), "Assembly-CSharp, System.Void LightSource::Update()");
-DO_APP_FUNC(void, Mesh_Clear, (Mesh* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Mesh::Clear()");
-DO_APP_FUNC(void, CommandBuffer_Clear, (CommandBuffer* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Rendering.CommandBuffer::Clear()");
-DO_APP_FUNC(Color, Color_get_clear, (MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Color UnityEngine.Color::get_clear()");
-DO_APP_FUNC(void, Material_set_color, (Material* __this, Color value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Material::set_color(UnityEngine.Color)");
-DO_APP_FUNC(void, RenderTexture_Release, (RenderTexture* __this, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.RenderTexture::Release()");
+DO_APP_FUNC(void, ShadowCollab_OnEnable, (ShadowCollab* __this, MethodInfo* method), "Assembly-CSharp, System.Void ShadowCollab::OnEnable()");
+DO_APP_FUNC(MessageWriter*, InnerNetClient_StartEndGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, Hazel.MessageWriter InnerNet.InnerNetClient::StartEndGame()");
+DO_APP_FUNC(void, SpawnInMinigame_Begin, (SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method), "Assembly-CSharp, System.Void SpawnInMinigame::Begin(PlayerTask)");

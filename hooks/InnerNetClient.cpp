@@ -122,6 +122,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false);
     if (Equals(initialSpawnLocation, newPosition)) return false;
     if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
+    if (IsAirshipSpawnLocation(newPosition)) return false;
     if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
         return false;
 #ifdef _DEBUG
@@ -159,7 +160,29 @@ void dInnerNetObject_Despawn(InnerNetObject* __this, MethodInfo* method) {
     if ((*Game::pLobbyBehaviour)) {
         if ((InnerNetObject*)(*Game::pLobbyBehaviour) == __this) {
             State.events.clear();
+
+            State.mapDoors.clear();
+            State.pinnedDoors.clear();
+
+            auto allDoors = (*Game::pShipStatus)->fields.AllDoors;
+
+            for (il2cpp_array_size_t i = 0; i < allDoors->max_length; i++) {
+                if (std::find(State.mapDoors.begin(), State.mapDoors.end(), allDoors->vector[i]->fields.Room) == State.mapDoors.end())
+                    State.mapDoors.push_back(allDoors->vector[i]->fields.Room);
+            }
+
+            std::sort(State.mapDoors.begin(), State.mapDoors.end());
+            State.selectedDoor = State.mapDoors[0];
         }
     }
     InnerNetObject_Despawn(__this, method);
+}
+
+void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
+    State.shadowLayer.reset();
+    State.spawnInGame.reset();
+    State.aumUsers.clear();
+    State.events.clear();
+
+    InnerNetClient_StartEndGame(__this, method);
 }

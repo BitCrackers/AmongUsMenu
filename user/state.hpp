@@ -118,6 +118,9 @@ public:
     
     std::string userName = "";
 
+    std::optional<ShadowCollab*> shadowLayer;
+    std::optional<SpawnInMinigame*> spawnInGame;
+
     void Load();
     void Save();
 };

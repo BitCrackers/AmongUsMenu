@@ -26,33 +26,30 @@ struct KLASS_PAIR {
 };
 
 const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
-	{ {"", "Constants"}, {"", "NFONDPLFBCP"}}, //done
-	{ {"", "GameData.PlayerInfo"}, {"", "GameData.OFKOJOKOOAK"} }, //done
-	{ {"", "GameData.TaskInfo"}, {"", "GameData.FPNIHBANCDO"} }, //done
-	{ {"", "GameOptionsData"}, {"", "IGDMNKLDEPI"} }, //done
-	{ {"", "Palette"}, {"", "GLNPIJPGGNJ"} }, //done
-	{ {"", "SaveManager"}, {"", "ALOOOIHKCAC"} }, //done
-	{ {"", "StatsManager"}, {"", "MOJBJJPEFPG"} }, //done
-	{ {"", "SystemTypes"}, {"", "LGBKLKNAINN"} }, //done
-	{ {"", "DisconnectReasons"}, {"", "ECELNFALKOB"} }, //done
-	{ {"", "ISystemType"}, {"", "CBFMKGACLNE"} }, //done
-	{ {"", "SwitchSystem"}, {"", "FNEHFOPHPJO"} }, //done
+	{ {"", "Constants"}, {"", "NFONDPLFBCP"}},
+	{ {"", "GameData.PlayerInfo"}, {"", "GameData.OFKOJOKOOAK"} },
+	{ {"", "GameData.TaskInfo"}, {"", "GameData.FPNIHBANCDO"} },
+	{ {"", "GameOptionsData"}, {"", "IGDMNKLDEPI"} },
+	{ {"", "Palette"}, {"", "GLNPIJPGGNJ"} },
+	{ {"", "SaveManager"}, {"", "ALOOOIHKCAC"} },
+	{ {"", "StatsManager"}, {"", "MOJBJJPEFPG"} },
+	{ {"", "SystemTypes"}, {"", "LGBKLKNAINN"} },
+	{ {"", "DisconnectReasons"}, {"", "ECELNFALKOB"} },
+	{ {"", "ISystemType"}, {"", "CBFMKGACLNE"} },
+	{ {"", "SwitchSystem"}, {"", "FNEHFOPHPJO"} },
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
-	{ "get_BanMinutesLeft", "CHAKNIAAIDE" }, //done
-	{ "get_AmBanned", "OOPPAGDFJIP" }, //done
-	{ "get_BanPoints", "NDKIBBHCHPN" }, //done
-	{ "Deserialize", "BBEAAOOCKOP" }, //done
-	{ "EnterVent", "AFIBGDGMNEA" }, // done
-	{ "ExitVent", "NFFLCEOEGNF" }, // done
-	{ "ReportDeadBody", "AGANIGJHGNB" }, //done
-	{ "ShouldFlipSkeld", "DECMMJMOCKM" }, //done
-	{ "SendStartGame", "OFMEGDEDGOK" }, //done
-	{ "SetMaskFunction", "NDMKNGFHFJO" }, //done
-	{ "OnPlayerLeft", "NBDIGLAODOA" }, //done FBJJGMOIHOI
-	{ "SnapTo", "BNNEAMEFHIG" }, //done
-	{ "DrawOcclusion", "OGILAKHGLMJ" }, //done
-	{ "GenerateShadowmap", "NHBAHJHENFP" }, //done
-	{ "GPUShadows", "PMGHICOFNCH" } //done
+	{ "get_BanMinutesLeft", "CHAKNIAAIDE" },
+	{ "get_AmBanned", "OOPPAGDFJIP" },
+	{ "get_BanPoints", "NDKIBBHCHPN" },
+	{ "Deserialize", "BBEAAOOCKOP" },
+	{ "EnterVent", "AFIBGDGMNEA" },
+	{ "ExitVent", "NFFLCEOEGNF" },
+	{ "ReportDeadBody", "AGANIGJHGNB" },
+	{ "ShouldFlipSkeld", "DECMMJMOCKM" },
+	{ "SendStartGame", "OFMEGDEDGOK" },
+	{ "SetMaskFunction", "NDMKNGFHFJO" },
+	{ "OnPlayerLeft", "FBJJGMOIHOI" },
+	{ "SnapTo", "BNNEAMEFHIG" },
 };

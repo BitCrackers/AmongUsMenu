@@ -341,14 +341,18 @@ void RepairSabotage(PlayerControl* player) {
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
-		if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Ship || (*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Hq) {
+		if (GetMapId() == 0 || GetMapId() == 1) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 65));
 		}
 
-		if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Pb) {
+		if (GetMapId() == 2) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 65));
+		}
+		if (GetMapId() == 3) {
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 16));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 17));
 		}
 	}
 }
@@ -448,8 +452,7 @@ std::vector<ClientData*> GetAllClients()
 
 Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 {
-	ShipStatus_MapType__Enum type = (*Game::pShipStatus)->fields.Type;
-	if (type == ShipStatus_MapType__Enum_Ship || type != ShipStatus_MapType__Enum_Pb || initialSpawn)
+	if (GetMapId() == MAP_SKELD || GetMapId() != MAP_POLUS || initialSpawn)
 	{
 		Vector2 vector = { 0, 1 };
 		vector = Rotate(vector, (float)(playerId - 1) * (360.f / (float)numPlayer));
@@ -465,6 +468,23 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 	}
 	Vector2 spawncenter = (*Game::pShipStatus)->fields.MeetingSpawnCenter2;
 	return { (spawncenter.x + 1) * (float)(playerId - 5), spawncenter.y * (float)(playerId - 5) };
+}
+
+bool IsAirshipSpawnLocation(Vector2 vec)
+{
+	if (GetMapId() == MAP_AIRSHIP) return true; // This function doesn't work yet havent figured it out
+	else return false;
+
+	// unreachable code
+	if (Equals(vec, { -25.f, 40.f })) return true;
+	if (Equals(vec, { -0.66f, -0.5f })) return true;
+	if (!State.spawnInGame.has_value()) return false;
+
+	SpawnInMinigame* game = State.spawnInGame.value();
+	for (auto location : game->fields.Locations->vector)
+		if (Equals(vec, { location.Location.x, location.Location.y })) return true;
+
+	return false;
 }
 
 Vector2 Rotate(Vector2 vec, float degrees)

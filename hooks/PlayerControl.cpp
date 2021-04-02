@@ -52,6 +52,11 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
 		}
 
+		if (State.shadowLayer.has_value()) {
+			GameObject* shadowLayerObject = Component_get_gameObject((Component*)State.shadowLayer.value()->fields.ShadowQuad, NULL);
+			GameObject_SetActive(shadowLayerObject, !(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack), NULL);
+		}
+
 		if (__this == *Game::pLocalPlayer) {
 			if (State.FollowerCam == nullptr) {
 				for (auto cam : GetAllCameras()) {
@@ -119,16 +124,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
 		}
 
-		/*if (State.playerToFollow.has_value() && __this == *Game::pLocalPlayer)
-		{
-			auto mainCamera = Camera_get_main(NULL);
-
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
-			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
-			Vector2 playerVector2 = GetTrueAdjustedPosition(State.playerToFollow.get_PlayerControl());
-
-			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
-		}*/
+		
 
 		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
 		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);
