@@ -26,25 +26,30 @@ struct KLASS_PAIR {
 };
 
 const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
-	{ {"", "Constants"}, {"", "DPHADHMAPCB"}},	
-	{ {"", "GameData.PlayerInfo"}, {"", "GameData.GOOIGLGKMCE"} },
-	{ {"", "GameData.TaskInfo"}, {"", "GameData.HKFJOIBBOBD"} },
-	{ {"", "GameOptionsData"}, {"", "PAMOPBEDCNI"} },
-	{ {"", "Palette"}, {"", "KOBANOHPIIA"} },
-	{ {"", "SaveManager"}, {"", "BNAOOLKPIBG"} },
-	{ {"", "StatsManager"}, {"", "HHCMEENGBEI"} },
-	{ {"", "SystemTypes"}, {"", "GOODOHMJKLN"} },
+	{ {"", "Constants"}, {"", "NFONDPLFBCP"}},
+	{ {"", "GameData.PlayerInfo"}, {"", "GameData.OFKOJOKOOAK"} },
+	{ {"", "GameData.TaskInfo"}, {"", "GameData.FPNIHBANCDO"} },
+	{ {"", "GameOptionsData"}, {"", "IGDMNKLDEPI"} },
+	{ {"", "Palette"}, {"", "GLNPIJPGGNJ"} },
+	{ {"", "SaveManager"}, {"", "ALOOOIHKCAC"} },
+	{ {"", "StatsManager"}, {"", "MOJBJJPEFPG"} },
+	{ {"", "SystemTypes"}, {"", "LGBKLKNAINN"} },
+	{ {"", "DisconnectReasons"}, {"", "ECELNFALKOB"} },
+	{ {"", "ISystemType"}, {"", "CBFMKGACLNE"} },
+	{ {"", "SwitchSystem"}, {"", "FNEHFOPHPJO"} },
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
-	{ "get_BanMinutesLeft", "MBFOPPGNFAF" },
-	{ "get_AmBanned", "HLEKGEFELJO" },
-	{ "get_BanPoints", "FHELDINHHMJ" },
-	{ "Deserialize", "OBBPKOCNPDG" },
-	{ "EnterVent", "AAFOLJNFDOH" },
-	{ "ExitVent", "KJAPJGIAEDD" },
-	{ "ReportDeadBody", "AMPIGFMHGBM" },
-	{ "ShouldFlipSkeld", "HOFPIHJFIGI" },
-	{ "SendStartGame", "KFBAMPOABEN" },
-	{ "SetMaskFunction", "OGHEGEOFGNP" }
+	{ "get_BanMinutesLeft", "CHAKNIAAIDE" },
+	{ "get_AmBanned", "OOPPAGDFJIP" },
+	{ "get_BanPoints", "NDKIBBHCHPN" },
+	{ "Deserialize", "BBEAAOOCKOP" },
+	{ "EnterVent", "AFIBGDGMNEA" },
+	{ "ExitVent", "NFFLCEOEGNF" },
+	{ "ReportDeadBody", "AGANIGJHGNB" },
+	{ "ShouldFlipSkeld", "DECMMJMOCKM" },
+	{ "SendStartGame", "OFMEGDEDGOK" },
+	{ "SetMaskFunction", "NDMKNGFHFJO" },
+	{ "OnPlayerLeft", "FBJJGMOIHOI" },
+	{ "SnapTo", "BNNEAMEFHIG" },
 };

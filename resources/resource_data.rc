@@ -56,6 +56,8 @@ IDB_PNG2                PNG                     "mira_hq.png"
 
 IDB_PNG3                PNG                     "polus.png"
 
+IDB_PNG4                PNG                     "airship.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

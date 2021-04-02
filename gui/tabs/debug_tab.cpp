@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include "state.hpp"
 #include "main.h"
+#include "game.h"
+#include <iostream>
 
 namespace DebugTab {
 
@@ -27,6 +29,7 @@ namespace DebugTab {
 			{
 				State.Save();
 			}
+
 			ImGui::EndTabItem();
 		}
 	}

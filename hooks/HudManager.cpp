@@ -15,3 +15,14 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 }
+
+void dChatController_Update(ChatController* __this, MethodInfo* method) {
+	SaveManager__TypeInfo->static_fields->chatModeType = 1;
+	SaveManager__TypeInfo->static_fields->isGuest = false;
+	ChatController_Update(__this, method);
+}
+
+void dAccountTab_Open(AccountTab* __this, MethodInfo* method) {
+	AccountTab_Open(__this, method);
+	FullAccount_CanSetCustomName(__this->fields.fullAccount, true, NULL);
+}

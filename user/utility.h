@@ -11,6 +11,13 @@ struct CorrectedColor32 {
 	uint8_t a;
 };
 
+enum MapType {
+	MAP_SKELD = 0,
+	MAP_MIRAHQ = 1,
+	MAP_POLUS = 2,
+	MAP_AIRSHIP = 3
+};
+
 class PlayerSelection {
 	bool hasValue;
 	int32_t clientId;
@@ -101,3 +108,8 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
+Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
+bool IsAirshipSpawnLocation(Vector2 vec);
+Vector2 Rotate(Vector2 vec, float degrees);
+bool Equals(Vector2 vec1, Vector2 vec2);
+int32_t GetMapId();

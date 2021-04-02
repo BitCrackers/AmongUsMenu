@@ -83,6 +83,10 @@ public:
 
     std::bitset<0xFF> voteMonitor;
 
+    std::vector<int32_t> aumUsers;
+    int32_t rpcCooldown = 15;
+    int32_t playerKilledId = 0;
+
     std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
     int map = -1;
     ShipStatus_MapType__Enum previousMap = (ShipStatus_MapType__Enum)0;
@@ -111,6 +115,11 @@ public:
 	bool OcclusionCulling = false;
 
     int LobbyTimer = -1;
+    
+    std::string userName = "";
+
+    std::optional<ShadowCollab*> shadowLayer;
+    std::optional<SpawnInMinigame*> spawnInGame;
 
     void Load();
     void Save();

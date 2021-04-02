@@ -3,6 +3,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "esp.hpp"
+#include "_rpc.h"
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -16,6 +17,18 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 }
 
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
+	if (__this == *Game::pLocalPlayer) {
+		if (State.rpcCooldown == 0) {
+			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
+			MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
+			MessageWriter_EndMessage(rpcMessage, NULL);
+			State.rpcCooldown = 15;
+		}
+		else {
+			State.rpcCooldown--;
+		}
+	}
+
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
@@ -36,7 +49,12 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
-			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100}, NULL);
+			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
+		}
+
+		if (State.shadowLayer.has_value()) {
+			GameObject* shadowLayerObject = Component_get_gameObject((Component*)State.shadowLayer.value()->fields.ShadowQuad, NULL);
+			GameObject_SetActive(shadowLayerObject, !(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack), NULL);
 		}
 
 		if (__this == *Game::pLocalPlayer) {
@@ -106,16 +124,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
 		}
 
-		if (State.playerToFollow.has_value() && __this == *Game::pLocalPlayer)
-		{
-			auto mainCamera = Camera_get_main(NULL);
-
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
-			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
-			Vector2 playerVector2 = GetTrueAdjustedPosition(State.playerToFollow.get_PlayerControl());
-
-			Transform_set_position(cameraTransform, { playerVector2.x, playerVector2.y, 100 }, NULL);
-		}
+		
 
 		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
 		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);
@@ -169,6 +178,10 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
+	if (GetPlayerData(__this)->fields.IsImpostor && GetPlayerData(target)->fields.IsImpostor) {
+		State.events.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
+	}
+
 	State.events.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_MurderPlayer(__this, target, method);
 }
@@ -185,6 +198,11 @@ void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__A
 		}
 	}
 	PlayerControl_RpcSetInfected(__this, infected, method);
+}
+
+void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
+	HandleRpc(callId, reader);
+	PlayerControl_HandleRpc(__this, callId, reader, NULL);
 }
 
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {

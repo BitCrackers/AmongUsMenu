@@ -1,6 +1,8 @@
 #pragma once
 #include "utility.h"
 
+void HandleRpc(uint8_t callId, MessageReader* reader);
+
 class RPCInterface {
 public:
 	virtual ~RPCInterface() {}

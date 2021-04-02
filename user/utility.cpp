@@ -141,9 +141,9 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
-#define LocalInGame (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInGame (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInLobby (((*Game::pAmongUsClient)->fields.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
+#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
@@ -341,14 +341,18 @@ void RepairSabotage(PlayerControl* player) {
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
-		if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Ship || (*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Hq) {
+		if (GetMapId() == 0 || GetMapId() == 1) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 65));
 		}
 
-		if ((*Game::pShipStatus)->fields.Type == ShipStatus_MapType__Enum_Pb) {
+		if (GetMapId() == 2) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 65));
+		}
+		if (GetMapId() == 3) {
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 16));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 17));
 		}
 	}
 }
@@ -366,7 +370,9 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 		"Inspect Sample", "Empty Chute", "Empty Garbage", "Align Engine Output", "Fix Wiring", "Calibrate Distributor", "Divert Power", "Unlock Manifolds", "Reset Reactor",
 		"Fix Lights", "Clean O2 Filter", "Fix Communications", "Restore Oxygen", "Stabilize Steering", "Assemble Artifact", "Sort Samples", "Measure Weather", "Enter ID Code",
 		"Buy Beverage", "Process Data", "Run Diagnostics", "Water Plants", "Monitor Oxygen", "Store Artifacts", "Fill Canisters", "Activate Weather Nodes", "Insert Keys",
-		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi" };
+		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi", 
+		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
+		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles" };
 	return TASK_TRANSLATIONS[taskType];
 }
 
@@ -374,7 +380,8 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 	static const char* const SYSTEM_TRANSLATIONS[] = { "Hallway", "Storage", "Cafeteria", "Reactor", "Upper Engine", "Navigation", "Admin", "Electrical", "Oxygen", "Shields",
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
-		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room" };
+		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck", 
+		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical" };
 	return SYSTEM_TRANSLATIONS[systemType];
 }
 
@@ -441,4 +448,67 @@ std::vector<ClientData*> GetAllClients()
 			clients.push_back(getItem(allClients, i, NULL));
 
 	return clients;
+}
+
+Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
+{
+	if (GetMapId() == MAP_SKELD || GetMapId() != MAP_POLUS || initialSpawn)
+	{
+		Vector2 vector = { 0, 1 };
+		vector = Rotate(vector, (float)(playerId - 1) * (360.f / (float)numPlayer));
+		float radius = (*Game::pShipStatus)->fields.SpawnRadius;
+		vector = { vector.x * radius, vector.y * radius };
+		Vector2 spawncenter = (initialSpawn ? (*Game::pShipStatus)->fields.InitialSpawnCenter : (*Game::pShipStatus)->fields.MeetingSpawnCenter);
+		return { spawncenter.x + vector.x, spawncenter.y + vector.y + 0.3636f };
+	}
+	if (playerId < 5)
+	{
+		Vector2 spawncenter = (*Game::pShipStatus)->fields.MeetingSpawnCenter;
+		return { (spawncenter.x + 1) * (float)playerId, spawncenter.y * (float)playerId };
+	}
+	Vector2 spawncenter = (*Game::pShipStatus)->fields.MeetingSpawnCenter2;
+	return { (spawncenter.x + 1) * (float)(playerId - 5), spawncenter.y * (float)(playerId - 5) };
+}
+
+bool IsAirshipSpawnLocation(Vector2 vec)
+{
+	if (GetMapId() == MAP_AIRSHIP) return true; // This function doesn't work yet havent figured it out
+	else return false;
+
+	// unreachable code
+	if (Equals(vec, { -25.f, 40.f })) return true;
+	if (Equals(vec, { -0.66f, -0.5f })) return true;
+	if (!State.spawnInGame.has_value()) return false;
+
+	SpawnInMinigame* game = State.spawnInGame.value();
+	for (auto location : game->fields.Locations->vector)
+		if (Equals(vec, { location.Location.x, location.Location.y })) return true;
+
+	return false;
+}
+
+Vector2 Rotate(Vector2 vec, float degrees)
+{
+	float f = 0.017453292f * degrees;
+	float num = cos(f);
+	float num2 = sin(f);
+	return { vec.x * num - num2 * vec.y, vec.x * num2 + num * vec.y };
+}
+
+bool Equals(Vector2 vec1, Vector2 vec2) {
+	return vec1.x == vec2.x && vec1.y == vec2.y;
+}
+
+int32_t GetMapId() {
+	Vector2 spawn = (*Game::pShipStatus)->fields.InitialSpawnCenter;
+	if (Equals(spawn, { -4.4, 2.2 })) {
+		return 1;
+	}
+	if (Equals(spawn, { 16.64, -2.46 })) {
+		return 2;
+	}
+	if (Equals(spawn, { 20, 9 })) {
+		return 3;
+	}
+	return 0;
 }

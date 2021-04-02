@@ -83,14 +83,23 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_ReportDeadBody);
 	HOOKFUNC(PlayerControl_RpcSetInfected);
+	HOOKFUNC(PlayerControl_HandleRpc);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
+	HOOKFUNC(InnerNetObject_Despawn);
+	HOOKFUNC(AmongUsClient_OnPlayerLeft);
+	HOOKFUNC(CustomNetworkTransform_SnapTo);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
 	HOOKFUNC(NoShadowBehaviour_LateUpdate);
+	HOOKFUNC(ChatController_Update);
+	HOOKFUNC(AccountTab_Open);
+	HOOKFUNC(FollowerCamera_Update);
+	HOOKFUNC(ShadowCollab_OnEnable);
+	HOOKFUNC(SpawnInMinigame_Begin);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -134,13 +143,22 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	UNHOOKFUNC(PlayerControl_ReportDeadBody);
 	UNHOOKFUNC(PlayerControl_RpcSetInfected);
+	UNHOOKFUNC(PlayerControl_HandleRpc);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
+	UNHOOKFUNC(InnerNetObject_Despawn);
+	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
+	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
+	UNHOOKFUNC(ChatController_Update);
+	UNHOOKFUNC(AccountTab_Open);
+	UNHOOKFUNC(FollowerCamera_Update);
+	UNHOOKFUNC(ShadowCollab_OnEnable);
+	UNHOOKFUNC(SpawnInMinigame_Begin);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

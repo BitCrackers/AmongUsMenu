@@ -44,7 +44,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "ad92e334") {
+	if (GetCRC32(gameAssembly) != "6df51577") {
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
@@ -93,6 +93,7 @@ void Run(LPVOID lpParam) {
 	Game::pAllPlayerControls = &(app::PlayerControl__TypeInfo->static_fields->AllPlayerControls);
 	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
 	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
+	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
 
 	DetourInitilization();
 #if _DEBUG

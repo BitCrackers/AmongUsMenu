@@ -54,6 +54,7 @@ void Settings::Load() {
     } catch (...) {
         std::cout << "Unable to load settings.json" << std::endl;
     }
+    this->userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 }
 
 void Settings::Save() {
