@@ -23,3 +23,11 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 
 	State.mapType = Settings::MapType::Airship;
 }
+
+float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method)
+{
+	if (State.MaxVision || State.EnableZoom || State.FreeCam)
+		return 10.F;
+	else
+		return AirshipStatus_CalculateLightRadius(__this, player, method);
+}

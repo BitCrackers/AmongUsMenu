@@ -59,6 +59,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(ShipStatus_CalculateLightRadius);
+	HOOKFUNC(AirshipStatus_CalculateLightRadius);
 	HOOKFUNC(ShipStatus_OnEnable);
 	HOOKFUNC(PolusShipStatus_OnEnable);
 	HOOKFUNC(AirshipStatus_OnEnable);
@@ -119,6 +120,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(MeetingHud_Update);
+	UNHOOKFUNC(AirshipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_OnEnable);
 	UNHOOKFUNC(PolusShipStatus_OnEnable);
