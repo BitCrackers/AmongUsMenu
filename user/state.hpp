@@ -130,6 +130,8 @@ public:
     std::optional<ShadowCollab*> shadowLayer;
     std::optional<SpawnInMinigame*> spawnInGame;
 
+    bool AutoOpenDoors = false;
+
     void Load();
     void Save();
 };

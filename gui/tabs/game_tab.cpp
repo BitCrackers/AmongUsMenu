@@ -97,6 +97,9 @@ namespace GameTab {
 				State.Save();
 			}
 
+			if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
+				State.Save();
+			}
 			ImGui::EndTabItem();
 		}
 	}

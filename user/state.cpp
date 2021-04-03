@@ -49,6 +49,7 @@ void Settings::Load() {
         j.at("RevealImpostors").get_to(this->RevealImpostors);
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
+        j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
 
         j.at("ShowConsole").get_to(this->ShowConsole);
     } catch (...) {

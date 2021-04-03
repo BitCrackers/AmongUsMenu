@@ -58,6 +58,7 @@
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\NoShadowBehaviour.cpp" />
+    <ClCompile Include="hooks\PlainDoor.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="user\keybinds.cpp">
