@@ -88,7 +88,7 @@ public:
     int32_t playerKilledId = 0;
 
     std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
-    int map = -1;
+    int mapHostChoice = -1;
     int impostors_amount = 0;
 
     bool Wallhack = false;

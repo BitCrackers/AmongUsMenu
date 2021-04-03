@@ -65,18 +65,18 @@ namespace HostTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("host#actions", ImVec2(200, 0), true);
 				State.impostors_amount = std::clamp(State.impostors_amount, 0, 2);
-				State.map = std::clamp(State.map, 0, 3);
+				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
 				if (CustomListBoxInt("Impostors", &State.impostors_amount, IMPOSTOR_AMOUNTS, 75)) {
 					if (!IsInGame()) (*Game::pGameOptionsData)->fields.NumImpostors = (State.impostors_amount + 1);
 				}
-				if (CustomListBoxInt("Map", &State.map, MAP_NAMES, 75)) {
+				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75)) {
 					if (!IsInGame()) {
-						if (State.map == 3) {
+						if (State.mapHostChoice == 3) {
 							(*Game::pGameOptionsData)->fields.MapId = 0;
 							State.FlipSkeld = true;
 						}
 						else {
-							(*Game::pGameOptionsData)->fields.MapId = State.map;
+							(*Game::pGameOptionsData)->fields.MapId = State.mapHostChoice;
 							State.FlipSkeld = false;
 						}
 					}
