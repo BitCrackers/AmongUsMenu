@@ -22,13 +22,17 @@ namespace SabotageTab {
                 if (ImGui::Button("Sabotage Lights")) {
                     State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Electrical));
                 }
-                if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq || State.mapType == Settings::MapType::Airship) {
+                if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Reactor")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
                     }
                 } else if (State.mapType == Settings::MapType::Pb) {
                     if (ImGui::Button("Sabotage Seismic")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Laboratory));
+                    }
+                } else if (State.mapType == Settings::MapType::Airship) {
+                    if (ImGui::Button("Sabotage Course")) {
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
                     }
                 }
                 else if (GetMapId() == MAP_AIRSHIP) {
