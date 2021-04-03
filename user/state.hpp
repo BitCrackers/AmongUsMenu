@@ -89,7 +89,6 @@ public:
 
     std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
     int map = -1;
-    ShipStatus_MapType__Enum previousMap = (ShipStatus_MapType__Enum)0;
     int impostors_amount = 0;
 
     bool Wallhack = false;
@@ -117,6 +116,15 @@ public:
     int LobbyTimer = -1;
     
     std::string userName = "";
+
+    enum MapType : uint8_t
+    {
+        Ship = 0,
+        Hq = 1,
+        Pb = 2,
+        Airship = 3,
+        NotSet = 0xFF
+    } mapType;
 
     std::optional<ShadowCollab*> shadowLayer;
     std::optional<SpawnInMinigame*> spawnInGame;

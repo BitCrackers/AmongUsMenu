@@ -2,9 +2,9 @@
 #include "_hooks.h"
 #include "state.hpp"
 
-void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
+void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 {
-	PolusShipStatus_OnEnable(__this, method);
+	AirshipStatus_OnEnable(__this, method);
 
 	State.events.clear();
 
@@ -21,5 +21,5 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
-	State.mapType = Settings::MapType::Pb;
+	State.mapType = Settings::MapType::Airship;
 }

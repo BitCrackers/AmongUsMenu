@@ -235,6 +235,9 @@
     <ClCompile Include="events\CheatDetectedEvent.cpp">
       <Filter>events</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\AirshipStatus.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">

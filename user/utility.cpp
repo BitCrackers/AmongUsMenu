@@ -498,17 +498,3 @@ Vector2 Rotate(Vector2 vec, float degrees)
 bool Equals(Vector2 vec1, Vector2 vec2) {
 	return vec1.x == vec2.x && vec1.y == vec2.y;
 }
-
-int32_t GetMapId() {
-	Vector2 spawn = (*Game::pShipStatus)->fields.InitialSpawnCenter;
-	if (Equals(spawn, { -4.4, 2.2 })) {
-		return 1;
-	}
-	if (Equals(spawn, { 16.64, -2.46 })) {
-		return 2;
-	}
-	if (Equals(spawn, { 20, 9 })) {
-		return 3;
-	}
-	return 0;
-}

@@ -61,6 +61,7 @@ void DetourInitilization() {
 	HOOKFUNC(ShipStatus_CalculateLightRadius);
 	HOOKFUNC(ShipStatus_OnEnable);
 	HOOKFUNC(PolusShipStatus_OnEnable);
+	HOOKFUNC(AirshipStatus_OnEnable);
 	HOOKFUNC(Vent_CanUse);
 	HOOKFUNC(Vent_EnterVent);
 	HOOKFUNC(Vent_ExitVent);
@@ -121,6 +122,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(ShipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_OnEnable);
 	UNHOOKFUNC(PolusShipStatus_OnEnable);
+	UNHOOKFUNC(AirshipStatus_OnEnable);
 	UNHOOKFUNC(Vent_CanUse);
 	UNHOOKFUNC(Vent_EnterVent);
 	UNHOOKFUNC(Vent_ExitVent);

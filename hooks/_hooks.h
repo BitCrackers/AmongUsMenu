@@ -50,5 +50,7 @@ void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method
 void dChatController_Update(ChatController* __this, MethodInfo* method);
 void dAccountTab_Open(AccountTab* __this, MethodInfo* method);
 void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
+void dAirshipStatus_OnEnable (AirshipStatus* __this, MethodInfo* method);
+void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
 void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method);
 void dSpawnInMinigame_Begin(SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method);
