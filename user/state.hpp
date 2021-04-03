@@ -71,6 +71,7 @@ public:
     bool PlayMedbayScan = false;
 
     bool ChatAlwaysActive = false;
+    bool ChatActiveOriginalState = false;
     bool ReadGhostMessages = false;
 
     SystemTypes__Enum selectedDoor;

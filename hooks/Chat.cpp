@@ -23,6 +23,7 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {
+	State.ChatActiveOriginalState = visible;
 	if (State.ChatAlwaysActive)
 		ChatController_SetVisible(__this, true, method);
 	else
