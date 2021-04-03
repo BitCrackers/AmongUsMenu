@@ -472,8 +472,7 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 
 bool IsAirshipSpawnLocation(Vector2 vec)
 {
-	if (State.mapType == Settings::MapType::Airship) return true; // This function doesn't work yet havent figured it out
-	else return false;
+	return (State.mapType == Settings::MapType::Airship);
 
 	// unreachable code
 	if (Equals(vec, { -25.f, 40.f })) return true;

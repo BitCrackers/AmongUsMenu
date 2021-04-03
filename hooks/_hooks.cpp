@@ -101,7 +101,6 @@ void DetourInitilization() {
 	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
 	HOOKFUNC(ShadowCollab_OnEnable);
-	HOOKFUNC(SpawnInMinigame_Begin);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -162,7 +161,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
 	UNHOOKFUNC(ShadowCollab_OnEnable);
-	UNHOOKFUNC(SpawnInMinigame_Begin);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

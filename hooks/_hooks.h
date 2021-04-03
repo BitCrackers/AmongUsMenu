@@ -54,4 +54,3 @@ void dAirshipStatus_OnEnable (AirshipStatus* __this, MethodInfo* method);
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method);
 void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
 void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method);
-void dSpawnInMinigame_Begin(SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method);

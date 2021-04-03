@@ -29,8 +29,3 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
 }
-
-void dSpawnInMinigame_Begin(SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method) {
-	State.spawnInGame = __this;
-	SpawnInMinigame_Begin(__this, playerTask, method);
-}
