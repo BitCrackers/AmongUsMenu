@@ -13,7 +13,7 @@ void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, 
 
 void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	HudManager_Update(__this, method);
-	__this->fields.PlayerCam->fields.Locked = (State.FreeCam || State.playerToFollow.has_value());
+	__this->fields.PlayerCam->fields.Locked = (State.FreeCam);
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 }
 
