@@ -341,16 +341,16 @@ void RepairSabotage(PlayerControl* player) {
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
-		if (GetMapId() == 0 || GetMapId() == 1) {
+		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 65));
 		}
 
-		if (GetMapId() == 2) {
+		if (State.mapType == Settings::MapType::Pb) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 65));
 		}
-		if (GetMapId() == 3) {
+		if (State.mapType == Settings::MapType::Airship) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 16));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 17));
 		}
@@ -452,7 +452,7 @@ std::vector<ClientData*> GetAllClients()
 
 Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 {
-	if (GetMapId() == MAP_SKELD || GetMapId() != MAP_POLUS || initialSpawn)
+	if (State.mapType == Settings::MapType::Ship || State.mapType != Settings::MapType::Pb || initialSpawn)
 	{
 		Vector2 vector = { 0, 1 };
 		vector = Rotate(vector, (float)(playerId - 1) * (360.f / (float)numPlayer));
@@ -472,7 +472,7 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 
 bool IsAirshipSpawnLocation(Vector2 vec)
 {
-	if (GetMapId() == MAP_AIRSHIP) return true; // This function doesn't work yet havent figured it out
+	if (State.mapType == Settings::MapType::Airship) return true; // This function doesn't work yet havent figured it out
 	else return false;
 
 	// unreachable code

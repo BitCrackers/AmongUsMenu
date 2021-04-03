@@ -31,16 +31,11 @@ namespace SabotageTab {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Laboratory));
                     }
                 } else if (State.mapType == Settings::MapType::Airship) {
-                    if (ImGui::Button("Sabotage Course")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
-                    }
-                }
-                else if (GetMapId() == MAP_AIRSHIP) {
                     if (ImGui::Button("Sabotage Heli")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
                     }
                 }
-                if (GetMapId() == MAP_SKELD || GetMapId() == MAP_MIRAHQ) {
+                if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Oxygen")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_LifeSupp));
                     }
