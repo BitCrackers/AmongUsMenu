@@ -17,8 +17,9 @@ void dScreenJoystick_FixedUpdate(ScreenJoystick* __this, MethodInfo* method)
         app::ScreenJoystick_FixedUpdate(__this, method);
         countdown = 3; //This is necessary for mouseup to zero out the delta movement
     }
-    else if (countdown-- > 0) {
+    else if (countdown > 0) {
         app::ScreenJoystick_FixedUpdate(__this, method);
+        countdown--;
     }
     
 }
