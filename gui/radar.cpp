@@ -29,7 +29,7 @@ namespace Radar {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
-			int MapType = GetMapId();
+			int MapType = State.mapType;
 
 			if (mouse.x < winpos.x
 				|| mouse.x > winpos.x + winsize.x
@@ -63,7 +63,7 @@ namespace Radar {
 		if (!init)
 			Radar::Init();
 
-		int MapType = GetMapId();
+		int MapType = State.mapType;
 		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F + 10, (float)maps[MapType].mapImage.imageHeight * 0.5F + 10), ImGuiCond_None);
 
 		if(State.LockRadar)

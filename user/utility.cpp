@@ -341,16 +341,16 @@ void RepairSabotage(PlayerControl* player) {
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
-		if (GetMapId() == 0 || GetMapId() == 1) {
+		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 65));
 		}
 
-		if (GetMapId() == 2) {
+		if (State.mapType == Settings::MapType::Pb) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 65));
 		}
-		if (GetMapId() == 3) {
+		if (State.mapType == Settings::MapType::Airship) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 16));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 17));
 		}
@@ -452,7 +452,7 @@ std::vector<ClientData*> GetAllClients()
 
 Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 {
-	if (GetMapId() == MAP_SKELD || GetMapId() != MAP_POLUS || initialSpawn)
+	if (State.mapType == Settings::MapType::Ship || State.mapType != Settings::MapType::Pb || initialSpawn)
 	{
 		Vector2 vector = { 0, 1 };
 		vector = Rotate(vector, (float)(playerId - 1) * (360.f / (float)numPlayer));
@@ -472,8 +472,7 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 
 bool IsAirshipSpawnLocation(Vector2 vec)
 {
-	if (GetMapId() == MAP_AIRSHIP) return true; // This function doesn't work yet havent figured it out
-	else return false;
+	return (State.mapType == Settings::MapType::Airship);
 
 	// unreachable code
 	if (Equals(vec, { -25.f, 40.f })) return true;
@@ -497,18 +496,4 @@ Vector2 Rotate(Vector2 vec, float degrees)
 
 bool Equals(Vector2 vec1, Vector2 vec2) {
 	return vec1.x == vec2.x && vec1.y == vec2.y;
-}
-
-int32_t GetMapId() {
-	Vector2 spawn = (*Game::pShipStatus)->fields.InitialSpawnCenter;
-	if (Equals(spawn, { -4.4, 2.2 })) {
-		return 1;
-	}
-	if (Equals(spawn, { 16.64, -2.46 })) {
-		return 2;
-	}
-	if (Equals(spawn, { 20, 9 })) {
-		return 3;
-	}
-	return 0;
 }

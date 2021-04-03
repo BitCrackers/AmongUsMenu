@@ -112,4 +112,3 @@ Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
 bool IsAirshipSpawnLocation(Vector2 vec);
 Vector2 Rotate(Vector2 vec, float degrees);
 bool Equals(Vector2 vec1, Vector2 vec2);
-int32_t GetMapId();

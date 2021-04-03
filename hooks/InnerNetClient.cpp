@@ -130,6 +130,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     std::cout << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
     std::cout << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
     std::cout << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
+    std::cout << "-------" << std::endl;
 #endif
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }

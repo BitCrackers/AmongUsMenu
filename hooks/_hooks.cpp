@@ -59,8 +59,10 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(ShipStatus_CalculateLightRadius);
+	HOOKFUNC(AirshipStatus_CalculateLightRadius);
 	HOOKFUNC(ShipStatus_OnEnable);
 	HOOKFUNC(PolusShipStatus_OnEnable);
+	HOOKFUNC(AirshipStatus_OnEnable);
 	HOOKFUNC(Vent_CanUse);
 	HOOKFUNC(Vent_EnterVent);
 	HOOKFUNC(Vent_ExitVent);
@@ -99,7 +101,6 @@ void DetourInitilization() {
 	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
 	HOOKFUNC(ShadowCollab_OnEnable);
-	HOOKFUNC(SpawnInMinigame_Begin);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -118,9 +119,11 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(MeetingHud_Update);
+	UNHOOKFUNC(AirshipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_OnEnable);
 	UNHOOKFUNC(PolusShipStatus_OnEnable);
+	UNHOOKFUNC(AirshipStatus_OnEnable);
 	UNHOOKFUNC(Vent_CanUse);
 	UNHOOKFUNC(Vent_EnterVent);
 	UNHOOKFUNC(Vent_ExitVent);
@@ -158,7 +161,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
 	UNHOOKFUNC(ShadowCollab_OnEnable);
-	UNHOOKFUNC(SpawnInMinigame_Begin);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

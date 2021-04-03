@@ -26,9 +26,6 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	}
 
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
-}
 
-void dSpawnInMinigame_Begin(SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method) {
-	State.spawnInGame = __this;
-	SpawnInMinigame_Begin(__this, playerTask, method);
+	State.mapType = (Settings::MapType)(__this->fields.Type);
 }
