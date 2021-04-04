@@ -19,9 +19,9 @@ void Logger::Create()
 	std::ofstream file(logPath);
 	std::stringstream ss;
 
-	ss << "AmongUsMenu - " << __TIME__ << " - " << __DATE__ << "\n"; // Log amongusmenu info
+	ss << "AmongUsMenu - " << __DATE__ << " - " << __TIME__ << "\n"; // Log amongusmenu info
+	ss << "Build: " << _CONFIGURATION_NAME << std::endl;
 	ss << "Commit: " << GetGitCommit() << " - " << GetGitBranch() << "\n"; // Log git info
-	ss << "Among Us Version: " << getGameVersion() << "\n"; // Log among us info
 
 	std::cout << ss.str();
 	file << ss.str();

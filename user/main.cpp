@@ -26,7 +26,7 @@ std::string GetCRC32(std::filesystem::path filePath) {
 		auto readSize = fin.gcount();
 		crc32.add(&buffer[0], (size_t) readSize);
 	}
-
+	LOG_INFO("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
 	return crc32.getHash();
 }
 
@@ -65,6 +65,7 @@ void Run(LPVOID lpParam) {
 #if _DEBUG
 	new_console();
 #endif
+	Log.Create();
 	if (!GameVersionCheck()) {
 		fclose(stdout);
 		FreeConsole();
@@ -75,7 +76,6 @@ void Run(LPVOID lpParam) {
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
 	State.Load();
-	Log.Create();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	
