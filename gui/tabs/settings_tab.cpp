@@ -30,7 +30,7 @@ namespace SettingsTab {
 
 			char* nameBuffer[15]{ const_cast<char*>(State.userName.c_str()) };
 			if (ImGui::InputText("PlayerName", *nameBuffer, IM_ARRAYSIZE(nameBuffer))) {
-				State.userName = std::string(*nameBuffer);
+				if (!(IsInGame() || IsInLobby())) State.userName = std::string(*nameBuffer);
 			}
 
 			ImGui::EndTabItem();
