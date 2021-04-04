@@ -96,10 +96,6 @@ namespace GameTab {
 			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
 				State.Save();
 			}
-
-			if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
-				State.Save();
-			}
 			ImGui::EndTabItem();
 		}
 	}

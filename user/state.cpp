@@ -95,6 +95,7 @@ void Settings::Save() {
             {"RevealImpostors", this->RevealImpostors},
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
+            {"AutoOpenDoors", this->AutoOpenDoors},
 
             {"ShowConsole", this->ShowConsole}
         };
