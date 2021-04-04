@@ -128,6 +128,7 @@ public:
     } mapType;
 
     std::optional<ShadowCollab*> shadowLayer;
+    std::map<uint8_t, float> playerSkinLocations;
     std::optional<SpawnInMinigame*> spawnInGame;
 
     bool AutoOpenDoors = false;

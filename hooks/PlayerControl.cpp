@@ -4,6 +4,7 @@
 #include "state.hpp"
 #include "esp.hpp"
 #include "_rpc.h"
+#include <iostream>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -125,15 +126,20 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		}
 
 		
-
 		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
 		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);
+		std::map<uint8_t, float>::iterator it = State.playerSkinLocations.find(__this->fields.PlayerId);
+		float location = NULL;
 
-		if (State.Wallhack || State.FreeCam || State.EnableZoom) {
-			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -6 }, NULL);
+		if (it != State.playerSkinLocations.end()) location = it->second;
+
+		if ((State.Wallhack || State.FreeCam || State.EnableZoom) && location == NULL) {
+			State.playerSkinLocations.insert({ __this->fields.PlayerId, skinLocation.z });
+			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -6.f }, NULL);
 		}
-		else {
-			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -5 }, NULL);
+		else if(!(State.Wallhack || State.FreeCam || State.EnableZoom) && location != NULL) {
+			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, location }, NULL);
+			State.playerSkinLocations.erase(__this->fields.PlayerId);
 		}
     
 		// We should have this in a scope so that the lock guard only locks the right things
