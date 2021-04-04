@@ -102,9 +102,6 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
     if (it != State.aumUsers.end())
         State.aumUsers.erase(it);
 
-    std::map<uint8_t, float>::iterator it2 = State.playerSkinLocations.find(data->fields.Character->fields.PlayerId);
-    if (it2 != State.playerSkinLocations.end()) State.playerSkinLocations.erase(data->fields.Character->fields.PlayerId);
-
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
