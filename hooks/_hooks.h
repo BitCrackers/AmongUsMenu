@@ -6,7 +6,6 @@ void DetourUninitialization();
 bool dAutoOpenDoor_DoUpdate(AutoOpenDoor* __this, float dt, MethodInfo* method);
 bool dConstants_ShouldFlipSkeld(MethodInfo* method);
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method);
-void dInnerNetObject_Despawn(InnerNetObject* __this, MethodInfo* method);
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method);
 void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 position, uint16_t minSid, MethodInfo* method);
 bool dStatsManager_get_AmBanned(StatsManager* __this, MethodInfo* method);

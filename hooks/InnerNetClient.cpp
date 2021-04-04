@@ -163,28 +163,6 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }
 
-void dInnerNetObject_Despawn(InnerNetObject* __this, MethodInfo* method) {
-    if ((*Game::pLobbyBehaviour)) {
-        if ((InnerNetObject*)(*Game::pLobbyBehaviour) == __this) {
-            State.events.clear();
-
-            State.mapDoors.clear();
-            State.pinnedDoors.clear();
-
-            auto allDoors = (*Game::pShipStatus)->fields.AllDoors;
-
-            for (il2cpp_array_size_t i = 0; i < allDoors->max_length; i++) {
-                if (std::find(State.mapDoors.begin(), State.mapDoors.end(), allDoors->vector[i]->fields.Room) == State.mapDoors.end())
-                    State.mapDoors.push_back(allDoors->vector[i]->fields.Room);
-            }
-
-            std::sort(State.mapDoors.begin(), State.mapDoors.end());
-            State.selectedDoor = State.mapDoors[0];
-        }
-    }
-    InnerNetObject_Despawn(__this, method);
-}
-
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.shadowLayer.reset();
     State.spawnInGame.reset();
