@@ -60,6 +60,7 @@
     <ClCompile Include="hooks\NoShadowBehaviour.cpp" />
     <ClCompile Include="hooks\PlainDoor.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
+    <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -189,6 +190,7 @@
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
+    <ClCompile Include="user\logger.cpp" />
     <ClCompile Include="user\resources.cpp" />
     <ClCompile Include="user\utility.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -330,10 +332,12 @@
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
+    <ClInclude Include="user\gitparams.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />
     <ClInclude Include="gui\tabs\self_tab.h" />
+    <ClInclude Include="user\logger.h" />
     <ClInclude Include="user\resources.h" />
     <ClInclude Include="user\utility.h" />
     <ClInclude Include="framework\il2cpp-appdata.h" />
@@ -477,6 +481,16 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Create gitparams.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">
     <ClCompile>
@@ -510,6 +524,16 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Create gitparams.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -548,6 +572,16 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Create gitparams.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'">
     <ClCompile>
@@ -585,6 +619,16 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Create gitparams.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,7 @@
 #include <iostream>
 #include "game.h"
 #include "_hooks.h"
+#include "logger.h"
 #include "state.hpp"
 #include "version.h"
 #include <fstream>
@@ -35,21 +36,25 @@ bool GameVersionCheck() {
 	auto steamApi = modulePath.parent_path() / "Among Us_Data" / "Plugins" / "x86" / "steam_api.dll";
 
 	if (!IsWindows10OrGreater()) {
+		Log.Error("Version of windows not supported exiting!");
 		MessageBox(NULL, L"This version of Windows is not supported!", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (!std::filesystem::exists(gameAssembly)) {
+		Log.Error("GameAssembly.dll was not found");
 		MessageBox(NULL, L"Unable to locate GameAssembly.dll", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (GetCRC32(gameAssembly) != "6df51577") {
+		Log.Error("GameAssembly.dll is either not the right version or corrupted");
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (std::filesystem::exists(steamApi) && GetCRC32(steamApi) != "815ba560") {
+		Log.Error("SteamApi not found or incorrect version");
 		ShellExecute(NULL, NULL, L"https://store.steampowered.com/app/945360/Among_Us/", NULL, NULL, SW_SHOW);
 	}
 
@@ -70,6 +75,7 @@ void Run(LPVOID lpParam) {
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
 	State.Load();
+	Log.Create();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	

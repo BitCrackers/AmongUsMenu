@@ -1,0 +1,2 @@
+#define GIT_CUR_COMMIT 3f63feff96e660aac54f8283b7ea61adb3360384
+#define GIT_BRANCH DoorFixes

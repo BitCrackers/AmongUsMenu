@@ -103,6 +103,10 @@ void DetourInitilization() {
 	HOOKFUNC(ShadowCollab_OnEnable);
 	HOOKFUNC(DoorBreakerGame_Start);
 	HOOKFUNC(DoorCardSwipeGame_Begin);
+	HOOKFUNC(Debug_Log);
+	HOOKFUNC(Debug_LogError);
+	HOOKFUNC(Debug_LogException);
+	HOOKFUNC(Debug_LogWarning);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -165,6 +169,10 @@ void DetourUninitialization()
 	UNHOOKFUNC(ShadowCollab_OnEnable);
 	UNHOOKFUNC(DoorBreakerGame_Start);
 	UNHOOKFUNC(DoorCardSwipeGame_Begin);
+	UNHOOKFUNC(Debug_Log);
+	UNHOOKFUNC(Debug_LogError);
+	UNHOOKFUNC(Debug_LogException);
+	UNHOOKFUNC(Debug_LogWarning);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

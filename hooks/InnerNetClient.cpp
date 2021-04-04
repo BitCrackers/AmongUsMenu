@@ -3,7 +3,8 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
-#include <iostream>
+#include "logger.h"
+#include <sstream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -96,8 +97,9 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
-    std::cout << data->fields.Character->fields.nameText->fields.Text << " has left the game.\n";
-
+#ifdef _DEBUG
+    Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
+#endif
     auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
     if (it != State.aumUsers.end())
         State.aumUsers.erase(it);
@@ -109,7 +111,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 {
 #ifdef _DEBUG
     if (!player.has_value())
-        std::cout << __func__ << " received invalid player!" << std::endl;
+        Log.Debug("bogusTransformSnap received invalid player!");
 #endif
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
@@ -127,11 +129,14 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
         return false;
 #ifdef _DEBUG
-    std::cout << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
-    std::cout << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
-    std::cout << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
-    std::cout << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
-    std::cout << "-------" << std::endl;
+    std::ostringstream ss;
+
+    ss << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
+    ss << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
+    ss << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
+    ss << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
+    ss << "-------";
+    Log.Debug(ss.str());
 #endif
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }

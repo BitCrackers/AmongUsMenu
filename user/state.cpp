@@ -4,6 +4,7 @@
 #include <fstream>
 #include "main.h"
 #include "utility.h"
+#include "logger.h"
 
 Settings State;
 
@@ -53,7 +54,7 @@ void Settings::Load() {
 
         j.at("ShowConsole").get_to(this->ShowConsole);
     } catch (...) {
-        std::cout << "Unable to load settings.json" << std::endl;
+        Log.Info("Unable to load settings.json");
     }
     this->userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 }
@@ -103,6 +104,6 @@ void Settings::Save() {
         std::ofstream outSettings(settingsPath);
         outSettings << std::setw(4) << j << std::endl;
     } catch (...) {
-        std::cout << "Unable to save settings.json" << std::endl;
+        Log.Info("Unable to save settings.json");
     }
 }

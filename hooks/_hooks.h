@@ -56,3 +56,7 @@ void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
 void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method);
 void dDoorBreakerGame_Start(DoorBreakerGame* __this, MethodInfo* method);
 void dDoorCardSwipeGame_Begin(DoorCardSwipeGame* __this, PlayerTask* playerTask, MethodInfo* method);
+void dDebug_Log(Object* message, MethodInfo* method);
+void dDebug_LogError(Object* message, MethodInfo* method);
+void dDebug_LogException(Exception* exception, MethodInfo* method);
+void dDebug_LogWarning(Object* message, MethodInfo* method);

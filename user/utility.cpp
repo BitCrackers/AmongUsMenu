@@ -2,6 +2,7 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
+#include "gitparams.h"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -496,4 +497,39 @@ Vector2 Rotate(Vector2 vec, float degrees)
 
 bool Equals(Vector2 vec1, Vector2 vec2) {
 	return vec1.x == vec2.x && vec1.y == vec2.y;
+}
+
+std::string ToString(Object* object) {
+	std::string type = convert_from_string(Object_ToString(object, NULL));
+	if (type == "System.String") {
+		return convert_from_string((String*)object);
+	}
+	return type;
+}
+
+#define ADD_QUOTES_HELPER(s) #s
+#define ADD_QUOTES(s) ADD_QUOTES_HELPER(s)
+
+std::string GetGitCommit()
+{
+#ifdef GIT_CUR_COMMIT
+	return ADD_QUOTES(GIT_CUR_COMMIT);
+#endif
+	return "unavailable";
+}
+
+std::string GetGitBranch()
+{
+#ifdef GIT_BRANCH
+	return ADD_QUOTES(GIT_BRANCH);
+#endif
+	return "unavailable";
+}
+
+std::string GetCurrentBuildVersion()
+{
+#ifdef _DEBUG
+	return "debug";
+#endif
+	return "release";
 }

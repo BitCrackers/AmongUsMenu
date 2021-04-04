@@ -151,3 +151,9 @@ DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* me
 DO_APP_FUNC(void, ShadowCollab_OnEnable, (ShadowCollab* __this, MethodInfo* method), "Assembly-CSharp, System.Void ShadowCollab::OnEnable()");
 DO_APP_FUNC(MessageWriter*, InnerNetClient_StartEndGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, Hazel.MessageWriter InnerNet.InnerNetClient::StartEndGame()");
 DO_APP_FUNC(void, SpawnInMinigame_Begin, (SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method), "Assembly-CSharp, System.Void SpawnInMinigame::Begin(PlayerTask)");
+
+DO_APP_FUNC(void, Debug_Log, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::Log(System.Object)");
+DO_APP_FUNC(void, Debug_LogError, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogError(System.Object)");
+DO_APP_FUNC(void, Debug_LogException, (Exception* exception, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogException(System.Exception)");
+DO_APP_FUNC(void, Debug_LogWarning, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogWarning(System.Object)");
+DO_APP_FUNC(String*, Object_ToString, (Object* __this, MethodInfo* method), "mscorlib, System.String System.Object::ToString()");

@@ -1,7 +1,7 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "state.hpp"
-#include <iostream>
+#include "logger.h"
 
 void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method) {
 	if ((State.Wallhack || State.FreeCam || State.EnableZoom) && !State.OcclusionCulling) {
@@ -16,5 +16,7 @@ void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method
 void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method) {
 	ShadowCollab_OnEnable(__this, method);
 	State.shadowLayer = __this;
-	std::cout << "ShadowLayer Enabled \n";
+#ifdef _DEBUG
+	Log.Debug("ShadowLayer Enabled");
+#endif
 }
