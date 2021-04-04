@@ -53,11 +53,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
 		}
 
-		if (State.shadowLayer.has_value()) {
-			GameObject* shadowLayerObject = Component_get_gameObject((Component*)State.shadowLayer.value()->fields.ShadowQuad, NULL);
-			GameObject_SetActive(shadowLayerObject, !(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack), NULL);
-		}
-
 		if (__this == *Game::pLocalPlayer) {
 			if (State.FollowerCam == nullptr) {
 				for (auto cam : GetAllCameras()) {
