@@ -17,7 +17,6 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	State.selectedDoor = SystemTypes__Enum_Hallway;
 	State.mapDoors.clear();
 	State.pinnedDoors.clear();
-	State.playerSkinLocations.clear();
 
 	auto allDoors = __this->fields.AllDoors;
 
