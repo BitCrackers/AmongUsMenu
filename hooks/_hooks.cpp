@@ -107,6 +107,7 @@ void DetourInitilization() {
 	HOOKFUNC(Debug_LogError);
 	HOOKFUNC(Debug_LogException);
 	HOOKFUNC(Debug_LogWarning);
+	HOOKFUNC(VersionShower_Start);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -173,6 +174,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(Debug_LogError);
 	UNHOOKFUNC(Debug_LogException);
 	UNHOOKFUNC(Debug_LogWarning);
+	UNHOOKFUNC(VersionShower_Start);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

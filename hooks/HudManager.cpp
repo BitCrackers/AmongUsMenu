@@ -37,3 +37,10 @@ void dAccountTab_Open(AccountTab* __this, MethodInfo* method) {
 	AccountTab_Open(__this, method);
 	FullAccount_CanSetCustomName(__this->fields.fullAccount, true, NULL);
 }
+
+void dVersionShower_Start(VersionShower* __this, MethodInfo* method) {
+	VersionShower_Start(__this, method);
+	std::string versionText = convert_from_string(__this->fields.text->fields.Text);
+	versionText = versionText + "\n AmongUsMenu - " + GetGitBranch();
+	__this->fields.text->fields.Text = convert_to_string(versionText);
+}
