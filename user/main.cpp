@@ -63,6 +63,16 @@ bool GameVersionCheck() {
 	return true;
 }
 
+bool cctor_finished(Il2CppClass* klass)
+{
+	while (klass->has_cctor && !klass->cctor_finished);
+	return true;
+}
+
+#define IL2CPP_STATIC_FIELD(f,c,m) \
+	while (c##__TypeInfo->_0.klass->has_cctor && !c##__TypeInfo->_0.klass->cctor_finished); \
+	f = &(c##__TypeInfo->static_fields->m);
+
 void Run(LPVOID lpParam) {
 #if _DEBUG
 	new_console();
@@ -101,6 +111,14 @@ void Run(LPVOID lpParam) {
 	output_class_methods(klass);*/
 #endif
 
+	IL2CPP_STATIC_FIELD(Game::pAmongUsClient, app::AmongUsClient, Instance);
+	IL2CPP_STATIC_FIELD(Game::pGameData, app::GameData, Instance);
+	IL2CPP_STATIC_FIELD(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	IL2CPP_STATIC_FIELD(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
+	IL2CPP_STATIC_FIELD(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
+	IL2CPP_STATIC_FIELD(Game::pShipStatus, app::ShipStatus, Instance);
+	IL2CPP_STATIC_FIELD(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	/*
 	Game::pAmongUsClient = &(app::AmongUsClient__TypeInfo->static_fields->Instance);
 	Game::pGameData = &(app::GameData__TypeInfo->static_fields->Instance);
 	Game::pGameOptionsData = &(app::PlayerControl__TypeInfo->static_fields->GameOptions);
@@ -108,7 +126,7 @@ void Run(LPVOID lpParam) {
 	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
 	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
 	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
-
+	*/
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);

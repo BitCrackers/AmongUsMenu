@@ -58,7 +58,8 @@ void Settings::Load() {
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
-    this->userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+
+    //Do not do any IL2CPP stuff here!  The constructors of most classes have not run yet!
 }
 
 void Settings::Save() {

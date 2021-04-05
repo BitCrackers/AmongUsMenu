@@ -106,6 +106,7 @@ void DetourInitilization() {
 	HOOKFUNC(Debug_LogException);
 	HOOKFUNC(Debug_LogWarning);
 	HOOKFUNC(VersionShower_Start);
+	HOOKFUNC(MainMenuManager_Start);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -116,6 +117,7 @@ void DetourUninitialization()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
+	UNHOOKFUNC(MainMenuManager_Start);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(HatManager_GetUnlockedHats);
