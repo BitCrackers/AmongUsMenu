@@ -2,9 +2,7 @@
 #include "logger.h"
 #include <sstream>
 #include <iostream>
-#include "main.h"
 #include "utility.h"
-#include "gitparams.h"
 
 Logger Log;
 
@@ -15,17 +13,6 @@ void Logger::Create()
 	if (std::filesystem::exists(logPath)) {
 		std::filesystem::remove(logPath);
 	}
-
-	std::ofstream file(logPath);
-	std::stringstream ss;
-
-	ss << "AmongUsMenu - " << __DATE__ << " - " << __TIME__ << "\n"; // Log amongusmenu info
-	ss << "Build: " << _CONFIGURATION_NAME << std::endl;
-	ss << "Commit: " << GetGitCommit() << " - " << GetGitBranch() << "\n"; // Log git info
-
-	std::cout << ss.str();
-	file << ss.str();
-	file.close();
 
 	this->filePath = logPath;
 }

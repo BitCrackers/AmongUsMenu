@@ -11,6 +11,8 @@
 #include "state.hpp"
 #include "version.h"
 #include <fstream>
+#include <sstream>
+#include "gitparams.h"
 
 HMODULE hModule;
 HANDLE hUnloadEvent;
@@ -26,7 +28,7 @@ std::string GetCRC32(std::filesystem::path filePath) {
 		auto readSize = fin.gcount();
 		crc32.add(&buffer[0], (size_t) readSize);
 	}
-	LOG_INFO("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
+	LOG_DEBUG("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
 	return crc32.getHash();
 }
 
@@ -75,6 +77,12 @@ void Run(LPVOID lpParam) {
 
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
+	std::ostringstream ss;
+	ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
+	ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
+	ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
+	ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
+	LOG_INFO(ss.str());
 	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
