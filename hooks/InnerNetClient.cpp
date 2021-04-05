@@ -8,6 +8,7 @@
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
+
     if (!IsInLobby()) {
         State.LobbyTimer = -1;
     }
@@ -68,6 +69,13 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
         if (State.MoveInVent && (*Game::pLocalPlayer)->fields.inVent) {
             (*Game::pLocalPlayer)->fields.moveable = true;
+        }
+
+        if (State.shadowLayer.has_value()) {
+            GameObject* shadowLayerObject = Component_get_gameObject((Component*)State.shadowLayer.value()->fields.ShadowQuad, NULL);
+            GameObject_SetActive(shadowLayerObject,
+                !(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
+                NULL);
         }
     }
 
