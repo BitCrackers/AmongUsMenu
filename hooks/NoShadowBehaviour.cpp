@@ -12,11 +12,3 @@ void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method
 	}
 	return;
 }
-
-void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method) {
-	ShadowCollab_OnEnable(__this, method);
-	State.shadowLayer = __this;
-#ifdef _DEBUG
-	Log.Debug("ShadowLayer Enabled");
-#endif
-}

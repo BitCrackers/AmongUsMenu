@@ -99,7 +99,6 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
-	HOOKFUNC(ShadowCollab_OnEnable);
 	HOOKFUNC(DoorBreakerGame_Start);
 	HOOKFUNC(DoorCardSwipeGame_Begin);
 	HOOKFUNC(Debug_Log);
@@ -165,7 +164,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
-	UNHOOKFUNC(ShadowCollab_OnEnable);
 	UNHOOKFUNC(DoorBreakerGame_Start);
 	UNHOOKFUNC(DoorCardSwipeGame_Begin);
 	UNHOOKFUNC(Debug_Log);

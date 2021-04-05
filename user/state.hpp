@@ -128,9 +128,6 @@ public:
         NotSet = 0xFF
     } mapType;
 
-    std::optional<ShadowCollab*> shadowLayer;
-    std::optional<SpawnInMinigame*> spawnInGame;
-
     bool AutoOpenDoors = false;
 
     void Load();

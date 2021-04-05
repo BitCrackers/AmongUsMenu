@@ -478,11 +478,6 @@ bool IsAirshipSpawnLocation(Vector2 vec)
 	// unreachable code
 	if (Equals(vec, { -25.f, 40.f })) return true;
 	if (Equals(vec, { -0.66f, -0.5f })) return true;
-	if (!State.spawnInGame.has_value()) return false;
-
-	SpawnInMinigame* game = State.spawnInGame.value();
-	for (auto location : game->fields.Locations->vector)
-		if (Equals(vec, { location.Location.x, location.Location.y })) return true;
 
 	return false;
 }

@@ -52,7 +52,6 @@ void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
 void dAirshipStatus_OnEnable (AirshipStatus* __this, MethodInfo* method);
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method);
 void dFollowerCamera_Update(FollowerCamera* __this, MethodInfo* method);
-void dShadowCollab_OnEnable(ShadowCollab* __this, MethodInfo* method);
 void dDoorBreakerGame_Start(DoorBreakerGame* __this, MethodInfo* method);
 void dDoorCardSwipeGame_Begin(DoorCardSwipeGame* __this, PlayerTask* playerTask, MethodInfo* method);
 void dDebug_Log(Object* message, MethodInfo* method);

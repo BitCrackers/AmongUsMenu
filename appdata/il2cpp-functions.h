@@ -147,9 +147,7 @@ DO_APP_FUNC(void, MessageWriter_EndMessage, (MessageWriter* __this, MethodInfo* 
 DO_APP_FUNC(void, AccountTab_Open, (AccountTab* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountTab::Open()");
 DO_APP_FUNC(void, FullAccount_CanSetCustomName, (FullAccount* __this, bool canSetName, MethodInfo* method), "Assembly-CSharp, System.Void FullAccount::CanSetCustomName(System.Boolean)");
 DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* method), "Assembly-CSharp, System.Void FollowerCamera::Update()");
-DO_APP_FUNC(void, ShadowCollab_OnEnable, (ShadowCollab* __this, MethodInfo* method), "Assembly-CSharp, System.Void ShadowCollab::OnEnable()");
 DO_APP_FUNC(MessageWriter*, InnerNetClient_StartEndGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, Hazel.MessageWriter InnerNet.InnerNetClient::StartEndGame()");
-DO_APP_FUNC(void, SpawnInMinigame_Begin, (SpawnInMinigame* __this, PlayerTask* playerTask, MethodInfo* method), "Assembly-CSharp, System.Void SpawnInMinigame::Begin(PlayerTask)");
 
 DO_APP_FUNC(void, Debug_Log, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::Log(System.Object)");
 DO_APP_FUNC(void, Debug_LogError, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogError(System.Object)");
