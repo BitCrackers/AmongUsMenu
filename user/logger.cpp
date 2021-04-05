@@ -20,7 +20,7 @@ void Logger::Create()
 void Logger::Write(std::string verbosity, std::string source, std::string message)
 {
 	std::stringstream ss;
-	ss << "[" << verbosity << " - " << source << "] " << message << "\n";
+	ss << "[" << verbosity << " - " << source << "] " << message << std::endl;
 	std::cout << ss.str();
 
 	std::ofstream file(this->filePath, std::ios_base::app);
