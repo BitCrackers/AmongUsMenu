@@ -112,3 +112,7 @@ Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
 bool IsAirshipSpawnLocation(Vector2 vec);
 Vector2 Rotate(Vector2 vec, float degrees);
 bool Equals(Vector2 vec1, Vector2 vec2);
+std::string ToString(Object* object);
+std::string GetGitCommit();
+std::string GetGitBranch();
+std::string GetCurrentBuildVersion();

@@ -4,6 +4,7 @@
 #include <fstream>
 #include "main.h"
 #include "utility.h"
+#include "logger.h"
 
 Settings State;
 
@@ -49,10 +50,13 @@ void Settings::Load() {
         j.at("RevealImpostors").get_to(this->RevealImpostors);
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
+        j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
+        j.at("MoveInVent").get_to(this->MoveInVent);
 
         j.at("ShowConsole").get_to(this->ShowConsole);
+        j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
     } catch (...) {
-        std::cout << "Unable to load settings.json" << std::endl;
+        Log.Info("Unable to load settings.json");
     }
     this->userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 }
@@ -94,13 +98,16 @@ void Settings::Save() {
             {"RevealImpostors", this->RevealImpostors},
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
+            {"AutoOpenDoors", this->AutoOpenDoors},
+            {"MoveInVent", this->MoveInVent},
 
-            {"ShowConsole", this->ShowConsole}
+            {"ShowConsole", this->ShowConsole},
+            {"ShowUnityLogs", this->ShowUnityLogs}
         };
 
         std::ofstream outSettings(settingsPath);
         outSettings << std::setw(4) << j << std::endl;
     } catch (...) {
-        std::cout << "Unable to save settings.json" << std::endl;
+        Log.Info("Unable to save settings.json");
     }
 }

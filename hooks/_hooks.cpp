@@ -90,7 +90,6 @@ void DetourInitilization() {
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
-	HOOKFUNC(InnerNetObject_Despawn);
 	HOOKFUNC(AmongUsClient_OnPlayerLeft);
 	HOOKFUNC(CustomNetworkTransform_SnapTo);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
@@ -100,7 +99,13 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
-	HOOKFUNC(ShadowCollab_OnEnable);
+	HOOKFUNC(DoorBreakerGame_Start);
+	HOOKFUNC(DoorCardSwipeGame_Begin);
+	HOOKFUNC(Debug_Log);
+	HOOKFUNC(Debug_LogError);
+	HOOKFUNC(Debug_LogException);
+	HOOKFUNC(Debug_LogWarning);
+	HOOKFUNC(VersionShower_Start);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -151,7 +156,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
-	UNHOOKFUNC(InnerNetObject_Despawn);
 	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
@@ -160,7 +164,13 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
-	UNHOOKFUNC(ShadowCollab_OnEnable);
+	UNHOOKFUNC(DoorBreakerGame_Start);
+	UNHOOKFUNC(DoorCardSwipeGame_Begin);
+	UNHOOKFUNC(Debug_Log);
+	UNHOOKFUNC(Debug_LogError);
+	UNHOOKFUNC(Debug_LogException);
+	UNHOOKFUNC(Debug_LogWarning);
+	UNHOOKFUNC(VersionShower_Start);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

@@ -238,6 +238,15 @@
     <ClCompile Include="hooks\AirshipStatus.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\PlainDoor.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="user\logger.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\UnityDebug.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -401,6 +410,12 @@
     </ClInclude>
     <ClInclude Include="gui\Renderer.hpp">
       <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="user\logger.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="user\gitparams.h">
+      <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

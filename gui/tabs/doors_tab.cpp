@@ -97,6 +97,13 @@ namespace DoorsTab {
 						}
 					}
 				}
+				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
+				{
+					ImGui::Dummy(ImVec2(4, 4));
+					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
+						State.Save();
+					}
+				}
 				ImGui::EndChild();
 				ImGui::EndTabItem();
 			}

@@ -3,10 +3,12 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
-#include <iostream>
+#include "logger.h"
+#include <sstream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
+
     if (!IsInLobby()) {
         State.LobbyTimer = -1;
     }
@@ -84,23 +86,34 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
     }
 
-    if (convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) {
-        SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
-        if (IsInGame())
-            State.rpcQueue.push(new RpcSetName(State.userName));
-        else if (IsInLobby())
-            State.lobbyRpcQueue.push(new RpcSetName(State.userName));
+    static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
+
+    if (nameChangeCycleDelay <= 0) {
+        if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
+            SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
+            LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
+            if (IsInGame())
+                State.rpcQueue.push(new RpcSetName(State.userName));
+            else if (IsInLobby())
+                State.lobbyRpcQueue.push(new RpcSetName(State.userName));
+            nameChangeCycleDelay = 100; //Should be approximately two second
+        }
+    }
+    else {
+        nameChangeCycleDelay--;
     }
 
     InnerNetClient_Update(__this, method);
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
+#ifdef _DEBUG
+    Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
+#endif
     auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
-    std::cout << data->fields.Character->fields.nameText->fields.Text << " has left the game.\n";
-
     if (it != State.aumUsers.end())
         State.aumUsers.erase(it);
+
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
@@ -108,7 +121,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 {
 #ifdef _DEBUG
     if (!player.has_value())
-        std::cout << __func__ << " received invalid player!" << std::endl;
+        Log.Debug("bogusTransformSnap received invalid player!");
 #endif
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
@@ -126,11 +139,14 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
         return false;
 #ifdef _DEBUG
-    std::cout << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
-    std::cout << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
-    std::cout << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
-    std::cout << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
-    std::cout << "-------" << std::endl;
+    std::ostringstream ss;
+
+    ss << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
+    ss << "Range to target " << +distanceToTarget << ", KillDistance: " << +killDistance << std::endl;
+    ss << "Initial Spawn Location " << +initialSpawnLocation.x << "," << +initialSpawnLocation.y << std::endl;
+    ss << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
+    ss << "-------";
+    Log.Debug(ss.str());
 #endif
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }
@@ -157,31 +173,7 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }
 
-void dInnerNetObject_Despawn(InnerNetObject* __this, MethodInfo* method) {
-    if ((*Game::pLobbyBehaviour)) {
-        if ((InnerNetObject*)(*Game::pLobbyBehaviour) == __this) {
-            State.events.clear();
-
-            State.mapDoors.clear();
-            State.pinnedDoors.clear();
-
-            auto allDoors = (*Game::pShipStatus)->fields.AllDoors;
-
-            for (il2cpp_array_size_t i = 0; i < allDoors->max_length; i++) {
-                if (std::find(State.mapDoors.begin(), State.mapDoors.end(), allDoors->vector[i]->fields.Room) == State.mapDoors.end())
-                    State.mapDoors.push_back(allDoors->vector[i]->fields.Room);
-            }
-
-            std::sort(State.mapDoors.begin(), State.mapDoors.end());
-            State.selectedDoor = State.mapDoors[0];
-        }
-    }
-    InnerNetObject_Despawn(__this, method);
-}
-
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
-    State.shadowLayer.reset();
-    State.spawnInGame.reset();
     State.aumUsers.clear();
     State.events.clear();
 

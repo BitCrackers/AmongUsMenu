@@ -2,6 +2,7 @@
 #include "_hooks.h"
 #include "state.hpp"
 #include "utility.h"
+#include "game.h"
 
 void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, MethodInfo* method) {
 	HudManager_ShowMap(__this, mapAction, method);
@@ -24,7 +25,14 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	}
 	HudManager_Update(__this, method);
 	__this->fields.PlayerCam->fields.Locked = State.FreeCam;
+	
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
+	if (IsInGame()) {
+		GameObject* shadowLayerObject = Component_get_gameObject((Component*)__this->fields.ShadowQuad, NULL);
+		GameObject_SetActive(shadowLayerObject,
+			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
+			NULL);
+	}
 }
 
 void dChatController_Update(ChatController* __this, MethodInfo* method) {
@@ -36,4 +44,11 @@ void dChatController_Update(ChatController* __this, MethodInfo* method) {
 void dAccountTab_Open(AccountTab* __this, MethodInfo* method) {
 	AccountTab_Open(__this, method);
 	FullAccount_CanSetCustomName(__this->fields.fullAccount, true, NULL);
+}
+
+void dVersionShower_Start(VersionShower* __this, MethodInfo* method) {
+	VersionShower_Start(__this, method);
+	std::string versionText = convert_from_string(__this->fields.text->fields.Text);
+	versionText = versionText + "\n AmongUsMenu - " + GetGitBranch();
+	__this->fields.text->fields.Text = convert_to_string(versionText);
 }

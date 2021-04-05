@@ -7,9 +7,12 @@
 #include <iostream>
 #include "game.h"
 #include "_hooks.h"
+#include "logger.h"
 #include "state.hpp"
 #include "version.h"
 #include <fstream>
+#include <sstream>
+#include "gitparams.h"
 
 HMODULE hModule;
 HANDLE hUnloadEvent;
@@ -25,7 +28,7 @@ std::string GetCRC32(std::filesystem::path filePath) {
 		auto readSize = fin.gcount();
 		crc32.add(&buffer[0], (size_t) readSize);
 	}
-
+	LOG_DEBUG("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
 	return crc32.getHash();
 }
 
@@ -35,21 +38,25 @@ bool GameVersionCheck() {
 	auto steamApi = modulePath.parent_path() / "Among Us_Data" / "Plugins" / "x86" / "steam_api.dll";
 
 	if (!IsWindows10OrGreater()) {
+		Log.Error("Version of windows not supported exiting!");
 		MessageBox(NULL, L"This version of Windows is not supported!", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (!std::filesystem::exists(gameAssembly)) {
+		Log.Error("GameAssembly.dll was not found");
 		MessageBox(NULL, L"Unable to locate GameAssembly.dll", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (GetCRC32(gameAssembly) != "6df51577") {
+		Log.Error("GameAssembly.dll is either not the right version or corrupted");
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (std::filesystem::exists(steamApi) && GetCRC32(steamApi) != "815ba560") {
+		Log.Error("SteamApi not found or incorrect version");
 		ShellExecute(NULL, NULL, L"https://store.steampowered.com/app/945360/Among_Us/", NULL, NULL, SW_SHOW);
 	}
 
@@ -60,6 +67,7 @@ void Run(LPVOID lpParam) {
 #if _DEBUG
 	new_console();
 #endif
+	Log.Create();
 	if (!GameVersionCheck()) {
 		fclose(stdout);
 		FreeConsole();
@@ -69,6 +77,12 @@ void Run(LPVOID lpParam) {
 
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
+	std::ostringstream ss;
+	ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
+	ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
+	ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
+	ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
+	LOG_INFO(ss.str());
 	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);

@@ -4,6 +4,7 @@
 #include "state.hpp"
 #include "esp.hpp"
 #include "_rpc.h"
+#include <iostream>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -50,11 +51,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
-		}
-
-		if (State.shadowLayer.has_value()) {
-			GameObject* shadowLayerObject = Component_get_gameObject((Component*)State.shadowLayer.value()->fields.ShadowQuad, NULL);
-			GameObject_SetActive(shadowLayerObject, !(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack), NULL);
 		}
 
 		if (__this == *Game::pLocalPlayer) {
@@ -122,18 +118,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			}
 			
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
-		}
-
-		
-
-		Transform* skinTransform = Component_get_transform((Component*)__this->fields.MyPhysics->fields.Skin, NULL);
-		Vector3 skinLocation = Transform_get_position(skinTransform, NULL);
-
-		if (State.Wallhack || State.FreeCam || State.EnableZoom) {
-			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -6 }, NULL);
-		}
-		else {
-			Transform_set_position(skinTransform, { skinLocation.x, skinLocation.y, -5 }, NULL);
 		}
     
 		// We should have this in a scope so that the lock guard only locks the right things

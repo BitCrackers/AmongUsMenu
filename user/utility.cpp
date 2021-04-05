@@ -2,6 +2,7 @@
 #include "utility.h"
 #include "state.hpp"
 #include "game.h"
+#include "gitparams.h"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -477,11 +478,6 @@ bool IsAirshipSpawnLocation(Vector2 vec)
 	// unreachable code
 	if (Equals(vec, { -25.f, 40.f })) return true;
 	if (Equals(vec, { -0.66f, -0.5f })) return true;
-	if (!State.spawnInGame.has_value()) return false;
-
-	SpawnInMinigame* game = State.spawnInGame.value();
-	for (auto location : game->fields.Locations->vector)
-		if (Equals(vec, { location.Location.x, location.Location.y })) return true;
 
 	return false;
 }
@@ -496,4 +492,39 @@ Vector2 Rotate(Vector2 vec, float degrees)
 
 bool Equals(Vector2 vec1, Vector2 vec2) {
 	return vec1.x == vec2.x && vec1.y == vec2.y;
+}
+
+std::string ToString(Object* object) {
+	std::string type = convert_from_string(Object_ToString(object, NULL));
+	if (type == "System.String") {
+		return convert_from_string((String*)object);
+	}
+	return type;
+}
+
+#define ADD_QUOTES_HELPER(s) #s
+#define ADD_QUOTES(s) ADD_QUOTES_HELPER(s)
+
+std::string GetGitCommit()
+{
+#ifdef GIT_CUR_COMMIT
+	return ADD_QUOTES(GIT_CUR_COMMIT);
+#endif
+	return "unavailable";
+}
+
+std::string GetGitBranch()
+{
+#ifdef GIT_BRANCH
+	return ADD_QUOTES(GIT_BRANCH);
+#endif
+	return "unavailable";
+}
+
+std::string GetCurrentBuildVersion()
+{
+#ifdef _DEBUG
+	return "debug";
+#endif
+	return "release";
 }

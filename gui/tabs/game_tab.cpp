@@ -96,7 +96,6 @@ namespace GameTab {
 			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
 				State.Save();
 			}
-
 			ImGui::EndTabItem();
 		}
 	}

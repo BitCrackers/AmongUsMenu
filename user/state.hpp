@@ -113,6 +113,7 @@ public:
     bool FlipSkeld = false;
 
 	bool OcclusionCulling = false;
+    bool ShowUnityLogs = true;
 
     int LobbyTimer = -1;
     
@@ -127,8 +128,7 @@ public:
         NotSet = 0xFF
     } mapType;
 
-    std::optional<ShadowCollab*> shadowLayer;
-    std::optional<SpawnInMinigame*> spawnInGame;
+    bool AutoOpenDoors = false;
 
     void Load();
     void Save();
