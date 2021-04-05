@@ -51,6 +51,7 @@ void Settings::Load() {
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
         j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
+        j.at("MoveInVent").get_to(this->MoveInVent);
 
         j.at("ShowConsole").get_to(this->ShowConsole);
     } catch (...) {
@@ -97,6 +98,7 @@ void Settings::Save() {
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
             {"AutoOpenDoors", this->AutoOpenDoors},
+            {"MoveInVent", this->MoveInVent},
 
             {"ShowConsole", this->ShowConsole}
         };
