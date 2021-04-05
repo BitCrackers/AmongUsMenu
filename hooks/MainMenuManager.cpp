@@ -7,6 +7,6 @@ void dMainMenuManager_Start(MainMenuManager* __this, MethodInfo* method)
 	MainMenuManager_Start(__this, method);
 
 	//This hook is good for one-time initializing at the beginning of the game
-
+	assert(cctor_finished(SaveManager__TypeInfo->_0.klass));
 	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 }

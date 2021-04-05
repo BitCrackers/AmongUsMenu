@@ -11,3 +11,4 @@ Il2CppClass* get_class(std::string classSignature);
 std::string get_method_description(const MethodInfo* methodInfo);
 void output_class_methods(Il2CppClass* klass);
 void output_assembly_methods(const Il2CppAssembly* assembly);
+bool cctor_finished(Il2CppClass* klass);

@@ -63,15 +63,12 @@ bool GameVersionCheck() {
 	return true;
 }
 
-bool cctor_finished(Il2CppClass* klass)
-{
-	while (klass->has_cctor && !klass->cctor_finished);
-	return true;
-}
-
-#define IL2CPP_STATIC_FIELD(f,c,m) \
-	while (c##__TypeInfo->_0.klass->has_cctor && !c##__TypeInfo->_0.klass->cctor_finished); \
-	f = &(c##__TypeInfo->static_fields->m);
+#define GAME_STATIC_POINTER(f,c,m) \
+	do \
+	{ \
+		assert(cctor_finished(c##__TypeInfo->_0.klass)); \
+		f = &(c##__TypeInfo->static_fields->m); \
+	} while (0);
 
 void Run(LPVOID lpParam) {
 #if _DEBUG
@@ -110,14 +107,13 @@ void Run(LPVOID lpParam) {
 	auto klass = il2cpp_class_from_name(assembly->image, "", "ENHLBAECCDF");
 	output_class_methods(klass);*/
 #endif
-
-	IL2CPP_STATIC_FIELD(Game::pAmongUsClient, app::AmongUsClient, Instance);
-	IL2CPP_STATIC_FIELD(Game::pGameData, app::GameData, Instance);
-	IL2CPP_STATIC_FIELD(Game::pGameOptionsData, app::PlayerControl, GameOptions);
-	IL2CPP_STATIC_FIELD(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
-	IL2CPP_STATIC_FIELD(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
-	IL2CPP_STATIC_FIELD(Game::pShipStatus, app::ShipStatus, Instance);
-	IL2CPP_STATIC_FIELD(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
+	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
+	GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
+	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
+	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
+	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
 	/*
 	Game::pAmongUsClient = &(app::AmongUsClient__TypeInfo->static_fields->Instance);
 	Game::pGameData = &(app::GameData__TypeInfo->static_fields->Instance);

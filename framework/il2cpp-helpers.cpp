@@ -227,3 +227,10 @@ void output_assembly_methods(const Il2CppAssembly* assembly) {
 		output_class_methods(const_cast<Il2CppClass*>(il2cpp_image_get_class(assembly->image, i)));
 	}
 }
+
+bool cctor_finished(Il2CppClass* klass)
+{
+	//TODO: Implement timeout and return false
+	while (klass->has_cctor && !klass->cctor_finished);
+	return true;
+}
