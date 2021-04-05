@@ -113,6 +113,7 @@ public:
     bool FlipSkeld = false;
 
 	bool OcclusionCulling = false;
+    bool ShowUnityLogs = true;
 
     int LobbyTimer = -1;
     

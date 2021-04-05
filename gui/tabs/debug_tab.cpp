@@ -30,6 +30,10 @@ namespace DebugTab {
 				State.Save();
 			}
 
+			ImGui::Dummy(ImVec2(4, 4));
+
+			ImGui::Checkbox("Log Unity Debug Messages", &State.ShowUnityLogs);
+
 			ImGui::EndTabItem();
 		}
 	}
