@@ -107,11 +107,12 @@ void Run(LPVOID lpParam) {
 	#define DO_APP_FUNC(r, n, p, s) if(!n) printf("Unable to locate %s\n", #n)
 	#include "il2cpp-functions.h"
 	#undef DO_APP_FUNC
-
+	/*
 	auto domain = il2cpp_domain_get();
 	auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
 	auto klass = il2cpp_class_from_name(assembly->image, "", "MovingPlatformBehaviour");
 	output_class_methods(klass);
+	*/
 #endif
 	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
 	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
