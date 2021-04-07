@@ -368,6 +368,7 @@
     <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\airship.png" />
     <Image Include="resources\mira_hq.png" />
     <Image Include="resources\polus.png" />
     <Image Include="resources\the_skald.png" />
