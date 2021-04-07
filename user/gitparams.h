@@ -1,2 +1,2 @@
-#define GIT_CUR_COMMIT e10e17071e0721b33d9f187dd38da700c209ad5d
+#define GIT_CUR_COMMIT cee355d154593977d15d0de2bf3317e0b1c7df8a
 #define GIT_BRANCH FixEarlyStartup

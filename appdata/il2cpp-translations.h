@@ -52,4 +52,5 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "SetMaskFunction", "NDMKNGFHFJO" },
 	{ "OnPlayerLeft", "FBJJGMOIHOI" },
 	{ "SnapTo", "BNNEAMEFHIG" },
+	{ "SetSide", "BPIJLFKFMMN"},
 };

@@ -96,6 +96,13 @@ namespace GameTab {
 			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
 				State.Save();
 			}
+
+			ImGui::Dummy(ImVec2(4, 4));
+
+			if ((State.mapType == Settings::MapType::Airship) && IsHost() && IsInGame() && ImGui::Button("Switch Moving Platform Side"))
+			{
+				State.rpcQueue.push(new RpcUsePlatform());
+			}
 			ImGui::EndTabItem();
 		}
 	}

@@ -250,6 +250,9 @@
     <ClCompile Include="hooks\MainMenuManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\RpcUsePlatform.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">

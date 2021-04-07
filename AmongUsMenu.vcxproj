@@ -63,6 +63,7 @@
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
+    <ClCompile Include="rpc\RpcUsePlatform.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
