@@ -37,6 +37,7 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "DisconnectReasons"}, {"", "ECELNFALKOB"} },
 	{ {"", "ISystemType"}, {"", "CBFMKGACLNE"} },
 	{ {"", "SwitchSystem"}, {"", "FNEHFOPHPJO"} },
+	{ {"InnerNet", "MessageExtensions"}, {"", "AGJLGGLENOC"}},
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
@@ -53,4 +54,5 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "OnPlayerLeft", "FBJJGMOIHOI" },
 	{ "SnapTo", "BNNEAMEFHIG" },
 	{ "SetSide", "BPIJLFKFMMN"},
+	{ "WriteNetObject", "HPBDHGFGHHN"},
 };
