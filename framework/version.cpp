@@ -82,7 +82,7 @@ DWORD WINAPI Load(LPVOID lpParam) {
 
 	if (applicationPath.filename() != "Among Us.exe") return 0;
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	Run(lpParam);
 
 	return 0;

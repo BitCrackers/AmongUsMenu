@@ -25,4 +25,18 @@ private:
 #define LOG_DEBUG(x) Log.Debug(_log_source, x);
 #define LOG_ERROR(x) Log.Error(_log_source, x);
 
+#define STREAM_DEBUG(x) \
+	do { \
+		std::ostringstream ss; \
+		ss << x; \
+		LOG_DEBUG(ss.str()); \
+	} while (0)
+
+#define STREAM_ERROR(x) \
+	do { \
+		std::ostringstream ss; \
+		ss << x; \
+		LOG_ERROR(ss.str()); \
+	} while (0)
+
 extern Logger Log;

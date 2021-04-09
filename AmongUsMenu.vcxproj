@@ -57,11 +57,13 @@
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
+    <ClCompile Include="hooks\MainMenuManager.cpp" />
     <ClCompile Include="hooks\NoShadowBehaviour.cpp" />
     <ClCompile Include="hooks\PlainDoor.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
+    <ClCompile Include="rpc\RpcUsePlatform.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -366,6 +368,7 @@
     <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\airship.png" />
     <Image Include="resources\mira_hq.png" />
     <Image Include="resources\polus.png" />
     <Image Include="resources\the_skald.png" />

@@ -2,7 +2,9 @@
 #include "il2cpp-helpers.h"
 #include <codecvt>
 #include <optional>
-#include <iostream>
+#include <thread>
+#include <chrono>
+#include "logger.h"
 
 void new_console() {
 	AllocConsole();
@@ -213,7 +215,7 @@ std::string get_method_description(const MethodInfo* methodInfo) {
 
 void output_class_methods(Il2CppClass* klass) {
 	if (klass == NULL) return;
-	std::cout << "output_class_methods(" << klass->name << ")" << std::endl;
+	STREAM_DEBUG("output_class_methods(" << klass->name << ")");
 	void* iterator = NULL;
 	const MethodInfo* method = NULL;
 	while ((method = il2cpp_class_get_methods(klass, &iterator)) != NULL) {
@@ -222,8 +224,32 @@ void output_class_methods(Il2CppClass* klass) {
 }
 
 void output_assembly_methods(const Il2CppAssembly* assembly) {
-	std::cout << "output_assembly_methods(" << assembly->aname.name << ")" << std::endl;
+	STREAM_DEBUG("output_assembly_methods(" << assembly->aname.name << ")");
 	for (size_t i = 0; i < il2cpp_image_get_class_count(assembly->image); i++) {
 		output_class_methods(const_cast<Il2CppClass*>(il2cpp_image_get_class(assembly->image, i)));
 	}
+}
+bool cctor_finished(Il2CppClass* klass)
+{
+	constexpr int CCTOR_TIMEOUT = 5000; //Time in milliseconds to wait for class to initialize
+	int timeout = CCTOR_TIMEOUT; //Five second timeout
+	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
+	//First we wait for the class itself to finish initializing
+	while (!klass->initialized && (timeout >= 0))
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		timeout -= 10;
+	}
+
+	if (timeout <= 0) return false;
+	//Then we wait for the static constructor to finish
+	timeout = CCTOR_TIMEOUT;
+
+	if (!klass->has_cctor) return true; //If we don't have a static constructor, no need to wait
+	while (!klass->cctor_finished && (timeout >= 0))
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		timeout -= 10;
+	}
+	return (timeout > 0);
 }

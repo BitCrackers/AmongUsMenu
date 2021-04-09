@@ -148,18 +148,22 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
+	if ((*Game::pAmongUsClient) == nullptr) return false;
 	return OnlineInLobby && (*Game::pLocalPlayer);
 }
 
 bool IsHost() {
+	if ((*Game::pAmongUsClient) == nullptr) return false;
 	return app::InnerNetClient_get_AmHost((InnerNetClient*)(*Game::pAmongUsClient), NULL);
 }
 
 bool IsInGame() {
+	if ((*Game::pAmongUsClient) == nullptr) return false;
 	return (LocalInGame || OnlineInGame || TutorialScene) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
 }
 
 bool IsInMultiplayerGame() {
+	if ((*Game::pAmongUsClient) == nullptr) return false;
 	return (LocalInGame || OnlineInGame) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
 }
 

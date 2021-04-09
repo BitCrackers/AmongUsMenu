@@ -80,3 +80,9 @@ public:
 	RpcSetName(std::string name);
 	virtual void Process() override;
 };
+
+class RpcUsePlatform : public RPCInterface {
+public:
+	RpcUsePlatform();
+	virtual void Process() override;
+};

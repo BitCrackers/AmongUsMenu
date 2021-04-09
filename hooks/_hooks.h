@@ -59,3 +59,4 @@ void dDebug_LogError(Object* message, MethodInfo* method);
 void dDebug_LogException(Exception* exception, MethodInfo* method);
 void dDebug_LogWarning(Object* message, MethodInfo* method);
 void dVersionShower_Start(VersionShower* __this, MethodInfo* method);
+void dMainMenuManager_Start(MainMenuManager* __this, MethodInfo* method);

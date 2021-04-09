@@ -247,6 +247,12 @@
     <ClCompile Include="hooks\UnityDebug.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\MainMenuManager.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="rpc\RpcUsePlatform.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -426,6 +432,9 @@
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\the_skald.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\airship.png">
       <Filter>resources</Filter>
     </Image>
   </ItemGroup>

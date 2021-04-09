@@ -33,6 +33,8 @@ namespace PlayersTab {
 					ImVec4 nameColor;
 					if (State.RevealImpostors && playerData->fields.IsImpostor)
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
+					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
+						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
 					else
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
 
@@ -42,11 +44,11 @@ namespace PlayersTab {
 				}
 				ImGui::ListBoxFooter();
 
-				bool aum = State.selectedPlayer.is_LocalPlayer();
-				if (!aum) {
-					aum = std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerId());
-				}
-				ImGui::Text("Is using AUM: %s", aum ? "Yes" : "No");
+				ImGui::Text("Is using AUM: %s", 
+					State.selectedPlayer.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerData()->fields.PlayerId)
+					? "Yes" : "No");
+
+
 
 				if (IsInMultiplayerGame() && IsInGame()) {
 					float taskPercentage = (float) (*Game::pGameData)->fields.CompletedTasks / (float) (*Game::pGameData)->fields.TotalTasks;

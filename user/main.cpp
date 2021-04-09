@@ -63,6 +63,20 @@ bool GameVersionCheck() {
 	return true;
 }
 
+#define ToString(s) stringify(s)
+#define stringify(s) #s
+
+#define GAME_STATIC_POINTER(f,c,m) \
+	do \
+	{ \
+		assert(cctor_finished(c##__TypeInfo->_0.klass)); \
+		f = &(c##__TypeInfo->static_fields->m); \
+		std::ostringstream ss; \
+		ss << std::internal << std::setfill('0') << std::hex << std::setw(8) \
+		 << stringify(f) << " is 0x" << f << " -> 0x" << *f; \
+		LOG_DEBUG(ss.str()); \
+	} while (0);
+
 void Run(LPVOID lpParam) {
 #if _DEBUG
 	new_console();
@@ -74,14 +88,13 @@ void Run(LPVOID lpParam) {
 		FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 		return;
 	}
-
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
 	std::ostringstream ss;
 	ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
 	ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
 	ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
-	ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
+	ss << "\tAmong Us Version: " << getGameVersion(); // Log among us info
 	LOG_INFO(ss.str());
 	State.Load();
 #if _DEBUG
@@ -94,26 +107,26 @@ void Run(LPVOID lpParam) {
 	#define DO_APP_FUNC(r, n, p, s) if(!n) printf("Unable to locate %s\n", #n)
 	#include "il2cpp-functions.h"
 	#undef DO_APP_FUNC
-
-	/*auto domain = il2cpp_domain_get();
+	/*
+	auto domain = il2cpp_domain_get();
 	auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
-	auto klass = il2cpp_class_from_name(assembly->image, "", "ENHLBAECCDF");
-	output_class_methods(klass);*/
+	auto klass = il2cpp_class_from_name(assembly->image, "", "MovingPlatformBehaviour");
+	output_class_methods(klass);
+	*/
 #endif
-
-	Game::pAmongUsClient = &(app::AmongUsClient__TypeInfo->static_fields->Instance);
-	Game::pGameData = &(app::GameData__TypeInfo->static_fields->Instance);
-	Game::pGameOptionsData = &(app::PlayerControl__TypeInfo->static_fields->GameOptions);
-	Game::pAllPlayerControls = &(app::PlayerControl__TypeInfo->static_fields->AllPlayerControls);
-	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
-	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
-	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
+	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
+	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
+	GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
+	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
+	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
+	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
 
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
 	if (dwWaitResult != WAIT_OBJECT_0) {
-		std::cout << "Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError() << std::endl;
+		STREAM_ERROR("Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError());
 		return;
 	}
 	
