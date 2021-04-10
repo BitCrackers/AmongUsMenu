@@ -12,9 +12,8 @@
 #include "esp.hpp"
 #include "state.hpp"
 #include "theme.hpp"
-#include <iostream>
 #include <mutex>
-
+#include "logger.h"
 #include "resource_data.h"
 #include "game.h"
 
@@ -29,7 +28,8 @@ ID3D11RenderTargetView* pRenderTargetView;
 D3D_PRESENT_FUNCTION oPresent;
 WNDPROC oWndProc;
 
-HANDLE hPresentMutex;
+HANDLE DirectX::hRenderSemaphore;
+constexpr DWORD MAX_RENDER_THREAD_COUNT = 5; //Should be overkill for our purposes
 
 std::vector<MapTexture> maps = std::vector<MapTexture>();
 
@@ -96,7 +96,11 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG4), pDevice), 162.F, 107.F, 6.F });
 
-        hPresentMutex = CreateMutex(NULL, false, NULL);
+        DirectX::hRenderSemaphore = CreateSemaphore(
+            NULL,                                 // default security attributes
+            MAX_RENDER_THREAD_COUNT,              // initial count
+            MAX_RENDER_THREAD_COUNT,              // maximum count
+            NULL);                                // unnamed semaphore);
 
         return true;
     }
@@ -114,12 +118,12 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         if (ImGuiInitialization(__this)) {
             State.ImGuiInitialized = true;
         } else {
-            ReleaseMutex(hPresentMutex);
+            ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
             return oPresent(__this, SyncInterval, Flags);
         }
     }
 
-    WaitForSingleObject(hPresentMutex, 0); //We're claiming ownership, but we'll be damned if we're going to wait
+    WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
 
     il2cpp_gc_disable();
 
@@ -185,18 +189,20 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     HRESULT result = oPresent(__this, SyncInterval, Flags);
 
-    ReleaseMutex(hPresentMutex);
+    ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
 
     return result;
 }
 
 void DirectX::Shutdown() {
-    assert(hPresentMutex != NULL); //Initialization is now in a hook, so we might as well guard against this
-    assert(WaitForSingleObject(hPresentMutex, INFINITE) == WAIT_OBJECT_0); //Since this is only used on debug builds, we'll leave this for now
+    assert(hRenderSemaphore != NULL); //Initialization is now in a hook, so we might as well guard against this
+    for (uint8_t i = 0; i < MAX_RENDER_THREAD_COUNT; i++) //This ugly little hack means we use up all the render queues so we can end everything
+    {
+        assert(WaitForSingleObject(hRenderSemaphore, INFINITE) == WAIT_OBJECT_0); //Since this is only used on debug builds, we'll leave this for now
+    }
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-    ReleaseMutex(hPresentMutex);
-    CloseHandle(hPresentMutex);
+    CloseHandle(hRenderSemaphore);
 }
