@@ -4,7 +4,7 @@
 #include "state.hpp"
 #include "game.h"
 #include "logger.h"
-#include <sstream>
+#include "utility.h"
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -51,7 +51,8 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             State.HotkeyNoClip = false;
             State.originalName = "-";
         }
-    } else {
+    }
+    else {
         if (!State.rpcQueue.empty()) {
             auto rpc = State.rpcQueue.front();
             State.rpcQueue.pop();
@@ -88,7 +89,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
 
-    if (nameChangeCycleDelay <= 0) {
+    if ((IsInGame() || IsInLobby()) && nameChangeCycleDelay <= 0) {
         if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
             SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
             LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
