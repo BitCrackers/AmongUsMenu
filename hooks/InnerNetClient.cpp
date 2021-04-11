@@ -91,7 +91,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     if ((IsInGame() || IsInLobby()) && nameChangeCycleDelay <= 0) {
         if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
-            SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
             LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
             if (IsInGame())
                 State.rpcQueue.push(new RpcSetName(State.userName));
@@ -108,12 +107,15 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
+    if (data->fields.Character != nullptr) //Found this happens on game ending occasionally
+    {
 #ifdef _DEBUG
-    Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
+        Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
 #endif
-    auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
-    if (it != State.aumUsers.end())
-        State.aumUsers.erase(it);
+        auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
+        if (it != State.aumUsers.end())
+            State.aumUsers.erase(it);
+    }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
