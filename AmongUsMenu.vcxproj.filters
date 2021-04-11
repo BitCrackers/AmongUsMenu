@@ -247,11 +247,11 @@
     <ClCompile Include="hooks\UnityDebug.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\MainMenuManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
     <ClCompile Include="rpc\RpcUsePlatform.cpp">
       <Filter>rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\EOSManager.cpp">
+      <Filter>hooks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

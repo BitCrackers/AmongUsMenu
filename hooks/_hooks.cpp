@@ -96,8 +96,6 @@ void DetourInitilization() {
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
 	HOOKFUNC(NoShadowBehaviour_LateUpdate);
-	HOOKFUNC(ChatController_Update);
-	HOOKFUNC(AccountTab_Open);
 	HOOKFUNC(FollowerCamera_Update);
 	HOOKFUNC(DoorBreakerGame_Start);
 	HOOKFUNC(DoorCardSwipeGame_Begin);
@@ -106,7 +104,10 @@ void DetourInitilization() {
 	HOOKFUNC(Debug_LogException);
 	HOOKFUNC(Debug_LogWarning);
 	HOOKFUNC(VersionShower_Start);
-	HOOKFUNC(MainMenuManager_Start);
+	HOOKFUNC(EOSManager_LoginWithExistingToken);
+	HOOKFUNC(EOSManager_LogInWithDeviceID);
+	HOOKFUNC(EOSManager_LoginWithCorrectPlatform);
+	HOOKFUNC(EOSManager_InitializePlatformInterface);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -117,7 +118,6 @@ void DetourUninitialization()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
-	UNHOOKFUNC(MainMenuManager_Start);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(HatManager_GetUnlockedHats);
@@ -163,8 +163,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
-	UNHOOKFUNC(ChatController_Update);
-	UNHOOKFUNC(AccountTab_Open);
 	UNHOOKFUNC(FollowerCamera_Update);
 	UNHOOKFUNC(DoorBreakerGame_Start);
 	UNHOOKFUNC(DoorCardSwipeGame_Begin);
@@ -173,6 +171,10 @@ void DetourUninitialization()
 	UNHOOKFUNC(Debug_LogException);
 	UNHOOKFUNC(Debug_LogWarning);
 	UNHOOKFUNC(VersionShower_Start);
+	UNHOOKFUNC(EOSManager_LoginWithExistingToken);
+	UNHOOKFUNC(EOSManager_LogInWithDeviceID);
+	UNHOOKFUNC(EOSManager_LoginWithCorrectPlatform);
+	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

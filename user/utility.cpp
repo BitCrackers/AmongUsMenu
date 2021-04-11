@@ -478,12 +478,6 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 bool IsAirshipSpawnLocation(Vector2 vec)
 {
 	return (State.mapType == Settings::MapType::Airship);
-
-	// unreachable code
-	if (Equals(vec, { -25.f, 40.f })) return true;
-	if (Equals(vec, { -0.66f, -0.5f })) return true;
-
-	return false;
 }
 
 Vector2 Rotate(Vector2 vec, float degrees)
@@ -523,12 +517,4 @@ std::string GetGitBranch()
 	return ADD_QUOTES(GIT_BRANCH);
 #endif
 	return "unavailable";
-}
-
-std::string GetCurrentBuildVersion()
-{
-#ifdef _DEBUG
-	return "debug";
-#endif
-	return "release";
 }

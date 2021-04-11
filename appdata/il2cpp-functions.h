@@ -163,3 +163,9 @@ DO_APP_FUNC(void, Debug_LogException, (Exception* exception, MethodInfo* method)
 DO_APP_FUNC(void, Debug_LogWarning, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogWarning(System.Object)");
 DO_APP_FUNC(String*, Object_ToString, (Object* __this, MethodInfo* method), "mscorlib, System.String System.Object::ToString()");
 DO_APP_FUNC(void, VersionShower_Start, (VersionShower* __this, MethodInfo* method), "Assembly-CSharp, System.Void VersionShower::Start()");
+
+DO_APP_FUNC(void, EOSManager_LogInWithDeviceID, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LogInWithDeviceID()");
+DO_APP_FUNC(void, EOSManager_LoginWithExistingToken, (EOSManager* __this, ExternalCredentialType__Enum OGDJNOBMALG, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginWithExistingToken(Epic.OnlineServices.ExternalCredentialType)");
+DO_APP_FUNC(void, EOSManager_HasSignedIn, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::HasSignedIn()");
+DO_APP_FUNC(void, EOSManager_LoginWithCorrectPlatform, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginWithCorrectPlatform()");
+DO_APP_FUNC(void, EOSManager_InitializePlatformInterface, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::InitializePlatformInterface()");

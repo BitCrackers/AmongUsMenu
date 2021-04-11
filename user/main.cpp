@@ -122,6 +122,9 @@ void Run(LPVOID lpParam) {
 	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
 	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
 
+	assert(cctor_finished(SaveManager__TypeInfo->_0.klass));
+	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
