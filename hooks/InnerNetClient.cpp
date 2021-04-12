@@ -163,6 +163,8 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 }
 
 void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 position, uint16_t minSid, MethodInfo* method) {
+    //Leave this out until we fix it.
+    /*
     if (!IsInGame()) {
         CustomNetworkTransform_SnapTo(__this, position, minSid, method);
         return;
@@ -175,11 +177,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
             break;
         }
     }
-
     if (bogusTransformSnap(player, position))
     {
         State.events.push_back(new CheatDetectedEvent(GetEventPlayer(player.get_PlayerControl()), CHEAT_TELEPORT));
     }
+    */
 
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }
