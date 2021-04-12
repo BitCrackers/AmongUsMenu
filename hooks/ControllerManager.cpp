@@ -1,16 +1,23 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "logger.h"
+#include "utility.h"
 
 void dControllerManager_CloseOverlayMenu(ControllerManager* __this, String* menuName, MethodInfo* method)
 {
 	auto currentMenuName = __this->fields.CurrentUiState->fields.MenuName;
-
-	//This bug is present as Innersloth somehow cloned MeetingHub, and it does not reset controller input upon closing
-	ControllerManager_CloseOverlayMenu(__this, menuName, method);
-	if (convert_from_string(menuName) == "ChatUi" && convert_from_string(currentMenuName) == "MeetingHub(Clone)")
+	/*
+	std::vector<ControllerUiElementsState*> uiStack = GetElementsFromList<List_1_ControllerUiElementsState_*, ControllerUiElementsState*>(__this->fields.CurrentUiStateStack);
+	STREAM_DEBUG("Ui Stack Count: " << uiStack.size());
+	for (ControllerUiElementsState* uiElement : uiStack)
 	{
-		LOG_INFO("Reset ControllerManager Input to fix Innersloth movement bug");
-		ControllerManager_ResetAll(__this, NULL);
+		STREAM_DEBUG("Ui Stack " << convert_from_string(uiElement->fields.MenuName));
 	}
+	*/
+	if (convert_from_string(menuName) == "MeetingHub(Clone)" && convert_from_string(currentMenuName) == "PlayerButton(Clone)")
+	{
+		LOG_INFO("Close PlayerButton before MeetingHub to fix Innersloth movement bug");
+		ControllerManager_CloseOverlayMenu(__this, currentMenuName, method);
+	}
+	ControllerManager_CloseOverlayMenu(__this, menuName, method);
 }
