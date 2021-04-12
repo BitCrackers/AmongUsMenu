@@ -24,11 +24,11 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		if (playerData && localData) {
 			if (State.RevealImpostors || localData->fields.IsImpostor)
-				playerVoteArea->fields.NameText->fields.Color = playerData->fields.IsImpostor
+				playerVoteArea->fields.NameText->fields._.m_fontColor = playerData->fields.IsImpostor
 				? Palette__TypeInfo->static_fields->ImpostorRed
 				: Palette__TypeInfo->static_fields->White;
 			else
-				playerVoteArea->fields.NameText->fields.Color = Palette__TypeInfo->static_fields->White;
+				playerVoteArea->fields.NameText->fields._.m_fontColor = Palette__TypeInfo->static_fields->White;
 		}
 
 		// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them

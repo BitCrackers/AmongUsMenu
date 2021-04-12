@@ -35,7 +35,7 @@ DO_APP_FUNC(float, AirshipStatus_CalculateLightRadius, (AirshipStatus* __this, G
 DO_APP_FUNC(bool, AutoOpenDoor_DoUpdate, (AutoOpenDoor* __this, float dt, MethodInfo* method), "Assembly-CSharp, System.Boolean AutoOpenDoor::DoUpdate(System.Single)");
 
 DO_APP_FUNC(void, NoShadowBehaviour_LateUpdate, (NoShadowBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void NoShadowBehaviour::LateUpdate()");
-DO_APP_FUNC(void, NoShadowBehaviour_SetMaskFunction, (NoShadowBehaviour * __this, int32_t func, MethodInfo * method), "Assembly-CSharp, System.Void NoShadowBehaviour::SetMaskFunction(System.Int32)");
+DO_APP_FUNC(void, NoShadowBehaviour_SetMaskFunction, (NoShadowBehaviour* __this, int32_t func, MethodInfo* method), "Assembly-CSharp, System.Void NoShadowBehaviour::SetMaskFunction(System.Int32)");
 
 DO_APP_FUNC(Vector3, Camera_ScreenToWorldPoint, (Camera* __this, Vector3 position, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Vector3 UnityEngine.Camera::ScreenToWorldPoint(UnityEngine.Vector3)");
 
@@ -83,7 +83,7 @@ DO_APP_FUNC(void, PlayerControl_RpcPlayAnimation, (PlayerControl* __this, uint8_
 DO_APP_FUNC(void, PlayerControl_CmdReportDeadBody, (PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdReportDeadBody(GameData.PlayerInfo)");
 DO_APP_FUNC(void, PlayerControl_MurderPlayer, (PlayerControl* __this, PlayerControl* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::MurderPlayer(PlayerControl)");
 DO_APP_FUNC(void, PlayerControl_RpcMurderPlayer, (PlayerControl* __this, PlayerControl* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcMurderPlayer(PlayerControl)");
-DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method), "Assembly-CSharp, System.Void PlayerControl::ReportDeadBody(GameData.PlayerInfo)");
+DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ReportDeadBody(GameData.PlayerInfo)");
 DO_APP_FUNC(void, PlayerControl_RpcSetInfected, (PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetInfected(GameData.PlayerInfo[])");
 DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetScanner(System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_SetColor, (PlayerControl* __this, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetColor(System.Int32)");

@@ -49,9 +49,13 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "6df51577") {
+	if (GetCRC32(gameAssembly) != "9c4a74df") {
 		Log.Error("GameAssembly.dll is either not the right version or corrupted");
+		std::string test = GetCRC32(gameAssembly);
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		std::wstring stemp = std::wstring(test.begin(), test.end());
+		LPCWSTR sw = stemp.c_str();
+		MessageBox(NULL, sw, L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
