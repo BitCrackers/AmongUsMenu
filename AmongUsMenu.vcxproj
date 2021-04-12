@@ -51,6 +51,7 @@
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
     <ClCompile Include="hooks\AirshipStatus.cpp" />
     <ClCompile Include="hooks\Camera.cpp" />
+    <ClCompile Include="hooks\ControllerManager.cpp" />
     <ClCompile Include="hooks\DirectX.cpp" />
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\EOSManager.cpp" />

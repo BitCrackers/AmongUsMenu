@@ -61,3 +61,4 @@ void dEOSManager_LogInWithDeviceID(EOSManager* __this, MethodInfo* method);
 void dEOSManager_LoginWithExistingToken(EOSManager* __this, ExternalCredentialType__Enum externalCredentialType, MethodInfo* method);
 void dEOSManager_LoginWithCorrectPlatform(EOSManager* __this, MethodInfo* method);
 void dEOSManager_InitializePlatformInterface(EOSManager* __this, MethodInfo* method);
+void dControllerManager_CloseOverlayMenu(ControllerManager* __this, String* menuName, MethodInfo* method);
