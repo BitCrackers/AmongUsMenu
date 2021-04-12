@@ -92,8 +92,8 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if ((IsInGame() || IsInLobby()))
     {
         if (nameChangeCycleDelay <= 0) {
-            
-            if ((convert_from_string(PlayerSelection(*Game::pLocalPlayer).get_PlayerData()->fields.PlayerName) != State.userName) && !State.userName.empty()) {
+            auto localPlayer = PlayerSelection(*Game::pLocalPlayer);
+            if (localPlayer.has_value() && (convert_from_string(localPlayer.get_PlayerData()->fields.PlayerName) != State.userName) && !State.userName.empty()) {
                 STREAM_DEBUG("Name mismatch \"" << convert_from_string(PlayerSelection(*Game::pLocalPlayer).get_PlayerData()->fields.PlayerName) << "\", setting name to \"" << State.userName << "\"");
                 if (IsInGame())
                     State.rpcQueue.push(new RpcSetName(State.userName));
