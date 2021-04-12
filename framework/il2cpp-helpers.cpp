@@ -235,13 +235,14 @@ bool cctor_finished(Il2CppClass* klass)
 	int timeout = CCTOR_TIMEOUT; //Five second timeout
 	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
 	//First we wait for the class itself to finish initializing
+	/* Skipping this check for now as the 2021.04.12s is not initializing for some reason
 	while (!klass->initialized && (timeout >= 0))
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		timeout -= 10;
 	}
 
-	if (timeout <= 0) return false;
+	if (timeout <= 0) return false; */
 	//Then we wait for the static constructor to finish
 	timeout = CCTOR_TIMEOUT;
 
