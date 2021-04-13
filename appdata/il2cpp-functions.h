@@ -169,6 +169,3 @@ DO_APP_FUNC(void, EOSManager_LoginWithExistingToken, (EOSManager* __this, Extern
 DO_APP_FUNC(void, EOSManager_HasSignedIn, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::HasSignedIn()");
 DO_APP_FUNC(void, EOSManager_LoginWithCorrectPlatform, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginWithCorrectPlatform()");
 DO_APP_FUNC(void, EOSManager_InitializePlatformInterface, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::InitializePlatformInterface()");
-
-DO_APP_FUNC(void, ControllerManager_ResetAll, (ControllerManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void ControllerManager::ResetAll()");
-DO_APP_FUNC(void, ControllerManager_CloseOverlayMenu, (ControllerManager* __this, String* menuName, MethodInfo* method), "Assembly-CSharp, System.Void ControllerManager::CloseOverlayMenu(System.String)");

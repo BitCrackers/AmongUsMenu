@@ -9,4 +9,3 @@ DO_APP_CLASS(GameOptionsData, "Assembly-CSharp, GameOptionsData");
 DO_APP_CLASS(Camera, "UnityEngine.CoreModule, UnityEngine.Camera");
 DO_APP_CLASS(LobbyBehaviour, "Assembly-CSharp, LobbyBehaviour");
 DO_APP_CLASS(SaveManager, "Assembly-CSharp, SaveManager");
-DO_APP_CLASS(ControllerManager, "Assembly-CSharp, ControllerManager");

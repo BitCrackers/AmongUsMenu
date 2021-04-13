@@ -108,7 +108,6 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_LogInWithDeviceID);
 	HOOKFUNC(EOSManager_LoginWithCorrectPlatform);
 	HOOKFUNC(EOSManager_InitializePlatformInterface);
-	HOOKFUNC(ControllerManager_CloseOverlayMenu);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -176,7 +175,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_LogInWithDeviceID);
 	UNHOOKFUNC(EOSManager_LoginWithCorrectPlatform);
 	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
-	UNHOOKFUNC(ControllerManager_CloseOverlayMenu);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
