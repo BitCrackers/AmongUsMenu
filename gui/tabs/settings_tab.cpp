@@ -28,7 +28,7 @@ namespace SettingsTab {
 			}
 			ImGui::Dummy(ImVec2(4, 4));
 #endif
-			if (IsInGame() || IsInLobby()) //Main menu can change the game normally now
+			//Change this to in game only once account is overridden
 			{
 				char* nameBuffer[12]{ const_cast<char*>(State.userName.c_str()) };
 				if (ImGui::InputText("PlayerName", *nameBuffer, IM_ARRAYSIZE(nameBuffer))) {
