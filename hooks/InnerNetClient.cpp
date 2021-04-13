@@ -89,26 +89,19 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
 
-    if ((IsInGame() || IsInLobby()))
-    {
-        if (nameChangeCycleDelay <= 0) {
-            auto localPlayer = PlayerSelection(*Game::pLocalPlayer);
-            if (localPlayer.has_value() && (convert_from_string(localPlayer.get_PlayerData()->fields.PlayerName) != State.userName) && !State.userName.empty()) {
-                STREAM_DEBUG("Name mismatch \"" << convert_from_string(PlayerSelection(*Game::pLocalPlayer).get_PlayerData()->fields.PlayerName) << "\", setting name to \"" << State.userName << "\"");
-                if (IsInGame())
-                    State.rpcQueue.push(new RpcSetName(State.userName));
-                else if (IsInLobby())
-                    State.lobbyRpcQueue.push(new RpcSetName(State.userName));
-                nameChangeCycleDelay = 100; //Should be approximately two second
-            }
-        }
-        else {
-            nameChangeCycleDelay--;
+    if (nameChangeCycleDelay <= 0) {
+        if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
+            SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
+            LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
+            if (IsInGame())
+                State.rpcQueue.push(new RpcSetName(State.userName));
+            else if (IsInLobby())
+                State.lobbyRpcQueue.push(new RpcSetName(State.userName));
+            nameChangeCycleDelay = 100; //Should be approximately two second
         }
     }
-    else
-    {
-        State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+    else {
+        nameChangeCycleDelay--;
     }
 
     InnerNetClient_Update(__this, method);
