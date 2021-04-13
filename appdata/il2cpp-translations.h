@@ -62,5 +62,4 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "SnapTo", "ODDILDEGEOD" },
 	{ "SetSide", "OMLGOAEHPKJ"},
 	{ "WriteNetObject", "HHECOFHJFEE"},
-	{ "InitializePlatformInterface", "PLMCCAHGEHD"},
 };

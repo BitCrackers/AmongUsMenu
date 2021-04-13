@@ -164,8 +164,11 @@ DO_APP_FUNC(void, Debug_LogWarning, (Object* message, MethodInfo* method), "Unit
 DO_APP_FUNC(String*, Object_ToString, (Object* __this, MethodInfo* method), "mscorlib, System.String System.Object::ToString()");
 DO_APP_FUNC(void, VersionShower_Start, (VersionShower* __this, MethodInfo* method), "Assembly-CSharp, System.Void VersionShower::Start()");
 
-DO_APP_FUNC(void, EOSManager_LogInWithDeviceID, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LogInWithDeviceID()");
-DO_APP_FUNC(void, EOSManager_LoginWithExistingToken, (EOSManager* __this, ExternalCredentialType__Enum OGDJNOBMALG, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginWithExistingToken(Epic.OnlineServices.ExternalCredentialType)");
-DO_APP_FUNC(void, EOSManager_HasSignedIn, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::HasSignedIn()");
-DO_APP_FUNC(void, EOSManager_LoginWithCorrectPlatform, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginWithCorrectPlatform()");
+DO_APP_FUNC(void, EOSManager_LoginFromAccountTab, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginFromAccountTab()");
+DO_APP_FUNC(void, EOSManager_LoginForKWS, (EOSManager* __this, bool allowOffline, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::LoginForKWS(System.Boolean)");
+DO_APP_FUNC(bool, EOSManager_HasFinishedLoginFlow, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean EOSManager::HasFinishedLoginFlow()");
 DO_APP_FUNC(void, EOSManager_InitializePlatformInterface, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::InitializePlatformInterface()");
+DO_APP_FUNC(void, EOSManager_DeleteDeviceID, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::DeleteDeviceID()");
+DO_APP_FUNC(void, EOSManager_BeginLoginFlow, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::BeginLoginFlow()");
+DO_APP_FUNC(void, EOSManager_ReallyBeginFlow, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::ReallyBeginFlow()");
+DO_APP_FUNC(bool, EOSManager_IsFreechatAllowed, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean EOSManager::IsFreechatAllowed()");

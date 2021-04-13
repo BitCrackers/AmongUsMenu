@@ -104,10 +104,12 @@ void DetourInitilization() {
 	HOOKFUNC(Debug_LogException);
 	HOOKFUNC(Debug_LogWarning);
 	HOOKFUNC(VersionShower_Start);
-	HOOKFUNC(EOSManager_LoginWithExistingToken);
-	HOOKFUNC(EOSManager_LogInWithDeviceID);
-	HOOKFUNC(EOSManager_LoginWithCorrectPlatform);
+	HOOKFUNC(EOSManager_LoginFromAccountTab);
+	HOOKFUNC(EOSManager_LoginForKWS);
 	HOOKFUNC(EOSManager_InitializePlatformInterface);
+	HOOKFUNC(EOSManager_BeginLoginFlow);
+	HOOKFUNC(EOSManager_ReallyBeginFlow);
+	HOOKFUNC(EOSManager_IsFreechatAllowed);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -171,10 +173,12 @@ void DetourUninitialization()
 	UNHOOKFUNC(Debug_LogException);
 	UNHOOKFUNC(Debug_LogWarning);
 	UNHOOKFUNC(VersionShower_Start);
-	UNHOOKFUNC(EOSManager_LoginWithExistingToken);
-	UNHOOKFUNC(EOSManager_LogInWithDeviceID);
-	UNHOOKFUNC(EOSManager_LoginWithCorrectPlatform);
+	UNHOOKFUNC(EOSManager_LoginFromAccountTab);
+	UNHOOKFUNC(EOSManager_LoginForKWS);
 	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
+	UNHOOKFUNC(EOSManager_BeginLoginFlow);
+	UNHOOKFUNC(EOSManager_ReallyBeginFlow);
+	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
