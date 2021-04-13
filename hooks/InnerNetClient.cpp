@@ -110,9 +110,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
     if (data->fields.Character != nullptr) //Found this happens on game ending occasionally
     {
-#ifdef _DEBUG
-        Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
-#endif
+        Log.Debug(convert_from_string(data->fields.Character->fields._cachedData->fields.PlayerName) + " has left the game.");
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
