@@ -33,18 +33,18 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
-		TextRenderer* nameText = (TextRenderer*)(__this->fields.nameText);
+		auto nameTextTMP = __this->fields.nameText->fields._;
 
 		if (!playerData || !localData)
 			return;
-
+		
 		if (State.RevealImpostors || localData->fields.IsImpostor)
-			nameText->fields.Color = playerData->fields.IsImpostor
+			nameTextTMP.m_fontColor = playerData->fields.IsImpostor
 			? Palette__TypeInfo->static_fields->ImpostorRed
 			: Palette__TypeInfo->static_fields->White;
 		else
-			nameText->fields.Color = Palette__TypeInfo->static_fields->White;
-
+			nameTextTMP.m_fontColor = Palette__TypeInfo->static_fields->White;
+			
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
