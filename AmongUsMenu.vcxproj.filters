@@ -106,9 +106,6 @@
     <ClCompile Include="hooks\PlayerControl.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\SceneManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
     <ClCompile Include="hooks\ShipStatus.cpp">
       <Filter>hooks</Filter>
     </ClCompile>

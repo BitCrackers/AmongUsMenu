@@ -219,7 +219,7 @@ void output_class_methods(Il2CppClass* klass) {
 	void* iterator = NULL;
 	const MethodInfo* method = NULL;
 	while ((method = il2cpp_class_get_methods(klass, &iterator)) != NULL) {
-		std::cout << get_method_description(method) << std::endl;
+		STREAM_DEBUG(get_method_description(method));;
 	}
 }
 

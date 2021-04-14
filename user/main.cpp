@@ -128,11 +128,11 @@ void Run(LPVOID lpParam) {
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
+	
 	if (dwWaitResult != WAIT_OBJECT_0) {
 		STREAM_ERROR("Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError());
 		return;
 	}
-	
 	DetourUninitialization();
 	fclose(stdout);
 	FreeConsole();
