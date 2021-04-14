@@ -68,6 +68,28 @@ namespace PlayersTab {
 				}
 				if (State.selectedPlayer.has_value())
 				{
+					if (State.selectedPlayer.is_LocalPlayer())
+					{
+						if (ImGui::Button("Reset Impersonation"))
+						{
+							if (IsInGame())
+							{
+								State.rpcQueue.push(new RpcSetColor(State.originalColor));
+								State.rpcQueue.push(new RpcSetPet(State.originalPet));
+								State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
+								State.rpcQueue.push(new RpcSetHat(State.originalHat));
+								State.rpcQueue.push(new RpcSetName(State.originalName));
+							}
+							else if (IsInLobby())
+							{
+								State.lobbyRpcQueue.push(new RpcSetColor(State.originalColor));
+								State.lobbyRpcQueue.push(new RpcSetPet(State.originalPet));
+								State.lobbyRpcQueue.push(new RpcSetSkin(State.originalSkin));
+								State.lobbyRpcQueue.push(new RpcSetHat(State.originalHat));
+								State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
+							}
+						}
+					}
 					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 						ImGui::NewLine();
 						if (ImGui::Button("Report Body")) {
@@ -100,17 +122,30 @@ namespace PlayersTab {
 					}
 					else if(!State.selectedPlayer.is_LocalPlayer()) {
 						if ((IsInMultiplayerGame() || IsInLobby()) && ImGui::Button("Steal Name")) {
-							if (convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName).length() < 10) {
-								if(IsInGame())
-									State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
+							ImpersonateName(State.selectedPlayer);
+						}
+					}
+					if ((IsInGame() || IsInLobby())) {
+						if (!State.selectedPlayer.is_LocalPlayer()) {
+							if (ImGui::Button("Impersonate")) {
+								auto petId = State.selectedPlayer.get_PlayerData()->fields.PetId;
+								auto skinId = State.selectedPlayer.get_PlayerData()->fields.SkinId;
+								auto hatId = State.selectedPlayer.get_PlayerData()->fields.HatId;
+								ImpersonateName(State.selectedPlayer);
+								if (IsInGame())
+								{
+									State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
+									State.rpcQueue.push(new RpcSetPet(petId));
+									State.rpcQueue.push(new RpcSetSkin(skinId));
+									State.rpcQueue.push(new RpcSetHat(hatId));
+								}
 								else if (IsInLobby())
-									State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName) + " "));
-							}
-							else {
-								if(IsInGame())
-									State.rpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
-								else if(IsInLobby())
-									State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(State.selectedPlayer.get_PlayerData()->fields.PlayerName)));
+								{
+									State.lobbyRpcQueue.push(new RpcSetColor(GetRandomColorId()));
+									State.lobbyRpcQueue.push(new RpcSetPet(petId));
+									State.lobbyRpcQueue.push(new RpcSetSkin(skinId));
+									State.lobbyRpcQueue.push(new RpcSetHat(hatId));
+								}
 							}
 						}
 					}

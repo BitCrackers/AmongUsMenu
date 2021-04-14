@@ -3,6 +3,7 @@
 #include "state.hpp"
 #include "game.h"
 #include "gitparams.h"
+#include "logger.h"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -517,4 +518,73 @@ std::string GetGitBranch()
 	return ADD_QUOTES(GIT_BRANCH);
 #endif
 	return "unavailable";
+}
+
+void ImpersonateName(PlayerSelection player)
+{
+	if (!(IsInGame() || IsInLobby())) return;
+	if (convert_from_string(player.get_PlayerData()->fields.PlayerName).length() < 10) {
+		if (IsInGame())
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+		else if (IsInLobby())
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+	}
+	else {
+		if (IsInGame())
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+		else if (IsInLobby())
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+	}
+}
+
+int GetRandomColorId()
+{
+	int colorId = 0;
+	if (IsInGame() || IsInLobby())
+	{
+		auto players = GetAllPlayerControl();
+		std::vector<int> availableColors = { };
+		for (int i = 0; i < 12; i++)
+		{
+			bool colorAvailable = true;
+			for (PlayerControl* player : players)
+			{
+				if (i == GetPlayerData(player)->fields.ColorId)
+				{
+					colorAvailable = false;
+					break;
+				}
+			}
+
+			if (colorAvailable)
+				availableColors.push_back(i);
+		}
+
+		colorId = availableColors.at(randi(0, availableColors.size() - 1));
+	}
+	else
+	{
+		colorId = randi(0, 11);
+	}
+	return colorId;
+}
+
+void SaveOriginalAppearance()
+{
+	PlayerSelection player = *Game::pLocalPlayer;
+	LOG_DEBUG("Set appearance values to current player");
+	State.originalName = convert_from_string(player.get_PlayerData()->fields.PlayerName);
+	State.originalSkin = player.get_PlayerData()->fields.SkinId;
+	State.originalHat = player.get_PlayerData()->fields.HatId;
+	State.originalPet = player.get_PlayerData()->fields.PetId;
+	State.originalColor = player.get_PlayerData()->fields.ColorId;
+}
+
+void ResetOriginalAppearance()
+{
+	LOG_DEBUG("Reset appearance values to invalid");
+	State.originalSkin = 0xFF;
+	State.originalHat = 0xFF;
+	State.originalPet = 0xFF;
+	State.originalColor = 0xFF;
 }

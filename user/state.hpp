@@ -104,6 +104,10 @@ public:
 
 	int SelectedColorId = 0;
     std::string originalName = "-";
+    uint32_t originalSkin = 0xFF;
+    uint32_t originalHat = 0xFF;
+    uint32_t originalPet = 0xFF;
+    uint8_t originalColor = 0xFF;
 
     PlayerSelection playerToFollow;
 
