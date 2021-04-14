@@ -49,7 +49,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "6df51577") {
+	if (GetCRC32(gameAssembly) != "9c4a74df") {
 		Log.Error("GameAssembly.dll is either not the right version or corrupted");
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
@@ -121,6 +121,9 @@ void Run(LPVOID lpParam) {
 	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
 	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
 	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+
+	assert(cctor_finished(SaveManager__TypeInfo->_0.klass));
+	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 
 	DetourInitilization();
 #if _DEBUG

@@ -33,18 +33,27 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
-		TextRenderer* nameText = (TextRenderer*)(__this->fields.nameText);
+		auto nameTextTMP = __this->fields.nameText;
 
 		if (!playerData || !localData)
 			return;
+		
+		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
+		if (State.RevealImpostors || localData->fields.IsImpostor) {
+			Color32 c = app::Color32_op_Implicit(playerData->fields.IsImpostor
+				? Palette__TypeInfo->static_fields->ImpostorRed
+				: Palette__TypeInfo->static_fields->White, NULL);
 
-		if (State.RevealImpostors || localData->fields.IsImpostor)
-			nameText->fields.Color = playerData->fields.IsImpostor
-			? Palette__TypeInfo->static_fields->ImpostorRed
-			: Palette__TypeInfo->static_fields->White;
-		else
-			nameText->fields.Color = Palette__TypeInfo->static_fields->White;
 
+			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
+			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
+		}
+		else {
+			Color32 c = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
+			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
+			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
+		}
+			
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 

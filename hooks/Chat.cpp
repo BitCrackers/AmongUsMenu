@@ -49,3 +49,10 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 	}
 	ChatBubble_SetName(__this, playerName, isDead, voted, color, method);
 }
+
+void dChatController_Update(ChatController* __this, MethodInfo* method)
+{
+	SaveManager__TypeInfo->static_fields->chatModeType = 1;
+	SaveManager__TypeInfo->static_fields->isGuest = false;
+	ChatController_Update(__this, method);
+}

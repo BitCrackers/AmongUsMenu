@@ -219,7 +219,7 @@ void output_class_methods(Il2CppClass* klass) {
 	void* iterator = NULL;
 	const MethodInfo* method = NULL;
 	while ((method = il2cpp_class_get_methods(klass, &iterator)) != NULL) {
-		std::cout << get_method_description(method) << std::endl;
+		STREAM_DEBUG(get_method_description(method));
 	}
 }
 
@@ -235,7 +235,7 @@ bool cctor_finished(Il2CppClass* klass)
 	int timeout = CCTOR_TIMEOUT; //Five second timeout
 	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
 	//First we wait for the class itself to finish initializing
-	while (!klass->initialized && (timeout >= 0))
+	while (!(klass->initialized || klass->initialized_and_no_error) && (timeout >= 0)) //Bails on either initialization setting
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		timeout -= 10;

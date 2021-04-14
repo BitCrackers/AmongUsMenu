@@ -4,7 +4,7 @@
 #include "state.hpp"
 #include "game.h"
 #include "logger.h"
-#include <sstream>
+#include "utility.h"
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -51,7 +51,8 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             State.HotkeyNoClip = false;
             State.originalName = "-";
         }
-    } else {
+    }
+    else {
         if (!State.rpcQueue.empty()) {
             auto rpc = State.rpcQueue.front();
             State.rpcQueue.pop();
@@ -107,12 +108,13 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
-#ifdef _DEBUG
-    Log.Debug(convert_from_string(data->fields.Character->fields.nameText->fields.Text) + " has left the game.");
-#endif
-    auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
-    if (it != State.aumUsers.end())
-        State.aumUsers.erase(it);
+    if (data->fields.Character != nullptr) //Found this happens on game ending occasionally
+    {
+        Log.Debug(convert_from_string(data->fields.Character->fields._cachedData->fields.PlayerName) + " has left the game.");
+        auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
+        if (it != State.aumUsers.end())
+            State.aumUsers.erase(it);
+    }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
@@ -152,6 +154,8 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 }
 
 void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 position, uint16_t minSid, MethodInfo* method) {
+    //Leave this out until we fix it.
+    /*
     if (!IsInGame()) {
         CustomNetworkTransform_SnapTo(__this, position, minSid, method);
         return;
@@ -164,11 +168,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
             break;
         }
     }
-
     if (bogusTransformSnap(player, position))
     {
         State.events.push_back(new CheatDetectedEvent(GetEventPlayer(player.get_PlayerControl()), CHEAT_TELEPORT));
     }
+    */
 
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }

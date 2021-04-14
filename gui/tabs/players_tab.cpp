@@ -44,10 +44,12 @@ namespace PlayersTab {
 				}
 				ImGui::ListBoxFooter();
 
-				ImGui::Text("Is using AUM: %s", 
-					State.selectedPlayer.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerData()->fields.PlayerId)
-					? "Yes" : "No");
-
+				if (State.selectedPlayer.has_value() && State.selectedPlayer.get_PlayerData() != NULL) //Upon first startup no player is selected.  Also rare case where the playerdata is deleted before the next gui cycle
+				{
+					ImGui::Text("Is using AUM: %s",
+						State.selectedPlayer.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerData()->fields.PlayerId)
+						? "Yes" : "No");
+				}
 
 
 				if (IsInMultiplayerGame() && IsInGame()) {
