@@ -88,6 +88,7 @@ namespace PlayersTab {
 								State.lobbyRpcQueue.push(new RpcSetHat(State.originalHat));
 								State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
 							}
+							State.activeImpersonation = false;
 						}
 					}
 					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
@@ -146,6 +147,7 @@ namespace PlayersTab {
 									State.lobbyRpcQueue.push(new RpcSetSkin(skinId));
 									State.lobbyRpcQueue.push(new RpcSetHat(hatId));
 								}
+								State.activeImpersonation = true;
 							}
 						}
 					}
