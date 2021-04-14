@@ -578,6 +578,7 @@ void SaveOriginalAppearance()
 	State.originalHat = player.get_PlayerData()->fields.HatId;
 	State.originalPet = player.get_PlayerData()->fields.PetId;
 	State.originalColor = player.get_PlayerData()->fields.ColorId;
+	State.activeImpersonation = false;
 }
 
 void ResetOriginalAppearance()

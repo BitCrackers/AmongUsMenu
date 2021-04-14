@@ -68,7 +68,7 @@ namespace PlayersTab {
 				}
 				if (State.selectedPlayer.has_value())
 				{
-					if (State.selectedPlayer.is_LocalPlayer())
+					if (State.selectedPlayer.is_LocalPlayer() && State.activeImpersonation)
 					{
 						if (ImGui::Button("Reset Impersonation"))
 						{
