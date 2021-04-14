@@ -172,3 +172,5 @@ DO_APP_FUNC(void, EOSManager_DeleteDeviceID, (EOSManager* __this, MethodInfo* me
 DO_APP_FUNC(void, EOSManager_BeginLoginFlow, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::BeginLoginFlow()");
 DO_APP_FUNC(void, EOSManager_ReallyBeginFlow, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void EOSManager::ReallyBeginFlow()");
 DO_APP_FUNC(bool, EOSManager_IsFreechatAllowed, (EOSManager* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean EOSManager::IsFreechatAllowed()");
+DO_APP_FUNC(void, TutorialManager_Awake, (TutorialManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void TutorialManager::Awake()");
+DO_APP_FUNC(void, TutorialManager_OnDestroy, (TutorialManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void TutorialManager::OnDestroy()");

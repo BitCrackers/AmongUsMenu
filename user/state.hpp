@@ -27,7 +27,7 @@ public:
     bool showDebugTab = false;
 #endif
 
-    std::string CurrentScene;
+    bool Tutorial;
 
     bool MaxVision = false;
     float PrevPlayerSpeed = 1.f;
