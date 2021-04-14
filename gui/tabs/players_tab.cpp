@@ -66,31 +66,31 @@ namespace PlayersTab {
 						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
 				}
+				if (State.activeImpersonation)
+				{
+					if (ImGui::Button("Reset Impersonation"))
+					{
+						if (IsInGame())
+						{
+							State.rpcQueue.push(new RpcSetColor(State.originalColor));
+							State.rpcQueue.push(new RpcSetPet(State.originalPet));
+							State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
+							State.rpcQueue.push(new RpcSetHat(State.originalHat));
+							State.rpcQueue.push(new RpcSetName(State.originalName));
+						}
+						else if (IsInLobby())
+						{
+							State.lobbyRpcQueue.push(new RpcSetColor(State.originalColor));
+							State.lobbyRpcQueue.push(new RpcSetPet(State.originalPet));
+							State.lobbyRpcQueue.push(new RpcSetSkin(State.originalSkin));
+							State.lobbyRpcQueue.push(new RpcSetHat(State.originalHat));
+							State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
+						}
+						State.activeImpersonation = false;
+					}
+				}
 				if (State.selectedPlayer.has_value())
 				{
-					if (State.selectedPlayer.is_LocalPlayer() && State.activeImpersonation)
-					{
-						if (ImGui::Button("Reset Impersonation"))
-						{
-							if (IsInGame())
-							{
-								State.rpcQueue.push(new RpcSetColor(State.originalColor));
-								State.rpcQueue.push(new RpcSetPet(State.originalPet));
-								State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
-								State.rpcQueue.push(new RpcSetHat(State.originalHat));
-								State.rpcQueue.push(new RpcSetName(State.originalName));
-							}
-							else if (IsInLobby())
-							{
-								State.lobbyRpcQueue.push(new RpcSetColor(State.originalColor));
-								State.lobbyRpcQueue.push(new RpcSetPet(State.originalPet));
-								State.lobbyRpcQueue.push(new RpcSetSkin(State.originalSkin));
-								State.lobbyRpcQueue.push(new RpcSetHat(State.originalHat));
-								State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
-							}
-							State.activeImpersonation = false;
-						}
-					}
 					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 						ImGui::NewLine();
 						if (ImGui::Button("Report Body")) {
