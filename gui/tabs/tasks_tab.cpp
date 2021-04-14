@@ -49,7 +49,7 @@ namespace TasksTab {
 					State.rpcQueue.push(new RpcPlayAnimation(6));
 				}
 
-				if(ImGui::Button("Play Trash Animation"))
+				if (ImGui::Button("Play Trash Animation"))
 				{
 					State.rpcQueue.push(new RpcPlayAnimation(10));
 				}
@@ -64,6 +64,11 @@ namespace TasksTab {
 					{
 						State.rpcQueue.push(new RpcSetScanner(false));
 					}
+				}
+
+				if (ImGui::Checkbox("Fake Cameras In Use", &State.FakeCameraUsage))
+				{
+					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Security, (State.FakeCameraUsage ? 1 : 0)));
 				}
 
 				ImGui::EndTabItem();
