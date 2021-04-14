@@ -22,16 +22,24 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		PlayerVoteArea* playerVoteArea = playerStates->vector[i];
 		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
-		auto playerNameTMP = playerVoteArea->fields.NameText->fields._;
+		auto playerNameTMP = playerVoteArea->fields.NameText;
 
 		if (playerData && localData) {
-			if (State.RevealImpostors || localData->fields.IsImpostor)
-				playerNameTMP.m_fontColor = playerData->fields.IsImpostor
-				? Palette__TypeInfo->static_fields->ImpostorRed
-				: Palette__TypeInfo->static_fields->White;
-			else
-				playerNameTMP.m_fontColor = Palette__TypeInfo->static_fields->White;
-			playerNameTMP.m_text;
+			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
+			if (State.RevealImpostors || localData->fields.IsImpostor) {
+				Color32 c = app::Color32_op_Implicit(playerData->fields.IsImpostor
+					? Palette__TypeInfo->static_fields->ImpostorRed
+					: Palette__TypeInfo->static_fields->White, NULL);
+
+				
+				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
+				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
+			}
+			else {
+				Color32 c = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
+				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
+				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
+			}
 		}
 
 		// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
