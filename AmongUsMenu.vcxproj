@@ -179,6 +179,7 @@
     <ClCompile Include="hooks\KeyboardJoystick.cpp" />
     <ClCompile Include="hooks\MeetingHud.cpp" />
     <ClCompile Include="hooks\PlayerControl.cpp" />
+    <ClCompile Include="hooks\SceneManager.cpp" />
     <ClCompile Include="hooks\ShipStatus.cpp" />
     <ClCompile Include="hooks\StatsManager.cpp" />
     <ClCompile Include="hooks\Vent.cpp" />

@@ -145,8 +145,7 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 #define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
 #define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
 #define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
-#define TutorialScene (false) 
-//((DestroyableSingleton_1_TutorialManager___TypeInfo->static_fields->_instance) != nullptr)
+#define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
 	if ((*Game::pAmongUsClient) == nullptr) return false;
