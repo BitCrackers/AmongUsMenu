@@ -132,17 +132,24 @@ namespace PlayersTab {
 								auto petId = State.selectedPlayer.get_PlayerData()->fields.PetId;
 								auto skinId = State.selectedPlayer.get_PlayerData()->fields.SkinId;
 								auto hatId = State.selectedPlayer.get_PlayerData()->fields.HatId;
+								auto colorId = State.selectedPlayer.get_PlayerData()->fields.ColorId;
 								ImpersonateName(State.selectedPlayer);
 								if (IsInGame())
 								{
-									State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
+									if (IsHost())
+										State.rpcQueue.push(new RpcSetColor(colorId, true));
+									else
+										State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
 									State.rpcQueue.push(new RpcSetPet(petId));
 									State.rpcQueue.push(new RpcSetSkin(skinId));
 									State.rpcQueue.push(new RpcSetHat(hatId));
 								}
 								else if (IsInLobby())
 								{
-									State.lobbyRpcQueue.push(new RpcSetColor(GetRandomColorId()));
+									if (IsHost())
+										State.rpcQueue.push(new RpcSetColor(colorId, true));
+									else
+										State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
 									State.lobbyRpcQueue.push(new RpcSetPet(petId));
 									State.lobbyRpcQueue.push(new RpcSetSkin(skinId));
 									State.lobbyRpcQueue.push(new RpcSetHat(hatId));
