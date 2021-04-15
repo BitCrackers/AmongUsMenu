@@ -49,7 +49,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "9c4a74df") {
+	if (GetCRC32(gameAssembly) != "563db6f7") {
 		Log.Error("GameAssembly.dll is either not the right version or corrupted");
 		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
