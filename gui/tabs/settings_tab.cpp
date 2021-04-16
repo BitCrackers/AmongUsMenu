@@ -36,6 +36,18 @@ namespace SettingsTab {
 				}
 			}
 
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+
+			char* codeBuffer[15]{ const_cast<char*>(State.CustomCode.c_str()) };
+			if (ImGui::InputText("Custom Code", *codeBuffer, IM_ARRAYSIZE(codeBuffer))) {
+				State.CustomCode = std::string(*codeBuffer);
+			}
+			if (ImGui::Checkbox("Replace Lobby Code", &State.HideCode)) {
+				State.Save();
+			}
+
 			ImGui::EndTabItem();
 		}
 	}

@@ -67,3 +67,4 @@ void dEOSManager_BeginLoginFlow(EOSManager* __this, MethodInfo* method);
 void dEOSManager_ReallyBeginFlow(EOSManager* __this, MethodInfo* method);
 bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method);
 void dChatController_Update(ChatController* __this, MethodInfo* method);
+void dGameStartManager_Update(GameStartManager* __this, MethodInfo* method);

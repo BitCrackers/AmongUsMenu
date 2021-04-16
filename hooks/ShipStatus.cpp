@@ -1,6 +1,7 @@
-#include "pch-il2cpp.h"
+﻿#include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "state.hpp"
+#include "game.h"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
@@ -38,4 +39,14 @@ void dShipStatus_RpcRepairSystem(ShipStatus* __this, SystemTypes__Enum systemTyp
 		return;
 	}
 	ShipStatus_RpcRepairSystem(__this, systemType, amount, method);
+}
+
+void dGameStartManager_Update(GameStartManager* __this, MethodInfo* method) {
+	if (State.HideCode) {
+		TMP_Text_SetText((TMP_Text*)__this->fields.GameRoomName, convert_to_string(State.CustomCode), false, NULL);
+	}
+	else {
+		TMP_Text_SetText((TMP_Text*)__this->fields.GameRoomName, InnerNet_GameCode_IntToGameName((*Game::pAmongUsClient)->fields._.GameId, NULL), false, NULL);
+	}
+	GameStartManager_Update(__this, method);
 }

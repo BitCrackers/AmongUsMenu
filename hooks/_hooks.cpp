@@ -114,6 +114,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(ShipStatus_RpcRepairSystem);
+	HOOKFUNC(GameStartManager_Update);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -187,6 +188,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(ShipStatus_RpcRepairSystem);
+	UNHOOKFUNC(GameStartManager_Update);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

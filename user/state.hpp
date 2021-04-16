@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <bitset>
 #include <queue>
 #include "_events.h"
@@ -132,6 +132,8 @@ public:
 
 
     bool HideNSeek = false;
+    std::string CustomCode = "CODE";
+    bool HideCode = false;
 
     void Load();
     void Save();

@@ -44,7 +44,8 @@ const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
 	{ {"", "Announcement"}, {"", "DEMJCHFGGHP"} },
 	{ {"InnerNet", "MessageExtensions"}, {"", "GNECIFEPIHB"} },
 	{ {"InnerNet", "GameKeywords"}, {"", "HPPGMINEFNF"} },
-	{ {"InnerNetClient", "GameStates"}, {"", "GCDONLGCMIL"} }
+	{ {"InnerNetClient", "GameStates"}, {"", "GCDONLGCMIL"} },
+	{ {"InnerNet", "GameCode"}, {"", "GLNIFBJGNFJ"} }
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
@@ -62,4 +63,5 @@ const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
 	{ "SnapTo", "ODDILDEGEOD" },
 	{ "SetSide", "OMLGOAEHPKJ"},
 	{ "WriteNetObject", "HHECOFHJFEE"},
+	{ "IntToGameName", "LAEAGKNJOAK"},
 };
