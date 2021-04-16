@@ -229,3 +229,17 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 	}
 	GameObject_SetActive(__this, value, method);
 }
+
+void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method) {
+	if (State.HideNSeek) {
+		return;
+	}
+	PlayerControl_CmdReportDeadBody(__this, target, method);
+}
+
+void dPlayerControl_RpcStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method) {
+	if (State.HideNSeek) {
+		return;
+	}
+	PlayerControl_RpcStartMeeting(__this, target, method);
+}

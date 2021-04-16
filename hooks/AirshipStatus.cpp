@@ -22,6 +22,9 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = Settings::MapType::Airship;
+	if (State.HideNSeek) {
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, 7));
+	}
 }
 
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method)

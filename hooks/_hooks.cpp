@@ -86,6 +86,8 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_ReportDeadBody);
 	HOOKFUNC(PlayerControl_RpcSetInfected);
 	HOOKFUNC(PlayerControl_HandleRpc);
+	HOOKFUNC(PlayerControl_RpcStartMeeting);
+	HOOKFUNC(PlayerControl_CmdReportDeadBody);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
@@ -111,6 +113,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_ReallyBeginFlow);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
+	HOOKFUNC(ShipStatus_RpcRepairSystem);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -157,6 +160,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_ReportDeadBody);
 	UNHOOKFUNC(PlayerControl_RpcSetInfected);
 	UNHOOKFUNC(PlayerControl_HandleRpc);
+	UNHOOKFUNC(PlayerControl_RpcStartMeeting);
+	UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
@@ -181,6 +186,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_ReallyBeginFlow);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
+	UNHOOKFUNC(ShipStatus_RpcRepairSystem);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

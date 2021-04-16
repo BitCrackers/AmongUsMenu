@@ -28,4 +28,14 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
+	if (State.HideNSeek) {
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, 7));
+	}
+}
+
+void dShipStatus_RpcRepairSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method) {
+	if (State.HideNSeek) {
+		return;
+	}
+	ShipStatus_RpcRepairSystem(__this, systemType, amount, method);
 }

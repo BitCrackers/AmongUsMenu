@@ -36,10 +36,13 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method);
 void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method);
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method);
+void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method);
+void dPlayerControl_RpcStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method);
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method);
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method);
+void dShipStatus_RpcRepairSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method);
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method);
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method);
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method);

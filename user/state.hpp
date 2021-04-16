@@ -130,6 +130,9 @@ public:
 
     bool AutoOpenDoors = false;
 
+
+    bool HideNSeek = false;
+
     void Load();
     void Save();
 };
