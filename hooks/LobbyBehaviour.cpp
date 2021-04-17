@@ -6,6 +6,7 @@ void dLobbyBehaviour_Start(LobbyBehaviour* __this, MethodInfo* method)
 {
 	State.LobbyTimer = 15;
 	LobbyBehaviour_Start(__this, method);
+	State.HideNSeek = false;
 
 	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
 }

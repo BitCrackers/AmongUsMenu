@@ -7,13 +7,11 @@
 
 namespace HostTab {
 	void Render() {
-		if (!(IsHost() && IsInLobby() && !IsInGame())) {
-			if (State.HideNSeek) {
-				State.HideNSeek = false;
-			}
+		if (!(IsHost() && IsInLobby())) {
+			return;
 		}
 		if (ImGui::BeginTabItem("Host")) {
-			ImGui::Text("Select Impostors:");
+			ImGui::Text(State.HideNSeek ? "Select Seekers" : "Select Impostors");
 			ImGui::BeginChild("host#list", ImVec2(200, 0), true);
 			ImGui::ListBoxHeader("Choose Impostors", ImVec2(200, 150));
 			for (auto playerData : GetAllPlayerData()) {
