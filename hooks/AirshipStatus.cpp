@@ -1,6 +1,8 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "state.hpp"
+#include "logger.h"
+#include "utility.h"
 
 void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 {
@@ -22,6 +24,9 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = Settings::MapType::Airship;
+
+	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+	ResetOriginalAppearance();
 }
 
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method)

@@ -1,6 +1,8 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "state.hpp"
+#include "logger.h"
+#include "utility.h"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
@@ -28,4 +30,7 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
+
+	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+	ResetOriginalAppearance();
 }

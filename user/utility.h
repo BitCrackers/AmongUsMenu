@@ -115,4 +115,7 @@ bool Equals(Vector2 vec1, Vector2 vec2);
 std::string ToString(Object* object);
 std::string GetGitCommit();
 std::string GetGitBranch();
-std::string GetCurrentBuildVersion();
+void ImpersonateName(PlayerSelection player);
+int GetRandomColorId();
+void SaveOriginalAppearance();
+void ResetOriginalAppearance();
