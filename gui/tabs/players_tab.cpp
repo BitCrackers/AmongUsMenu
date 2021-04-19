@@ -70,22 +70,18 @@ namespace PlayersTab {
 				{
 					if (ImGui::Button("Reset Impersonation"))
 					{
+						std::queue<RPCInterface*> queue;
+
 						if (IsInGame())
-						{
-							State.rpcQueue.push(new RpcSetColor(State.originalColor));
-							State.rpcQueue.push(new RpcSetPet(State.originalPet));
-							State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
-							State.rpcQueue.push(new RpcSetHat(State.originalHat));
-							State.rpcQueue.push(new RpcSetName(State.originalName));
-						}
+							queue = State.rpcQueue;
 						else if (IsInLobby())
-						{
-							State.lobbyRpcQueue.push(new RpcSetColor(State.originalColor));
-							State.lobbyRpcQueue.push(new RpcSetPet(State.originalPet));
-							State.lobbyRpcQueue.push(new RpcSetSkin(State.originalSkin));
-							State.lobbyRpcQueue.push(new RpcSetHat(State.originalHat));
-							State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
-						}
+							queue = State.lobbyRpcQueue;
+
+						queue.push(new RpcSetColor(State.originalColor));
+						queue.push(new RpcSetPet(State.originalPet));
+						queue.push(new RpcSetSkin(State.originalSkin));
+						queue.push(new RpcSetHat(State.originalHat));
+						queue.push(new RpcSetName(State.originalName));
 						State.activeImpersonation = false;
 					}
 				}
@@ -133,27 +129,21 @@ namespace PlayersTab {
 								auto skinId = State.selectedPlayer.get_PlayerData()->fields.SkinId;
 								auto hatId = State.selectedPlayer.get_PlayerData()->fields.HatId;
 								auto colorId = State.selectedPlayer.get_PlayerData()->fields.ColorId;
-								ImpersonateName(State.selectedPlayer);
+								std::queue<RPCInterface*> queue;
+
 								if (IsInGame())
-								{
-									if (IsHost())
-										State.rpcQueue.push(new RpcSetColor(colorId, true));
-									else
-										State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
-									State.rpcQueue.push(new RpcSetPet(petId));
-									State.rpcQueue.push(new RpcSetSkin(skinId));
-									State.rpcQueue.push(new RpcSetHat(hatId));
-								}
+									queue = State.rpcQueue;
 								else if (IsInLobby())
-								{
-									if (IsHost())
-										State.rpcQueue.push(new RpcSetColor(colorId, true));
-									else
-										State.rpcQueue.push(new RpcSetColor(GetRandomColorId()));
-									State.lobbyRpcQueue.push(new RpcSetPet(petId));
-									State.lobbyRpcQueue.push(new RpcSetSkin(skinId));
-									State.lobbyRpcQueue.push(new RpcSetHat(hatId));
-								}
+									queue = State.lobbyRpcQueue;
+								
+								if (IsHost())
+									queue.push(new RpcSetColor(colorId, true));
+								else
+									queue.push(new RpcSetColor(GetRandomColorId()));
+								queue.push(new RpcSetPet(petId));
+								queue.push(new RpcSetSkin(skinId));
+								queue.push(new RpcSetHat(hatId));
+								ImpersonateName(State.selectedPlayer);
 								State.activeImpersonation = true;
 							}
 						}
