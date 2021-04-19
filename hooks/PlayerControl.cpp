@@ -180,6 +180,15 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	}
 
 	State.events.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	if (State.activeImpersonation && State.AutoResetImpersonation)
+	{
+		State.rpcQueue.push(new RpcSetColor(State.originalColor));
+		State.rpcQueue.push(new RpcSetPet(State.originalPet));
+		State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
+		State.rpcQueue.push(new RpcSetHat(State.originalHat));
+		State.rpcQueue.push(new RpcSetName(State.originalName));
+		State.activeImpersonation = false;
+	}
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 

@@ -78,6 +78,12 @@ namespace GameTab {
 			{
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
+
+			ImGui::Dummy(ImVec2(4, 4));
+
+			if (ImGui::Checkbox("Auto Reset Impersonation", &State.AutoResetImpersonation)) {
+				State.Save();
+			}
 			ImGui::EndTabItem();
 		}
 	}

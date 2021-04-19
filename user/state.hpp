@@ -108,7 +108,9 @@ public:
     uint32_t originalHat = 0xFF;
     uint32_t originalPet = 0xFF;
     uint8_t originalColor = 0xFF;
+
     bool activeImpersonation = false;
+    bool AutoResetImpersonation = true;
 
     PlayerSelection playerToFollow;
 
