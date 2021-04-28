@@ -25,17 +25,17 @@ namespace ConsoleGui {
 		ImGui::EndChild();
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(490, 225), true);
-		for (int i = State.events.size() - 1; i >= 0; i--) {
-			if (State.events[i]->getType() == EVENT_WALK)
+		for (int i = State.consoleEvents.size() - 1; i >= 0; i--) {
+			if (State.consoleEvents[i]->getType() == EVENT_WALK)
 				continue;
 
 			if (ConsoleGui::selectedType > 0)
-				if (State.events[i]->getType() != (EVENT_TYPES)ConsoleGui::selectedType)
+				if (State.consoleEvents[i]->getType() != (EVENT_TYPES)ConsoleGui::selectedType)
 					continue;
 
-			State.events[i]->ColoredEventOutput();
+			State.consoleEvents[i]->ColoredEventOutput();
 			ImGui::SameLine();
-			State.events[i]->Output();
+			State.consoleEvents[i]->Output();
 		}
 		ImGui::EndChild();
 		ImGui::End();

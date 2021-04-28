@@ -179,7 +179,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
-    State.events.clear();
+
+    State.consoleEvents.clear();
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+            State.events[i][j].clear();
 
     InnerNetClient_StartEndGame(__this, method);
 }

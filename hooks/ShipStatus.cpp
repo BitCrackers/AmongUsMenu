@@ -14,7 +14,10 @@ float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
-	State.events.clear();
+	State.consoleEvents.clear();
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+			State.events[i][j].clear();
 
 	State.selectedDoor = SystemTypes__Enum_Hallway;
 	State.mapDoors.clear();

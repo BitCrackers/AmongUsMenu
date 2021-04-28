@@ -13,10 +13,13 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	State.events.push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
+int dPlayerControl_fixedUpdateTimer = 50;
+int dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (__this == *Game::pLocalPlayer) {
 		if (State.rpcCooldown == 0) {
@@ -140,6 +143,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 
+			// Use UpdateTimer and UpdateCount to execute this part every second
+			dPlayerControl_fixedUpdateCount++;
+			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
+				dPlayerControl_fixedUpdateCount = 0;
+				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(*Game::pLocalPlayer), localPos));
+			}
+
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
 			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
@@ -153,12 +163,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			instance.LocalPosition = localScreenPosition;
 			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
 		}
-
-		// TODO: Improve performance
-		/*Vector2 position = PlayerControl_GetTruePosition(__this, NULL);
-		std::optional<Vector2> lastPosition = GetLastWalkEventPosition(__this->fields.PlayerId);
-		if (!lastPosition.has_value() ||(lastPosition.has_value() && position.x != lastPosition->x && position.y != lastPosition->y))
-			State.events.push_back(new WalkEvent(GetEventPlayer(__this), position));*/
 	}
 	app::PlayerControl_FixedUpdate(__this, method);
 }
@@ -176,15 +180,18 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
 	if (GetPlayerData(__this)->fields.IsImpostor && GetPlayerData(target)->fields.IsImpostor) {
-		State.events.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
+		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
+		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
 	}
 
-	State.events.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
-	State.events.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
 

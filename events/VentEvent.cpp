@@ -1,6 +1,7 @@
 #include "pch-il2cpp.h"
 #include "_events.h"
 #include "utility.h"
+#include <chrono>
 
 VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTION action) : EventInterface(source, EVENT_VENT)
 {
@@ -13,6 +14,11 @@ void VentEvent::Output() {
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());
 	ImGui::SameLine();
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
+	ImGui::SameLine();
+	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
+	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
+	if (sec < 60) ImGui::Text(" [%d sec ago]", sec);
+	else ImGui::Text(" [%d min ago]", min);
 }
 
 void VentEvent::ColoredEventOutput() {

@@ -8,7 +8,10 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 {
 	AirshipStatus_OnEnable(__this, method);
 
-	State.events.clear();
+	State.consoleEvents.clear();
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+			State.events[i][j].clear();
 
 	State.selectedDoor = SystemTypes__Enum_Hallway;
 	State.mapDoors.clear();
