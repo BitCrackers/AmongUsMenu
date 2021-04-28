@@ -33,6 +33,7 @@ struct EVENT_PLAYER {
 	uint8_t playerId;
 	uint8_t colorId;
 	std::string playerName;
+	Vector2 position;
 
 	EVENT_PLAYER() {
 		playerId = 0;
@@ -44,6 +45,7 @@ struct EVENT_PLAYER {
 		playerId = playerInfo->fields.PlayerId;
 		colorId = playerInfo->fields.ColorId;
 		playerName = convert_from_string(playerInfo->fields.PlayerName);
+		position = PlayerControl_GetTruePosition(playerInfo->fields._object, nullptr);
 	}
 };
 
@@ -63,6 +65,7 @@ public:
 	virtual void ColoredEventOutput() = 0;
 	EVENT_TYPES getType() { return this->eventType; }
 	EVENT_PLAYER getSource() { return this->source; }
+	Vector2 getPosition() { return this->source.position; }
 };
 
 class KillEvent : public EventInterface {
