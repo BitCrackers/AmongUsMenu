@@ -124,7 +124,7 @@ namespace Radar {
 		if (State.selectedPlayer.has_value()) {
 			std::lock_guard<std::mutex> lock(Radar::radarEventMutex);
 			for (int i = 1; i != EVENT_TYPES_SIZE; i++) {
-				if (i == EVENT_VOTE) continue;
+				if (i == EVENT_VOTE || i == EVENT_MEETING) continue;
 				for (unsigned int j = 0; j < State.events[State.selectedPlayer.get_PlayerId()][i].size(); j++) {
 					const auto e = State.events[State.selectedPlayer.get_PlayerId()][i][j];
 					float radX = maps[MapType].x_offset + (e->getPosition().x * maps[MapType].scale) + winpos.x;
