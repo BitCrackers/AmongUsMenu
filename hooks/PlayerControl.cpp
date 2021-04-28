@@ -142,7 +142,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_FixedUpdateCount[__this->fields.PlayerId] = 0;
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 			std::lock_guard<std::mutex> lock(Radar::radarEventMutex);
-			if (!State.InMeeting) State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(__this)));
+			if (!State.InMeeting) {
+				if (State.events[__this->fields.PlayerId][EVENT_WALK].size() == 0
+					|| State.events[__this->fields.PlayerId][EVENT_WALK].back()->getPosition().x != playerPos.x
+					|| State.events[__this->fields.PlayerId][EVENT_WALK].back()->getPosition().y != playerPos.y)
+					State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(__this)));
+					
+			}
 		}
 		dPlayerControl_FixedUpdateCount[__this->fields.PlayerId]++;
     
