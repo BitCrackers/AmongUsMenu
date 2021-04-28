@@ -3,6 +3,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "esp.hpp"
+#include "radar.hpp"
 #include "_rpc.h"
 #include <iostream>
 
@@ -18,8 +19,8 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
-int dPlayerControl_fixedUpdateTimer = 50;
-int dPlayerControl_fixedUpdateCount = 0;
+int dPlayerControl_FixedUpdateTimer = 10;
+int dPlayerControl_FixedUpdateCount[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (__this == *Game::pLocalPlayer) {
 		if (State.rpcCooldown == 0) {
@@ -135,6 +136,15 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			
 			Transform_set_position(cameraTransform, { State.camPos.x, State.camPos.y, 100 }, NULL);
 		}
+
+		if (dPlayerControl_FixedUpdateCount[__this->fields.PlayerId] >= dPlayerControl_FixedUpdateTimer)
+		{
+			dPlayerControl_FixedUpdateCount[__this->fields.PlayerId] = 0;
+			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
+			std::lock_guard<std::mutex> lock(Radar::radarEventMutex);
+			if (!State.InMeeting) State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(__this)));
+		}
+		dPlayerControl_FixedUpdateCount[__this->fields.PlayerId]++;
     
 		// We should have this in a scope so that the lock guard only locks the right things
 		{
@@ -142,13 +152,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			ImVec2 localScreenPosition = WorldToScreen(localPos);
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
-
-			// Use UpdateTimer and UpdateCount to execute this part every second
-			dPlayerControl_fixedUpdateCount++;
-			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
-				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(*Game::pLocalPlayer), localPos));
-			}
 
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);

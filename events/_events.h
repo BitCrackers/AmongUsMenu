@@ -130,9 +130,8 @@ public:
 
 class WalkEvent : public EventInterface {
 private:
-	Vector2 position;
 public:
-	WalkEvent(EVENT_PLAYER source, Vector2 position);
+	WalkEvent(EVENT_PLAYER source);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

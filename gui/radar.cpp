@@ -6,6 +6,8 @@
 #include "state.hpp"
 
 namespace Radar {
+	std::mutex radarEventMutex;
+
 	ImU32 GetRadarPlayerColor(GameData_PlayerInfo* playerData) {
 		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)));
 	}
@@ -115,6 +117,29 @@ namespace Radar {
 				float radY = maps[MapType].y_offset - (bodyPos.y * maps[MapType].scale) + winpos.y;
 
 				drawList->AddText(ImGui::GetFont(), 16, ImVec2(radX - 5.F, radY - 6.75F), GetRadarPlayerColor(playerData), "X");
+			}
+		}
+
+		// event drawing
+		if (State.selectedPlayer.has_value()) {
+			std::lock_guard<std::mutex> lock(Radar::radarEventMutex);
+			for (int i = 1; i != EVENT_TYPES_SIZE; i++) {
+				if (i == EVENT_VOTE) continue;
+				for (unsigned int j = 0; j < State.events[State.selectedPlayer.get_PlayerId()][i].size(); j++) {
+					const auto e = State.events[State.selectedPlayer.get_PlayerId()][i][j];
+					float radX = maps[MapType].x_offset + (e->getPosition().x * maps[MapType].scale) + winpos.x;
+					float radY = maps[MapType].y_offset - (e->getPosition().y * maps[MapType].scale) + winpos.y;
+					if (i != EVENT_WALK) drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, e->getColor());
+					else {
+						if (j + 1 < State.events[State.selectedPlayer.get_PlayerId()][i].size()) {
+							const auto e2 = State.events[State.selectedPlayer.get_PlayerId()][i][j + 1];
+							float radX2 = maps[MapType].x_offset + (e2->getPosition().x * maps[MapType].scale) + winpos.x;
+							float radY2 = maps[MapType].y_offset - (e2->getPosition().y * maps[MapType].scale) + winpos.y;
+
+							drawList->AddLine(ImVec2(radX, radY), ImVec2(radX2, radY2), e->getColor());
+						}
+					}
+				}
 			}
 		}
 
