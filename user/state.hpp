@@ -80,7 +80,8 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<EventInterface*> events;
+    std::vector<EventInterface*> consoleEvents;
+    std::vector<EventInterface*> events[10][EVENT_TYPES_SIZE];
 
     std::bitset<0xFF> voteMonitor;
 
