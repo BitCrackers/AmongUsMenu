@@ -2,8 +2,9 @@
 #include "_events.h"
 #include "utility.h"
 
-CastVoteEvent::CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target) : EventInterface(source, EVENT_VOTE) {
+CastVoteEvent::CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target) : EventInterface(source, EVENT_VOTE, ImColor(0.3f, 0.4f, 1.f, 1.f)) {
 	this->target = target;
+	this->systemType = GetSystemTypes(source.position);
 }
 
 void CastVoteEvent::Output() {
@@ -23,7 +24,7 @@ void CastVoteEvent::Output() {
 void CastVoteEvent::ColoredEventOutput() {
 	ImGui::Text("[");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.3f, 0.4f, 1.f, 1.f), "VOTE");
+	ImGui::TextColored(this->getColor(), "VOTE");
 	ImGui::SameLine();
 	ImGui::Text("]");
 }

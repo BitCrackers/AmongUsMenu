@@ -2,10 +2,9 @@
 #include "_events.h"
 #include "utility.h"
 
-KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position) : EventInterface(source, EVENT_KILL) {
+KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_KILL, ImColor(1.f, 0.f, 0.f, 1.f)) {
 	this->target = target;
-	this->position = position;
-	this->systemType = GetSystemTypes(position);
+	this->systemType = GetSystemTypes(source.position);
 }
 
 void KillEvent::Output() {
@@ -15,7 +14,7 @@ void KillEvent::Output() {
 	ImGui::SameLine();
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(target.colorId)), target.playerName.c_str());
 	ImGui::SameLine();
-	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
+	ImGui::Text("(%s)", TranslateSystemTypes(this->systemType));
 	ImGui::SameLine();
 	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
 	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
@@ -26,7 +25,7 @@ void KillEvent::Output() {
 void KillEvent::ColoredEventOutput() {
 	ImGui::Text("[");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "KILL");
+	ImGui::TextColored(this->getColor(), "KILL");
 	ImGui::SameLine();
 	ImGui::Text("]");
 }

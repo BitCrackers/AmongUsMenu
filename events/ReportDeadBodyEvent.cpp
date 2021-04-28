@@ -2,11 +2,10 @@
 #include "_events.h"
 #include "utility.h"
 
-ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position)
-	: EventInterface(source, (target.has_value() ? EVENT_REPORT : EVENT_MEETING)) {
+ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target)
+	: EventInterface(source, (target.has_value() ? EVENT_REPORT : EVENT_MEETING), (target) ? ImColor(1.f, 0.5f, 0.f, 1.f) : ImColor(1.f, 1.f, 0.f, 1.f)) {
 	this->target = target;
-	this->position = position;
-	this->systemType = GetSystemTypes(position);
+	this->systemType = GetSystemTypes(source.position);
 }
 
 void ReportDeadBodyEvent::Output() {
@@ -18,7 +17,7 @@ void ReportDeadBodyEvent::Output() {
 		ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(target->colorId)), target->playerName.c_str());
 		ImGui::SameLine();
 	}
-	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
+	ImGui::Text("(%s)", TranslateSystemTypes(this->systemType));
 	ImGui::SameLine();
 	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
 	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
@@ -29,7 +28,7 @@ void ReportDeadBodyEvent::Output() {
 void ReportDeadBodyEvent::ColoredEventOutput() {
 	ImGui::Text("[");
 	ImGui::SameLine();
-	ImGui::TextColored((target) ? ImVec4(1.f, 0.5f, 0.f, 1.f) : ImVec4(1.f, 1.f, 0, 1.f), (target.has_value()) ? "REPORT" : "MEETING");
+	ImGui::TextColored(this->getColor(), (target.has_value()) ? "REPORT" : "MEETING");
 	ImGui::SameLine();
 	ImGui::Text("]");
 }

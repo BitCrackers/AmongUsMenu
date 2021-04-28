@@ -2,8 +2,9 @@
 #include "_events.h"
 #include "utility.h"
 
-CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action) : EventInterface(source, EVENT_CHEAT) {
+CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action) : EventInterface(source, EVENT_CHEAT, ImColor(1.f, 0.f, 0.f, 1.f)) {
 	this->action = action;
+	this->systemType = GetSystemTypes(source.position);
 }
 
 void CheatDetectedEvent::Output() {
@@ -22,7 +23,7 @@ void CheatDetectedEvent::Output() {
 void CheatDetectedEvent::ColoredEventOutput() {
 	ImGui::Text("[");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "CHEAT");
+	ImGui::TextColored(this->getColor(), "CHEAT");
 	ImGui::SameLine();
 	ImGui::Text("]");
 }

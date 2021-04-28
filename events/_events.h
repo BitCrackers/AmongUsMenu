@@ -1,6 +1,7 @@
 #pragma once
 #include <optional>
 #include <chrono>
+#include "imgui/imgui.h"
 
 using namespace app;
 
@@ -52,18 +53,22 @@ struct EVENT_PLAYER {
 class EventInterface {
 protected:
 	EVENT_TYPES eventType;
+	ImColor eventColor;
 	EVENT_PLAYER source;
+	SystemTypes__Enum systemType;
 	std::chrono::system_clock::time_point timestamp;
 public:
-	EventInterface(EVENT_PLAYER source, EVENT_TYPES eventType) {
+	EventInterface(EVENT_PLAYER source, EVENT_TYPES eventType, ImColor eventColor) {
 		this->source = source;
 		this->eventType = eventType;
+		this->eventColor = eventColor;
 		this->timestamp = std::chrono::system_clock::now();
 	}
 	virtual ~EventInterface() {}
 	virtual void Output() = 0;
 	virtual void ColoredEventOutput() = 0;
 	EVENT_TYPES getType() { return this->eventType; }
+	ImColor getColor() { return this->eventColor; }
 	EVENT_PLAYER getSource() { return this->source; }
 	Vector2 getPosition() { return this->source.position; }
 };
@@ -72,20 +77,17 @@ class KillEvent : public EventInterface {
 private:
 	EVENT_PLAYER target;
 	Vector2 position;
-	SystemTypes__Enum systemType;
 public:
-	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position);
+	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
 
 class VentEvent : public EventInterface {
 private:
-	Vector2 position;
-	SystemTypes__Enum systemType;
 	VENT_ACTION action;
 public:
-	VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTION action);
+	VentEvent(EVENT_PLAYER source, VENT_ACTION action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
@@ -93,10 +95,8 @@ public:
 class TaskCompletedEvent : public EventInterface {
 private:
 	std::optional<TaskTypes__Enum> taskType;
-	Vector2 position;
-	SystemTypes__Enum systemType;
 public:
-	TaskCompletedEvent(EVENT_PLAYER source, std::optional<TaskTypes__Enum> taskType, Vector2 position);
+	TaskCompletedEvent(EVENT_PLAYER source, std::optional<TaskTypes__Enum> taskType);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
@@ -104,10 +104,8 @@ public:
 class ReportDeadBodyEvent : public EventInterface {
 private:
 	std::optional<EVENT_PLAYER> target;
-	Vector2 position;
-	SystemTypes__Enum systemType;
 public:
-	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position);
+	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
