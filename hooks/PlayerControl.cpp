@@ -196,15 +196,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
 	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	if (State.activeImpersonation && State.AutoResetImpersonation)
-	{
-		State.rpcQueue.push(new RpcSetColor(State.originalColor));
-		State.rpcQueue.push(new RpcSetPet(State.originalPet));
-		State.rpcQueue.push(new RpcSetSkin(State.originalSkin));
-		State.rpcQueue.push(new RpcSetHat(State.originalHat));
-		State.rpcQueue.push(new RpcSetName(State.originalName));
-		State.activeImpersonation = false;
-	}
+
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
 

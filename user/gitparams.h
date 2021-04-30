@@ -1,2 +1,2 @@
-#define GIT_CUR_COMMIT UNKNOWN
-#define GIT_BRANCH UNKNOWN
+#define GIT_CUR_COMMIT 1101c4b979efd6f30dd4fc611b0f02b8bd38a412
+#define GIT_BRANCH Impersonation

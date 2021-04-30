@@ -113,7 +113,6 @@ public:
     uint8_t originalColor = 0xFF;
 
     bool activeImpersonation = false;
-    bool AutoResetImpersonation = true;
 
     PlayerSelection playerToFollow;
 

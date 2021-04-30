@@ -55,7 +55,6 @@ void Settings::Load() {
 
         j.at("ShowConsole").get_to(this->ShowConsole);
         j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
-        j.at("AutoResetImpersonation").get_to(this->AutoResetImpersonation);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
@@ -104,8 +103,7 @@ void Settings::Save() {
             {"MoveInVent", this->MoveInVent},
 
             {"ShowConsole", this->ShowConsole},
-            {"ShowUnityLogs", this->ShowUnityLogs},
-            {"AutoResetImpersonation", this->AutoResetImpersonation}
+            {"ShowUnityLogs", this->ShowUnityLogs}
         };
 
         std::ofstream outSettings(settingsPath);
