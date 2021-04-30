@@ -80,7 +80,8 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<EventInterface*> events;
+    std::vector<EventInterface*> consoleEvents;
+    std::vector<EventInterface*> events[10][EVENT_TYPES_SIZE];
 
     std::bitset<0xFF> voteMonitor;
 
@@ -99,6 +100,8 @@ public:
     float CameraHeight = 3.0;
     Camera* FollowerCam = nullptr;
     bool EnableZoom = false;
+
+    bool FakeCameraUsage = false;
 
     ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
 

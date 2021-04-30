@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <chrono>
 
 using namespace app;
 
@@ -13,6 +14,7 @@ enum EVENT_TYPES {
 	EVENT_VOTE = 0x6,
 	EVENT_CHEAT = 0x7,
 	EVENT_WALK = 0x8,
+	EVENT_TYPES_SIZE = 9
 };
 
 enum VENT_ACTION {
@@ -49,10 +51,12 @@ class EventInterface {
 protected:
 	EVENT_TYPES eventType;
 	EVENT_PLAYER source;
+	std::chrono::system_clock::time_point timestamp;
 public:
 	EventInterface(EVENT_PLAYER source, EVENT_TYPES eventType) {
 		this->source = source;
 		this->eventType = eventType;
+		this->timestamp = std::chrono::system_clock::now();
 	}
 	virtual ~EventInterface() {}
 	virtual void Output() = 0;
@@ -119,6 +123,15 @@ private:
 	CHEAT_ACTION action;
 public:
 	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action);
+	virtual void Output() override;
+	virtual void ColoredEventOutput() override;
+};
+
+class WalkEvent : public EventInterface {
+private:
+	Vector2 position;
+public:
+	WalkEvent(EVENT_PLAYER source, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

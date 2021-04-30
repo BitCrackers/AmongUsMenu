@@ -12,15 +12,18 @@ ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVEN
 void ReportDeadBodyEvent::Output() {
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());
 	ImGui::SameLine();
-
 	if (target.has_value()) {
 		ImGui::Text(">");
 		ImGui::SameLine();
 		ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(target->colorId)), target->playerName.c_str());
 		ImGui::SameLine();
 	}
-
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
+	ImGui::SameLine();
+	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
+	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
+	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
+	else ImGui::Text(" [%dm ago]", min);
 }
 
 void ReportDeadBodyEvent::ColoredEventOutput() {
