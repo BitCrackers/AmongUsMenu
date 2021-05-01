@@ -69,8 +69,9 @@ public:
 
 class RpcSetColor : public RPCInterface {
 	uint8_t bodyColor;
+	bool forceColor; //Uses RpcSetColor, only can use as host
 public:
-	RpcSetColor(uint8_t colorId);
+	RpcSetColor(uint8_t colorId, bool force=false);
 	virtual void Process() override;
 };
 
@@ -84,5 +85,26 @@ public:
 class RpcUsePlatform : public RPCInterface {
 public:
 	RpcUsePlatform();
+	virtual void Process() override;
+};
+
+class RpcSetPet : public RPCInterface {
+	uint32_t PetId;
+public:
+	RpcSetPet(uint32_t petId);
+	virtual void Process() override;
+};
+
+class RpcSetSkin : public RPCInterface {
+	uint32_t SkinId;
+public:
+	RpcSetSkin(uint32_t skinId);
+	virtual void Process() override;
+};
+
+class RpcSetHat : public RPCInterface {
+	uint32_t HatId;
+public:
+	RpcSetHat(uint32_t hatId);
 	virtual void Process() override;
 };

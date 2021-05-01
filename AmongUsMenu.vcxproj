@@ -24,6 +24,7 @@
     <ClCompile Include="events\KillEvent.cpp" />
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
+    <ClCompile Include="events\WalkEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\esp.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
+    <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

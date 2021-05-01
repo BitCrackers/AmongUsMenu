@@ -63,32 +63,7 @@ namespace GameTab {
 			ImGui::SameLine(215);
 			if (ImGui::Button("Random Color"))
 			{
-				if (IsInGame() || IsInLobby())
-				{
-					auto players = GetAllPlayerControl();
-					std::vector<int> availableColors = { };
-					for (int i = 0; i < 12; i++)
-					{
-						bool colorAvailable = true;
-						for (PlayerControl* player : players)
-						{
-							if (i == GetPlayerData(player)->fields.ColorId)
-							{
-								colorAvailable = false;
-								break;
-							}
-						}
-
-						if (colorAvailable)
-							availableColors.push_back(i);
-					}
-
-					State.SelectedColorId = availableColors.at(randi(0, availableColors.size() - 1));
-				}
-				else
-				{
-					State.SelectedColorId = randi(0, 11);
-				}
+				State.SelectedColorId = GetRandomColorId();
 			}
 
 			ImGui::Dummy(ImVec2(4, 4));
@@ -103,6 +78,7 @@ namespace GameTab {
 			{
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
+
 			ImGui::EndTabItem();
 		}
 	}

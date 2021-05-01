@@ -2,12 +2,16 @@
 #include "_rpc.h"
 #include "game.h"
 
-RpcSetColor::RpcSetColor(uint8_t bodyColor)
+RpcSetColor::RpcSetColor(uint8_t bodyColor, bool force)
 {
 	this->bodyColor = bodyColor;
+	this->forceColor = force;
 }
 
 void RpcSetColor::Process()
 {
-	PlayerControl_CmdCheckColor(*Game::pLocalPlayer, bodyColor, NULL);
+	if (forceColor)
+		PlayerControl_RpcSetColor(*Game::pLocalPlayer, bodyColor, NULL);
+	else
+		PlayerControl_CmdCheckColor(*Game::pLocalPlayer, bodyColor, NULL);
 }

@@ -89,7 +89,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
 
-    if (nameChangeCycleDelay <= 0) {
+    if (nameChangeCycleDelay <= 0 && !State.activeImpersonation) {
         if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
             SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
             LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
@@ -121,10 +121,8 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
 
 bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
 {
-#ifdef _DEBUG
     if (!player.has_value())
         Log.Debug("bogusTransformSnap received invalid player!");
-#endif
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
     if (player.get_PlayerControl()->fields.inVent) return false; //Vent buttons are warps
@@ -140,7 +138,6 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (IsAirshipSpawnLocation(newPosition)) return false;
     if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
         return false;
-#ifdef _DEBUG
     std::ostringstream ss;
 
     ss << "From " << +currentPosition.x << "," << +currentPosition.y << " to " << +newPosition.x << "," << +newPosition.y << std::endl;
@@ -149,7 +146,6 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     ss << "Meeting Spawn Location " << +meetingSpawnLocation.x << "," << +meetingSpawnLocation.y << std::endl;
     ss << "-------";
     Log.Debug(ss.str());
-#endif
     return true; //We have ruled out all possible scenarios.  Off with his head!
 }
 
@@ -179,7 +175,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
-    State.events.clear();
+
+    State.consoleEvents.clear();
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+            State.events[i][j].clear();
 
     InnerNetClient_StartEndGame(__this, method);
 }

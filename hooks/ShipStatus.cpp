@@ -1,6 +1,8 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 #include "state.hpp"
+#include "logger.h"
+#include "utility.h"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
@@ -12,7 +14,10 @@ float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
-	State.events.clear();
+	State.consoleEvents.clear();
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+			State.events[i][j].clear();
 
 	State.selectedDoor = SystemTypes__Enum_Hallway;
 	State.mapDoors.clear();
@@ -28,4 +33,7 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
+
+	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+	ResetOriginalAppearance();
 }

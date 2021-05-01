@@ -45,7 +45,8 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
 		// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
 		if (playerVoteArea->fields.didVote && playerVoteArea->fields.votedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
-			State.events.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+			State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+			State.consoleEvents.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
 			State.voteMonitor[playerData->fields.PlayerId] = true;
 		}
 	}
