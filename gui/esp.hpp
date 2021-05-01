@@ -41,6 +41,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	// Scaling from the x axis would probably also work but now we scale from the y axis.
 	float view = GetScaleFromValue(180.0f);
 	const ImVec2 winsize = { (float)Screen_get_width(nullptr), (float)Screen_get_height(nullptr) };
+	const bool isFullscreen = Screen_get_fullScreen(nullptr);
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
