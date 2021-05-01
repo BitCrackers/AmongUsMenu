@@ -78,6 +78,7 @@ namespace GameTab {
 			{
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
+
 			ImGui::EndTabItem();
 		}
 	}
