@@ -5,10 +5,8 @@
 #include "state.hpp"
 
 void dDebug_Log(Object* message, MethodInfo* method) {
-#ifdef _DEBUG
 	if (State.ShowUnityLogs)
 		Log.Debug("UNITY", ToString(message));
-#endif
 	Debug_Log(message, method);
 }
 

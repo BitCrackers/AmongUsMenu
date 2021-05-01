@@ -91,6 +91,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			SaveOriginalAppearance();
 		}
 
+		if ((__this == *Game::pLocalPlayer) && (State.originalColor == 0xFF)) {
+			SaveOriginalAppearance();
+		}
+
 		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
@@ -192,6 +196,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
 	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
 
