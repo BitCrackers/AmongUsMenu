@@ -92,6 +92,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			SaveOriginalAppearance();
 		}
 
+		if ((__this == *Game::pLocalPlayer) && (State.originalColor == 0xFF)) {
+			SaveOriginalAppearance();
+		}
+
 		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
