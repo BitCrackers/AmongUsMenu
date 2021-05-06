@@ -13,14 +13,6 @@ static bool IsWithinScreenBounds(Vector2& pos)
 	return pos.x < (float)Screen_get_width(nullptr) && pos.y < (float)Screen_get_height(nullptr);
 }
 
-static ImVec2 GetDesktopResolution()
-{
-	RECT rect;
-	const HWND window = GetDesktopWindow();
-	GetWindowRect(window, &rect);
-	return { (float)rect.right, (float)rect.bottom };
-}
-
 static ImVec2 GetResolution()
 {
 	return Screen_get_fullScreen(nullptr) ? GetDesktopResolution() : ImVec2((float)Screen_get_width(nullptr), (float)Screen_get_height(nullptr));
@@ -54,6 +46,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	// Scaling from the x axis would probably also work but now we scale from the y axis.
 	float view = GetScaleFromValue(180.0f);
 	const ImVec2 winsize = GetResolution();
+	
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
