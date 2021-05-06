@@ -92,14 +92,10 @@ void Run(LPVOID lpParam) {
 	init_il2cpp();
 	{
 		std::ostringstream ss;
-		ImVec2 desktopResolution = GetDesktopResolution();
 		ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
 		ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
 		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
 		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
-		ss << "\tFullscreen: " << Screen_get_fullScreen(nullptr) << std::endl;
-		ss << "\tWindow Resolution: " << +Screen_get_width(nullptr) << "x" << +Screen_get_height(nullptr) << std::endl;
-		ss << "\tScreen Resolution: " << desktopResolution.x << "x" << desktopResolution.y;
 		LOG_INFO(ss.str());
 	}
 	State.Load();

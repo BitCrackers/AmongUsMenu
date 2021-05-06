@@ -41,6 +41,14 @@ typedef struct Cache
 
 static cache_t s_Cache;
 
+ImVec2 DirectX::GetWindowSize()
+{
+    RECT rect;
+    GetWindowRect(window, &rect);
+
+    return { (float)(rect.right-rect.left),  (float)(rect.bottom-rect.top) };
+}
+
 static bool CanDrawEsp()
 {
 	return IsInGame() && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
@@ -101,7 +109,6 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
             MAX_RENDER_THREAD_COUNT,              // initial count
             MAX_RENDER_THREAD_COUNT,              // maximum count
             NULL);                                // unnamed semaphore);
-
         return true;
     }
     
@@ -116,7 +123,12 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     });
 	if (!State.ImGuiInitialized) {
         if (ImGuiInitialization(__this)) {
+            ImVec2 size = DirectX::GetWindowSize();
             State.ImGuiInitialized = true;
+            STREAM_DEBUG("ImGui Initialized successfully!");
+            STREAM_DEBUG("Fullscreen: " << Screen_get_fullScreen(nullptr));
+            STREAM_DEBUG("Unity Window Resolution: " << +Screen_get_width(nullptr) << "x" << +Screen_get_height(nullptr));
+            STREAM_DEBUG("DirectX Window Size: " << +size.x << "x" << +size.y);
         } else {
             ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
             return oPresent(__this, SyncInterval, Flags);

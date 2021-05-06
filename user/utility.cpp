@@ -589,11 +589,3 @@ void ResetOriginalAppearance()
 	State.originalPet = 0xFF;
 	State.originalColor = 0xFF;
 }
-
-ImVec2 GetDesktopResolution()
-{
-	RECT rect;
-	const HWND window = GetDesktopWindow();
-	GetWindowRect(window, &rect);
-	return { (float)rect.right, (float)rect.bottom };
-}

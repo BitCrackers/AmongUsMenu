@@ -119,4 +119,3 @@ void ImpersonateName(PlayerSelection player);
 int GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
-ImVec2 GetDesktopResolution();
