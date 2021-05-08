@@ -5,6 +5,7 @@
 #include "state.hpp"
 
 namespace SettingsTab {
+	const char* FONT_SIZES[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 	void Render() {
 		if (ImGui::BeginTabItem("Settings")) {
 			ImGui::Dummy(ImVec2(4, 4));
@@ -35,6 +36,16 @@ namespace SettingsTab {
 					State.userName = std::string(*nameBuffer);
 				}
 			}
+
+			ImGui::BeginChild("chat#options", ImVec2(200, 0), true);
+			ImGui::Checkbox("Bold", &State.chatTextBold);
+			ImGui::SameLine();
+			ImGui::Checkbox("Italics", &State.chatTextItalics);
+			ImGui::Checkbox("Underline", &State.chatTextUnderline);
+			ImGui::SameLine();
+			ImGui::Checkbox("Strikethrough", &State.chatTextStrikethrough);
+			ImGui::Combo("Font Size", &State.chatFontSize, FONT_SIZES, IM_ARRAYSIZE(FONT_SIZES));
+			ImGui::EndChild();
 
 			ImGui::EndTabItem();
 		}

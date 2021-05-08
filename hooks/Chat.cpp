@@ -3,8 +3,21 @@
 #include "utility.h"
 #include "game.h"
 #include "state.hpp"
+#include "tabs/settings_tab.h"
 
+const char* FONT_SIZES[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
+	std::string chatMessage = convert_from_string(chatText);
+	if (State.chatTextBold) chatMessage = "<b>" + chatMessage;
+	if (State.chatTextItalics) chatMessage = "<i>" + chatMessage;
+	if (State.chatTextUnderline) chatMessage = "<u>" + chatMessage;
+	if (State.chatTextStrikethrough) chatMessage = "<s>" + chatMessage;
+	if (State.chatFontSize > 1) {
+		std::ostringstream ss;
+		ss << "<size=" << FONT_SIZES[State.chatFontSize] << ">" << chatMessage << "</size>";
+		chatMessage = ss.str();
+	}
+	chatText = convert_to_string(chatMessage);
 	if (State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
