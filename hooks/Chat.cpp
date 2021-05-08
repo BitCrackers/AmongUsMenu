@@ -5,6 +5,7 @@
 #include "state.hpp"
 
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
+	//Modify chat text here for markup
 	if (State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
@@ -54,5 +55,12 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 {
 	SaveManager__TypeInfo->static_fields->chatModeType = 1;
 	SaveManager__TypeInfo->static_fields->isGuest = false;
+	__this->fields.TextArea->fields.characterLimit = 500;
 	ChatController_Update(__this, method);
+}
+
+//This should apply to all text fields, not just chat
+bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
+{
+	return true; //We don't care what we put in here
 }
