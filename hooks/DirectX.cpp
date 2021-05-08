@@ -43,10 +43,16 @@ static cache_t s_Cache;
 
 ImVec2 DirectX::GetWindowSize()
 {
-    RECT rect;
-    GetWindowRect(window, &rect);
+    if (Screen_get_fullScreen(nullptr))
+    {
+        RECT rect;
+        GetWindowRect(window, &rect);
 
-    return { (float)(rect.right-rect.left),  (float)(rect.bottom-rect.top) };
+        return { (float)(rect.right - rect.left),  (float)(rect.bottom - rect.top) };
+    }
+
+    return { (float)Screen_get_width(nullptr), (float)Screen_get_height(nullptr) };
+
 }
 
 static bool CanDrawEsp()
