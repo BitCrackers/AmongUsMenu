@@ -114,12 +114,6 @@ public:
 
     bool activeImpersonation = false;
 
-    bool chatTextBold = false;
-    bool chatTextItalics = false;
-    bool chatTextUnderline = false;
-    bool chatTextStrikethrough = false;
-    int chatFontSize = 1;
-
     PlayerSelection playerToFollow;
 
     Vector3 camPos = { NULL, NULL, NULL };
