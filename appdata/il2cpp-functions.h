@@ -95,6 +95,7 @@ DO_APP_FUNC(void, PlayerControl_HandleRpc, (PlayerControl* __this, uint8_t callI
 DO_APP_FUNC(void, PlayerControl_RpcSetPet, (PlayerControl* __this, uint32_t petId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetPet(System.UInt32)");
 DO_APP_FUNC(void, PlayerControl_RpcSetSkin, (PlayerControl* __this, uint32_t skinId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetSkin(System.UInt32)");
 DO_APP_FUNC(void, PlayerControl_RpcSetHat, (PlayerControl* __this, uint32_t hatId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetHat(System.UInt32)");
+DO_APP_FUNC(bool, PlayerControl_RpcSendChat, (PlayerControl* __this, String* message, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::RpcSendChat(System.String)");
 
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");
 
