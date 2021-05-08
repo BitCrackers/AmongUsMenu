@@ -172,7 +172,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 			ImGui::Begin("BackBuffer", reinterpret_cast<bool*>(true),
 				ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoScrollbar);
 
-			s_Cache.Winsize = GetResolution();
+			s_Cache.Winsize = DirectX::GetWindowSize();
 			s_Cache.Window = ImGui::GetCurrentWindow();
 
 			//Set window properties

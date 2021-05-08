@@ -13,12 +13,6 @@ static bool IsWithinScreenBounds(Vector2& pos)
 	return pos.x < (float)Screen_get_width(nullptr) && pos.y < (float)Screen_get_height(nullptr);
 }
 
-static ImVec2 GetResolution()
-{
-	return DirectX::GetWindowSize();
-}
-
-
 static float GetScaleFromValue(float value)
 {
 	// NOTE : The res of the game can not be lower than the desktop res if the game is in fullscreen.
@@ -46,8 +40,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	// The value 180 is specific for 1920x1080 so we need to scale it for other resolutions.
 	// Scaling from the x axis would probably also work but now we scale from the y axis.
 	float view = GetScaleFromValue(180.0f);
-	const ImVec2 winsize = GetResolution();
-	
+	const ImVec2 winsize = DirectX::GetWindowSize();
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
