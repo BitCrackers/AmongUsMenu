@@ -62,5 +62,5 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 //This should apply to all text fields, not just chat
 bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
 {
-	return true; //We don't care what we put in here
+	return (unicode_char != 0x08); //List invalid characters here
 }
