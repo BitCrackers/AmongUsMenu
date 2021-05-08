@@ -2,6 +2,7 @@
 #include "resources.h"
 #include "directx11.h"
 #include <vector>
+#include <imgui/imgui.h>
 
 struct MapTexture {
 	D3D11Image mapImage;
@@ -18,4 +19,5 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 namespace DirectX {
 	extern HANDLE hRenderSemaphore;
 	void Shutdown();
+	ImVec2 GetWindowSize();
 }

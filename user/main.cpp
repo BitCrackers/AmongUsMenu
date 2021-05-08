@@ -90,12 +90,14 @@ void Run(LPVOID lpParam) {
 	}
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
-	std::ostringstream ss;
-	ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
-	ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
-	ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
-	ss << "\tAmong Us Version: " << getGameVersion(); // Log among us info
-	LOG_INFO(ss.str());
+	{
+		std::ostringstream ss;
+		ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
+		ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
+		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
+		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
+		LOG_INFO(ss.str());
+	}
 	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);

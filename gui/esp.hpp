@@ -5,7 +5,7 @@
 
 #include "state.hpp"
 #include "game.h"
-
+#include "DirectX.h"
 #include <imgui/imgui.h>
 
 static bool IsWithinScreenBounds(Vector2& pos)
@@ -19,7 +19,7 @@ static float GetScaleFromValue(float value)
 	// We always need to divide the camera height by 3
 	// since 3 is the default zoom in the menu for some reason.
 	// We offset from 1080 since the w2s scale is defaulted to that.
-	float scale = (float)Screen_get_height(nullptr) / 1080.0f;
+	float scale = DirectX::GetWindowSize().y / 1080.0f;
 
 	// If we enable zoom then we scale but otherwise don't
 	float cameraHeight = State.EnableZoom ? State.CameraHeight / 3.0f : 1.0f;
@@ -40,7 +40,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	// The value 180 is specific for 1920x1080 so we need to scale it for other resolutions.
 	// Scaling from the x axis would probably also work but now we scale from the y axis.
 	float view = GetScaleFromValue(180.0f);
-	const ImVec2 winsize = { (float)Screen_get_width(nullptr), (float)Screen_get_height(nullptr) };
+	const ImVec2 winsize = DirectX::GetWindowSize();
 
 	// Here we transform the world position to the screen position
 	ImVec2 value;
