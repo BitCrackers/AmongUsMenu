@@ -75,7 +75,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     if (IsInLobby()) {
         if (State.originalName == "-") {
-            State.originalName = convert_from_string(GetPlayerData(*Game::pLocalPlayer)->fields.PlayerName);
+            State.originalName = convert_from_string(GetPlayerData(*Game::pLocalPlayer)->fields._playerName);
         }
 
         if (!State.lobbyRpcQueue.empty()) {
@@ -110,7 +110,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
     if (data->fields.Character != nullptr) //Found this happens on game ending occasionally
     {
-        Log.Debug(convert_from_string(data->fields.Character->fields._cachedData->fields.PlayerName) + " has left the game.");
+        Log.Debug(convert_from_string(data->fields.Character->fields._cachedData->fields._playerName) + " has left the game.");
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
