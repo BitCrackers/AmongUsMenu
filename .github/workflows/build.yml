@@ -15,9 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
       
-      - name: Build
+      - name: Build Release
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
+        
+      - name: Build Release_Version
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
@@ -26,26 +30,26 @@ jobs:
           name: Release
           path: |
             ./Release/AmongUsMenu.dll
-            ./LICENSE
-  
-  Release_Version:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-      - name: Build
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
-      
-      - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
-        with:
-          name: Release_Version
-          path: |
             ./Release_Version/version.dll
             ./LICENSE
+            
+      - name: Package Builds
+        if: ${{ github.event_name == 'push' }}
+        run: tar -caf Release_${{ github.sha }}.zip ./Release/AmongUsMenu.dll ./Release_Version/version.dll ./LICENSE
+      
+      - name: Automatic Releases
+        if: ${{ github.event_name == 'push' }}
+        uses: marvinpinto/action-automatic-releases@latest
+        id: "automatic_releases"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest-release"
+          prerelease: true
+          title: "Release Build"
+          files: |
+            Release_${{ github.sha }}.zip
+      # note, we can invoke the discord webhook here and send it ${{ steps.automatic_releases.outputs.upload_url }} for a direct link to the release
+      # if we do that we can probably remove the artifact uploads entirely unless there's a reason to keep them?
 
   Debug:
     runs-on: windows-latest
@@ -53,9 +57,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
       
-      - name: Build
+      - name: Build Debug
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
+        
+      - name: Build Debug_Version
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
       
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
@@ -64,31 +72,29 @@ jobs:
           name: Debug
           path: |
             ./Debug/AmongUsMenu.dll
-            ./LICENSE
-  
-  Debug_Version:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-      - name: Build
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
-      
-      - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
-        with:
-          name: Debug_Version
-          path: | 
             ./Debug_Version/version.dll
             ./LICENSE
+            
+      - name: Package Builds
+        if: ${{ github.event_name == 'push' }}
+        run: tar -caf Debug_${{ github.sha }}.zip ./Debug/AmongUsMenu.dll ./Debug_Version/version.dll ./LICENSE
+        
+      - name: Automatic Releases
+        if: ${{ github.event_name == 'push' }}
+        uses: marvinpinto/action-automatic-releases@latest
+        id: "automatic_releases"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest-debug"
+          prerelease: true
+          title: "Debug Build"
+          files: |
+            Debug_${{ github.sha }}.zip
   
   Notification:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.repository == "BitCrackers/AmongUsMenu" }}
     runs-on: ubuntu-latest
-    needs: [Release, Release_Version, Debug, Debug_Version]
+    needs: [Release, Debug]
     steps:
       - name: Discord Notification
         uses: rjstone/discord-webhook-notify@v1.0.4
