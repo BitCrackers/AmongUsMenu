@@ -26,40 +26,7 @@ struct KLASS_PAIR {
 };
 
 const std::vector<KLASS_PAIR> KLASS_TRANSLATIONS = {
-	{ {"", "Constants"}, {"", "LNCOKMACBKP"}},
-	{ {"", "GameData.PlayerInfo"}, {"", "GameData.LGBOMGHJELL"} },
-	{ {"", "GameData.TaskInfo"}, {"", "GameData.NGBCKJFEBBJ"} },
-	{ {"", "DoorCardSwipeGame.TaskStages"}, {"", "DoorCardSwipeGame.FJAMAKBHCLP"}},
-	{ {"", "GameOptionsData"}, {"", "CEIOGGEDKAN"} },
-	{ {"", "Palette"}, {"", "BLMBFIODBKL"} },
-	{ {"", "SaveManager"}, {"", "BLCGIFOPMIA"} },
-	{ {"", "StatsManager"}, {"", "IAJICOPDKHA"} },
-	{ {"", "SystemTypes"}, {"", "BCPJLGGNHBC"} },
-	{ {"", "DisconnectReasons"}, {"", "GABADEGMIHF"} },
-	{ {"", "ISystemType"}, {"", "JBBCJFNFOBB"} },
-	{ {"", "SwitchSystem"}, {"", "ABIMJJMBJJM"} },
-	{ {"", "TaskTypes"}, {"", "DMOAGPGAFKM"} },
-	{ {"", "TaskBarUpdates"}, {"", "NJIFIEMPGEC"} },
-	{ {"", "GameMode"}, {"", "IDLLMBGOEPL"} },
-	{ {"", "Announcement"}, {"", "DEMJCHFGGHP"} },
-	{ {"InnerNet", "MessageExtensions"}, {"", "GNECIFEPIHB"} },
-	{ {"InnerNet", "GameKeywords"}, {"", "HPPGMINEFNF"} },
-	{ {"InnerNetClient", "GameStates"}, {"", "GCDONLGCMIL"} }
 };
 
 const std::vector<std::pair<std::string, std::string>> METHOD_TRANSLATIONS = {
-	{ "get_BanMinutesLeft", "ABJEJPPKINE" },
-	{ "get_AmBanned", "GJMGEHKGFDA" },
-	{ "get_BanPoints", "NAMLHJLDMNN" },
-	{ "Deserialize", "GGJDCBJNFBH" },
-	{ "EnterVent", "FCHLKLJCBEP" },
-	{ "ExitVent", "AGOIHGCNABM" },
-	{ "ReportDeadBody", "OAEFBFNHJGG" },
-	{ "ShouldFlipSkeld", "OCGFJNHBAPE" },
-	{ "SendStartGame", "MFLPHJGDGDB" },
-	{ "SetMaskFunction", "ODDFGCMOGOA" },
-	{ "OnPlayerLeft", "LIOEBBDDACD" },
-	{ "SnapTo", "ODDILDEGEOD" },
-	{ "SetSide", "OMLGOAEHPKJ"},
-	{ "WriteNetObject", "HHECOFHJFEE"},
 };

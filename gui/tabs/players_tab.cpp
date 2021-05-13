@@ -17,7 +17,7 @@ namespace PlayersTab {
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected) continue;
 
-					std::string playerName = convert_from_string(playerData->fields.PlayerName);
+					std::string playerName = convert_from_string(playerData->fields._playerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
