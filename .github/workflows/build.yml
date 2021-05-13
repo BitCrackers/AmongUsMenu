@@ -92,7 +92,7 @@ jobs:
             Debug_${{ github.sha }}.zip
   
   Notification:
-    if: ${{ github.event_name == 'push' && github.repository == "BitCrackers/AmongUsMenu" }}
+    if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
     runs-on: ubuntu-latest
     needs: [Release, Debug]
     steps:
