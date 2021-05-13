@@ -523,17 +523,17 @@ std::string GetGitBranch()
 void ImpersonateName(PlayerSelection player)
 {
 	if (!(IsInGame() || IsInLobby())) return;
-	if (convert_from_string(player.get_PlayerData()->fields.PlayerName).length() < 10) {
+	if (convert_from_string(player.get_PlayerData()->fields._playerName).length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
 	}
 }
 
@@ -573,7 +573,7 @@ void SaveOriginalAppearance()
 {
 	PlayerSelection player = *Game::pLocalPlayer;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(player.get_PlayerData()->fields.PlayerName);
+	State.originalName = convert_from_string(player.get_PlayerData()->fields._playerName);
 	State.originalSkin = player.get_PlayerData()->fields.SkinId;
 	State.originalHat = player.get_PlayerData()->fields.HatId;
 	State.originalPet = player.get_PlayerData()->fields.PetId;
