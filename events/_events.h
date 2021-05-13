@@ -43,7 +43,7 @@ struct EVENT_PLAYER {
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
 		playerId = playerInfo->fields.PlayerId;
 		colorId = playerInfo->fields.ColorId;
-		playerName = convert_from_string(playerInfo->fields.PlayerName);
+		playerName = convert_from_string(playerInfo->fields._playerName);
 	}
 };
 

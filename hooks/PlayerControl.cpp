@@ -157,7 +157,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
 			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
-			espPlayerData.Name = convert_from_string(playerData->fields.PlayerName);
+			espPlayerData.Name = convert_from_string(playerData->fields._playerName);
 			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
 			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
 			espPlayerData.playerData = PlayerSelection(__this);

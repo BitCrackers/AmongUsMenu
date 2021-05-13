@@ -33,7 +33,7 @@ void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
 	if (IsInGame()) {
 		for (auto playerData : GetAllPlayerData()) {
-			if (playerName == playerData->fields.PlayerName) {
+			if (playerName == playerData->fields._playerName) {
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				if (!localData)
 					continue;
