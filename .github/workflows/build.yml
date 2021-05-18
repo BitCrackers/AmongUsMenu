@@ -30,7 +30,7 @@ jobs:
       
       - name: Upload Release Artifact
         if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+        uses: actions/upload-artifact@v2.2.3
         with:
           name: Release
           path: Release_${{ github.sha }}.zip
@@ -52,7 +52,7 @@ jobs:
         
       - name: Upload Debug Artifact
         if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+        uses: actions/upload-artifact@v2.2.3
         with:
           name: Debug
           path: Debug_${{ github.sha }}.zip
@@ -79,14 +79,14 @@ jobs:
             echo 'feature ver: ${{ steps.semver_parser.outputs.build }}'
             echo 'full: ${{ steps.semver_parser.outputs.fullversion }}'
             echo 'is pre-release: ${{ steps.semver_parser.outputs.prerelease != 0 }}'
-            
+	    
       - name: Download Release Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v2.0.9
         with:
           name: Release
 	  
       - name: Download Debug Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v2.0.9
         with:
           name: Debug
 	  
