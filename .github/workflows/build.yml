@@ -84,12 +84,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Release
-		  
+	  
       - name: Download Debug Artifact
         uses: actions/download-artifact@v2
         with:
           name: Debug
-			
+	  
       - name: Automatic Releases
         if: ${{ github.event_name == 'push' }}
         uses: marvinpinto/action-automatic-releases@526ce12c6675bbe6e0e9a4169c90d09a3f7ad3e2
