@@ -79,7 +79,7 @@ jobs:
             echo 'feature ver: ${{ steps.semver_parser.outputs.build }}'
             echo 'full: ${{ steps.semver_parser.outputs.fullversion }}'
             echo 'is pre-release: ${{ steps.semver_parser.outputs.prerelease != 0 }}'
-	    
+      
       - name: Download Release Artifact
         uses: actions/download-artifact@v2.0.9
         with:
