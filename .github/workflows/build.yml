@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
       
-      # used solely for backwards compat, can remove once all the discord stuff is changed to use the release instead of the artifacts
+      # used solely for backwards compat, can remove once bitbot is updated to use the release instead of the artifacts
       - name: Upload Release Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
         
-        # used solely for backwards compat, can remove once all the discord stuff is changed to use the release instead of the artifacts
+        # used solely for backwards compat, can remove once bitbot is updated to use the release instead of the artifacts
       - name: Upload Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.1
@@ -95,21 +95,24 @@ jobs:
             Release_${{ github.sha }}.zip
             Debug_${{ github.sha }}.zip
             
-        # note, we can invoke the discord webhook here and send it ${{ steps.automatic_releases.outputs.upload_url }} for a direct link to the release
-        # if we do that we can probably remove the artifact uploads entirely unless there's a reason to keep them?
-      - name: Debug Discord
-        if: ${{ github.event_name == 'push' }}
-        run: echo 'Release URL ${{ steps.automatic_releases.outputs.upload_url }}'
   
   Notification:
     if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
     runs-on: ubuntu-latest
     needs: [BuildAndRelease]
     steps:
+      - name: Parse tag into env
+        # credit: mcraiha via [https://github.community/t/how-to-get-just-the-tag-name/16241/17]
+        id: get_tag
+        shell: bash
+        run: echo ::set-output name=THIS_TAG::${GITHUB_REF/refs\/tags\//}
+      - name: Debug tag parsing
+        run: echo '${{ steps.get_tag.outputs.THIS_TAG }}'
       - name: Discord Notification
         uses: rjstone/discord-webhook-notify@v1.0.4
         with:
           severity: info
           description: "Project Build"
-          details: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # note: we could also link directly to the asset, but that might not be very user-friendly
+          details: "${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.get_tag.outputs.THIS_TAG }}"
           webhookUrl: ${{ secrets.DISCORD_BUILD_WEBHOOK }}
