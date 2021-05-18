@@ -14,7 +14,7 @@
 #include <sstream>
 #include "gitparams.h"
 
-// test 'feature/automatic-releases' featureBranch 1.1.3
+// test 'feature/automatic-releases' featureBranch 1.1.4
 
 HMODULE hModule;
 HANDLE hUnloadEvent;
