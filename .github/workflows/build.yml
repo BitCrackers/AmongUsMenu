@@ -10,8 +10,57 @@ on:
       - main
   
 jobs:
-  BuildAndRelease:
+  Build_Release:
     runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+      - name: Build Release
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
+        
+      - name: Build Release_Version
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
+        
+      - name: Package Release Builds
+        if: ${{ github.event_name == 'push' }}
+        run: tar -caf Release_${{ github.sha }}.zip Release/AmongUsMenu.dll Release_Version/version.dll LICENSE
+      
+      - name: Upload Release Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Release
+          path: Release_${{ github.sha }}.zip
+            
+  Build_Debug:
+    runs-on: windows-latest
+    steps:
+      - name: Build Debug
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
+        
+      - name: Build Debug_Version
+        shell: bash
+        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
+        
+      - name: Package Debug Builds
+        if: ${{ github.event_name == 'push' }}
+        run: tar -caf Debug_${{ github.sha }}.zip Debug/AmongUsMenu.dll Debug_Version/version.dll LICENSE
+        
+      - name: Upload Debug Artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Debug
+          path: Debug_${{ github.sha }}.zip
+            
+  AutoRelease:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: windows-latest
+    needs: [Build_Release, Build_Debug]
     steps:
       - name: Parse tag semver
         uses: booxmedialtd/ws-action-parse-semver@3576f3a20a39f8752fe0d8195f5ed384090285dc
@@ -30,60 +79,17 @@ jobs:
             echo 'feature ver: ${{ steps.semver_parser.outputs.build }}'
             echo 'full: ${{ steps.semver_parser.outputs.fullversion }}'
             echo 'is pre-release: ${{ steps.semver_parser.outputs.prerelease != 0 }}'
-          
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-        # begin release builds
-      - name: Build Release
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
-        
-      - name: Build Release_Version
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
-      
-      # used solely for backwards compat, can remove once bitbot is updated to use the release instead of the artifacts
-      - name: Upload Release Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+            
+      - name: Download Release Artifact
+        uses: actions/download-artifact@v2
         with:
           name: Release
-          path: |
-            ./Release/AmongUsMenu.dll
-            ./Release_Version/version.dll
-            ./LICENSE
-            
-      - name: Package Release Build
-        if: ${{ github.event_name == 'push' }}
-        run: tar -caf Release_${{ github.sha }}.zip Release/AmongUsMenu.dll Release_Version/version.dll LICENSE
-        # end release builds
-        
-        # begin debug builds
-      - name: Build Debug
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug'
-        
-      - name: Build Debug_Version
-        shell: bash
-        run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
-        
-        # used solely for backwards compat, can remove once bitbot is updated to use the release instead of the artifacts
-      - name: Upload Artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v2.2.1
+		  
+      - name: Download Debug Artifact
+        uses: actions/download-artifact@v2
         with:
           name: Debug
-          path: |
-            ./Debug/AmongUsMenu.dll
-            ./Debug_Version/version.dll
-            ./LICENSE
-            
-      - name: Package Builds
-        if: ${{ github.event_name == 'push' }}
-        run: tar -caf Debug_${{ github.sha }}.zip Debug/AmongUsMenu.dll Debug_Version/version.dll LICENSE
-        #end debug builds
-      
+			
       - name: Automatic Releases
         if: ${{ github.event_name == 'push' }}
         uses: marvinpinto/action-automatic-releases@526ce12c6675bbe6e0e9a4169c90d09a3f7ad3e2
@@ -94,12 +100,11 @@ jobs:
           files: |
             Release_${{ github.sha }}.zip
             Debug_${{ github.sha }}.zip
-            
   
   Notification:
     if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
     runs-on: ubuntu-latest
-    needs: [BuildAndRelease]
+    needs: [AutoRelease]
     steps:
       - name: Parse tag into env
         # credit: mcraiha via [https://github.community/t/how-to-get-just-the-tag-name/16241/17]
