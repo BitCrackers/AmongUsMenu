@@ -27,14 +27,14 @@ jobs:
       - name: Package Release Builds
         if: ${{ github.event_name == 'push' }}
         run: tar -caf Release_${{ github.sha }}.zip Release/AmongUsMenu.dll Release_Version/version.dll LICENSE
-      
+        
       - name: Upload Release Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Release
           path: Release_${{ github.sha }}.zip
-            
+          
   Build_Debug:
     runs-on: windows-latest
     steps:
@@ -56,7 +56,7 @@ jobs:
         with:
           name: Debug
           path: Debug_${{ github.sha }}.zip
-            
+          
   AutoRelease:
     if: ${{ github.event_name == 'push' }}
     runs-on: windows-latest
@@ -68,8 +68,8 @@ jobs:
         with:
           input_string: ${{ github.ref }}
           version_extractor_regex: '\/v(.*)$'
-        
-        # please keep this for an adjustment period, will help diagnose any issues
+          
+      # please keep this for an adjustment period, will help diagnose any issues
       - name: Debug semver
         run: |
             echo 'major: ${{ steps.semver_parser.outputs.major }}'
@@ -84,12 +84,12 @@ jobs:
         uses: actions/download-artifact@v2.0.9
         with:
           name: Release
-	  
+      
       - name: Download Debug Artifact
         uses: actions/download-artifact@v2.0.9
         with:
           name: Debug
-	  
+      
       - name: Automatic Releases
         if: ${{ github.event_name == 'push' }}
         uses: marvinpinto/action-automatic-releases@526ce12c6675bbe6e0e9a4169c90d09a3f7ad3e2
@@ -111,8 +111,10 @@ jobs:
         id: get_tag
         shell: bash
         run: echo ::set-output name=THIS_TAG::${GITHUB_REF/refs\/tags\//}
+        
       - name: Debug tag parsing
         run: echo '${{ steps.get_tag.outputs.THIS_TAG }}'
+        
       - name: Discord Notification
         uses: rjstone/discord-webhook-notify@v1.0.4
         with:
