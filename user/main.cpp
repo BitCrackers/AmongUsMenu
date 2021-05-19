@@ -14,7 +14,7 @@
 #include <sstream>
 #include "gitparams.h"
 
-// test 'feature/automatic-releases'
+// test autoRelease main ver increment
 
 HMODULE hModule;
 HANDLE hUnloadEvent;
