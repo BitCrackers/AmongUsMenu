@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Release
-          path: Release_${{ github.sha }}.zip
+          path: Release.zip
           
   Build_Debug:
     runs-on: windows-latest
@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Debug
-          path: Debug_${{ github.sha }}.zip
+          path: Debug.zip
           
   AutoRelease:
     if: ${{ github.event_name == 'push' }}
@@ -101,8 +101,8 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: ${{ steps.semver_parser.outputs.prerelease != 0 }}
           files: |
-            Release_${{ github.sha }}.zip
-            Debug_${{ github.sha }}.zip
+            Release.zip
+            Debug.zip
   
   Notification:
     if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
