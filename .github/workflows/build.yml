@@ -26,14 +26,14 @@ jobs:
         
       - name: Package Release Builds
         if: ${{ github.event_name == 'push' }}
-        run: tar -caf Release_${{ github.sha }}.zip Release/AmongUsMenu.dll Release_Version/version.dll LICENSE
+        run: tar -caf Release.zip Release/AmongUsMenu.dll Release_Version/version.dll LICENSE
         
       - name: Upload Release Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Release
-          path: Release_${{ github.sha }}.zip
+          path: Release.zip
           
   Build_Debug:
     runs-on: windows-latest
@@ -51,14 +51,14 @@ jobs:
         
       - name: Package Debug Builds
         if: ${{ github.event_name == 'push' }}
-        run: tar -caf Debug_${{ github.sha }}.zip Debug/AmongUsMenu.dll Debug_Version/version.dll LICENSE
+        run: tar -caf Debug.zip Debug/AmongUsMenu.dll Debug_Version/version.dll LICENSE
         
       - name: Upload Debug Artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Debug
-          path: Debug_${{ github.sha }}.zip
+          path: Debug.zip
           
   AutoRelease:
     if: ${{ github.event_name == 'push' }}
@@ -101,8 +101,8 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: ${{ steps.semver_parser.outputs.prerelease != 0 }}
           files: |
-            Release_${{ github.sha }}.zip
-            Debug_${{ github.sha }}.zip
+            Release.zip
+            Debug.zip
   
   Notification:
     if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
