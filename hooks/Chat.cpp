@@ -55,7 +55,6 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 {
 	SaveManager__TypeInfo->static_fields->chatModeType = 1;
 	SaveManager__TypeInfo->static_fields->isGuest = false;
-	__this->fields.TextArea->fields.characterLimit = 500;
 	ChatController_Update(__this, method);
 }
 
