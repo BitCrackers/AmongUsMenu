@@ -19,7 +19,7 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	{
 		if (State.ChatAlwaysActive)
 			ChatController_SetVisible(__this->fields.Chat, true, NULL);
-		else
+		else if (!State.InMeeting && !IsInLobby()) //You will lose chat ability in meeting otherwise
 			ChatController_SetVisible(__this->fields.Chat, State.ChatActiveOriginalState, NULL);
 		bChatAlwaysActivePrevious = State.ChatAlwaysActive;
 	}
