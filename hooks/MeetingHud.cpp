@@ -20,7 +20,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 	PlayerVoteArea__Array* playerStates = __this->fields.playerStates;
 	for (size_t i = 0; i < playerStates->max_length; i++) {
 		PlayerVoteArea* playerVoteArea = playerStates->vector[i];
-		auto playerData = GetPlayerDataById(playerVoteArea->fields.votedFor);
+		auto playerData = GetPlayerDataById(playerVoteArea->fields._TargetPlayerId_k__BackingField);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
 
@@ -44,7 +44,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
 			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
 			if (playerVoteArea->fields.didVote && playerVoteArea->fields.votedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
-				State.events[playerVoteArea->fields.votedFor][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+				State.events[playerVoteArea->fields._TargetPlayerId_k__BackingField][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
 				State.consoleEvents.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
 				State.voteMonitor[playerData->fields.PlayerId] = true;
 			}
