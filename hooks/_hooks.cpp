@@ -37,10 +37,12 @@ void DetourInitilization() {
 		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
 		return;
 	} else {
-		oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("55 8B EC 53 8B 5D ? F6 C3 01 74 ? 53 FF 75 ? FF 75 ? FF 15 ? ? ? ? 5B 5D C2", GetModuleHandleA("GameOverlayRenderer.dll"));
+		HMODULE steamApiModule = GetModuleHandleA("GameOverlayRenderer.dll");
+		if (steamApiModule != NULL)
+			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("55 8B EC 53 8B 5D ? F6 C3 01 74 ? 53 FF 75 ? FF 75 ? FF 15 ? ? ? ? 5B 5D C2", steamApiModule);
 		if (!oPresent)
 		{
-			if (MessageBox(0, L"Failed to hook the Steam overlay D3DPresent function.  This may cause the menu to be visible to streaming applications.  Do you wish to continue?", L"Error", MB_YESNO | MB_ICONERROR) == IDNO)
+			if (steamApiModule && MessageBox(0, L"Failed to hook the Steam overlay D3DPresent function.  This may cause the menu to be visible to streaming applications.  Do you wish to continue?", L"Error", MB_YESNO | MB_ICONERROR) == IDNO)
 			{
 #ifndef _VERSION
 				SetEvent(hUnloadEvent); //Might as well unload the DLL if we're not going to render anything

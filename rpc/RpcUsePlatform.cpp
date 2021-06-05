@@ -17,8 +17,8 @@ void RpcUsePlatform::Process()
 		auto shipStatus = (AirshipStatus*)*(Game::pShipStatus);
 		auto movingPlatform = shipStatus->fields.GapPlatform;
 		if (movingPlatform->fields.Target == nullptr) //If the platform is in use, this would cause unknown behaviour.
-			MovingPlatformBehaviour_SetSide(movingPlatform, !movingPlatform->fields.isLeft, NULL);
+			MovingPlatformBehaviour_SetSide(movingPlatform, !movingPlatform->fields.IsLeft, NULL);
 
-		STREAM_DEBUG("Moving Platform warped to " << (movingPlatform->fields.isLeft ? "Left" : "Right"));
+		STREAM_DEBUG("Moving Platform warped to " << (movingPlatform->fields.IsLeft ? "Left" : "Right"));
 	}
 }

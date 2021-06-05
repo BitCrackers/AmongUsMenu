@@ -18,11 +18,13 @@ std::string utf16_to_utf8(std::u16string u16_string) {
 }
 
 std::string convert_from_string(Il2CppString* input) {
+	if (input == nullptr) return "";
 	std::u16string u16(reinterpret_cast<const char16_t*>(input->chars));
 	return utf16_to_utf8(u16);
 }
 
 std::string convert_from_string(app::String* input) {
+	if (input == nullptr) return "";
 	std::u16string u16(reinterpret_cast<const char16_t*>(&input->fields.m_firstChar));
 	return utf16_to_utf8(u16);
 }

@@ -20,7 +20,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 	PlayerVoteArea__Array* playerStates = __this->fields.playerStates;
 	for (size_t i = 0; i < playerStates->max_length; i++) {
 		PlayerVoteArea* playerVoteArea = playerStates->vector[i];
-		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
+		auto playerData = GetPlayerDataById(playerVoteArea->fields._TargetPlayerId_k__BackingField);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
 
@@ -31,7 +31,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 					? Palette__TypeInfo->static_fields->ImpostorRed
 					: Palette__TypeInfo->static_fields->White, NULL);
 
-				
+
 				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
 				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
 			}
@@ -40,14 +40,14 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
 				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
 			}
-		}
 
-		// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
-		// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
-		if (playerVoteArea->fields.didVote && playerVoteArea->fields.votedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
-			State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
-			State.consoleEvents.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
-			State.voteMonitor[playerData->fields.PlayerId] = true;
+			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
+			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
+			if (playerVoteArea->fields.didVote && playerVoteArea->fields.votedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
+				State.events[playerVoteArea->fields._TargetPlayerId_k__BackingField][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+				State.consoleEvents.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.votedFor))));
+				State.voteMonitor[playerData->fields.PlayerId] = true;
+			}
 		}
 	}
 	
