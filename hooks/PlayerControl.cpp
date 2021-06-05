@@ -176,8 +176,8 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PrevKillDistance = gameOptions->fields.KillDistance;
 	State.KillDistance = gameOptions->fields.KillDistance;
-	State.PrevTaskBarUpdates = gameOptions->fields.TaskBarUpdates;
-	State.TaskBarUpdates = gameOptions->fields.TaskBarUpdates;
+	State.PrevTaskBarUpdates = gameOptions->fields.TaskBarMode;
+	State.TaskBarUpdates = gameOptions->fields.TaskBarMode;
 
 	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
 }
