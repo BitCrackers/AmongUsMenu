@@ -113,6 +113,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_ReallyBeginFlow);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
+	HOOKFUNC(TextBoxTMP_IsCharAllowed);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -183,6 +184,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_ReallyBeginFlow);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
+	UNHOOKFUNC(TextBoxTMP_IsCharAllowed);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
