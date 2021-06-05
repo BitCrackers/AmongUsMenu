@@ -5,6 +5,7 @@
 #include "state.hpp"
 
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
+	//Modify chat text here for markup
 	if (State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
@@ -23,11 +24,13 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {
-	State.ChatActiveOriginalState = visible;
 	if (State.ChatAlwaysActive)
 		ChatController_SetVisible(__this, true, method);
 	else
+	{
+		State.ChatActiveOriginalState = visible;
 		ChatController_SetVisible(__this, visible, method);
+	}
 }
 
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
@@ -55,4 +58,10 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 	SaveManager__TypeInfo->static_fields->chatModeType = 1;
 	SaveManager__TypeInfo->static_fields->isGuest = false;
 	ChatController_Update(__this, method);
+}
+
+//This should apply to all text fields, not just chat
+bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
+{
+	return (unicode_char != 0x08); //List invalid characters here
 }

@@ -27,7 +27,7 @@ namespace GameTab {
 			if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES)) {
 				if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
 				else {
-					(*Game::pGameOptionsData)->fields.TaskBarUpdates = (TaskBarUpdates__Enum)State.TaskBarUpdates;
+					(*Game::pGameOptionsData)->fields.TaskBarMode = (TaskBarMode__Enum)State.TaskBarUpdates;
 					State.PrevTaskBarUpdates = State.TaskBarUpdates;
 				}
 			}

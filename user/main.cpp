@@ -51,16 +51,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "7b179922") {
-		Log.Error("GameAssembly.dll is either not the right version or corrupted");
-		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
-		return false;
-	}
-
-	if (std::filesystem::exists(steamApi) && GetCRC32(steamApi) != "815ba560") {
-		Log.Error("SteamApi not found or incorrect version");
-		ShellExecute(NULL, NULL, L"https://store.steampowered.com/app/945360/Among_Us/", NULL, NULL, SW_SHOW);
-	}
+	std::string gameAssemblyCRC = GetCRC32(gameAssembly); //We won't use this, but it will log it
 
 	return true;
 }

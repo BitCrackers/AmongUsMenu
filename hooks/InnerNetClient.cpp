@@ -5,6 +5,7 @@
 #include "game.h"
 #include "logger.h"
 #include "utility.h"
+#include <sstream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
