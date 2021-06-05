@@ -27,8 +27,8 @@ jobs:
       - name: Package Release Builds
         if: ${{ github.event_name == 'push' }}
         run: |
-          move /y Release/AmongUsMenu.dll .
-          move /y Release_Version/version.dll .
+          move /y Release\AmongUsMenu.dll .
+          move /y Release_Version\version.dll .
           tar -caf Release.zip AmongUsMenu.dll version.dll LICENSE
         
       - name: Upload Release Artifact
@@ -55,9 +55,9 @@ jobs:
       - name: Package Debug Builds
         if: ${{ github.event_name == 'push' }}
         run: |
-          move /y Debug/AmongUsMenu.dll .
-          move /y Debug_Version/version.dll .
-          tar -caf Debug.zip Debug/AmongUsMenu.dll Debug_Version/version.dll LICENSE
+          move /y Debug\AmongUsMenu.dll .
+          move /y Debug_Version\version.dll .
+          tar -caf Debug.zip AmongUsMenu.dll version.dll LICENSE
         
       - name: Upload Debug Artifact
         if: ${{ github.event_name == 'push' }}
