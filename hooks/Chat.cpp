@@ -23,17 +23,19 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {
-	State.ChatActiveOriginalState = visible;
 	if (State.ChatAlwaysActive)
 		ChatController_SetVisible(__this, true, method);
 	else
+	{
+		State.ChatActiveOriginalState = visible;
 		ChatController_SetVisible(__this, visible, method);
+	}
 }
 
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
 	if (IsInGame()) {
 		for (auto playerData : GetAllPlayerData()) {
-			if (playerName == playerData->fields.PlayerName) {
+			if (playerName == playerData->fields._playerName) {
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				if (!localData)
 					continue;

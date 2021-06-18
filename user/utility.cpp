@@ -143,9 +143,9 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
-#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameMode__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
+#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
+#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
@@ -523,17 +523,17 @@ std::string GetGitBranch()
 void ImpersonateName(PlayerSelection player)
 {
 	if (!(IsInGame() || IsInLobby())) return;
-	if (convert_from_string(player.get_PlayerData()->fields.PlayerName).length() < 10) {
+	if (convert_from_string(player.get_PlayerData()->fields._playerName).length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields.PlayerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
 	}
 }
 
@@ -544,7 +544,7 @@ int GetRandomColorId()
 	{
 		auto players = GetAllPlayerControl();
 		std::vector<int> availableColors = { };
-		for (int i = 0; i < 12; i++)
+		for (il2cpp_array_size_t i = 0; i < app::Palette__TypeInfo->static_fields->PlayerColors->max_length; i++)
 		{
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
@@ -564,7 +564,7 @@ int GetRandomColorId()
 	}
 	else
 	{
-		colorId = randi(0, 11);
+		colorId = randi(0, app::Palette__TypeInfo->static_fields->PlayerColors->max_length - 1);
 	}
 	return colorId;
 }
@@ -573,7 +573,7 @@ void SaveOriginalAppearance()
 {
 	PlayerSelection player = *Game::pLocalPlayer;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(player.get_PlayerData()->fields.PlayerName);
+	State.originalName = convert_from_string(player.get_PlayerData()->fields._playerName);
 	State.originalSkin = player.get_PlayerData()->fields.SkinId;
 	State.originalHat = player.get_PlayerData()->fields.HatId;
 	State.originalPet = player.get_PlayerData()->fields.PetId;

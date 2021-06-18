@@ -15,7 +15,7 @@ namespace HostTab {
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected) continue;
 
-					std::string playerName = convert_from_string(playerData->fields.PlayerName);
+					std::string playerName = convert_from_string(playerData->fields._playerName);
 
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 

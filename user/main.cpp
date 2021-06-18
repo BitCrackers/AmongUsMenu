@@ -14,6 +14,8 @@
 #include <sstream>
 #include "gitparams.h"
 
+// test autoRelease main ver increment
+
 HMODULE hModule;
 HANDLE hUnloadEvent;
 
@@ -49,16 +51,7 @@ bool GameVersionCheck() {
 		return false;
 	}
 
-	if (GetCRC32(gameAssembly) != "563db6f7") {
-		Log.Error("GameAssembly.dll is either not the right version or corrupted");
-		MessageBox(NULL, L"GameAssembly.dll is either not the right version or corrupted", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
-		return false;
-	}
-
-	if (std::filesystem::exists(steamApi) && GetCRC32(steamApi) != "815ba560") {
-		Log.Error("SteamApi not found or incorrect version");
-		ShellExecute(NULL, NULL, L"https://store.steampowered.com/app/945360/Among_Us/", NULL, NULL, SW_SHOW);
-	}
+	std::string gameAssemblyCRC = GetCRC32(gameAssembly); //We won't use this, but it will log it
 
 	return true;
 }
@@ -90,12 +83,14 @@ void Run(LPVOID lpParam) {
 	}
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
-	std::ostringstream ss;
-	ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
-	ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
-	ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
-	ss << "\tAmong Us Version: " << getGameVersion(); // Log among us info
-	LOG_INFO(ss.str());
+	{
+		std::ostringstream ss;
+		ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
+		ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
+		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
+		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
+		LOG_INFO(ss.str());
+	}
 	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
