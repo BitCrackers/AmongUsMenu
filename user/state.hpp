@@ -81,7 +81,7 @@ public:
 
     bool ShowConsole = false;
     std::vector<EventInterface*> consoleEvents;
-    std::vector<EventInterface*> events[10][EVENT_TYPES_SIZE];
+    std::vector<EventInterface*> events[15][EVENT_TYPES_SIZE];
 
     std::bitset<0xFF> voteMonitor;
 

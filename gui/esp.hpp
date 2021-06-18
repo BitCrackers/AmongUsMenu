@@ -67,7 +67,7 @@ typedef struct Drawing
 {
 	std::mutex m_DrawingMutex;
 
-	static const int MaxPlayersInLevel = 10;
+	static const int MaxPlayersInLevel = 15;
 	std::array<PlayerData, MaxPlayersInLevel> m_Players;
 
 	ImVec2 LocalPosition{ 0.0f, 0.0f };

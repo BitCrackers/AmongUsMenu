@@ -544,7 +544,7 @@ int GetRandomColorId()
 	{
 		auto players = GetAllPlayerControl();
 		std::vector<int> availableColors = { };
-		for (int i = 0; i < 12; i++)
+		for (il2cpp_array_size_t i = 0; i < app::Palette__TypeInfo->static_fields->PlayerColors->max_length; i++)
 		{
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
@@ -564,7 +564,7 @@ int GetRandomColorId()
 	}
 	else
 	{
-		colorId = randi(0, 11);
+		colorId = randi(0, app::Palette__TypeInfo->static_fields->PlayerColors->max_length - 1);
 	}
 	return colorId;
 }
