@@ -186,6 +186,7 @@ void KeyBinds::to_json(nlohmann::ordered_json& j, KeyBinds::Config value)
         {"Toggle_Radar", value.Toggle_Radar},
         {"Toggle_Console", value.Toggle_Console},
         {"Repair_Sabotage", value.Repair_Sabotage},
+		{"Sabotage_Light", value.Sabotage_Light},
         {"Toggle_Noclip", value.Toggle_Noclip},
         {"Close_All_Doors", value.Close_All_Doors},
         {"Toggle_Zoom", value.Toggle_Zoom},
@@ -200,6 +201,7 @@ void KeyBinds::from_json(const nlohmann::ordered_json& j, KeyBinds::Config& valu
     j.at("Toggle_Radar").get_to(value.Toggle_Radar);
     j.at("Toggle_Console").get_to(value.Toggle_Console);
     j.at("Repair_Sabotage").get_to(value.Repair_Sabotage);
+	j.at("Sabotage_Light").get_to(value.Sabotage_Light);
     j.at("Toggle_Noclip").get_to(value.Toggle_Noclip);
     j.at("Close_All_Doors").get_to(value.Close_All_Doors);
     j.at("Toggle_Zoom").get_to(value.Toggle_Zoom);

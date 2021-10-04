@@ -10,6 +10,7 @@ namespace KeyBinds {
         uint8_t Toggle_Radar;
         uint8_t Toggle_Console;
         uint8_t Repair_Sabotage;
+		uint8_t Sabotage_Light;
         uint8_t Toggle_Noclip;
         uint8_t Close_All_Doors;
         uint8_t Toggle_Zoom;

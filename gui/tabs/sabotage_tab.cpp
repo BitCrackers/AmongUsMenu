@@ -22,6 +22,10 @@ namespace SabotageTab {
                 if (ImGui::Button("Sabotage Lights")) {
                     State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Electrical));
                 }
+				ImGui::SameLine();
+                if (HotKey(State.KeyBinds.Sabotage_Light)) {
+                    State.Save();
+                }
                 if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Reactor")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
