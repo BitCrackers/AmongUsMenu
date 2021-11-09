@@ -1,6 +1,7 @@
 #pragma once
 #include <optional>
 #include <chrono>
+#include "utility.h"
 
 using namespace app;
 
@@ -42,8 +43,8 @@ struct EVENT_PLAYER {
 
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
 		playerId = playerInfo->fields.PlayerId;
-		colorId = playerInfo->fields.ColorId;
-		playerName = convert_from_string(playerInfo->fields._playerName);
+		colorId = GetPlayerOutfit(playerInfo)->fields.ColorId;
+		playerName = convert_from_string(GetPlayerOutfit(playerInfo)->fields._playerName);
 	}
 };
 
