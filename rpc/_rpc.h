@@ -28,7 +28,8 @@ class RpcRepairSystem : public RPCInterface {
 	SystemTypes__Enum selectedSystem;
 	int32_t amount;
 public:
-	RpcRepairSystem(SystemTypes__Enum selectedSystem, int32_t amount);
+	RpcRepairSystem(SystemTypes__Enum selectedSystem, SystemTypes__Enum amount);
+	RpcRepairSystem(SystemTypes__Enum selectedSystem, uint32_t amount);
 	virtual void Process() override;
 };
 
@@ -89,22 +90,22 @@ public:
 };
 
 class RpcSetPet : public RPCInterface {
-	uint32_t PetId;
+	String* PetId;
 public:
-	RpcSetPet(uint32_t petId);
+	RpcSetPet(String* petId);
 	virtual void Process() override;
 };
 
 class RpcSetSkin : public RPCInterface {
-	uint32_t SkinId;
+	String* SkinId;
 public:
-	RpcSetSkin(uint32_t skinId);
+	RpcSetSkin(String* skinId);
 	virtual void Process() override;
 };
 
 class RpcSetHat : public RPCInterface {
-	uint32_t HatId;
+	String* HatId;
 public:
-	RpcSetHat(uint32_t hatId);
+	RpcSetHat(String* hatId);
 	virtual void Process() override;
 };

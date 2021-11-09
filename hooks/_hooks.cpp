@@ -55,7 +55,7 @@ void DetourInitilization() {
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(HatManager_GetUnlockedHats);
-	HOOKFUNC(HatManager_GetUnlockedPets);
+	//HOOKFUNC(HatManager_GetUnlockedPets);
 	HOOKFUNC(HatManager_GetUnlockedSkins);
 	HOOKFUNC(PlayerControl_FixedUpdate);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
@@ -126,7 +126,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(HatManager_GetUnlockedHats);
-	UNHOOKFUNC(HatManager_GetUnlockedPets);
+	//UNHOOKFUNC(HatManager_GetUnlockedPets);
 	UNHOOKFUNC(HatManager_GetUnlockedSkins);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);

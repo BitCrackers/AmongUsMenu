@@ -156,8 +156,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
-			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
-			espPlayerData.Name = convert_from_string(playerData->fields._playerName);
+			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId));
+			espPlayerData.Name = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
 			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
 			espPlayerData.playerData = PlayerSelection(__this);
@@ -183,7 +183,7 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
-	if (GetPlayerData(__this)->fields.IsImpostor && GetPlayerData(target)->fields.IsImpostor) {
+	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
 		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
 		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
 	}

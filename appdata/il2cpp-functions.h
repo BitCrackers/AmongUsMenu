@@ -53,7 +53,7 @@ DO_APP_FUNC(GameOptionsData*, GameOptionsData_Deserialize, (BinaryReader* reader
 DO_APP_FUNC(GameOptionsData*, GameOptionsData_Deserialize_1, (MessageReader* reader, MethodInfo* method), "Assembly-CSharp, GameOptionsData GameOptionsData::Deserialize(Hazel.MessageReader)");
 
 DO_APP_FUNC(HatBehaviour__Array*, HatManager_GetUnlockedHats, (HatManager* __this, MethodInfo* method), "Assembly-CSharp, HatBehaviour[] HatManager::GetUnlockedHats()");
-DO_APP_FUNC(PetBehaviour__Array*, HatManager_GetUnlockedPets, (HatManager* __this, MethodInfo* method), "Assembly-CSharp, PetBehaviour[] HatManager::GetUnlockedPets()");
+DO_APP_FUNC(PetData__Array*, HatManager_GetUnlockedPets, (HatManager* __this, MethodInfo* method), "Assembly-CSharp, PetData[] HatManager::GetUnlockedPets()");
 DO_APP_FUNC(SkinData__Array*, HatManager_GetUnlockedSkins, (HatManager* __this, MethodInfo* method), "Assembly-CSharp, SkinData[] HatManager::GetUnlockedSkins()");
 
 DO_APP_FUNC(void, KeyboardJoystick_Update, (KeyboardJoystick* __this, MethodInfo* method), "Assembly-CSharp, System.Void KeyboardJoystick::Update()");
@@ -92,9 +92,9 @@ DO_APP_FUNC(void, PlayerControl_RpcSetColor, (PlayerControl* __this, uint8_t bod
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
 DO_APP_FUNC(void, PlayerControl_set_Visible, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::set_Visible(System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_HandleRpc, (PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::HandleRpc(System.Byte, Hazel.MessageReader)");
-DO_APP_FUNC(void, PlayerControl_RpcSetPet, (PlayerControl* __this, uint32_t petId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetPet(System.UInt32)");
-DO_APP_FUNC(void, PlayerControl_RpcSetSkin, (PlayerControl* __this, uint32_t skinId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetSkin(System.UInt32)");
-DO_APP_FUNC(void, PlayerControl_RpcSetHat, (PlayerControl* __this, uint32_t hatId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetHat(System.UInt32)");
+DO_APP_FUNC(void, PlayerControl_RpcSetPet, (PlayerControl* __this, String* petId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetPet(System.UInt32)");
+DO_APP_FUNC(void, PlayerControl_RpcSetSkin, (PlayerControl* __this, String* skinId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetSkin(System.UInt32)");
+DO_APP_FUNC(void, PlayerControl_RpcSetHat, (PlayerControl* __this, String* hatId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetHat(System.UInt32)");
 DO_APP_FUNC(bool, PlayerControl_RpcSendChat, (PlayerControl* __this, String* message, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::RpcSendChat(System.String)");
 
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");

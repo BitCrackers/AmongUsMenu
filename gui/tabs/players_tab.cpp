@@ -17,21 +17,21 @@ namespace PlayersTab {
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected) continue;
 
-					std::string playerName = convert_from_string(playerData->fields._playerName);
+					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
 						State.selectedPlayer = PlayerSelection(playerData);
 					}
 					ImGui::SameLine();
-					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
+					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 					ImGui::SameLine();
 					ImGui::PopStyleVar(2);
 					ImGui::Dummy(ImVec2(0, 0));
 					ImGui::SameLine();
 
 					ImVec4 nameColor;
-					if (State.RevealImpostors && playerData->fields.IsImpostor)
+					if (State.RevealImpostors && false /* who the imposter is is no longer being sent to the client */)
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
 					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
@@ -126,10 +126,10 @@ namespace PlayersTab {
 					if ((IsInGame() || IsInLobby())) {
 						if (!State.selectedPlayer.is_LocalPlayer()) {
 							if (ImGui::Button("Impersonate")) {
-								auto petId = State.selectedPlayer.get_PlayerData()->fields.PetId;
-								auto skinId = State.selectedPlayer.get_PlayerData()->fields.SkinId;
-								auto hatId = State.selectedPlayer.get_PlayerData()->fields.HatId;
-								auto colorId = State.selectedPlayer.get_PlayerData()->fields.ColorId;
+								auto petId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.PetId;
+								auto skinId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.SkinId;
+								auto hatId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.HatId;
+								auto colorId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.ColorId;
 								std::queue<RPCInterface*>* queue = nullptr;
 
 								if (IsInGame())
@@ -152,7 +152,7 @@ namespace PlayersTab {
 						}
 					}
 
-					if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+					if (IsInGame() && PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)) && !State.selectedPlayer.get_PlayerData()->fields.IsDead
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
 					{
 						if (ImGui::Button("Kill Player"))

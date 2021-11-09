@@ -20,28 +20,28 @@ namespace SabotageTab {
                 }
                 ImGui::NewLine();
                 if (ImGui::Button("Sabotage Lights")) {
-                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Electrical));
+                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Electrical));
                 }
                 if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Reactor")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Reactor));
                     }
                 } else if (State.mapType == Settings::MapType::Pb) {
                     if (ImGui::Button("Sabotage Seismic")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Laboratory));
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Laboratory));
                     }
                 } else if (State.mapType == Settings::MapType::Airship) {
                     if (ImGui::Button("Sabotage Heli")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Reactor));
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Reactor));
                     }
                 }
                 if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Oxygen")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_LifeSupp));
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::LifeSupp));
                     }
                 }
                 if (ImGui::Button("Sabotage Comms")) {
-                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Sabotage, SystemTypes__Enum_Comms));
+                    State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Comms));
                 }
 
                 ImGui::Dummy(ImVec2(7, 7));
@@ -54,7 +54,7 @@ namespace SabotageTab {
                         std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
 
                         for (auto system : systems) {
-                            if (system.first == SystemTypes__Enum_Electrical) {
+                            if (system.first == SystemTypes__Enum::Electrical) {
                                 switchSystem = (SwitchSystem*)system.second;
                             }
                         }
@@ -66,14 +66,14 @@ namespace SabotageTab {
                             auto switchMask = 1 << (0 & 0x1F);
 
                             if ((actualSwitches & switchMask) != (~expectedSwitches & switchMask))
-                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, 5));
+                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 5));
                         }
                     } else {
                         SwitchSystem* switchSystem = nullptr;
                         std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
 
                         for (auto system : systems) {
-                            if (system.first == SystemTypes__Enum_Electrical) {
+                            if (system.first == SystemTypes__Enum::Electrical) {
                                 switchSystem = (SwitchSystem*)system.second;
                             }
                         }
@@ -85,7 +85,7 @@ namespace SabotageTab {
                             auto switchMask = 1 << (5 & 0x1F);
 
                             if ((actualSwitches & switchMask) != (expectedSwitches & switchMask))
-                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, 5));
+                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 5));
                         }
                     }
                 }

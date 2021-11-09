@@ -35,13 +35,13 @@ void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
 	if (IsInGame()) {
 		for (auto playerData : GetAllPlayerData()) {
-			if (playerName == playerData->fields._playerName) {
+			if (playerName == GetPlayerOutfit(playerData)->fields._playerName) {
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				if (!localData)
 					continue;
 
-				if (State.RevealImpostors || localData->fields.IsImpostor)
-					color = playerData->fields.IsImpostor
+				if (State.RevealImpostors || PlayerIsImpostor(localData))
+					color = PlayerIsImpostor(playerData)
 					? Palette__TypeInfo->static_fields->ImpostorRed
 					: Palette__TypeInfo->static_fields->White;
 				else
