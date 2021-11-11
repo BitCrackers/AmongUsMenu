@@ -594,3 +594,30 @@ bool PlayerIsImpostor(GameData_PlayerInfo* player) {
 	RoleBehaviour* role = player->fields.Role;
 	return role->fields.Role == RoleTypes__Enum::Impostor;
 }
+
+
+Color GetRoleColor(RoleBehaviour* roleBehaviour) {
+	app::Color c;
+	switch (roleBehaviour->fields.Role) {
+	case RoleTypes__Enum::Engineer:
+		c = Palette__TypeInfo->static_fields->LightBlue;
+		break;
+	case RoleTypes__Enum::GuardianAngel:
+		c = Palette__TypeInfo->static_fields->Orange;
+		break;
+	case RoleTypes__Enum::Impostor:
+		c = Palette__TypeInfo->static_fields->ImpostorRed;
+		break;
+	case RoleTypes__Enum::Scientist:
+		c = Palette__TypeInfo->static_fields->Purple;
+		break;
+	case RoleTypes__Enum::Shapeshifter:
+		c = Palette__TypeInfo->static_fields->Brown;
+		break;
+	default:
+		c = Palette__TypeInfo->static_fields->White;
+		break;
+	}
+
+	return c;
+}
