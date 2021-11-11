@@ -40,10 +40,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		if (State.RevealImpostors || PlayerIsImpostor(localData)) {
-			Color32 c = app::Color32_op_Implicit(PlayerIsImpostor(playerData)
-				? Palette__TypeInfo->static_fields->ImpostorRed
-				: Palette__TypeInfo->static_fields->White, NULL);
+		if (State.RevealRoles || PlayerIsImpostor(localData)) {
+			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);

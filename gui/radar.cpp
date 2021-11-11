@@ -13,8 +13,8 @@ namespace Radar {
 	ImU32 GetRadarPlayerColorStatus(GameData_PlayerInfo* playerData) {
 		if (playerData->fields.IsDead)
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->HalfWhite));
-		else if (PlayerIsImpostor(playerData) && State.RevealImpostors)
-			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->ImpostorRed));
+		else if (State.RevealRoles && playerData->fields.Role->fields.StringName != StringNames__Enum::Crewmate)
+			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role)));
 		else
 			return ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0));
 	}

@@ -51,7 +51,7 @@ namespace SelfTab {
             ImGui::Separator();
             ImGui::Dummy(ImVec2(7, 7));
 
-            if (ImGui::Checkbox("Reveal Impostors", &State.RevealImpostors)) {
+            if (ImGui::Checkbox("Reveal Roles", &State.RevealRoles)) {
                 State.Save();
             }
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {

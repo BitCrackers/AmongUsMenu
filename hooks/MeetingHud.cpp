@@ -28,11 +28,9 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (playerData && localData) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-			if (State.RevealImpostors || PlayerIsImpostor(localData)) {
-				Color32 c = app::Color32_op_Implicit(PlayerIsImpostor(playerData)
-					? Palette__TypeInfo->static_fields->ImpostorRed
-					: Palette__TypeInfo->static_fields->White, NULL);
+			if (State.RevealRoles || PlayerIsImpostor(localData)) {
 
+				Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
 				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);

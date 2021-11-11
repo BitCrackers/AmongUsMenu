@@ -31,7 +31,7 @@ namespace PlayersTab {
 					ImGui::SameLine();
 
 					ImVec4 nameColor;
-					if (State.RevealImpostors && false /* who the imposter is is no longer being sent to the client */)
+					if (State.RevealRoles && false /* who the imposter is is no longer being sent to the client */)
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
 					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
@@ -185,7 +185,7 @@ namespace PlayersTab {
 					{
 						auto tasks = GetNormalPlayerTasks(State.selectedPlayer.get_PlayerControl());
 
-						if (State.RevealImpostors && PlayerIsImpostor(State.selectedPlayer.get_PlayerData()))
+						if (State.RevealRoles && PlayerIsImpostor(State.selectedPlayer.get_PlayerData()))
 						{
 							ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
 						}
