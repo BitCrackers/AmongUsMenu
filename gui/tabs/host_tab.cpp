@@ -58,7 +58,7 @@ namespace HostTab {
 					ImGui::Dummy(ImVec2(0, 0));
 					ImGui::SameLine();
 
-					ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)),playerName.c_str());
+					ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)),playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
 				ImGui::EndChild();

@@ -30,7 +30,7 @@ std::string GetCRC32(std::filesystem::path filePath) {
 		auto readSize = fin.gcount();
 		crc32.add(&buffer[0], (size_t) readSize);
 	}
-	LOG_DEBUG("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
+	//LOG_DEBUG("CRC32 of \"" + filePath.u8string() + "\" is " + crc32.getHash());
 	return crc32.getHash();
 }
 
@@ -116,6 +116,7 @@ void Run(LPVOID lpParam) {
 	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
 	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
 	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	//GAME_STATIC_POINTER(Game::pRoleManager, app::DestroyableSingleton_1_RoleManager_, _instance);
 
 	assert(cctor_finished(SaveManager__TypeInfo->_0.klass));
 	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);

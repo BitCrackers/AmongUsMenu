@@ -1,7 +1,6 @@
 #pragma once
 #include <bitset>
 #include <queue>
-#include "_events.h"
 #include "_rpc.h"
 #include "keybinds.h"
 
@@ -80,9 +79,6 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<EventInterface*> consoleEvents;
-    std::vector<EventInterface*> events[15][EVENT_TYPES_SIZE];
-
     std::bitset<0xFF> voteMonitor;
 
     std::vector<int32_t> aumUsers;
@@ -107,9 +103,9 @@ public:
 
 	int SelectedColorId = 0;
     std::string originalName = "-";
-    uint32_t originalSkin = 0xFF;
-    uint32_t originalHat = 0xFF;
-    uint32_t originalPet = 0xFF;
+    String* originalSkin = nullptr;
+    String* originalHat = nullptr;
+    String* originalPet = nullptr;
     uint8_t originalColor = 0xFF;
 
     bool activeImpersonation = false;

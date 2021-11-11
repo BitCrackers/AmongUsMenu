@@ -185,7 +185,7 @@ namespace PlayersTab {
 					{
 						auto tasks = GetNormalPlayerTasks(State.selectedPlayer.get_PlayerControl());
 
-						if (State.RevealImpostors && State.selectedPlayer.get_PlayerData()->fields.IsImpostor)
+						if (State.RevealImpostors && PlayerIsImpostor(State.selectedPlayer.get_PlayerData()))
 						{
 							ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
 						}

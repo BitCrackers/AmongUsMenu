@@ -86,7 +86,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_MurderPlayer);
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_ReportDeadBody);
-	HOOKFUNC(PlayerControl_RpcSetInfected);
+	HOOKFUNC(RoleManager_AssignRolesFromList);
 	HOOKFUNC(PlayerControl_HandleRpc);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
@@ -113,6 +113,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_ReallyBeginFlow);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
+	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -157,7 +158,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_MurderPlayer);
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	UNHOOKFUNC(PlayerControl_ReportDeadBody);
-	UNHOOKFUNC(PlayerControl_RpcSetInfected);
+	UNHOOKFUNC(RoleManager_AssignRolesFromList);
 	UNHOOKFUNC(PlayerControl_HandleRpc);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
@@ -183,6 +184,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_ReallyBeginFlow);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
+	UNHOOKFUNC(InnerNetClient_EnqueueDisconnect);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

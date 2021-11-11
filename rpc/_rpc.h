@@ -109,3 +109,11 @@ public:
 	RpcSetHat(String* hatId);
 	virtual void Process() override;
 };
+
+class RpcSetRole : public RPCInterface {
+	PlayerControl* Player;
+	RoleTypes__Enum Role;
+public:
+	RpcSetRole(PlayerControl* player, RoleTypes__Enum role);
+	virtual void Process() override;
+};

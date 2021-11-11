@@ -13,25 +13,23 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
 int dPlayerControl_fixedUpdateTimer = 50;
 int dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
-	if (__this == *Game::pLocalPlayer) {
-		if (State.rpcCooldown == 0) {
-			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
-			MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
-			MessageWriter_EndMessage(rpcMessage, NULL);
-			State.rpcCooldown = 15;
-		}
-		else {
-			State.rpcCooldown--;
-		}
-	}
+	//if (__this == *Game::pLocalPlayer) {
+	//	if (State.rpcCooldown == 0) {
+	//		MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
+	//		MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
+	//		MessageWriter_EndMessage(rpcMessage, NULL);
+	//		State.rpcCooldown = 15;
+	//	}
+	//	else {
+	//		State.rpcCooldown--;
+	//	}
+	//}
 
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
@@ -42,8 +40,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		if (State.RevealImpostors || localData->fields.IsImpostor) {
-			Color32 c = app::Color32_op_Implicit(playerData->fields.IsImpostor
+		if (State.RevealImpostors || PlayerIsImpostor(localData)) {
+			Color32 c = app::Color32_op_Implicit(PlayerIsImpostor(playerData)
 				? Palette__TypeInfo->static_fields->ImpostorRed
 				: Palette__TypeInfo->static_fields->White, NULL);
 
@@ -151,7 +149,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_fixedUpdateCount++;
 			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
 				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(*Game::pLocalPlayer), localPos));
 			}
 
 			PlayerData espPlayerData;
@@ -176,37 +173,18 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PrevKillDistance = gameOptions->fields.KillDistance;
 	State.KillDistance = gameOptions->fields.KillDistance;
-	State.PrevTaskBarUpdates = gameOptions->fields.TaskBarMode;
-	State.TaskBarUpdates = gameOptions->fields.TaskBarMode;
+	State.PrevTaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
+	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 
 	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
-	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
-		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
-		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
-	}
-
-	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-
 	PlayerControl_ReportDeadBody(__this, target, method);
-}
-
-void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method) {
-	for (int i = 0; i < (*Game::pGameOptionsData)->fields.NumImpostors; i++) {
-		if (State.impostors[i] != nullptr) {
-			infected->vector[i] = GetPlayerData(State.impostors[i]);
-		}
-	}
-	PlayerControl_RpcSetInfected(__this, infected, method);
 }
 
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {

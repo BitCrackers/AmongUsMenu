@@ -417,17 +417,6 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector) {
 	return SystemTypes__Enum::Outside;
 }
 
-EVENT_PLAYER GetEventPlayer(GameData_PlayerInfo* playerInfo)
-{
-	if (!playerInfo) return NULL;
-	return EVENT_PLAYER(playerInfo);
-}
-
-EVENT_PLAYER GetEventPlayerControl(PlayerControl* player)
-{
-	return *GetEventPlayer(player->fields._cachedData);
-}
-
 std::vector<Camera*> GetAllCameras() {
 	auto cameras = std::vector<Camera*>();
 

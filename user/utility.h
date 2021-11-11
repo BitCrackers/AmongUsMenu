@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <imgui/imgui.h>
-#include "_events.h"
 #include <filesystem>
 
 struct CorrectedColor32 {
@@ -104,8 +103,6 @@ CorrectedColor32 GetPlayerColor(uint8_t colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(Vector2 vector);
-std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
-EVENT_PLAYER GetEventPlayer(PlayerControl* player);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
@@ -119,3 +116,5 @@ void ImpersonateName(PlayerSelection player);
 int GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
+bool PlayerIsImpostor(GameData_PlayerInfo* player);
+GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player);

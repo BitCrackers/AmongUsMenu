@@ -4,18 +4,6 @@
     <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="events\CastVoteEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\KillEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\ReportDeadBodyEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="events\TaskCompletedEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
     <ClCompile Include="framework\dllmain.cpp">
       <Filter>framework</Filter>
     </ClCompile>
@@ -27,9 +15,6 @@
     </ClCompile>
     <ClCompile Include="framework\version.cpp">
       <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\console.cpp">
-      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="gui\gui-helpers.cpp">
       <Filter>gui</Filter>
@@ -117,9 +102,6 @@
     </ClCompile>
     <ClCompile Include="hooks\Vent.cpp">
       <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="events\VentEvent.cpp">
-      <Filter>events</Filter>
     </ClCompile>
     <ClCompile Include="includes\crc32.cpp">
       <Filter>includes</Filter>
@@ -232,9 +214,6 @@
     <ClCompile Include="rpc\CustomRpcHandler.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
-    <ClCompile Include="events\CheatDetectedEvent.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
     <ClCompile Include="hooks\AirshipStatus.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -256,8 +235,11 @@
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
-    <ClCompile Include="events\WalkEvent.cpp">
-      <Filter>events</Filter>
+    <ClCompile Include="RoleManager.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="RpcSetRole.cpp">
+      <Filter>rpc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,9 +258,6 @@
     <ClInclude Include="appdata\il2cpp-types.h">
       <Filter>appdata</Filter>
     </ClInclude>
-    <ClInclude Include="events\_events.h">
-      <Filter>events</Filter>
-    </ClInclude>
     <ClInclude Include="framework\il2cpp-appdata.h">
       <Filter>framework</Filter>
     </ClInclude>
@@ -290,9 +269,6 @@
     </ClInclude>
     <ClInclude Include="framework\version.h">
       <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="gui\console.hpp">
-      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="gui\gui-helpers.hpp">
       <Filter>gui</Filter>
@@ -452,9 +428,6 @@
   <ItemGroup>
     <Filter Include="appdata">
       <UniqueIdentifier>{8efb06fd-20f3-49a1-b6e8-232aaad89878}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="events">
-      <UniqueIdentifier>{800d0b6f-522e-4627-9bef-152eac4c06b8}</UniqueIdentifier>
     </Filter>
     <Filter Include="framework">
       <UniqueIdentifier>{a7e5ff23-2216-4f9e-bd38-4b79575f03e6}</UniqueIdentifier>

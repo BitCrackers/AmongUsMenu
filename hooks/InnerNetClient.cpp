@@ -137,7 +137,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (Equals(initialSpawnLocation, newPosition)) return false;
     if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
     if (IsAirshipSpawnLocation(newPosition)) return false;
-    if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
+    if (PlayerIsImpostor(player.get_PlayerData()) && distanceToTarget <= killDistance) 
         return false;
     std::ostringstream ss;
 
@@ -177,10 +177,14 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
-    State.consoleEvents.clear();
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-            State.events[i][j].clear();
-
     InnerNetClient_StartEndGame(__this, method);
+}
+
+void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
+    if (!IsHost() || reason != DisconnectReasons__Enum::Banned) {
+        return InnerNetClient_EnqueueDisconnect(__this, reason, stringReason, method);
+    }
+    if (reason == DisconnectReasons__Enum::Banned) {
+        LOG_INFO("Blocked ban");
+    }
 }

@@ -34,7 +34,8 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method);
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method);
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method);
-void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method);
+//void dPlayerControl_RpcSetRole(PlayerControl* __this, RoleTypes__Enum roleType, MethodInfo* method);
+void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method);
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method);
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method);
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
@@ -64,3 +65,5 @@ void dEOSManager_BeginLoginFlow(EOSManager* __this, MethodInfo* method);
 void dEOSManager_ReallyBeginFlow(EOSManager* __this, MethodInfo* method);
 bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method);
 void dChatController_Update(ChatController* __this, MethodInfo* method);
+void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method);
+void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method);
