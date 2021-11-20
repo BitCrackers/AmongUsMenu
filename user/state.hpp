@@ -34,7 +34,7 @@ public:
     bool UnlockVents = false;
     bool ShowGhosts = false;
 
-    bool RevealImpostors = false;
+    bool RevealRoles = false;
     int PrevKillDistance = 0;
     int KillDistance = 0;
     int PrevTaskBarUpdates = 0;

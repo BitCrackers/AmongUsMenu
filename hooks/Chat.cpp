@@ -40,10 +40,8 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 				if (!localData)
 					continue;
 
-				if (State.RevealImpostors || PlayerIsImpostor(localData))
-					color = PlayerIsImpostor(playerData)
-					? Palette__TypeInfo->static_fields->ImpostorRed
-					: Palette__TypeInfo->static_fields->White;
+				if (State.RevealRoles)
+					color = GetRoleColor(playerData->fields.Role);
 				else
 					color = Palette__TypeInfo->static_fields->White;
 			}

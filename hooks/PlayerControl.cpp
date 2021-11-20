@@ -5,6 +5,7 @@
 #include "esp.hpp"
 #include "_rpc.h"
 #include <iostream>
+#include <optional>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -40,10 +41,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		if (State.RevealImpostors || PlayerIsImpostor(localData)) {
-			Color32 c = app::Color32_op_Implicit(PlayerIsImpostor(playerData)
-				? Palette__TypeInfo->static_fields->ImpostorRed
-				: Palette__TypeInfo->static_fields->White, NULL);
+		if (State.RevealRoles || PlayerIsImpostor(localData)) {
+			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);

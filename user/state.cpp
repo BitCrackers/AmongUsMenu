@@ -47,7 +47,7 @@ void Settings::Load() {
         j.at("MaxVision").get_to(this->MaxVision);
         j.at("Wallhack").get_to(this->Wallhack);
         j.at("UnlockVents").get_to(this->UnlockVents);
-        j.at("RevealImpostors").get_to(this->RevealImpostors);
+        j.at("RevealRoles").get_to(this->RevealRoles);
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
         j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
@@ -96,7 +96,7 @@ void Settings::Save() {
             {"MaxVision", this->MaxVision},
             {"Wallhack", this->Wallhack},
             {"UnlockVents", this->UnlockVents},
-            {"RevealImpostors", this->RevealImpostors},
+            {"RevealRoles", this->RevealRoles},
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
             {"AutoOpenDoors", this->AutoOpenDoors},
