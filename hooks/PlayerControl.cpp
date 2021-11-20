@@ -5,6 +5,7 @@
 #include "esp.hpp"
 #include "_rpc.h"
 #include <iostream>
+#include <optional>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
