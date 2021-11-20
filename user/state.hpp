@@ -1,6 +1,7 @@
 #pragma once
 #include <bitset>
 #include <queue>
+#include "_events.h"
 #include "_rpc.h"
 #include "keybinds.h"
 
@@ -79,6 +80,9 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
+    std::vector<EventInterface*> consoleEvents;
+    std::vector<EventInterface*> events[15][EVENT_TYPES_SIZE];
+
     std::bitset<0xFF> voteMonitor;
 
     std::vector<int32_t> aumUsers;

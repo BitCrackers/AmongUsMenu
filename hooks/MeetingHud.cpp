@@ -45,6 +45,24 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		bool isDiscussionState = (__this->fields.discussionTimer < (*Game::pGameOptionsData)->fields.DiscussionTime);
 		bool isVotingState = !isDiscussionState &&
 							((__this->fields.discussionTimer - (*Game::pGameOptionsData)->fields.DiscussionTime) < (*Game::pGameOptionsData)->fields.VotingTime); //Voting phase
+
+		if (playerVoteArea && playerData)
+		{
+			bool didVote = (playerVoteArea->fields.VotedFor != 0xFF);
+			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
+			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
+			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId])
+			{
+				State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.consoleEvents.push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.voteMonitor[playerData->fields.PlayerId] = true;
+				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
+			}
+			else if (!didVote && State.voteMonitor[playerData->fields.PlayerId])
+			{
+				State.voteMonitor[playerData->fields.PlayerId] = false; //Likely disconnected player
+			}
+		}
 	}
 	
 	MeetingHud_Update(__this, method);

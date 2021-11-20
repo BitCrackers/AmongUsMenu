@@ -241,6 +241,30 @@
     <ClCompile Include="RpcSetRole.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+    <ClCompile Include="gui\console.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="events\CastVoteEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\CheatDetectedEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\KillEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\ReportDeadBodyEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\TaskCompletedEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\VentEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\WalkEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -405,6 +429,12 @@
     <ClInclude Include="user\gitparams.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="gui\console.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="events\_events.h">
+      <Filter>events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">
@@ -458,6 +488,9 @@
     </Filter>
     <Filter Include="user">
       <UniqueIdentifier>{c598f5c4-711e-4883-91b4-c7a35d7110bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="events">
+      <UniqueIdentifier>{13db4fa6-8f92-4d9a-ad87-758b95781032}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

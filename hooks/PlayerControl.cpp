@@ -14,6 +14,9 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
+	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
@@ -148,6 +151,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_fixedUpdateCount++;
 			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
 				dPlayerControl_fixedUpdateCount = 0;
+				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(*Game::pLocalPlayer).value(), localPos));
 			}
 
 			PlayerData espPlayerData;
@@ -179,10 +183,24 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
+
+	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
+	{
+		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+	}
+
+	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
+
+	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
 
