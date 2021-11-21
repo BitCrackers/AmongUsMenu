@@ -28,7 +28,7 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 	if (IsInGame()) {
-		GameObject* shadowLayerObject = Component_get_gameObject((Component*)__this->fields.ShadowQuad, NULL);
+		GameObject* shadowLayerObject = Component_get_gameObject((Component_1*)__this->fields.ShadowQuad, NULL);
 		GameObject_SetActive(shadowLayerObject,
 			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
 			NULL);

@@ -29,7 +29,7 @@ static float GetScaleFromValue(float value)
 static ImVec2 WorldToScreen(Vector2 pos)
 {
 	auto mainCamera = Camera_get_main(nullptr);
-	Transform* cameraTransform = Component_get_transform(reinterpret_cast<Component*>(mainCamera), nullptr);
+	Transform* cameraTransform = Component_get_transform(reinterpret_cast<Component_1*>(mainCamera), nullptr);
 	Vector3 cameraPosition = Transform_get_position(cameraTransform, nullptr);
 	Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
 

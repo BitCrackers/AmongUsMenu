@@ -635,3 +635,24 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 
 	return c;
 }
+
+std::string GetRoleName(RoleBehaviour* roleBehaviour)
+{
+	switch (roleBehaviour->fields.Role)
+	{
+		case RoleTypes__Enum::Engineer:
+			return "Engineer";
+		case RoleTypes__Enum::GuardianAngel:
+			return "GuardianAngel";
+		case RoleTypes__Enum::Impostor:
+			return "Impostor";
+		case RoleTypes__Enum::Scientist:
+			return "Scientist";
+		case RoleTypes__Enum::Shapeshifter:
+			return "Shapeshifter";
+		case RoleTypes__Enum::Crewmate:
+			return "Crewmate";
+		default:
+			return "Unknown";
+	}
+}

@@ -60,7 +60,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
 		}
@@ -80,7 +80,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				else
 					Camera_set_orthographicSize(State.FollowerCam, 3.0f, NULL);
 
-				Transform* cameraTransform = Component_get_transform((Component*)State.FollowerCam, NULL);
+				Transform* cameraTransform = Component_get_transform((Component_1*)State.FollowerCam, NULL);
 				Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 				if(State.EnableZoom && !State.InMeeting && State.CameraHeight > 3.0f)
 				Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100 }, NULL);
@@ -98,7 +98,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 			Transform_set_position(cameraTransform, State.prevCamPos, NULL);
 
@@ -109,7 +109,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (State.FreeCam  && __this == *Game::pLocalPlayer) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 
 			if (State.camPos.x == NULL) {
@@ -231,7 +231,7 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
 			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
 			{
-				auto nameObject = Component_get_gameObject((Component*)player->fields.nameText, NULL);
+				auto nameObject = Component_get_gameObject((Component_1*)player->fields.nameText, NULL);
 				if (nameObject == __this) {
 					value = true;
 				}

@@ -4,7 +4,7 @@
 
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
 	if (State.UnlockVents) {
-		auto ventTransform = app::Component_get_transform((Component*)__this, NULL);
+		auto ventTransform = app::Component_get_transform((Component_1*)__this, NULL);
 		auto ventVector = app::Transform_get_position(ventTransform, NULL);
 
 		auto playerPosition = app::PlayerControl_GetTruePosition(pc->fields._object, NULL);
@@ -26,7 +26,7 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
-	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component*)__this, NULL), NULL);
+	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	State.events[pc->fields.PlayerId][EVENT_VENT].push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_ENTER));
 	State.consoleEvents.push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_ENTER));
 
@@ -35,7 +35,7 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
-	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component*)__this, NULL), NULL);
+	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	State.events[pc->fields.PlayerId][EVENT_VENT].push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_EXIT));
 	State.consoleEvents.push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_EXIT));
 

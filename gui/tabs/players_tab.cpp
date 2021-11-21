@@ -40,7 +40,16 @@ namespace PlayersTab {
 
 					if (playerData->fields.IsDead) nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->DisabledGrey);
 
-					ImGui::TextColored(nameColor, playerName.c_str());
+					if (State.RevealRoles)
+					{
+						std::string roleName = GetRoleName(playerData->fields.Role);
+						std::string playerNameWithRole = playerName + "(" + roleName + ")";
+						ImGui::TextColored(nameColor, playerNameWithRole.c_str());
+					}
+					else
+					{
+						ImGui::TextColored(nameColor, playerName.c_str());
+					}
 				}
 				ImGui::ListBoxFooter();
 
