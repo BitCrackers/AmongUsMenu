@@ -605,12 +605,18 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player) {
 }
 
 bool PlayerIsImpostor(GameData_PlayerInfo* player) {
+
+	if (player->fields.Role == nullptr) return false;
+
 	RoleBehaviour* role = player->fields.Role;
 	return role->fields.Role == RoleTypes__Enum::Impostor;
 }
 
 
 Color GetRoleColor(RoleBehaviour* roleBehaviour) {
+
+	if (roleBehaviour == nullptr) return Palette__TypeInfo->static_fields->White;
+
 	app::Color c;
 	switch (roleBehaviour->fields.Role) {
 	case RoleTypes__Enum::Engineer:
@@ -638,6 +644,8 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 
 std::string GetRoleName(RoleBehaviour* roleBehaviour)
 {
+	if (roleBehaviour == nullptr) return "Unknown";
+
 	switch (roleBehaviour->fields.Role)
 	{
 		case RoleTypes__Enum::Engineer:

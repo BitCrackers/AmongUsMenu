@@ -47,6 +47,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (State.RevealRoles || PlayerIsImpostor(localData)) {
 			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
+			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			playerName += "\n(" + GetRoleName(playerData->fields.Role) + ")";
+			String* playerNameStr = convert_to_string(playerName);
+			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
 			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
