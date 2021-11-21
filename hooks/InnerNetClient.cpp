@@ -28,9 +28,9 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip) {
         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
             if (State.NoClip)
-                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
             else
-                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
+                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
         }
         State.HotkeyNoClip = false;
     }
@@ -127,7 +127,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
     if (player.get_PlayerControl()->fields.inVent) return false; //Vent buttons are warps
-    if (GameObject_get_layer(app::Component_get_gameObject((Component*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
+    if (GameObject_get_layer(app::Component_get_gameObject((Component_1*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
     int32_t distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
@@ -176,6 +176,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
+
+    State.consoleEvents.clear();
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+            State.events[i][j].clear();
 
     InnerNetClient_StartEndGame(__this, method);
 }

@@ -417,6 +417,20 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector) {
 	return SystemTypes__Enum::Outside;
 }
 
+std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
+{
+	if (!playerInfo) return std::nullopt;
+	return EVENT_PLAYER(playerInfo);
+}
+
+std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
+{
+	GameData_PlayerInfo* playerInfo = player->fields._cachedData;
+
+	if (!playerInfo) return std::nullopt;
+	return EVENT_PLAYER(playerInfo);
+}
+
 std::vector<Camera*> GetAllCameras() {
 	auto cameras = std::vector<Camera*>();
 
@@ -620,4 +634,25 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 	}
 
 	return c;
+}
+
+std::string GetRoleName(RoleBehaviour* roleBehaviour)
+{
+	switch (roleBehaviour->fields.Role)
+	{
+		case RoleTypes__Enum::Engineer:
+			return "Engineer";
+		case RoleTypes__Enum::GuardianAngel:
+			return "GuardianAngel";
+		case RoleTypes__Enum::Impostor:
+			return "Impostor";
+		case RoleTypes__Enum::Scientist:
+			return "Scientist";
+		case RoleTypes__Enum::Shapeshifter:
+			return "Shapeshifter";
+		case RoleTypes__Enum::Crewmate:
+			return "Crewmate";
+		default:
+			return "Unknown";
+	}
 }

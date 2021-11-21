@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <imgui/imgui.h>
+#include "_events.h"
 #include <filesystem>
 
 struct CorrectedColor32 {
@@ -103,6 +104,10 @@ CorrectedColor32 GetPlayerColor(uint8_t colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(Vector2 vector);
+// TO-DO:
+// some C++ wizardry to allow overloading on pointer types w/ different base type (then we can rename both to just GetEventPlayer)
+std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
+std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
@@ -119,3 +124,4 @@ void ResetOriginalAppearance();
 bool PlayerIsImpostor(GameData_PlayerInfo* player);
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
+std::string GetRoleName(RoleBehaviour* roleBehaviour);
