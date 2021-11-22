@@ -10065,6 +10065,83 @@ namespace app
     };
 #pragma endregion
 
+#pragma region NamePlateData
+    struct NamePlateData__Fields {
+        struct CosmeticData__Fields _;
+        void* Image;
+        bool Free;
+        int32_t Order;
+        bool NotInStore;
+    };
+
+    struct NamePlateData {
+        void* klass;
+        MonitorData* monitor;
+        struct NamePlateData__Fields fields;
+    };
+#pragma endregion
+
+#pragma region VisorData
+    struct VisorData__Fields {
+        struct CosmeticData__Fields _;
+        void* IdleFrame;
+        void* LeftIdleFrame;
+        void* ClimbFrame;
+        void* FloorFrame;
+        int32_t Order;
+        bool Free;
+        bool NotInStore;
+    };
+
+    struct VisorData {
+        void* klass;
+        MonitorData* monitor;
+        struct VisorData__Fields fields;
+    };
+#pragma endregion
+
+#pragma region PetData
+    struct PetBehaviour__Fields {
+        struct MonoBehaviour__Fields _;
+        struct PetData* Data;
+        struct PlayerControl* Source;
+        float YOffset;
+        void* animator;
+        void* rend;
+        void* shadowRend;
+        void* body;
+        struct Collider2D* Collider;
+        void* idleClip;
+        void* sadClip;
+        void* scaredClip;
+        void* walkClip;
+    };
+
+    struct PetBehaviour {
+        void* klass;
+        MonitorData* monitor;
+        struct PetBehaviour__Fields fields;
+    };
+
+    struct PetData__Fields {
+        struct CosmeticData__Fields _;
+        bool Free;
+        bool NotInStore;
+#if defined(_CPLUSPLUS_)
+        StringNames__Enum StoreName;
+#else
+        int32_t StoreName;
+#endif
+        struct PetBehaviour* PetPrefab;
+    };
+
+    struct PetData {
+        void* klass;
+        MonitorData* monitor;
+        struct PetData__Fields fields;
+    };
+#pragma endregion
+
 #pragma region List_1_PetData_
     struct __declspec(align(4)) List_1_PetData___Fields {
         struct PetData__Array* _items;

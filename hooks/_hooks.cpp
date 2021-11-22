@@ -6,6 +6,18 @@
 #include "main.h"
 #include "SignatureScan.hpp"
 
+typedef bool HATMANAGER_C_GETUNLOCKEDHATS(HatManager_c* __this, HatBehaviour* h, MethodInfo* method);
+typedef bool HATMANAGER_C_GETUNLOCKEDSKINS(HatManager_c* __this, SkinData* s, MethodInfo* method);
+typedef bool HATMANAGER_C_GETUNLOCKEDPETS(HatManager_c* __this, PetData* h, MethodInfo* method);
+typedef bool HATMANAGER_C_GETUNLOCKEDVISORS(HatManager_c* __this, VisorData* s, MethodInfo* method);
+typedef bool HATMANAGER_C_GETUNLOCKEDNAMEPLATES(HatManager_c* __this, NamePlateData* s, MethodInfo* method);
+
+HATMANAGER_C_GETUNLOCKEDHATS* HatManager_c__GetUnlockedHats_b__11_0 = nullptr;
+HATMANAGER_C_GETUNLOCKEDSKINS* HatManager_c__GetUnlockedSkins_b__12_0 = nullptr;
+HATMANAGER_C_GETUNLOCKEDPETS* HatManager_c__GetUnlockedPets_b__9_0 = nullptr;
+HATMANAGER_C_GETUNLOCKEDVISORS* HatManager_c__GetUnlockedVisors_b__15_0 = nullptr;
+HATMANAGER_C_GETUNLOCKEDNAMEPLATES* HatManager_c__GetUnlockedNamePlates_b__17_0 = nullptr;
+
 bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (DetourAttach(ppPointer, pDetour) != 0) {
 		std::cout << "Failed to hook " << functionName << std::endl;
@@ -53,10 +65,22 @@ void DetourInitilization() {
 		}
 	}
 
+	HatManager_c__GetUnlockedHats_b__11_0 = SignatureScan<HATMANAGER_C_GETUNLOCKEDHATS*>("55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 50 00", GetModuleHandleA("GameAssembly.dll"));
+	HOOKFUNC(HatManager_c__GetUnlockedHats_b__11_0);
+
+	HatManager_c__GetUnlockedSkins_b__12_0 = SignatureScan<HATMANAGER_C_GETUNLOCKEDSKINS*>("55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 42 80 B8 ? ? ? ? ?", GetModuleHandleA("GameAssembly.dll"));
+	HOOKFUNC(HatManager_c__GetUnlockedSkins_b__12_0);
+
+	HatManager_c__GetUnlockedPets_b__9_0= SignatureScan<HATMANAGER_C_GETUNLOCKEDPETS*>("55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 2C 00", GetModuleHandleA("GameAssembly.dll"));
+	HOOKFUNC(HatManager_c__GetUnlockedPets_b__9_0);
+
+	HatManager_c__GetUnlockedVisors_b__15_0 = SignatureScan<HATMANAGER_C_GETUNLOCKEDVISORS*>("55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 40 00", GetModuleHandleA("GameAssembly.dll"));
+	HOOKFUNC(HatManager_c__GetUnlockedVisors_b__15_0);
+
+	HatManager_c__GetUnlockedNamePlates_b__17_0 = SignatureScan<HATMANAGER_C_GETUNLOCKEDNAMEPLATES*>("55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 30 00", GetModuleHandleA("GameAssembly.dll"));
+	HOOKFUNC(HatManager_c__GetUnlockedNamePlates_b__17_0);
+
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
-	HOOKFUNC(HatManager_GetUnlockedHats);
-	HOOKFUNC(HatManager_GetUnlockedPets);
-	HOOKFUNC(HatManager_GetUnlockedSkins);
 	HOOKFUNC(PlayerControl_FixedUpdate);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(MeetingHud_Update);
@@ -126,9 +150,11 @@ void DetourUninitialization()
 	DetourUpdateThread(GetCurrentThread());
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
-	UNHOOKFUNC(HatManager_GetUnlockedHats);
-	UNHOOKFUNC(HatManager_GetUnlockedPets);
-	UNHOOKFUNC(HatManager_GetUnlockedSkins);
+	UNHOOKFUNC(HatManager_c__GetUnlockedHats_b__11_0);
+	UNHOOKFUNC(HatManager_c__GetUnlockedSkins_b__12_0);
+	UNHOOKFUNC(HatManager_c__GetUnlockedPets_b__9_0);
+	UNHOOKFUNC(HatManager_c__GetUnlockedVisors_b__15_0);
+	UNHOOKFUNC(HatManager_c__GetUnlockedNamePlates_b__17_0);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(MeetingHud_Update);
