@@ -55,7 +55,7 @@ void DetourInitilization() {
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(HatManager_GetUnlockedHats);
-	//HOOKFUNC(HatManager_GetUnlockedPets);
+	HOOKFUNC(HatManager_GetUnlockedPets);
 	HOOKFUNC(HatManager_GetUnlockedSkins);
 	HOOKFUNC(PlayerControl_FixedUpdate);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);

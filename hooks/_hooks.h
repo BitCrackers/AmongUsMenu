@@ -16,7 +16,7 @@ GameOptionsData* dGameOptionsData_Deserialize(BinaryReader* reader, MethodInfo* 
 GameOptionsData* dGameOptionsData_Deserialize_1(MessageReader* reader, MethodInfo* method);
 HatBehaviour__Array* dHatManager_GetUnlockedHats(HatManager* __this, MethodInfo* method);
 int32_t dStatsManager_get_BanMinutesLeft(StatsManager* __this, MethodInfo* method);
-//PetBehaviour__Array* dHatManager_GetUnlockedPets(HatManager* __this, MethodInfo* method);
+PetData__Array* dHatManager_GetUnlockedPets(HatManager* __this, MethodInfo* method);
 SkinData__Array* dHatManager_GetUnlockedSkins(HatManager* __this, MethodInfo* method);
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method);
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method);

@@ -9813,7 +9813,7 @@ namespace app
         struct DestroyableSingleton_1_HatManager___Fields _;
         void* DefaultHatShader;
         void* AllStarBundles;
-        void* AllPets;
+        struct List_1_PetData_* AllPets;
         struct List_1_HatBehaviour_* AllHats;
         struct List_1_SkinData_* AllSkins;
         void* AllVisors;
@@ -10024,6 +10024,26 @@ namespace app
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct HatBehaviour__Array__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region List_1_PetData_
+    struct __declspec(align(4)) List_1_PetData___Fields {
+        struct PetData__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
+
+    struct List_1_PetData_ {
+        struct List_1_PetData___Class* klass;
+        MonitorData* monitor;
+        struct List_1_PetData___Fields fields;
+    };
+
+    struct IEnumerator_1_PetData_ {
+        struct IEnumerator_1_PetData___Class* klass;
+        MonitorData* monitor;
     };
 #pragma endregion
 
