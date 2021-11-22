@@ -48,7 +48,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
-			playerName += "\n(" + GetRoleName(playerData->fields.Role) + ")";
+			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
+			playerName += "\n<size=50%>(" + roleName + ")";
 			String* playerNameStr = convert_to_string(playerName);
 			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 

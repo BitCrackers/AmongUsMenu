@@ -9853,6 +9853,44 @@ namespace app
     };
 #pragma endregion
 
+#pragma region HatManager_c
+
+    struct HatManager_c
+    {
+        struct HatManager_c__Class* klass;
+        void* monitor;
+    };
+
+    struct HatManager_c__VTable
+    {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct HatManager_c__StaticFields
+    {
+        struct HatManager_c* __9;
+        void* __9__9_0;
+        void* __9__11_0;
+        void* __9__12_0;
+        void* __9__15_0;
+        void* __9__17_0;
+    };
+
+    struct HatManager_c__Class
+    {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct HatManager_c__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct HatManager_c__VTable vtable;
+    };
+
+#pragma endregion
+
 #pragma region ScriptableObject
     struct ScriptableObject__Fields
     {

@@ -124,4 +124,4 @@ void ResetOriginalAppearance();
 bool PlayerIsImpostor(GameData_PlayerInfo* player);
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
-std::string GetRoleName(RoleBehaviour* roleBehaviour);
+std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);

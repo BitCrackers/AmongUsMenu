@@ -36,6 +36,7 @@ public:
     bool ShowGhosts = false;
 
     bool RevealRoles = false;
+    bool AbbreviatedRoleNames = false;
     int PrevKillDistance = 0;
     int KillDistance = 0;
     int PrevTaskBarUpdates = 0;

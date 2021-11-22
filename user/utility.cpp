@@ -642,25 +642,25 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 	return c;
 }
 
-std::string GetRoleName(RoleBehaviour* roleBehaviour)
+std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = false */)
 {
-	if (roleBehaviour == nullptr) return "Unknown";
+	if (roleBehaviour == nullptr) return (abbreviated ? "Unk" : "Unknown");
 
 	switch (roleBehaviour->fields.Role)
 	{
 		case RoleTypes__Enum::Engineer:
-			return "Engineer";
+			return (abbreviated ? "Eng" : "Engineer");
 		case RoleTypes__Enum::GuardianAngel:
-			return "GuardianAngel";
+			return (abbreviated ? "GA" : "GuardianAngel");
 		case RoleTypes__Enum::Impostor:
-			return "Impostor";
+			return (abbreviated ? "I" : "Impostor");
 		case RoleTypes__Enum::Scientist:
-			return "Scientist";
+			return (abbreviated ? "Sci" : "Scientist");
 		case RoleTypes__Enum::Shapeshifter:
-			return "Shapeshifter";
+			return (abbreviated ? "Sh" : "Shapeshifter");
 		case RoleTypes__Enum::Crewmate:
-			return "Crewmate";
+			return (abbreviated ? "C" : "Crewmate");
 		default:
-			return "Unknown";
+			return (abbreviated ? "Unk" : "Unknown");
 	}
 }

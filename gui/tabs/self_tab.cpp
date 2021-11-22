@@ -54,6 +54,12 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Roles", &State.RevealRoles)) {
                 State.Save();
             }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Abbrv. Role", &State.AbbreviatedRoleNames))
+            {
+                State.Save();
+            }
+
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {
                 State.Save();
             }

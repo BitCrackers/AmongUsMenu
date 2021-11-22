@@ -30,6 +30,11 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
 			if (State.RevealRoles || PlayerIsImpostor(localData)) {
 
+				std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+				playerName += "\n<size=50%>(" + GetRoleName(playerData->fields.Role) + ")";
+				String* playerNameStr = convert_to_string(playerName);
+				app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
+
 				Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);

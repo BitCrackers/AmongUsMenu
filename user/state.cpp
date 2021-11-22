@@ -48,6 +48,7 @@ void Settings::Load() {
         j.at("Wallhack").get_to(this->Wallhack);
         j.at("UnlockVents").get_to(this->UnlockVents);
         j.at("RevealRoles").get_to(this->RevealRoles);
+        j.at("AbbreviatedRoleNames").get_to(this->AbbreviatedRoleNames);
         j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
         j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
         j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
@@ -97,6 +98,7 @@ void Settings::Save() {
             {"Wallhack", this->Wallhack},
             {"UnlockVents", this->UnlockVents},
             {"RevealRoles", this->RevealRoles},
+            {"AbbreviatedRoleNames", this->AbbreviatedRoleNames},
             {"ChatAlwaysActive", this->ChatAlwaysActive},
             {"ReadGhostMessages", this->ReadGhostMessages},
             {"AutoOpenDoors", this->AutoOpenDoors},
