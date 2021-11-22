@@ -23,17 +23,17 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 int dPlayerControl_fixedUpdateTimer = 50;
 int dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
-	//if (__this == *Game::pLocalPlayer) {
-	//	if (State.rpcCooldown == 0) {
-	//		MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
-	//		MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
-	//		MessageWriter_EndMessage(rpcMessage, NULL);
-	//		State.rpcCooldown = 15;
-	//	}
-	//	else {
-	//		State.rpcCooldown--;
-	//	}
-	//}
+	if (__this == *Game::pLocalPlayer) {
+		if (State.rpcCooldown == 0) {
+			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
+			MessageWriter_WriteInt32(rpcMessage, __this->fields.PlayerId, NULL);
+			MessageWriter_EndMessage(rpcMessage, NULL);
+			State.rpcCooldown = 15;
+		}
+		else {
+			State.rpcCooldown--;
+		}
+	}
 
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
