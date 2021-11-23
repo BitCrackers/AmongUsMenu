@@ -103,7 +103,7 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->ClearFonts();
         ImFontConfig config;
-        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 15, &config, io.Fonts->GetGlyphRangesCyrillic());
+        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &config, io.Fonts->GetGlyphRangesCyrillic());
         io.Fonts->Build();
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
         ImGui_ImplWin32_Init(window);

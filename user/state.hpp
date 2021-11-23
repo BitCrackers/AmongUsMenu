@@ -104,7 +104,7 @@ public:
 
     bool FakeCameraUsage = false;
 
-    ImVec4 SelectedColor = ImVec4(0.502f, 0.075f, 0.256f, 0.5f);
+    ImVec4 SelectedColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
 
 	int SelectedColorId = 0;
     std::string originalName = "-";
