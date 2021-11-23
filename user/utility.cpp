@@ -614,31 +614,24 @@ bool PlayerIsImpostor(GameData_PlayerInfo* player) {
 
 
 Color GetRoleColor(RoleBehaviour* roleBehaviour) {
-
 	if (roleBehaviour == nullptr) return Palette__TypeInfo->static_fields->White;
 
 	app::Color c;
 	switch (roleBehaviour->fields.Role) {
-	case RoleTypes__Enum::Engineer:
-		c = Palette__TypeInfo->static_fields->LightBlue;
-		break;
-	case RoleTypes__Enum::GuardianAngel:
-		c = Palette__TypeInfo->static_fields->Orange;
-		break;
-	case RoleTypes__Enum::Impostor:
-		c = Palette__TypeInfo->static_fields->ImpostorRed;
-		break;
-	case RoleTypes__Enum::Scientist:
-		c = Palette__TypeInfo->static_fields->Purple;
-		break;
-	case RoleTypes__Enum::Shapeshifter:
-		c = Palette__TypeInfo->static_fields->Brown;
-		break;
 	default:
+	case RoleTypes__Enum::Crewmate:
 		c = Palette__TypeInfo->static_fields->White;
 		break;
+	case RoleTypes__Enum::Engineer:
+	case RoleTypes__Enum::GuardianAngel:
+	case RoleTypes__Enum::Scientist:
+		c = Palette__TypeInfo->static_fields->CrewmateBlue;
+		break;
+	case RoleTypes__Enum::Impostor:
+	case RoleTypes__Enum::Shapeshifter:
+		c = Palette__TypeInfo->static_fields->ImpostorRed;
+		break;
 	}
-
 	return c;
 }
 
@@ -653,13 +646,13 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = fals
 		case RoleTypes__Enum::GuardianAngel:
 			return (abbreviated ? "GA" : "GuardianAngel");
 		case RoleTypes__Enum::Impostor:
-			return (abbreviated ? "I" : "Impostor");
+			return (abbreviated ? "Imp" : "Impostor");
 		case RoleTypes__Enum::Scientist:
 			return (abbreviated ? "Sci" : "Scientist");
 		case RoleTypes__Enum::Shapeshifter:
-			return (abbreviated ? "Sh" : "Shapeshifter");
+			return (abbreviated ? "SH" : "Shapeshifter");
 		case RoleTypes__Enum::Crewmate:
-			return (abbreviated ? "C" : "Crewmate");
+			return (abbreviated ? "Crew" : "Crewmate");
 		default:
 			return (abbreviated ? "Unk" : "Unknown");
 	}
