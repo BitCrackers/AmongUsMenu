@@ -14,8 +14,9 @@ enum EVENT_TYPES {
 	EVENT_MEETING = 0x5,
 	EVENT_VOTE = 0x6,
 	EVENT_CHEAT = 0x7,
-	EVENT_WALK = 0x8,
-	EVENT_TYPES_SIZE = 9
+	EVENT_DISCONNECT = 0x8,
+	EVENT_WALK = 0x9,
+	EVENT_TYPES_SIZE = 10
 };
 
 enum VENT_ACTION {
@@ -145,6 +146,13 @@ private:
 	CHEAT_ACTION action;
 public:
 	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action);
+	virtual void Output() override;
+	virtual void ColoredEventOutput() override;
+};
+
+class DisconnectEvent : public EventInterface {
+public:
+	DisconnectEvent(EVENT_PLAYER source);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

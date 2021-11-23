@@ -2,7 +2,7 @@
 #include <vector>
 
 namespace ConsoleGui {
-	const std::vector<const char*> BY_TYPE = { "", "Kill", "Vent", "Task", "Report", "Meeting", "Vote", "Cheat" };
+	const std::vector<const char*> BY_TYPE = { "All", "Kill", "Vent", "Task", "Report", "Meeting", "Vote", "Cheat", "Disconnect" };
 	extern int selectedType;
 
 	void Init();

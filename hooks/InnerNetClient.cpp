@@ -115,6 +115,9 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
+
+        State.events[data->fields.Character->fields.PlayerId][EVENT_DISCONNECT].push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.consoleEvents.push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
