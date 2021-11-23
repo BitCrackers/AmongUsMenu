@@ -32,6 +32,8 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 		GameObject_SetActive(shadowLayerObject,
 			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
 			NULL);
+
+		app::GameObject_SetActive(app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL), State.UnlockVents || GetPlayerData(*Game::pLocalPlayer)->fields.Role->fields.CanVent, nullptr);
 	}
 }
 
