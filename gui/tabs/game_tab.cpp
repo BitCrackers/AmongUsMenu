@@ -42,7 +42,7 @@ namespace GameTab {
 
 				for (PlayerControl* player : GetAllPlayerControl())
 				{
-					if (State.SelectedColorId == GetPlayerData(player)->fields.ColorId)
+					if (State.SelectedColorId == GetPlayerOutfit(GetPlayerData(player))->fields.ColorId)
 					{
 						colorAvailable = false;
 						break;

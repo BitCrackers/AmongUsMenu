@@ -10,4 +10,5 @@ namespace Game {
 	extern PlayerControl** pLocalPlayer;
 	extern ShipStatus** pShipStatus;
 	extern LobbyBehaviour** pLobbyBehaviour;
+	extern RoleManager** pRoleManager;
 }

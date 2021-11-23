@@ -42,6 +42,6 @@ void dEOSManager_ReallyBeginFlow(EOSManager* __this, MethodInfo* method)
 
 bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method)
 {
-	SaveManager__TypeInfo->static_fields->chatModeType = QuickChatModes__Enum_FreeChatOrQuickChat;
+	SaveManager__TypeInfo->static_fields->chatModeType = (uint32_t)QuickChatModes__Enum::FreeChatOrQuickChat;
 	return true;
 }

@@ -1,7 +1,6 @@
 #include "pch-il2cpp.h"
 #include "DirectX.h"
 #include "Renderer.hpp"
-#include "console.hpp"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -16,6 +15,7 @@
 #include "logger.h"
 #include "resource_data.h"
 #include "game.h"
+#include "console.hpp"
 
 #include <future>
 

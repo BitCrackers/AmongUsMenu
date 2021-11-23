@@ -5,6 +5,7 @@
 #include "esp.hpp"
 #include "_rpc.h"
 #include <iostream>
+#include <optional>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
 	std::optional<TaskTypes__Enum> taskType = std::nullopt;
@@ -13,8 +14,9 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayer(__this), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
@@ -42,11 +44,14 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		if (State.RevealImpostors || localData->fields.IsImpostor) {
-			Color32 c = app::Color32_op_Implicit(playerData->fields.IsImpostor
-				? Palette__TypeInfo->static_fields->ImpostorRed
-				: Palette__TypeInfo->static_fields->White, NULL);
+		if (State.RevealRoles || PlayerIsImpostor(localData)) {
+			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
+			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
+			playerName += "\n<size=50%>(" + roleName + ")";
+			String* playerNameStr = convert_to_string(playerName);
+			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
 			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
@@ -60,7 +65,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 			Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 1000}, NULL);
 		}
@@ -80,7 +85,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				else
 					Camera_set_orthographicSize(State.FollowerCam, 3.0f, NULL);
 
-				Transform* cameraTransform = Component_get_transform((Component*)State.FollowerCam, NULL);
+				Transform* cameraTransform = Component_get_transform((Component_1*)State.FollowerCam, NULL);
 				Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 				if(State.EnableZoom && !State.InMeeting && State.CameraHeight > 3.0f)
 				Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100 }, NULL);
@@ -98,7 +103,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 			Transform_set_position(cameraTransform, State.prevCamPos, NULL);
 
@@ -109,7 +114,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (State.FreeCam  && __this == *Game::pLocalPlayer) {
 			auto mainCamera = Camera_get_main(NULL);
 
-			Transform* cameraTransform = Component_get_transform((Component*)mainCamera, NULL);
+			Transform* cameraTransform = Component_get_transform((Component_1*)mainCamera, NULL);
 			Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 
 			if (State.camPos.x == NULL) {
@@ -151,13 +156,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_fixedUpdateCount++;
 			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
 				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayer(*Game::pLocalPlayer), localPos));
+				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(*Game::pLocalPlayer).value(), localPos));
 			}
 
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
-			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId));
-			espPlayerData.Name = convert_from_string(playerData->fields._playerName);
+			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId));
+			espPlayerData.Name = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
 			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
 			espPlayerData.playerData = PlayerSelection(__this);
@@ -176,37 +181,32 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PrevKillDistance = gameOptions->fields.KillDistance;
 	State.KillDistance = gameOptions->fields.KillDistance;
-	State.PrevTaskBarUpdates = gameOptions->fields.TaskBarMode;
-	State.TaskBarUpdates = gameOptions->fields.TaskBarMode;
+	State.PrevTaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
+	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 
 	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
-	if (GetPlayerData(__this)->fields.IsImpostor && GetPlayerData(target)->fields.IsImpostor) {
-		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
-		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayer(__this), CHEAT_KILL_IMPOSTOR));
+
+	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
+	{
+		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 	}
 
-	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new KillEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayer(__this), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+
+	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
 
 	PlayerControl_ReportDeadBody(__this, target, method);
-}
-
-void dPlayerControl_RpcSetInfected(PlayerControl* __this, GameData_PlayerInfo__Array* infected, MethodInfo* method) {
-	for (int i = 0; i < (*Game::pGameOptionsData)->fields.NumImpostors; i++) {
-		if (State.impostors[i] != nullptr) {
-			infected->vector[i] = GetPlayerData(State.impostors[i]);
-		}
-	}
-	PlayerControl_RpcSetInfected(__this, infected, method);
 }
 
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
@@ -236,7 +236,7 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
 			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
 			{
-				auto nameObject = Component_get_gameObject((Component*)player->fields.nameText, NULL);
+				auto nameObject = Component_get_gameObject((Component_1*)player->fields.nameText, NULL);
 				if (nameObject == __this) {
 					value = true;
 				}

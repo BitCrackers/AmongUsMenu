@@ -23,6 +23,7 @@
     <ClCompile Include="events\CheatDetectedEvent.cpp" />
     <ClCompile Include="events\KillEvent.cpp" />
     <ClCompile Include="events\ReportDeadBodyEvent.cpp" />
+    <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="events\WalkEvent.cpp" />
     <ClCompile Include="gui\console.cpp" />
@@ -63,6 +64,8 @@
     <ClCompile Include="hooks\PlainDoor.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
+    <ClCompile Include="RoleManager.cpp" />
+    <ClCompile Include="RpcSetRole.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
@@ -192,7 +195,6 @@
     <ClCompile Include="rpc\RpcReportPlayer.cpp" />
     <ClCompile Include="rpc\RpcSetScanner.cpp" />
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
-    <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
     <ClCompile Include="user\logger.cpp" />
     <ClCompile Include="user\resources.cpp" />

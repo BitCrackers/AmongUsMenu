@@ -1,6 +1,7 @@
 #pragma once
 #include <optional>
 #include <chrono>
+//#include "utility.h"
 
 using namespace app;
 
@@ -42,8 +43,29 @@ struct EVENT_PLAYER {
 
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
 		playerId = playerInfo->fields.PlayerId;
-		colorId = playerInfo->fields.ColorId;
-		playerName = convert_from_string(playerInfo->fields._playerName);
+
+		// rolling GetPlayerOutfit into this func to avoid circular dependencies
+		GameData_PlayerOutfit* outfit = 0;
+		auto arr = playerInfo->fields.Outfits->fields.entries;
+		for (int i = 0; i < playerInfo->fields.Outfits->fields.count; i++)
+		{
+			auto kvp = arr->vector[i];
+			if (kvp.key == PlayerOutfitType__Enum::Default)
+			{
+				outfit = kvp.value;
+			}
+		}
+
+		if (outfit != 0)
+		{
+			colorId = outfit->fields.ColorId;
+			playerName = convert_from_string(outfit->fields._playerName);
+		}
+		else
+		{
+			colorId = 0;
+			playerName = "ERROR";
+		}
 	}
 };
 

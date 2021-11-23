@@ -15,7 +15,7 @@ namespace HostTab {
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected) continue;
 
-					std::string playerName = convert_from_string(playerData->fields._playerName);
+					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 
@@ -58,7 +58,7 @@ namespace HostTab {
 					ImGui::Dummy(ImVec2(0, 0));
 					ImGui::SameLine();
 
-					ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(playerData->fields.ColorId)),playerName.c_str());
+					ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)),playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
 				ImGui::EndChild();

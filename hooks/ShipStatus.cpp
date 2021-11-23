@@ -19,7 +19,7 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
 			State.events[i][j].clear();
 
-	State.selectedDoor = SystemTypes__Enum_Hallway;
+	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();
 	State.pinnedDoors.clear();
 

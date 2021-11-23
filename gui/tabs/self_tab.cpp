@@ -51,9 +51,15 @@ namespace SelfTab {
             ImGui::Separator();
             ImGui::Dummy(ImVec2(7, 7));
 
-            if (ImGui::Checkbox("Reveal Impostors", &State.RevealImpostors)) {
+            if (ImGui::Checkbox("Reveal Roles", &State.RevealRoles)) {
                 State.Save();
             }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Abbrv. Role", &State.AbbreviatedRoleNames))
+            {
+                State.Save();
+            }
+
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {
                 State.Save();
             }
@@ -67,9 +73,9 @@ namespace SelfTab {
                     else {
                         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
                             if (State.NoClip)
-                                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+                                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
                             else
-                                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
+                                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
                         }
                     }
                 } else State.NoClip = false;

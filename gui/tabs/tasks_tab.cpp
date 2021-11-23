@@ -9,7 +9,7 @@ namespace TasksTab {
 		if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.Tasks != NULL) {
 			if (ImGui::BeginTabItem("Tasks")) {
 				ImGui::Dummy(ImVec2(4, 4));
-				if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsImpostor) {
+				if (!PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer))) {
 					auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
 
 					if (ImGui::Button("Complete All Tasks")) {
@@ -68,7 +68,7 @@ namespace TasksTab {
 
 				if (ImGui::Checkbox("Fake Cameras In Use", &State.FakeCameraUsage))
 				{
-					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Security, (State.FakeCameraUsage ? 1 : 0)));
+					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Security, (State.FakeCameraUsage ? 1 : 0)));
 				}
 
 				ImGui::EndTabItem();

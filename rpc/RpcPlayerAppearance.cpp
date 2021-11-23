@@ -2,7 +2,7 @@
 #include "_rpc.h"
 #include "game.h"
 
-RpcSetPet::RpcSetPet(uint32_t petId)
+RpcSetPet::RpcSetPet(String* petId)
 {
 	this->PetId = petId;
 }
@@ -12,7 +12,7 @@ void RpcSetPet::Process()
 	PlayerControl_RpcSetPet((*Game::pLocalPlayer), this->PetId, NULL);
 }
 
-RpcSetSkin::RpcSetSkin(uint32_t skinId)
+RpcSetSkin::RpcSetSkin(String* skinId)
 {
 	this->SkinId = skinId;
 }
@@ -22,7 +22,7 @@ void RpcSetSkin::Process()
 	PlayerControl_RpcSetSkin((*Game::pLocalPlayer), this->SkinId, NULL);
 }
 
-RpcSetHat::RpcSetHat(uint32_t hatId)
+RpcSetHat::RpcSetHat(String* hatId)
 {
 	this->HatId = hatId;
 }

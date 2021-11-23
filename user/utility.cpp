@@ -143,9 +143,9 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
-#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Started))
-#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum_OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum_Joined))
+#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
+#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
+#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Joined))
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
@@ -327,38 +327,38 @@ void RepairSabotage(PlayerControl* player) {
 				auto switchMask = 1 << (i & 0x1F);
 
 				if ((actualSwitches & switchMask) != (expectedSwitches & switchMask))
-					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Electrical, i));
+					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, i));
 			}
 		}
 	}
 
 	if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Comms, 16));
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Comms, 17));
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 16));
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 17));
 	}
 
 	if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Comms, 0));
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 0));
 	}
 
 	if (noOxyTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_LifeSupp, 64));
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_LifeSupp, 65));
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 64));
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 65));
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
 		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 64));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 65));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 64));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 65));
 		}
 
 		if (State.mapType == Settings::MapType::Pb) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 64));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Laboratory, 65));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Laboratory, 64));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Laboratory, 65));
 		}
 		if (State.mapType == Settings::MapType::Airship) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 16));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum_Reactor, 17));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 16));
+			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 17));
 		}
 	}
 }
@@ -379,7 +379,7 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi", 
 		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
 		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning"};
-	return TASK_TRANSLATIONS[taskType];
+	return TASK_TRANSLATIONS[(uint8_t)taskType];
 }
 
 #pragma warning(suppress:26812)
@@ -388,7 +388,7 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck", 
 		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical" };
-	return SYSTEM_TRANSLATIONS[systemType];
+	return SYSTEM_TRANSLATIONS[(uint8_t)systemType];
 }
 
 CorrectedColor32 GetPlayerColor(uint8_t colorId) {
@@ -414,7 +414,7 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector) {
 		for (size_t i = 0; i < allRooms->max_length; i++)
 			if (allRooms->vector[i]->fields.roomArea != nullptr && app::Collider2D_OverlapPoint(allRooms->vector[i]->fields.roomArea, vector, NULL)) return allRooms->vector[i]->fields.RoomId;
 	}
-	return SystemTypes__Enum_Outside;
+	return SystemTypes__Enum::Outside;
 }
 
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
@@ -423,9 +423,12 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
 	return EVENT_PLAYER(playerInfo);
 }
 
-EVENT_PLAYER GetEventPlayer(PlayerControl* player)
+std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 {
-	return *GetEventPlayer(player->fields._cachedData);
+	GameData_PlayerInfo* playerInfo = player->fields._cachedData;
+
+	if (!playerInfo) return std::nullopt;
+	return EVENT_PLAYER(playerInfo);
 }
 
 std::vector<Camera*> GetAllCameras() {
@@ -523,17 +526,17 @@ std::string GetGitBranch()
 void ImpersonateName(PlayerSelection player)
 {
 	if (!(IsInGame() || IsInLobby())) return;
-	if (convert_from_string(player.get_PlayerData()->fields._playerName).length() < 10) {
+	if (convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName).length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName) + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName) + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName)));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(player.get_PlayerData()->fields._playerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName)));
 	}
 }
 
@@ -549,7 +552,7 @@ int GetRandomColorId()
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
 			{
-				if (i == GetPlayerData(player)->fields.ColorId)
+				if (i == GetPlayerOutfit(GetPlayerData(player))->fields.ColorId)
 				{
 					colorAvailable = false;
 					break;
@@ -573,19 +576,84 @@ void SaveOriginalAppearance()
 {
 	PlayerSelection player = *Game::pLocalPlayer;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(player.get_PlayerData()->fields._playerName);
-	State.originalSkin = player.get_PlayerData()->fields.SkinId;
-	State.originalHat = player.get_PlayerData()->fields.HatId;
-	State.originalPet = player.get_PlayerData()->fields.PetId;
-	State.originalColor = player.get_PlayerData()->fields.ColorId;
+	State.originalName = convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName);
+	State.originalSkin = GetPlayerOutfit(player.get_PlayerData())->fields.SkinId;
+	State.originalHat = GetPlayerOutfit(player.get_PlayerData())->fields.HatId;
+	State.originalPet = GetPlayerOutfit(player.get_PlayerData())->fields.PetId;
+	State.originalColor = GetPlayerOutfit(player.get_PlayerData())->fields.ColorId;
 	State.activeImpersonation = false;
 }
 
 void ResetOriginalAppearance()
 {
 	LOG_DEBUG("Reset appearance values to invalid");
-	State.originalSkin = 0xFF;
-	State.originalHat = 0xFF;
-	State.originalPet = 0xFF;
+	State.originalSkin = nullptr;
+	State.originalHat = nullptr;
+	State.originalPet = nullptr;
 	State.originalColor = 0xFF;
+}
+
+GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player) {
+	auto arr = player->fields.Outfits->fields.entries;
+	for (int i = 0; i < player->fields.Outfits->fields.count; i++) {
+		auto kvp = arr->vector[i];
+		if (kvp.key == PlayerOutfitType__Enum::Default) {
+			return kvp.value;
+		}
+	}
+	return 0;
+}
+
+bool PlayerIsImpostor(GameData_PlayerInfo* player) {
+
+	if (player->fields.Role == nullptr) return false;
+
+	RoleBehaviour* role = player->fields.Role;
+	return role->fields.Role == RoleTypes__Enum::Impostor;
+}
+
+
+Color GetRoleColor(RoleBehaviour* roleBehaviour) {
+	if (roleBehaviour == nullptr) return Palette__TypeInfo->static_fields->White;
+
+	app::Color c;
+	switch (roleBehaviour->fields.Role) {
+	default:
+	case RoleTypes__Enum::Crewmate:
+		c = Palette__TypeInfo->static_fields->White;
+		break;
+	case RoleTypes__Enum::Engineer:
+	case RoleTypes__Enum::GuardianAngel:
+	case RoleTypes__Enum::Scientist:
+		c = Palette__TypeInfo->static_fields->CrewmateBlue;
+		break;
+	case RoleTypes__Enum::Impostor:
+	case RoleTypes__Enum::Shapeshifter:
+		c = Palette__TypeInfo->static_fields->ImpostorRed;
+		break;
+	}
+	return c;
+}
+
+std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = false */)
+{
+	if (roleBehaviour == nullptr) return (abbreviated ? "Unk" : "Unknown");
+
+	switch (roleBehaviour->fields.Role)
+	{
+		case RoleTypes__Enum::Engineer:
+			return (abbreviated ? "Eng" : "Engineer");
+		case RoleTypes__Enum::GuardianAngel:
+			return (abbreviated ? "GA" : "GuardianAngel");
+		case RoleTypes__Enum::Impostor:
+			return (abbreviated ? "Imp" : "Impostor");
+		case RoleTypes__Enum::Scientist:
+			return (abbreviated ? "Sci" : "Scientist");
+		case RoleTypes__Enum::Shapeshifter:
+			return (abbreviated ? "SH" : "Shapeshifter");
+		case RoleTypes__Enum::Crewmate:
+			return (abbreviated ? "Crew" : "Crewmate");
+		default:
+			return (abbreviated ? "Unk" : "Unknown");
+	}
 }

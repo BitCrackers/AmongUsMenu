@@ -14,7 +14,7 @@ namespace DoorsTab {
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
 				for (size_t i = 0; i < State.mapDoors.size(); i++) {
 					auto systemType = State.mapDoors[i];
-					if (systemType == SystemTypes__Enum_Decontamination || systemType == SystemTypes__Enum_Decontamination2) continue;
+					if (systemType == SystemTypes__Enum::Decontamination || systemType == SystemTypes__Enum::Decontamination2) continue;
 					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
@@ -69,7 +69,7 @@ namespace DoorsTab {
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							if(door != SystemTypes__Enum_Decontamination && door != SystemTypes__Enum_Decontamination2)
+							if(door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
 								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}
@@ -79,7 +79,7 @@ namespace DoorsTab {
 					State.pinnedDoors.clear();
 				}
 				ImGui::NewLine();
-				if (State.selectedDoor != SystemTypes__Enum_Hallway) {
+				if (State.selectedDoor != SystemTypes__Enum::Hallway) {
 					auto plainDoor = GetPlainDoorByRoom(State.selectedDoor);
 
 					if (ImGui::Button("Close Door")) {

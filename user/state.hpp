@@ -35,7 +35,8 @@ public:
     bool UnlockVents = false;
     bool ShowGhosts = false;
 
-    bool RevealImpostors = false;
+    bool RevealRoles = false;
+    bool AbbreviatedRoleNames = false;
     int PrevKillDistance = 0;
     int KillDistance = 0;
     int PrevTaskBarUpdates = 0;
@@ -107,9 +108,9 @@ public:
 
 	int SelectedColorId = 0;
     std::string originalName = "-";
-    uint32_t originalSkin = 0xFF;
-    uint32_t originalHat = 0xFF;
-    uint32_t originalPet = 0xFF;
+    String* originalSkin = nullptr;
+    String* originalHat = nullptr;
+    String* originalPet = nullptr;
     uint8_t originalColor = 0xFF;
 
     bool activeImpersonation = false;

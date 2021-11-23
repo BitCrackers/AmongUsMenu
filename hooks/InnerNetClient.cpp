@@ -28,9 +28,9 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     if ((IsInGame() || IsInLobby()) && State.HotkeyNoClip) {
         if (!(GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) {
             if (State.NoClip)
-                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
             else
-                app::GameObject_set_layer(app::Component_get_gameObject((Component*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
+                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Players"), NULL), NULL);
         }
         State.HotkeyNoClip = false;
     }
@@ -76,7 +76,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
     if (IsInLobby()) {
         if (State.originalName == "-") {
-            State.originalName = convert_from_string(GetPlayerData(*Game::pLocalPlayer)->fields._playerName);
+            State.originalName = convert_from_string(GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer))->fields._playerName);
         }
 
         if (!State.lobbyRpcQueue.empty()) {
@@ -111,7 +111,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
     if (data->fields.Character != nullptr) //Found this happens on game ending occasionally
     {
-        Log.Debug(convert_from_string(data->fields.Character->fields._cachedData->fields._playerName) + " has left the game.");
+        Log.Debug(convert_from_string(GetPlayerOutfit(data->fields.Character->fields._cachedData)->fields._playerName) + " has left the game.");
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
@@ -127,7 +127,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (!player.has_value()) return false; //Error getting playercontroller
     if (player.is_LocalPlayer()) return false; //We are not going to log ourselves
     if (player.get_PlayerControl()->fields.inVent) return false; //Vent buttons are warps
-    if (GameObject_get_layer(app::Component_get_gameObject((Component*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
+    if (GameObject_get_layer(app::Component_get_gameObject((Component_1*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
     int32_t distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
@@ -137,7 +137,7 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (Equals(initialSpawnLocation, newPosition)) return false;
     if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
     if (IsAirshipSpawnLocation(newPosition)) return false;
-    if (player.get_PlayerData()->fields.IsImpostor && distanceToTarget <= killDistance) 
+    if (PlayerIsImpostor(player.get_PlayerData()) && distanceToTarget <= killDistance) 
         return false;
     std::ostringstream ss;
 
@@ -183,4 +183,13 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
             State.events[i][j].clear();
 
     InnerNetClient_StartEndGame(__this, method);
+}
+
+void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
+    if (!IsHost() || reason != DisconnectReasons__Enum::Banned) {
+        return InnerNetClient_EnqueueDisconnect(__this, reason, stringReason, method);
+    }
+    if (reason == DisconnectReasons__Enum::Banned) {
+        LOG_INFO("Blocked ban");
+    }
 }

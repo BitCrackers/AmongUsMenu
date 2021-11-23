@@ -28,11 +28,14 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (playerData && localData) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-			if (State.RevealImpostors || localData->fields.IsImpostor) {
-				Color32 c = app::Color32_op_Implicit(playerData->fields.IsImpostor
-					? Palette__TypeInfo->static_fields->ImpostorRed
-					: Palette__TypeInfo->static_fields->White, NULL);
+			if (State.RevealRoles || PlayerIsImpostor(localData)) {
 
+				std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+				playerName += "\n<size=50%>(" + GetRoleName(playerData->fields.Role) + ")";
+				String* playerNameStr = convert_to_string(playerName);
+				app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
+
+				Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
 				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
@@ -53,9 +56,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			bool didVote = (playerVoteArea->fields.VotedFor != 0xFF);
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
 			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
-			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId]) {
-				State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
-				State.consoleEvents.push_back(new CastVoteEvent(*GetEventPlayer(playerData), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId])
+			{
+				State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.consoleEvents.push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				State.voteMonitor[playerData->fields.PlayerId] = true;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 			}
