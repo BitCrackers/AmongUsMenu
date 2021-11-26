@@ -95,6 +95,7 @@ void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int3
 		if (roleList->fields._items->vector[i] == RoleTypes__Enum::Impostor) {
 			continue;
 		}
+		if (allPlayers.size() <= j) break;
 		auto player = allPlayers[j];
 		PlayerControl_RpcSetRole(player, roleList->fields._items->vector[i], NULL);
 		(*rolesAssigned)++;
