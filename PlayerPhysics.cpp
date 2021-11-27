@@ -5,8 +5,11 @@
 
 void dPlayerPhysics_FixedUpdate(PlayerPhysics* __this, MethodInfo* method)
 {
-	bool oldInVentState = (*Game::pLocalPlayer)->fields.inVent;
-	(*Game::pLocalPlayer)->fields.inVent = !State.MoveInVent && oldInVentState;
-	app::PlayerPhysics_FixedUpdate(__this, method);
-	(*Game::pLocalPlayer)->fields.inVent = oldInVentState;
+	if ((*Game::pLocalPlayer)->fields.inVent && State.MoveInVent)
+	{
+		(*Game::pLocalPlayer)->fields.inVent = false;
+		app::PlayerPhysics_FixedUpdate(__this, method);
+		(*Game::pLocalPlayer)->fields.inVent = true;
+	} else
+		app::PlayerPhysics_FixedUpdate(__this, method);
 }
