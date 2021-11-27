@@ -65,6 +65,7 @@
     <ClCompile Include="hooks\PlainDoor.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
+    <ClCompile Include="PlayerPhysics.cpp" />
     <ClCompile Include="RoleManager.cpp" />
     <ClCompile Include="RpcSetRole.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />

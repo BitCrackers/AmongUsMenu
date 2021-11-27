@@ -138,6 +138,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
+	HOOKFUNC(PlayerPhysics_FixedUpdate);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -148,6 +149,7 @@ void DetourUninitialization()
 {
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
+	UNHOOKFUNC(PlayerPhysics_FixedUpdate);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(HatManager_c__GetUnlockedHats_b__11_0);
