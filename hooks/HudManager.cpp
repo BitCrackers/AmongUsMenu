@@ -40,8 +40,9 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 			if (playerRole->fields.Role == RoleTypes__Enum::Engineer)
 			{
 				app::EngineerRole *engineerRole = (app::EngineerRole*)playerRole;
-				engineerRole->fields.cooldownSecondsRemaining = 0;
-				engineerRole->fields.inVentTimeRemaining = 30; //Can be anything as it will always be written
+				if (engineerRole->fields.cooldownSecondsRemaining > 0.0f)
+					engineerRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
+				engineerRole->fields.inVentTimeRemaining = 30.0f; //Can be anything as it will always be written
 			}
 			else
 			{
