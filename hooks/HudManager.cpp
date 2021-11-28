@@ -13,7 +13,7 @@ void dHudManager_ShowMap(HudManager* __this, Action_1_MapBehaviour_* mapAction, 
 	//	ChatController_SetVisible(__this->fields.Chat, false, NULL);
 }
 
-void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
+void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 	static bool bChatAlwaysActivePrevious = false;
 	if (bChatAlwaysActivePrevious != State.ChatAlwaysActive)
 	{
@@ -25,7 +25,7 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 	}
 	HudManager_Update(__this, method);
 	__this->fields.PlayerCam->fields.Locked = State.FreeCam;
-	
+
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 	if (IsInGame()) {
 		GameObject* shadowLayerObject = Component_get_gameObject((Component_1*)__this->fields.ShadowQuad, NULL);
@@ -33,7 +33,23 @@ void dHudManager_Update(HudManager* __this,  MethodInfo* method) {
 			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
 			NULL);
 
-		app::GameObject_SetActive(app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL), State.UnlockVents || GetPlayerData(*Game::pLocalPlayer)->fields.Role->fields.CanVent, nullptr);
+		if (!State.InMeeting)
+		{
+			app::RoleBehaviour *playerRole = GetPlayerData(*Game::pLocalPlayer)->fields.Role;
+
+			if (playerRole->fields.Role == RoleTypes__Enum::Engineer && State.UnlockVents)
+			{
+				app::EngineerRole *engineerRole = (app::EngineerRole*)playerRole;
+				if (engineerRole->fields.cooldownSecondsRemaining > 0.0f)
+					engineerRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
+				engineerRole->fields.inVentTimeRemaining = 30.0f; //Can be anything as it will always be written
+			}
+			else
+			{
+				GameObject* ImpostorVentButton = app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL);
+				app::GameObject_SetActive(ImpostorVentButton, State.UnlockVents || PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)), nullptr);
+			}
+		}
 	}
 }
 
