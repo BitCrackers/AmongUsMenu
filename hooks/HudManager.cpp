@@ -37,7 +37,7 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 		{
 			app::RoleBehaviour *playerRole = GetPlayerData(*Game::pLocalPlayer)->fields.Role;
 
-			if (playerRole->fields.Role == RoleTypes__Enum::Engineer)
+			if (playerRole->fields.Role == RoleTypes__Enum::Engineer && State.UnlockVents)
 			{
 				app::EngineerRole *engineerRole = (app::EngineerRole*)playerRole;
 				if (engineerRole->fields.cooldownSecondsRemaining > 0.0f)
