@@ -83,6 +83,8 @@ void DetourInitilization() {
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(PlayerControl_FixedUpdate);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
+	HOOKFUNC(PlayerControl_Shapeshift);
+	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(ShipStatus_CalculateLightRadius);
 	HOOKFUNC(AirshipStatus_CalculateLightRadius);
@@ -159,6 +161,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(HatManager_c__GetUnlockedNamePlates_b__17_0);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
+	UNHOOKFUNC(PlayerControl_Shapeshift);
+	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
 	UNHOOKFUNC(AirshipStatus_CalculateLightRadius);
 	UNHOOKFUNC(ShipStatus_CalculateLightRadius);

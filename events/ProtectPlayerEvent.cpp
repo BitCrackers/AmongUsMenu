@@ -2,11 +2,11 @@
 #include "_events.h"
 #include "utility.h"
 
-ShapeShiftEvent::ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_PROTECTPLAYER) {
+ProtectPlayerEvent::ProtectPlayerEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_PROTECTPLAYER) {
 	this->target = target;
 }
 
-void ShapeShiftEvent::Output() {
+void ProtectPlayerEvent::Output() {
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());
 	ImGui::SameLine();
 	ImGui::Text(">");
@@ -19,7 +19,7 @@ void ShapeShiftEvent::Output() {
 	else ImGui::Text(" [%dm ago]", min);
 }
 
-void ShapeShiftEvent::ColoredEventOutput() {
+void ProtectPlayerEvent::ColoredEventOutput() {
 	ImGui::Text("[");
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0.1f, 0.75f, 0.75f, 1.f), "PROTECT");

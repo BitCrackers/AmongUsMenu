@@ -245,3 +245,15 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 	}
 	GameObject_SetActive(__this, value, method);
 }
+
+void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
+	State.events[__this->fields.PlayerId][EVENT_SHAPESHIFT].push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.consoleEvents.push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	PlayerControl_Shapeshift(__this, target, animate, method);
+}
+
+void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
+	State.events[__this->fields.PlayerId][EVENT_PROTECTPLAYER].push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.consoleEvents.push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	PlayerControl_ProtectPlayer(__this, target, colorId, method);
+}
