@@ -65,13 +65,13 @@
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />
     <ClCompile Include="hooks\NoShadowBehaviour.cpp" />
     <ClCompile Include="hooks\PlainDoor.cpp" />
+    <ClCompile Include="hooks\PlayerPhysics.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
+    <ClCompile Include="hooks\RoleManager.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
-    <ClCompile Include="PlayerPhysics.cpp" />
-    <ClCompile Include="RoleManager.cpp" />
-    <ClCompile Include="RpcSetRole.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
+    <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

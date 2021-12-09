@@ -235,12 +235,6 @@
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
-    <ClCompile Include="RoleManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="RpcSetRole.cpp">
-      <Filter>rpc</Filter>
-    </ClCompile>
     <ClCompile Include="gui\console.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -268,14 +262,20 @@
     <ClCompile Include="events\DisconnectEvent.cpp">
       <Filter>events</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerPhysics.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
     <ClCompile Include="events\ShapeShiftEvent.cpp">
       <Filter>events</Filter>
     </ClCompile>
     <ClCompile Include="events\ProtectPlayerEvent.cpp">
       <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\RoleManager.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\PlayerPhysics.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="rpc\RpcSetRole.cpp">
+      <Filter>rpc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
