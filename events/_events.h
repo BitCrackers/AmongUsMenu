@@ -15,8 +15,10 @@ enum EVENT_TYPES {
 	EVENT_VOTE = 0x6,
 	EVENT_CHEAT = 0x7,
 	EVENT_DISCONNECT = 0x8,
-	EVENT_WALK = 0x9,
-	EVENT_TYPES_SIZE = 10
+	EVENT_SHAPESHIFT = 0x9,
+	EVENT_PROTECTPLAYER = 0x10,
+	EVENT_WALK = 0x11,
+	EVENT_TYPES_SIZE = 12
 };
 
 enum VENT_ACTION {
@@ -153,6 +155,24 @@ public:
 class DisconnectEvent : public EventInterface {
 public:
 	DisconnectEvent(EVENT_PLAYER source);
+	virtual void Output() override;
+	virtual void ColoredEventOutput() override;
+};
+
+class ShapeShiftEvent : public EventInterface {
+private:
+	EVENT_PLAYER target;
+public:
+	ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target);
+	virtual void Output() override;
+	virtual void ColoredEventOutput() override;
+};
+
+class ProtectPlayerEvent : public EventInterface {
+private:
+	EVENT_PLAYER target;
+public:
+	ProtectPlayerEvent(EVENT_PLAYER source, EVENT_PLAYER target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

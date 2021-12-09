@@ -271,6 +271,12 @@
     <ClCompile Include="PlayerPhysics.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="events\ShapeShiftEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="events\ProtectPlayerEvent.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
