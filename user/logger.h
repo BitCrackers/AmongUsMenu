@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-class Logger {
+class AUMLogger {
 public:
 	void Create();
 	void Write(std::string verbosity, std::string source, std::string message);
@@ -39,4 +39,4 @@ private:
 		LOG_ERROR(ss.str()); \
 	} while (0)
 
-extern Logger Log;
+extern AUMLogger Log;

@@ -9,7 +9,8 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
 		GameData_PlayerInfo* local = GetPlayerData(*Game::pLocalPlayer);
-		if (player->fields.IsDead && !local->fields.IsDead) {
+
+		if (player != NULL && player->fields.IsDead && local != NULL && !local->fields.IsDead) {
 			local->fields.IsDead = true;
 			wasDead = true;
 		}

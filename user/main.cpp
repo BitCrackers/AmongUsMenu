@@ -109,13 +109,20 @@ void Run(LPVOID lpParam) {
 	output_class_methods(klass);
 	*/
 #endif
-	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
-	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
-	GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
-	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
-	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
-	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
-	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	//GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
+	Game::pAmongUsClient = &(app::AmongUsClient__TypeInfo->static_fields->Instance);
+	//GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
+	Game::pGameData = &(app::GameData__TypeInfo->static_fields->Instance);
+	//GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	Game::pGameOptionsData = &(app::PlayerControl__TypeInfo->static_fields->GameOptions);
+	//GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
+	Game::pAllPlayerControls = &(app::PlayerControl__TypeInfo->static_fields->AllPlayerControls);
+	//GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
+	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
+	//GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
+	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
+	//GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
 	//GAME_STATIC_POINTER(Game::pRoleManager, app::DestroyableSingleton_1_RoleManager_, _instance);
 
 	assert(cctor_finished(SaveManager__TypeInfo->_0.klass));

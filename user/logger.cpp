@@ -4,9 +4,9 @@
 #include <iostream>
 #include "utility.h"
 
-Logger Log;
+AUMLogger Log;
 
-void Logger::Create()
+void AUMLogger::Create()
 {
 	auto path = getModulePath(NULL);
 	auto logPath = path.parent_path() / "aum-log.txt";
@@ -17,7 +17,7 @@ void Logger::Create()
 	this->filePath = logPath;
 }
 
-void Logger::Write(std::string verbosity, std::string source, std::string message)
+void AUMLogger::Write(std::string verbosity, std::string source, std::string message)
 {
 	std::stringstream ss;
 	ss << "[" << verbosity << " - " << source << "] " << message << std::endl;
@@ -28,32 +28,32 @@ void Logger::Write(std::string verbosity, std::string source, std::string messag
 	file.close();
 }
 
-void Logger::Debug(std::string source, std::string message)
+void AUMLogger::Debug(std::string source, std::string message)
 {
 	Write("DEBUG", source, message);
 }
 
-void Logger::Error(std::string source, std::string message)
+void AUMLogger::Error(std::string source, std::string message)
 {
 	Write("ERROR", source, message);
 }
 
-void Logger::Info(std::string source, std::string message)
+void AUMLogger::Info(std::string source, std::string message)
 {
 	Write("INFO", source, message);
 }
 
-void Logger::Debug(std::string message)
+void AUMLogger::Debug(std::string message)
 {
 	Debug("AUM", message);
 }
 
-void Logger::Error(std::string message)
+void AUMLogger::Error(std::string message)
 {
 	Error("AUM", message);
 }
 
-void Logger::Info(std::string message)
+void AUMLogger::Info(std::string message)
 {
 	Info("AUM", message);
 }
