@@ -1,2 +1,2 @@
-#define GIT_CUR_COMMIT 97d6966e173ddf5cb6fd2da09bee7e19990d5c6b
+#define GIT_CUR_COMMIT f43dca40e6ade5efd234d166a55babe129b9f8a7
 #define GIT_BRANCH 2021.12.14

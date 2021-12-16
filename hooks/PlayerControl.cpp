@@ -156,12 +156,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_fixedUpdateCount++;
 			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
 				dPlayerControl_fixedUpdateCount = 0;
-				// TO-DO:
-				// FIXME:
-				// crash to desktop here. not clear why. occurs in the vector's push_back method which is a complete mess of C++ nonsense (i hate C++)
-				// _this is valid, localPos is valid, and playerData is valid.
-				// not clear if State.events is valid or if the return value from GetEventPlayerControl is valid or if Game::pLocalPlayer is valid (but it should be since the crash would occur here due to dereference)
-				//State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(*Game::pLocalPlayer).value(), localPos));
+				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), localPos));
 			}
 
 			PlayerData espPlayerData;
