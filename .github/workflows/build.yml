@@ -69,7 +69,7 @@ jobs:
           path: Debug.zip
           
   AutoRelease:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: windows-latest
     needs: [Build_Release, Build_Debug]
     steps:
