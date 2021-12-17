@@ -56,6 +56,7 @@ struct EVENT_PLAYER {
 			if (kvp.key == PlayerOutfitType__Enum::Default)
 			{
 				outfit = kvp.value;
+				break;
 			}
 		}
 
