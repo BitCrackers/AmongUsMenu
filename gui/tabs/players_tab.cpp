@@ -162,7 +162,8 @@ namespace PlayersTab {
 					}
 
 					if (IsInGame() && PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)) && !State.selectedPlayer.get_PlayerData()->fields.IsDead
-						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f))
+						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f)
+						&& !State.selectedPlayer.get_PlayerControl()->fields.protectedByGuardian)
 					{
 						if (ImGui::Button("Kill Player"))
 						{

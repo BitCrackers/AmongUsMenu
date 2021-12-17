@@ -1,2 +1,2 @@
-#define GIT_CUR_COMMIT dd02efaa502cf8d64c81bf179ebcdacdbc937f2a
-#define GIT_BRANCH main
+#define GIT_CUR_COMMIT 4668a9eb2a178a5b4884eadbda78508c8ce3bb19
+#define GIT_BRANCH feature/check_protected_player
