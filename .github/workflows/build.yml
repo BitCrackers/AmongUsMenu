@@ -54,7 +54,7 @@ jobs:
         run: '"/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
         
       - name: Package Debug Builds
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && github.event_name != 'pull_request'  }}
         shell: cmd
         run: |
           move /y Debug\AmongUsMenu.dll AmongUsMenu.dll
@@ -62,14 +62,14 @@ jobs:
           tar -caf Debug.zip AmongUsMenu.dll version.dll LICENSE
         
       - name: Upload Debug Artifact
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Debug
           path: Debug.zip
           
   AutoRelease:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.event_name != 'pull_request'  }}
     runs-on: windows-latest
     needs: [Build_Release, Build_Debug]
     steps:
