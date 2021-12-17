@@ -243,7 +243,11 @@ bool cctor_finished(Il2CppClass* klass)
 		timeout -= 10;
 	}
 
-	if (timeout <= 0) return false;
+	if (timeout <= 0)
+	{
+		STREAM_DEBUG("Class " << klass->name << " Timed out waiting for initialized || initialized_and_no_error");
+		return false;
+	}
 	//Then we wait for the static constructor to finish
 	timeout = CCTOR_TIMEOUT;
 
@@ -252,6 +256,10 @@ bool cctor_finished(Il2CppClass* klass)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		timeout -= 10;
+	}
+	if (timeout <= 0)
+	{
+		STREAM_DEBUG("Class " << klass->name << " Timed out waiting for cctor_finished");
 	}
 	return (timeout > 0);
 }

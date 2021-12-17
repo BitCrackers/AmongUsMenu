@@ -7,7 +7,7 @@
 #include <imgui/imgui_internal.h>
 
 drawing_t* Esp::s_Instance = new drawing_t();
-ImGuiWindow* Window = nullptr;
+ImGuiWindow* CurrentWindow = nullptr;
 
 static void RenderText(const char* text, const ImVec2& pos, const ImVec4& color, const bool outlined = true, const bool centered = true)
 {
@@ -22,25 +22,25 @@ static void RenderText(const char* text, const ImVec2& pos, const ImVec4& color,
 
 	if (outlined)
 	{
-		Window->DrawList->AddText(nullptr, 0.f,
+		CurrentWindow->DrawList->AddText(nullptr, 0.f,
 		{ ImScreen.x - 1.f, ImScreen.y + 1.f },
 		ImGui::GetColorU32(IM_COL32_BLACK), text);
 	}
 
-	Window->DrawList->AddText(nullptr, 0.f, ImScreen, ImGui::GetColorU32(color), text);
+	CurrentWindow->DrawList->AddText(nullptr, 0.f, ImScreen, ImGui::GetColorU32(color), text);
 }
 
 static void RenderLine(const ImVec2& start, const ImVec2& end, const ImVec4& color, bool shadow = false) noexcept
 {
 	if (shadow)
 	{
-		Window->DrawList->AddLine(
+		CurrentWindow->DrawList->AddLine(
 		{ start.x + 1.0f, start.y + 1.0f },
 		{ end.x + 1.0f, end.y + 1.0f },
 		ImGui::GetColorU32(color) & IM_COL32_A_MASK);
 	}
 
-	Window->DrawList->AddLine(start, end, ImGui::GetColorU32(color));
+	CurrentWindow->DrawList->AddLine(start, end, ImGui::GetColorU32(color));
 }
 
 static void RenderBox(const ImVec2 top, const ImVec2 bottom, const float height, const float width, const ImVec4& color, const bool wantsShadow = true)
@@ -60,7 +60,7 @@ static void RenderBox(const ImVec2 top, const ImVec2 bottom, const float height,
 
 void Esp::Render()
 {
-	Window = ImGui::GetCurrentWindow();
+	CurrentWindow = ImGui::GetCurrentWindow();
 
 	drawing_t& instance = Esp::GetDrawing();
 

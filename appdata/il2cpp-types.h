@@ -7430,53 +7430,6 @@ namespace app
     };
 #pragma endregion
 
-#pragma region EngineerRole
-
-struct EngineerRole__Fields {
-    struct RoleBehaviour__Fields _;
-    struct Vent *currentTarget;
-    float cooldownSecondsRemaining;
-    float inVentTimeRemaining;
-};
-
-struct EngineerRole__VTable {
-    VirtualInvokeData Equals;
-    VirtualInvokeData Finalize;
-    VirtualInvokeData GetHashCode;
-    VirtualInvokeData ToString;
-    VirtualInvokeData CanUse;
-    VirtualInvokeData DidWin;
-    VirtualInvokeData Deinitialize;
-    VirtualInvokeData SpawnTaskHeader;
-    VirtualInvokeData UseAbility;
-    VirtualInvokeData OnMeetingStart;
-    VirtualInvokeData OnVotingComplete;
-    VirtualInvokeData Initialize;
-    VirtualInvokeData SetUsableTarget;
-    VirtualInvokeData SetPlayerTarget;
-    VirtualInvokeData SetCooldown;
-};
-
-struct EngineerRole__StaticFields {
-};
-
-struct EngineerRole__Class {
-    Il2CppClass_0 _0;
-    Il2CppRuntimeInterfaceOffsetPair *interfaceOffsets;
-    struct EngineerRole__StaticFields *static_fields;
-    const Il2CppRGCTXData *rgctx_data;
-    Il2CppClass_1 _1;
-    struct EngineerRole__VTable vtable;
-};
-
-struct EngineerRole {
-    struct EngineerRole__Class *klass;
-    MonitorData *monitor;
-    struct EngineerRole__Fields fields;
-};
-
-#pragma endregion
-
 #pragma region GameData_PlayerInfo
     struct __declspec(align(4)) GameData_PlayerInfo__Fields
     {
@@ -9160,6 +9113,7 @@ struct EngineerRole {
         int32_t msgNum;
         struct String* networkAddress;
         int32_t networkPort;
+        bool useDtls;
         void* connection;
 #if defined(_CPLUSPLUS_)
         MatchMakerModes__Enum mode;
@@ -11389,6 +11343,56 @@ struct EngineerRole {
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct DestroyableSingleton_1_RoleManager___VTable vtable;
+    };
+#pragma endregion
+
+#pragma region EngineerRole
+    struct EngineerRole__Fields
+    {
+        struct RoleBehaviour__Fields _;
+        struct Vent* currentTarget;
+        float cooldownSecondsRemaining;
+        float inVentTimeRemaining;
+    };
+
+    struct EngineerRole
+    {
+        struct EngineerRole__Class* klass;
+        void* monitor;
+        struct EngineerRole__Fields fields;
+    };
+
+    struct EngineerRole__VTable
+    {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData CanUse;
+        VirtualInvokeData DidWin;
+        VirtualInvokeData Deinitialize;
+        VirtualInvokeData SpawnTaskHeader;
+        VirtualInvokeData UseAbility;
+        VirtualInvokeData OnMeetingStart;
+        VirtualInvokeData OnVotingComplete;
+        VirtualInvokeData Initialize;
+        VirtualInvokeData SetUsableTarget;
+        VirtualInvokeData SetPlayerTarget;
+        VirtualInvokeData SetCooldown;
+    };
+
+    struct EngineerRole__StaticFields
+    {
+    };
+
+    struct EngineerRole__Class
+    {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct EngineerRole__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct EngineerRole__VTable vtable;
     };
 #pragma endregion
 

@@ -156,7 +156,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			dPlayerControl_fixedUpdateCount++;
 			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
 				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(*Game::pLocalPlayer).value(), localPos));
+				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), localPos));
 			}
 
 			PlayerData espPlayerData;
