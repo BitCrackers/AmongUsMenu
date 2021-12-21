@@ -47,7 +47,7 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 			else
 			{
 				GameObject* ImpostorVentButton = app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL);
-				app::GameObject_SetActive(ImpostorVentButton, State.UnlockVents || playerRole->fields.TeamType == app::RoleTeamTypes__Enum::Impostor, nullptr);
+				app::GameObject_SetActive(ImpostorVentButton, State.UnlockVents || PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)), nullptr);
 			}
 		}
 	}

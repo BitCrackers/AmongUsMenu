@@ -31,7 +31,7 @@ namespace PlayersTab {
 					ImGui::SameLine();
 
 					ImVec4 nameColor;
-					if (State.RevealRoles && false /* who the imposter is is no longer being sent to the client */)
+					if (State.RevealRoles && PlayerIsImpostor(PlayerSelection(playerData).get_PlayerData()))
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
 					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
 						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
