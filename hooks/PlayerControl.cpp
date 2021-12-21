@@ -44,19 +44,24 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		if (State.RevealRoles || PlayerIsImpostor(localData)) {
-			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
+		std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+		if (State.RevealRoles || PlayerIsImpostor(localData))
+		{
 
-			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
 			playerName += "\n<size=50%>(" + roleName + ")";
 			String* playerNameStr = convert_to_string(playerName);
 			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
+			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
 			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
 		}
-		else {
+		else
+		{
+			String* playerNameStr = convert_to_string(playerName);
+			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
+
 			Color32 c = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
 			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
 			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
