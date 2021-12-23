@@ -47,8 +47,7 @@ namespace SettingsTab {
 				{
 					Game::SteamUserStats_SetAchievement(convert_to_string(std::string(achievement)));
 				}
-
-				MessageBoxA(NULL, "Unlocked all Steam achievements!", "AmongUsMenu", MB_OK | MB_ICONINFORMATION);
+				Game::SteamUserStats_StoreStats();
 			}
 
 			ImGui::EndTabItem();

@@ -352,3 +352,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# gitparams.h is used for github workflow (we don't need to push it)
+user/gitparams.h
