@@ -447,6 +447,9 @@
     <ClInclude Include="events\_events.h">
       <Filter>events</Filter>
     </ClInclude>
+    <ClInclude Include="user\achievements.hpp">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">

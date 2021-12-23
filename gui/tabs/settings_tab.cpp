@@ -3,6 +3,8 @@
 #include "utility.h"
 #include "gui-helpers.hpp"
 #include "state.hpp"
+#include "game.h"
+#include "achievements.hpp"
 
 namespace SettingsTab {
 	void Render() {
@@ -36,7 +38,20 @@ namespace SettingsTab {
 				}
 			}
 
+			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Separator();
+			ImGui::Dummy(ImVec2(7, 7));
+			if (ImGui::Button("Unlock all Steam achievements"))
+			{
+				for (const char* achievement : steamAchievements)
+				{
+					Game::SteamUserStats_SetAchievement(convert_to_string(std::string(achievement)));
+				}
+
+				MessageBoxA(NULL, "Unlocked all Steam achievements!", "AmongUsMenu", MB_OK | MB_ICONINFORMATION);
+			}
+
 			ImGui::EndTabItem();
 		}
 	}
-} 
+}

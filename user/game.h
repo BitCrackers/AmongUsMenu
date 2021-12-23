@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
+#define RESOLVE_FUNC(r, n, p) extern r (*n) p
 
 using namespace app;
 
@@ -11,4 +13,10 @@ namespace Game {
 	extern ShipStatus** pShipStatus;
 	extern LobbyBehaviour** pLobbyBehaviour;
 	extern RoleManager** pRoleManager;
+
+	typedef bool STEAMUSERSTATS_SETACHIEVEMENT(String* pchName);
+	extern STEAMUSERSTATS_SETACHIEVEMENT* SteamUserStats_SetAchievement;
+
+	extern void scanGameFunctions();
 }
+#endif

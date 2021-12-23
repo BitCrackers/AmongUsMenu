@@ -342,6 +342,7 @@
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
+    <ClInclude Include="user\achievements.hpp" />
     <ClInclude Include="user\gitparams.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
