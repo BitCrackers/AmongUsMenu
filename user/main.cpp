@@ -134,6 +134,7 @@ void Run(LPVOID lpParam) {
 	assert(cctor_finished(app::SaveManager__TypeInfo->_0.klass));
 	State.userName = convert_from_string(app::SaveManager__TypeInfo->static_fields->lastPlayerName);
 
+	Game::scanGameFunctions();
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);

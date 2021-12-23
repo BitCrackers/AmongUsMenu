@@ -18,11 +18,7 @@
 
 namespace Menu {
 	void Init() {
-#ifdef _DEBUG
-		ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_Once);
-#else
-		ImGui::SetNextWindowSize(ImVec2(440, 300), ImGuiCond_Once);
-#endif
+		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 

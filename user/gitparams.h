@@ -1,2 +1,0 @@
-#define GIT_CUR_COMMIT 9ab12323f97355936bb26822121aacd7f59b39d2
-#define GIT_BRANCH FixRoleNames

@@ -438,15 +438,16 @@
     <ClInclude Include="user\logger.h">
       <Filter>user</Filter>
     </ClInclude>
-    <ClInclude Include="user\gitparams.h">
-      <Filter>user</Filter>
-    </ClInclude>
     <ClInclude Include="gui\console.hpp">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="events\_events.h">
       <Filter>events</Filter>
     </ClInclude>
+    <ClInclude Include="user\achievements.hpp">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="gitparams.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">
