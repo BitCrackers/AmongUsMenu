@@ -1,2 +1,2 @@
-#define GIT_CUR_COMMIT 9882aac6beb59c96a74d4082a7e2352d66d16232
+#define GIT_CUR_COMMIT 2e8146df17d581917baf5cec54e0ff504d1fc00b
 #define GIT_BRANCH feature/steam_achievements

@@ -1,6 +1,5 @@
-#ifndef SETTINGS_TAB_H
-#define SETTINGS_TAB_H
+#pragma once
+
 namespace SettingsTab {
 	void Render();
 }
-#endif

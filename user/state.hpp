@@ -1,5 +1,4 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
 #include <bitset>
 #include <queue>
 #include "_events.h"
@@ -146,4 +145,3 @@ public:
 };
 
 extern Settings State;
-#endif

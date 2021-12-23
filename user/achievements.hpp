@@ -1,5 +1,4 @@
-#ifndef ACHIEVEMENTS_H
-#define ACHIEVEMENTS_H
+#pragma once
 #include <vector>
 
 std::vector<const char*> steamAchievements = {
@@ -34,4 +33,3 @@ std::vector<const char*> steamAchievements = {
 	"MapWinsMira",
 	"MapWinsAirship"
 };
-#endif

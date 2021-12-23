@@ -1,5 +1,4 @@
-#ifndef UTILITY_H
-#define UTILITY_H
+#pragma once
 #include <vector>
 #include <imgui/imgui.h>
 #include "_events.h"
@@ -126,4 +125,3 @@ bool PlayerIsImpostor(GameData_PlayerInfo* player);
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
 std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);
-#endif
