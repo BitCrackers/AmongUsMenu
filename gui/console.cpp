@@ -8,7 +8,7 @@ namespace ConsoleGui {
 	int selectedType = 0;
 
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(500, 270), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 

@@ -320,6 +320,7 @@
     <ClInclude Include="appdata\il2cpp-functions.h" />
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
+    <ClInclude Include="gitparams.h" />
     <ClInclude Include="gui\console.hpp" />
     <ClInclude Include="gui\esp.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />
@@ -342,7 +343,7 @@
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
-    <ClInclude Include="user\gitparams.h" />
+    <ClInclude Include="user\achievements.hpp" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />
@@ -469,7 +470,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -493,11 +494,11 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
-git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  gitparams.h
 
-echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
-git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Create gitparams.h</Message>
@@ -512,7 +513,7 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -536,11 +537,11 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
-git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  gitparams.h
 
-echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
-git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Create gitparams.h</Message>
@@ -557,7 +558,7 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -584,11 +585,11 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
-git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  gitparams.h
 
-echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
-git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Create gitparams.h</Message>
@@ -605,7 +606,7 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -631,11 +632,11 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  user/gitparams.h
-git rev-parse --verify HEAD &gt;&gt;  user/gitparams.h
+      <Command>echo | set /p dummyName=#define GIT_CUR_COMMIT &gt;  gitparams.h
+git rev-parse --verify HEAD &gt;&gt;  gitparams.h
 
-echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  user/gitparams.h
-git rev-parse --abbrev-ref HEAD &gt;&gt;  user/gitparams.h</Command>
+echo | set /p dummyName=#define GIT_BRANCH &gt;&gt;  gitparams.h
+git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Create gitparams.h</Message>
