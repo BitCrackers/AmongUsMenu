@@ -109,29 +109,31 @@ void Run(LPVOID lpParam) {
 	output_class_methods(klass);
 	*/
 #endif
-	STREAM_DEBUG("AmongUsClient__TypeInfo: " << std::hex << app::AmongUsClient__TypeInfo << "\n\tHas Static Constructor: " << (app::AmongUsClient__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::AmongUsClient__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
-	Game::pAmongUsClient = &(app::AmongUsClient__TypeInfo->static_fields->Instance);
-	STREAM_DEBUG("GameData__TypeInfo: " << std::hex << app::GameData__TypeInfo << "\n\tHas Static Constructor: " << (app::GameData__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::GameData__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
-	Game::pGameData = &(app::GameData__TypeInfo->static_fields->Instance);
-	STREAM_DEBUG("PlayerControl__TypeInfo: " << std::hex << app::PlayerControl__TypeInfo << "\n\tHas Static Constructor: " << (app::PlayerControl__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::PlayerControl__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
-	Game::pGameOptionsData = &(app::PlayerControl__TypeInfo->static_fields->GameOptions);
-	//GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
-	Game::pAllPlayerControls = &(app::PlayerControl__TypeInfo->static_fields->AllPlayerControls);
-	//GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
-	Game::pLocalPlayer = &(app::PlayerControl__TypeInfo->static_fields->LocalPlayer);
-	STREAM_DEBUG("ShipStatus__TypeInfo: " << std::hex << app::ShipStatus__TypeInfo << "\n\tHas Static Constructor: " << (app::ShipStatus__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::ShipStatus__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
-	Game::pShipStatus = &(app::ShipStatus__TypeInfo->static_fields->Instance);
-	STREAM_DEBUG("LobbyBehaviour__TypeInfo: " << std::hex << app::LobbyBehaviour__TypeInfo << "\n\tHas Static Constructor: " << (app::LobbyBehaviour__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::LobbyBehaviour__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
-	Game::pLobbyBehaviour = &(app::LobbyBehaviour__TypeInfo->static_fields->Instance);
-	//STREAM_DEBUG("DestroyableSingleton_1_RoleManager___TypeInfo: " << std::hex << app::DestroyableSingleton_1_RoleManager___TypeInfo << "\n\tHas Static Constructor: " << (app::DestroyableSingleton_1_RoleManager___TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::DestroyableSingleton_1_RoleManager___TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
-	//GAME_STATIC_POINTER(Game::pRoleManager, app::DestroyableSingleton_1_RoleManager_, _instance);
-	STREAM_DEBUG("SaveManager__TypeInfo: " << std::hex << app::SaveManager__TypeInfo << "\n\tHas Static Constructor: " << (app::SaveManager__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::SaveManager__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	STREAM_DEBUG("\n\tAmongUsClient__TypeInfo: " << std::hex << app::AmongUsClient__TypeInfo << "\n\tHas Static Constructor: " << (app::AmongUsClient__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::AmongUsClient__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
+	
+	STREAM_DEBUG("\n\tGameData__TypeInfo: " << std::hex << app::GameData__TypeInfo << "\n\tHas Static Constructor: " << (app::GameData__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::GameData__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
+	
+	STREAM_DEBUG("\n\tPlayerControl__TypeInfo: " << std::hex << app::PlayerControl__TypeInfo << "\n\tHas Static Constructor: " << (app::PlayerControl__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::PlayerControl__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	
+	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
+	
+	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
+	
+	STREAM_DEBUG("\n\tShipStatus__TypeInfo: " << std::hex << app::ShipStatus__TypeInfo << "\n\tHas Static Constructor: " << (app::ShipStatus__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::ShipStatus__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
+	
+	STREAM_DEBUG("\n\tLobbyBehaviour__TypeInfo: " << std::hex << app::LobbyBehaviour__TypeInfo << "\n\tHas Static Constructor: " << (app::LobbyBehaviour__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::LobbyBehaviour__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
+	
+//	STREAM_DEBUG("DestroyableSingleton_1_RoleManager___TypeInfo: " << std::hex << app::DestroyableSingleton_1_RoleManager___TypeInfo << "\n\tHas Static Constructor: " << (app::DestroyableSingleton_1_RoleManager___TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::DestroyableSingleton_1_RoleManager___TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
+//	GAME_STATIC_POINTER(Game::pRoleManager, app::DestroyableSingleton_1_RoleManager_, _instance);
+
+	STREAM_DEBUG("\n\tSaveManager__TypeInfo: " << std::hex << app::SaveManager__TypeInfo << "\n\tHas Static Constructor: " << (app::SaveManager__TypeInfo->_0.klass->has_cctor ? "true" : "false") << "\n\tIs Static Constructor Finished: " << (app::SaveManager__TypeInfo->_0.klass->cctor_finished ? "true" : "false"));
 	assert(cctor_finished(app::SaveManager__TypeInfo->_0.klass));
+
 	State.userName = convert_from_string(app::SaveManager__TypeInfo->static_fields->lastPlayerName);
 
 	DetourInitilization();

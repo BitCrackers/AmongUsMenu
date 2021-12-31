@@ -233,9 +233,9 @@ void output_assembly_methods(const Il2CppAssembly* assembly) {
 }
 bool cctor_finished(Il2CppClass* klass)
 {
-	constexpr int CCTOR_TIMEOUT = 5000; //Time in milliseconds to wait for class to initialize
-	int timeout = CCTOR_TIMEOUT; //Five second timeout
-	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
+	constexpr int CCTOR_TIMEOUT = 30 * 1000; //Time in milliseconds to wait for class to initialize
+	int timeout = CCTOR_TIMEOUT; //Thirty second timeout
+	//STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
 	//First we wait for the class itself to finish initializing
 	while (!(klass->initialized || klass->initialized_and_no_error) && (timeout >= 0)) //Bails on either initialization setting
 	{
