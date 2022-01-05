@@ -122,6 +122,6 @@ int GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
 bool PlayerIsImpostor(GameData_PlayerInfo* player);
-GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player);
+GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted = false);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
 std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);

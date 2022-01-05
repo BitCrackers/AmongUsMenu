@@ -593,15 +593,24 @@ void ResetOriginalAppearance()
 	State.originalColor = 0xFF;
 }
 
-GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player) {
+GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted) {
 	auto arr = player->fields.Outfits->fields.entries;
-	for (int i = 0; i < player->fields.Outfits->fields.count; i++) {
+	auto outfitCount = player->fields.Outfits->fields.count;
+	GameData_PlayerOutfit* playerOutfit = NULL;
+	for (int i = 0; i < outfitCount; i++) {
 		auto kvp = arr->vector[i];
 		if (kvp.key == PlayerOutfitType__Enum::Default) {
-			return kvp.value;
+			if(playerOutfit == nullptr)
+				playerOutfit = kvp.value;
+			if(!includeShapeshifted)
+				break;
+		}
+		if (kvp.key == PlayerOutfitType__Enum::Shapeshifted && !convert_from_string(kvp.value->fields._playerName).empty()) {
+			playerOutfit = kvp.value;
+			break;
 		}
 	}
-	return 0;
+	return playerOutfit ? playerOutfit : 0;
 }
 
 bool PlayerIsImpostor(GameData_PlayerInfo* player) {
