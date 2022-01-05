@@ -44,29 +44,20 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			return;
 		
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+		Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
+		std::string playerName = convert_from_string(GetPlayerOutfit(playerData, true)->fields._playerName);
 		if (State.RevealRoles || PlayerIsImpostor(localData))
 		{
-
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
 			playerName += "\n<size=50%>(" + roleName + ")";
-			String* playerNameStr = convert_to_string(playerName);
-			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
-
-			Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
-			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
-			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
+			roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 		}
-		else
-		{
-			String* playerNameStr = convert_to_string(playerName);
-			app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
-			Color32 c = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-			app::TextMeshPro_SetFaceColor(nameTextTMP, c, NULL);
-			app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
-		}
-			
+		String* playerNameStr = convert_to_string(playerName);
+		app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
+		app::TextMeshPro_SetFaceColor(nameTextTMP, roleColor, NULL);
+		app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
+
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
 
@@ -95,10 +86,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				if(State.EnableZoom && !State.InMeeting && State.CameraHeight > 3.0f)
 				Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100 }, NULL);
 			}
-		}
-
-		if ((__this == *Game::pLocalPlayer) && (State.originalColor == 0xFF)) {
-			SaveOriginalAppearance();
 		}
 
 		if ((__this == *Game::pLocalPlayer) && (State.originalColor == 0xFF)) {
