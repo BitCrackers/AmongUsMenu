@@ -28,23 +28,25 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (playerData && localData) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
+			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			String* playerNameStr;
+			Color32 outlineColor;
 			if (State.RevealRoles || PlayerIsImpostor(localData)) {
 
-				std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
-				playerName += "\n<size=50%>(" + GetRoleName(playerData->fields.Role) + ")";
-				String* playerNameStr = convert_to_string(playerName);
-				app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
+				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
+				playerName += "\n<size=50%>(" + roleName + ")";
+				playerNameStr = convert_to_string(playerName);
 
-				Color32 c = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
-
-				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
-				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
+				outlineColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 			}
 			else {
-				Color32 c = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-				app::TextMeshPro_SetFaceColor(playerNameTMP, c, NULL);
-				app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
+				playerNameStr = convert_to_string(playerName);
+
+				outlineColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
 			}
+			app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
+			app::TextMeshPro_SetFaceColor(playerNameTMP, outlineColor, NULL);
+			app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
 		}
 		//This is to not show the "Force skip all" that a host does at the end of a meeting
 		bool isDiscussionState = (__this->fields.discussionTimer < (*Game::pGameOptionsData)->fields.DiscussionTime);
