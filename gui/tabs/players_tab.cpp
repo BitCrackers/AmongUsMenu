@@ -97,7 +97,7 @@ namespace PlayersTab {
 				}
 				if (State.selectedPlayer.has_value())
 				{
-					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && State.selectedPlayer.get_PlayerData()->fields.IsDead) {
 						ImGui::NewLine();
 						if (ImGui::Button("Report Body")) {
 							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
