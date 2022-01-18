@@ -12,5 +12,20 @@ void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleO
 }
 
 void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method) {
+	dRoleManager_AssignPreChosenRoles(rolesAssigned);
 	return RoleManager_AssignRolesFromList(players, teamMax, roleList, rolesAssigned, method);
+}
+
+void dRoleManager_AssignPreChosenRoles(int32_t*& rolesAssigned)
+{
+	for (int i = 0; i < State.assignedRolesPlayer.size(); i++) {
+		auto role = State.assignedRoles[i];
+		auto player = State.assignedRolesPlayer[i];
+		if (role == (int)RoleType::Random)
+			continue;
+
+		auto trueRole = GetRoleTypesEnum((RoleType)role);
+		PlayerControl_RpcSetRole(player, trueRole, NULL);
+		(*rolesAssigned)++;
+	}
 }

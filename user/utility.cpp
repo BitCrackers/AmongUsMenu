@@ -666,3 +666,20 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = fals
 			return (abbreviated ? "Unk" : "Unknown");
 	}
 }
+
+RoleTypes__Enum GetRoleTypesEnum(RoleType role)
+{
+	if (role == RoleType::Shapeshifter) {
+		return RoleTypes__Enum::Shapeshifter;
+	}
+	else if (role == RoleType::Impostor) {
+		return RoleTypes__Enum::Impostor;
+	}
+	else if (role == RoleType::Engineer) {
+		return RoleTypes__Enum::Engineer;
+	}
+	else if (role == RoleType::Scientist) {
+		return RoleTypes__Enum::Scientist;
+	}
+	return RoleTypes__Enum::Crewmate;
+}

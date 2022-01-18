@@ -69,6 +69,7 @@ bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method);
 void dChatController_Update(ChatController* __this, MethodInfo* method);
 void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method);
 void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method);
+void dRoleManager_AssignPreChosenRoles(int32_t*& rolesAssigned);
 void dPlayerPhysics_FixedUpdate (PlayerPhysics* __this, MethodInfo* method);
 
 // 55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 50 00
