@@ -56,9 +56,24 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     else {
         if (!State.rpcQueue.empty()) {
             auto rpc = State.rpcQueue.front();
-            State.rpcQueue.pop();
-
-            rpc->Process();
+            //Looks like there is a check on Task completion when u are dead.
+            //The maximum amount of Tasks that can be completed per Update is at 6.
+            auto maxProcessedTasks = 6;
+			auto processedTaskCompletes = 0;
+			if (dynamic_cast<RpcCompleteTask*>(rpc))
+			{
+				if (processedTaskCompletes < maxProcessedTasks)
+				{
+					State.rpcQueue.pop();
+					rpc->Process();
+					processedTaskCompletes++;
+				}
+			}
+			else
+			{
+				State.rpcQueue.pop();
+				rpc->Process();
+			}
             delete rpc;
         }
 
