@@ -7,4 +7,5 @@ namespace HostTab {
 	const std::vector<const char*> ROLE_NAMES = { "Random", "Crewmate", "Scientist", "Engineer", "Imposter", "Shapeshifter" };
 	void Render();
 	const ptrdiff_t& GetRoleCount(int role);
+	int GetMaxImposterAmount(size_t playerAmount);
 }

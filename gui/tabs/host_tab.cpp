@@ -13,7 +13,9 @@ namespace HostTab {
 				ImGui::BeginChild("host#list", ImVec2(200, 0), true);
 				ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150));
 				auto allPlayers = GetAllPlayerData();
-				for (int index = 0; index < allPlayers.size(); index++) {
+				auto playerAmount = allPlayers.size();
+				auto maxImposterAmount = GetMaxImposterAmount(playerAmount);
+				for (int index = 0; index < playerAmount; index++) {
 					auto playerData = allPlayers[index];
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 
@@ -28,12 +30,12 @@ namespace HostTab {
 						State.scientists_amount = GetRoleCount((int)RoleType::Scientist);
 						State.shapeshifters_amount = GetRoleCount((int)RoleType::Shapeshifter);
 						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
-						if (State.impostors_amount + State.shapeshifters_amount > 3)
+						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
 							State.assignedRoles[index] = (int)RoleType::Crewmate;
 							State.impostors_amount--;
 						}
-						else if (State.shapeshifters_amount + State.impostors_amount > 3)
+						else if (State.shapeshifters_amount + State.impostors_amount > maxImposterAmount)
 						{
 							State.assignedRoles[index] = (int)RoleType::Engineer;
 							State.shapeshifters_amount--;
@@ -87,5 +89,14 @@ namespace HostTab {
 	const ptrdiff_t& GetRoleCount(int role)
 	{
 		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](int i) {return i == role; });
+	}
+
+	int GetMaxImposterAmount(size_t playerAmount)
+	{
+		if(playerAmount >= 9)
+			return 3;
+		if(playerAmount >= 7)
+			return 2;
+		return 1;
 	}
 }
