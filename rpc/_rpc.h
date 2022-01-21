@@ -83,6 +83,13 @@ public:
 	virtual void Process() override;
 };
 
+class RpcSetNamePlate : public RPCInterface {
+	String* NamePlateId;
+public:
+	RpcSetNamePlate(String* namePlateId);
+	virtual void Process() override;
+};
+
 class RpcUsePlatform : public RPCInterface {
 public:
 	RpcUsePlatform();
@@ -107,6 +114,13 @@ class RpcSetHat : public RPCInterface {
 	String* HatId;
 public:
 	RpcSetHat(String* hatId);
+	virtual void Process() override;
+};
+
+class RpcSetVisor : public RPCInterface {
+	String* VisorId;
+public:
+	RpcSetVisor(String* visorId);
 	virtual void Process() override;
 };
 
