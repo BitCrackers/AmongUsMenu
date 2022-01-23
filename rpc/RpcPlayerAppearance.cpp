@@ -31,3 +31,23 @@ void RpcSetHat::Process()
 {
 	PlayerControl_RpcSetHat((*Game::pLocalPlayer), this->HatId, NULL);
 }
+
+RpcSetVisor::RpcSetVisor(String* visorId)
+{
+	this->VisorId = visorId;
+}
+
+void RpcSetVisor::Process()
+{
+	PlayerControl_RpcSetVisor((*Game::pLocalPlayer), this->VisorId, NULL);
+}
+
+RpcSetNamePlate::RpcSetNamePlate(String* namePlateId)
+{
+	this->NamePlateId = namePlateId;
+}
+
+void RpcSetNamePlate::Process()
+{
+	PlayerControl_RpcSetNamePlate((*Game::pLocalPlayer), this->NamePlateId, NULL);
+}

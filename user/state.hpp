@@ -108,8 +108,10 @@ public:
 
 	int SelectedColorId = 0;
     std::string originalName = "-";
+    String* originalNamePlate = nullptr;
     String* originalSkin = nullptr;
     String* originalHat = nullptr;
+    String* originalVisor = nullptr;
     String* originalPet = nullptr;
     uint8_t originalColor = 0xFF;
 

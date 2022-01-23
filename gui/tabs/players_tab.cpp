@@ -90,6 +90,8 @@ namespace PlayersTab {
 							queue->push(new RpcSetPet(State.originalPet));
 							queue->push(new RpcSetSkin(State.originalSkin));
 							queue->push(new RpcSetHat(State.originalHat));
+							queue->push(new RpcSetVisor(State.originalVisor));
+							queue->push(new RpcSetNamePlate(State.originalNamePlate));
 							queue->push(new RpcSetName(State.originalName));
 							State.activeImpersonation = false;
 						}
@@ -138,7 +140,9 @@ namespace PlayersTab {
 								auto petId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.PetId;
 								auto skinId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.SkinId;
 								auto hatId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.HatId;
+								auto visorId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.VisorId;
 								auto colorId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.ColorId;
+								auto namePlateId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.NamePlateId;
 								std::queue<RPCInterface*>* queue = nullptr;
 
 								if (IsInGame())
@@ -153,7 +157,9 @@ namespace PlayersTab {
 										queue->push(new RpcSetColor(GetRandomColorId()));
 									queue->push(new RpcSetPet(petId));
 									queue->push(new RpcSetSkin(skinId));
+									queue->push(new RpcSetVisor(visorId));
 									queue->push(new RpcSetHat(hatId));
+									queue->push(new RpcSetNamePlate(namePlateId));
 									ImpersonateName(State.selectedPlayer);
 									State.activeImpersonation = true;
 								}
