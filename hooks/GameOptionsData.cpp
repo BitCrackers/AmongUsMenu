@@ -13,6 +13,7 @@ GameOptionsData* dGameOptionsData_Deserialize(BinaryReader* reader, MethodInfo* 
 	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 	State.mapHostChoice = gameOptions->fields.MapId;
 	State.impostors_amount = gameOptions->fields.NumImpostors;
+	State.RoleOptions = gameOptions->fields.RoleOptions;
 
 	return gameOptions;
 }
@@ -28,6 +29,7 @@ GameOptionsData* dGameOptionsData_Deserialize_1(MessageReader* reader, MethodInf
 	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 	State.mapHostChoice = gameOptions->fields.MapId;
 	State.impostors_amount = gameOptions->fields.NumImpostors;
+	State.RoleOptions = gameOptions->fields.RoleOptions;
 
 	return gameOptions;
 }

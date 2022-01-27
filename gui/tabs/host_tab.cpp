@@ -9,66 +9,61 @@ namespace HostTab {
 	void Render() {
 		if (IsHost() && IsInLobby()) {
 			if (ImGui::BeginTabItem("Host")) {
-				ImGui::Text("Select Impostors:");
+				ImGui::Text("Select Roles:");
 				ImGui::BeginChild("host#list", ImVec2(200, 0), true);
-				ImGui::ListBoxHeader("Choose Impostors", ImVec2(200, 150));
-				for (auto playerData : GetAllPlayerData()) {
-					if (playerData->fields.Disconnected) continue;
-
-					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
-
+				ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150));
+				auto allPlayers = GetAllPlayerData();
+				auto playerAmount = allPlayers.size();
+				auto maxImposterAmount = GetMaxImposterAmount(playerAmount);
+				for (int index = 0; index < playerAmount; index++) {
+					auto playerData = allPlayers[index];
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 
-					bool impostor = std::find(State.impostors.begin(), State.impostors.end(), playerCtrl) != State.impostors.end();
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.13f, 0.14f, 0.17f, 1.00f));
-					if (ImGui::Checkbox(std::string("##" + playerName + "_CheckBox").c_str(), &impostor)) {
-						if (!(std::find(State.impostors.begin(), State.impostors.end(), playerCtrl) != State.impostors.end())) {
-							bool set = false;
+					State.assignedRolesPlayer[index] = playerCtrl;
+					if (State.assignedRolesPlayer[index] == nullptr)
+						continue;
 
-							for (int i = 0; i < (*Game::pGameOptionsData)->fields.NumImpostors; i++) {
-								if (State.impostors[i] == nullptr) {
-									State.impostors[i] = playerCtrl;
-									set = true;
-									break;
-								}
-							}
-
-							if (!set) {
-								if ((*Game::pGameOptionsData)->fields.NumImpostors > 2) {
-									State.impostors[2] = State.impostors[1];
-								}
-								if ((*Game::pGameOptionsData)->fields.NumImpostors > 1) {
-									State.impostors[1] = State.impostors[0];
-								}
-								State.impostors[0] = playerCtrl;
-							}
+					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+					if (CustomListBoxInt(playerName.c_str(), &State.assignedRoles[index], ROLE_NAMES, 80))
+					{
+						State.engineers_amount = GetRoleCount((int)RoleType::Engineer);
+						State.scientists_amount = GetRoleCount((int)RoleType::Scientist);
+						State.shapeshifters_amount = GetRoleCount((int)RoleType::Shapeshifter);
+						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
+						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
+						{
+							State.assignedRoles[index] = (int)RoleType::Crewmate;
+							State.impostors_amount--;
 						}
-						else {
-							for (int i = 0; i < (*Game::pGameOptionsData)->fields.NumImpostors; i++) {
-								if (State.impostors[i] == playerCtrl) {
-									State.impostors[i] = nullptr;
-									break;
-								}
-							}
+						else if (State.shapeshifters_amount + State.impostors_amount > maxImposterAmount)
+						{
+							State.assignedRoles[index] = (int)RoleType::Engineer;
+							State.shapeshifters_amount--;
 						}
 
+						if (!IsInGame())
+						{
+							auto vectors = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates->fields.entries[0].vector;
+							for (auto iVector = 0; iVector < 32; iVector++)
+							{
+								if (vectors[iVector].key == RoleTypes__Enum::Engineer && State.engineers_amount > vectors[iVector].value.MaxCount)
+									vectors[iVector].value.MaxCount = State.engineers_amount;
+								else if (vectors[iVector].key == RoleTypes__Enum::Scientist && State.scientists_amount > vectors[iVector].value.MaxCount)
+									vectors[iVector].value.MaxCount = State.scientists_amount;
+								else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter && State.shapeshifters_amount > vectors[iVector].value.MaxCount)
+									vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+							}
+							if((*Game::pGameOptionsData)->fields.NumImpostors <= State.impostors_amount + State.shapeshifters_amount)
+								(*Game::pGameOptionsData)->fields.NumImpostors = State.impostors_amount + State.shapeshifters_amount;
+						}
 					}
-					ImGui::PopStyleColor();
-					ImGui::SameLine();
-					ImGui::Dummy(ImVec2(0, 0));
-					ImGui::SameLine();
-
-					ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)),playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
 				ImGui::EndChild();
 				ImGui::SameLine();
 				ImGui::BeginChild("host#actions", ImVec2(200, 0), true);
-				State.impostors_amount = std::clamp(State.impostors_amount, 0, 2);
+
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
-				if (CustomListBoxInt("Impostors", &State.impostors_amount, IMPOSTOR_AMOUNTS, 75)) {
-					if (!IsInGame()) (*Game::pGameOptionsData)->fields.NumImpostors = (State.impostors_amount + 1);
-				}
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {
@@ -90,5 +85,18 @@ namespace HostTab {
 				ImGui::EndTabItem();
 			}
 		}
+	}
+	const ptrdiff_t& GetRoleCount(int role)
+	{
+		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](int i) {return i == role; });
+	}
+
+	int GetMaxImposterAmount(size_t playerAmount)
+	{
+		if(playerAmount >= 9)
+			return 3;
+		if(playerAmount >= 7)
+			return 2;
+		return 1;
 	}
 }

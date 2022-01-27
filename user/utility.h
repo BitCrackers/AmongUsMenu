@@ -18,6 +18,16 @@ enum MapType {
 	MAP_AIRSHIP = 3
 };
 
+enum RoleType
+{
+	Random = 0,
+	Crewmate = 1,
+	Scientist = 2,
+	Engineer = 3,
+	Impostor = 4,
+	Shapeshifter = 5,
+};
+
 class PlayerSelection {
 	bool hasValue;
 	int32_t clientId;
@@ -125,3 +135,4 @@ bool PlayerIsImpostor(GameData_PlayerInfo* player);
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted = false);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
 std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);
+RoleTypes__Enum GetRoleTypesEnum(RoleType role);

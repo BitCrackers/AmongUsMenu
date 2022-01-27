@@ -90,9 +90,14 @@ public:
     int32_t rpcCooldown = 15;
     int32_t playerKilledId = 0;
 
-    std::vector<PlayerControl*> impostors = { nullptr, nullptr, nullptr };
+    std::vector<PlayerControl*> assignedRolesPlayer = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    std::vector<int> assignedRoles = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     int mapHostChoice = -1;
     int impostors_amount = 0;
+    int shapeshifters_amount = 0;
+    int engineers_amount = 0;
+    int scientists_amount = 0;
+    RoleOptionsData* RoleOptions = nullptr;
 
     bool Wallhack = false;
     bool FreeCam = false;
