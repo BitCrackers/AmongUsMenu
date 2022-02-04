@@ -618,7 +618,7 @@ bool PlayerIsImpostor(GameData_PlayerInfo* player) {
 	if (player->fields.Role == nullptr) return false;
 
 	RoleBehaviour* role = player->fields.Role;
-	return role->fields.Role == RoleTypes__Enum::Impostor;
+	return role->fields.TeamType == RoleTeamTypes__Enum::Impostor;
 }
 
 

@@ -14,6 +14,7 @@ namespace PlayersTab {
 			if (ImGui::BeginTabItem("Players")) {
 				ImGui::BeginChild("players#list", ImVec2(200, 0), true);
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
+				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected) continue;
 
@@ -30,26 +31,22 @@ namespace PlayersTab {
 					ImGui::Dummy(ImVec2(0, 0));
 					ImGui::SameLine();
 
-					ImVec4 nameColor;
-					if (State.RevealRoles && false /* who the imposter is is no longer being sent to the client */)
-						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
-					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
-						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
-					else
-						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
-
-					if (playerData->fields.IsDead) nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->DisabledGrey);
-
+					ImVec4 nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
 					if (State.RevealRoles)
 					{
 						std::string roleName = GetRoleName(playerData->fields.Role);
-						std::string playerNameWithRole = playerName + "(" + roleName + ")";
-						ImGui::TextColored(nameColor, playerNameWithRole.c_str());
+						playerName = playerName + " (" + roleName + ")";
+						nameColor = AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
 					}
-					else
-					{
-						ImGui::TextColored(nameColor, playerName.c_str());
-					}
+					else if(PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
+						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
+					else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
+						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
+
+					if (playerData->fields.IsDead)
+						nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->DisabledGrey);
+
+					ImGui::TextColored(nameColor, playerName.c_str());
 				}
 				ImGui::ListBoxFooter();
 
