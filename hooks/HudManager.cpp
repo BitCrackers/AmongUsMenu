@@ -28,14 +28,16 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 	if (IsInGame()) {
+		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		GameObject* shadowLayerObject = Component_get_gameObject((Component_1*)__this->fields.ShadowQuad, NULL);
 		GameObject_SetActive(shadowLayerObject,
-			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead,
+			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !localData->fields.IsDead,
 			NULL);
 
 		if (!State.InMeeting)
 		{
-			app::RoleBehaviour *playerRole = GetPlayerData(*Game::pLocalPlayer)->fields.Role;
+			app::RoleBehaviour *playerRole = localData->fields.Role;
+			GameObject* ImpostorVentButton = app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL);
 
 			if (playerRole->fields.Role == RoleTypes__Enum::Engineer && State.UnlockVents)
 			{
@@ -44,10 +46,13 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 					engineerRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
 				engineerRole->fields.inVentTimeRemaining = 30.0f; //Can be anything as it will always be written
 			}
+			else if(playerRole->fields.Role == RoleTypes__Enum::GuardianAngel)
+			{
+				app::GameObject_SetActive(ImpostorVentButton, false, nullptr);
+			}
 			else
 			{
-				GameObject* ImpostorVentButton = app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL);
-				app::GameObject_SetActive(ImpostorVentButton, State.UnlockVents || PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)), nullptr);
+				app::GameObject_SetActive(ImpostorVentButton, State.UnlockVents || PlayerIsImpostor(localData), nullptr);
 			}
 		}
 	}
