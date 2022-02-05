@@ -43,16 +43,21 @@ namespace HostTab {
 
 						if (!IsInGame())
 						{
-							auto vectors = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates->fields.entries[0].vector;
-							for (auto iVector = 0; iVector < 32; iVector++)
+							auto roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
+							if(roleRates->fields.count != 0)
 							{
-								if (vectors[iVector].key == RoleTypes__Enum::Engineer && State.engineers_amount > vectors[iVector].value.MaxCount)
-									vectors[iVector].value.MaxCount = State.engineers_amount;
-								else if (vectors[iVector].key == RoleTypes__Enum::Scientist && State.scientists_amount > vectors[iVector].value.MaxCount)
-									vectors[iVector].value.MaxCount = State.scientists_amount;
-								else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter && State.shapeshifters_amount > vectors[iVector].value.MaxCount)
-									vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+								auto vectors = roleRates->fields.entries[0].vector;
+								for (auto iVector = 0; iVector < 32; iVector++)
+								{
+									if (vectors[iVector].key == RoleTypes__Enum::Engineer && State.engineers_amount > vectors[iVector].value.MaxCount)
+										vectors[iVector].value.MaxCount = State.engineers_amount;
+									else if (vectors[iVector].key == RoleTypes__Enum::Scientist && State.scientists_amount > vectors[iVector].value.MaxCount)
+										vectors[iVector].value.MaxCount = State.scientists_amount;
+									else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter && State.shapeshifters_amount > vectors[iVector].value.MaxCount)
+										vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+								}
 							}
+
 							if((*Game::pGameOptionsData)->fields.NumImpostors <= State.impostors_amount + State.shapeshifters_amount)
 								(*Game::pGameOptionsData)->fields.NumImpostors = State.impostors_amount + State.shapeshifters_amount;
 						}
