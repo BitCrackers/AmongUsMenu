@@ -7386,6 +7386,7 @@ namespace app
 #endif
         struct AbilityButtonSettings* Ability;
         struct AudioClip* UseSound;
+        struct AudioClip* IntroSound;
         struct PlayerControl* Player;
     };
 
