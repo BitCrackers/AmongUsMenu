@@ -10,6 +10,6 @@ void HandleRpc(uint8_t callId, MessageReader* reader) {
 		int32_t playerid = MessageReader_ReadInt32(reader, NULL);
 		STREAM_DEBUG("RPC Received for another AUM User from playerId: " << playerid);
 		if (!std::count(State.aumUsers.begin(), State.aumUsers.end(), playerid)) State.aumUsers.push_back(playerid);
+		break;
 	}
-	return;
 }
