@@ -100,22 +100,22 @@ namespace Replay
 			if (!playerFound && anyPlayerFilterSelected)
 				continue;
 
+
+			bool isUsingEventFilter = false;
+			for (int t = 0; t < Replay::event_filter.size(); t++)
+			{
+				if (Replay::event_filter[t].second == true)
+				{
+					isUsingEventFilter = true;
+					break;
+				}
+			}
 			// for each event type
 			for (int m = 0; m < EVENT_TYPES_SIZE; m++)
 			{
-				bool typeFound = false, anyTypeFilterSelected = false;
-				for (int t = 0; t < Replay::event_filter.size(); t++) {
-					if (Replay::event_filter[t].second
-						&& t == m) { // something wrong here ? filter not working
-						typeFound = true;
-						anyTypeFilterSelected = true;
-						break;
-					}
-					else if (Replay::event_filter[m].second)
-						anyTypeFilterSelected = true;
-				}
-
-				if (!typeFound && anyTypeFilterSelected)
+				// IMPORTANT:
+				// Replay::event_filter must be in same order as EVENT_TYPES enum defined in _events.h
+				if (Replay::event_filter[m].second == false && isUsingEventFilter == true)
 					continue;
 
 				// for each entry in event vector
