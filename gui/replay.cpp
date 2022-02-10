@@ -6,6 +6,20 @@
 
 namespace Replay
 {
+	std::vector<std::pair<const char*, bool>> exclude_filter =
+	{
+		{"Kill", false},
+		{"Vent", false},
+		{"Task", false},
+		{"Report", false},
+		{"Meeting", false},
+		{"Vote", false},
+		{"Cheat", false},
+		{"Disconnect", false},
+		{"Shapeshift", false},
+		{"Protect", false}
+	};
+
 	void SquareConstraint(ImGuiSizeCallbackData* data)
 	{
 		data->DesiredSize = ImVec2(data->DesiredSize.x, data->DesiredSize.y);
@@ -28,12 +42,16 @@ namespace Replay
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
-		ImGui::BeginChild("console#filter", ImVec2(490, 20), true);
-		//ImGui::Text("Filter\t");
-		//ImGui::SameLine();
-		////CUSTOMLIXTBOXINTMULTIPLE
+		/*ImGui::BeginChild("replay#filter", ImVec2(490, 20), true);
+		ImGui::Text("Exclude\t");
+		ImGui::SameLine();
+		CustomListBoxIntMultiple("Event Types", &Replay::exclude_filter, 100.f);
+		ImGui::SameLine();
+		ImGui::Text("Filter\t");
+		ImGui::SameLine();
+		CustomListBoxIntMultiple("Players", &Replay::exclude_filter, 100.f);
 		ImGui::EndChild();
-		ImGui::Separator();
+		ImGui::Separator();*/
 
 		ImGui::BeginChild("ReplayMap");
 
