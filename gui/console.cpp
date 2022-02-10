@@ -25,7 +25,7 @@ namespace ConsoleGui
 
 	bool init = false;
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(560, 320), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 
 		if (!init)
@@ -43,13 +43,14 @@ namespace ConsoleGui
 		ConsoleGui::Init();
 
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::BeginChild("console#filter", ImVec2(560, 20), true);
-		ImGui::Text("Exclude\t");
+		ImGui::BeginChild("console#filter", ImVec2(520, 20), true);
+		ImGui::SameLine(10.f);
+		ImGui::Text("Exclude: ");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &ConsoleGui::exclude_filter, 100.f);
 		if (IsInGame()) {
-			ImGui::SameLine();
-			ImGui::Text("Filter By Source\t");
+			ImGui::SameLine(0.f, 25.f);
+			ImGui::Text("Filter: ");
 			ImGui::SameLine();
 			CustomListBoxPlayerSelectionMultiple("Players", &ConsoleGui::player_filter, 150.f);
 		}
