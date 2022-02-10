@@ -6,6 +6,7 @@
 
 namespace Replay
 {
+	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> exclude_filter =
 	{
 		{"Kill", false},

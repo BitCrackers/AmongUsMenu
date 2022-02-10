@@ -47,8 +47,11 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 	return response;
 }
 
-bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const char*, bool>>* list, float width, ImGuiComboFlags flags) {
+bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const char*, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
 	auto comboLabel = "##" + std::string(label);
+	auto buttonLabel = "Reset##" + std::string(label);
+	ImGuiStyle& style = ImGui::GetStyle();
+	float spacing = style.ItemInnerSpacing.x;
 	ImGui::PushItemWidth(width);
 	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
 	if (response) {
@@ -62,13 +65,28 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	}
 
 	ImGui::PopItemWidth();
+
+	if (resetButton)
+	{
+		ImGui::SameLine(0, spacing);
+		const bool resetResponse = ImGui::Button(buttonLabel.c_str());
+		if (resetResponse) {
+			for (int i = 0; i < list->size(); i++)
+				list->at(i).second = false;
+			return resetResponse;
+		}
+	}
+	
 	return response;
 }
 
-bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pair<PlayerSelection, bool>>* list, float width, ImGuiComboFlags flags) {
+bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pair<PlayerSelection, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
 	if (!IsInGame) return false; // works only ingame
 
 	auto comboLabel = "##" + std::string(label);
+	auto buttonLabel = "Reset##" + std::string(label);
+	ImGuiStyle& style = ImGui::GetStyle();
+	float spacing = style.ItemInnerSpacing.x;
 	ImGui::PushItemWidth(width);
 	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
 	if (response) {
@@ -91,6 +109,8 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 					list->at(playerData->fields.PlayerId).first = PlayerSelection(playerData);
 				}
 			}
+			if (list->at(playerData->fields.PlayerId).second)
+				ImGui::SetItemDefaultFocus();
 			ImGui::SameLine();
 			ImGui::ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 			ImGui::SameLine();
@@ -119,6 +139,18 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 	}
 
 	ImGui::PopItemWidth();
+
+	if (resetButton)
+	{
+		ImGui::SameLine(0, spacing);
+		const bool resetResponse = ImGui::Button(buttonLabel.c_str());
+		if (resetResponse) {
+			for (int i = 0; i < list->size(); i++)
+				list->at(i).second = false;
+			return resetResponse;
+		}
+	}
+	
 	return response;
 }
 

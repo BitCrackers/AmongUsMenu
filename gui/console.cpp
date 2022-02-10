@@ -4,7 +4,9 @@
 #include "gui-helpers.hpp"
 #include "state.hpp"
 
-namespace ConsoleGui {
+namespace ConsoleGui
+{
+	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> exclude_filter =
 	{
 		{"Kill", false},
@@ -21,23 +23,27 @@ namespace ConsoleGui {
 
 	std::vector<std::pair<PlayerSelection, bool>> player_filter;
 
+	bool init = false;
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(560, 320), ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 
-		// setup player_filter list based on MAX_PLAYERS definition
-		for (int i = 0; i < MAX_PLAYERS; i++) {
-			player_filter.push_back({ PlayerSelection(), false });
+		if (!init)
+		{
+			// setup player_filter list based on MAX_PLAYERS definition
+			for (int i = 0; i < MAX_PLAYERS; i++) {
+				player_filter.push_back({ PlayerSelection(), false });
+			}
+			init = true;
 		}
 	}
 
-	bool init = false;
+
 	void Render() {
-		if (!init)
-			ConsoleGui::Init();
+		ConsoleGui::Init();
 
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::BeginChild("console#filter", ImVec2(490, 20), true);
+		ImGui::BeginChild("console#filter", ImVec2(560, 20), true);
 		ImGui::Text("Exclude\t");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &ConsoleGui::exclude_filter, 100.f);
@@ -45,18 +51,18 @@ namespace ConsoleGui {
 			ImGui::SameLine();
 			ImGui::Text("Filter By Source\t");
 			ImGui::SameLine();
-			CustomListBoxPlayerSelectionMultiple("Players", &player_filter, 150.f);
+			CustomListBoxPlayerSelectionMultiple("Players", &ConsoleGui::player_filter, 150.f);
 		}
 		ImGui::EndChild();
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(490, 225), true);
 		for (int i = State.consoleEvents.size() - 1; i >= 0; i--) {
 			if (State.consoleEvents[i]->getType() == EVENT_WALK
-				|| ConsoleGui::exclude_filter.at(State.consoleEvents[i]->getType() - 1 /* exclude EVENT_NONE */).second)
+				|| ConsoleGui::exclude_filter.at(State.consoleEvents[i]->getType()).second)
 				continue;
 
 			bool playerFound = false, anyFilterSelected = false;
-			for (auto player : player_filter) {
+			for (auto player : ConsoleGui::player_filter) {
 				if (player.second
 					&& player.first.has_value()
 					&& player.first.get_PlayerId() == State.consoleEvents[i]->getSource().playerId)
