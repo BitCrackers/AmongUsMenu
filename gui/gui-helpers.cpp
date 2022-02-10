@@ -81,7 +81,7 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 }
 
 bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pair<PlayerSelection, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
-	if (!IsInGame) return false; // works only ingame
+	if (!IsInGame()) return false; // works only ingame
 
 	auto comboLabel = "##" + std::string(label);
 	auto buttonLabel = "Reset##" + std::string(label);

@@ -32,7 +32,7 @@ namespace ConsoleGui
 		{
 			// setup player_filter list based on MAX_PLAYERS definition
 			for (int i = 0; i < MAX_PLAYERS; i++) {
-				player_filter.push_back({ PlayerSelection(), false });
+				ConsoleGui::player_filter.push_back({ PlayerSelection(), false });
 			}
 			init = true;
 		}
@@ -55,7 +55,7 @@ namespace ConsoleGui
 		}
 		ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild("console#scroll", ImVec2(511, 275), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		for (int i = State.consoleEvents.size() - 1; i >= 0; i--) {
 			if (State.consoleEvents[i]->getType() == EVENT_WALK)
 				continue;
