@@ -2,6 +2,8 @@
 
 using namespace app;
 
+#define MAX_PLAYERS 15
+
 namespace Game {
 	extern AmongUsClient** pAmongUsClient;
 	extern GameData** pGameData;

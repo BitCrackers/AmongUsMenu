@@ -277,6 +277,10 @@
     <ClCompile Include="rpc\RpcSetRole.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+    <ClCompile Include="gui\replay.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\tabs\replay_tab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -448,6 +452,10 @@
       <Filter>user</Filter>
     </ClInclude>
     <ClInclude Include="gitparams.h" />
+    <ClInclude Include="gui\replay.hpp">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\tabs\replay_tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">

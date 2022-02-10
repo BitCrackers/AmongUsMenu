@@ -44,6 +44,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Version|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="gui\replay.cpp" />
     <ClCompile Include="gui\tabs\debug_tab.cpp" />
     <ClCompile Include="gui\tabs\doors_tab.cpp" />
     <ClCompile Include="gui\tabs\esp_tab.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="gui\tabs\host_tab.cpp" />
     <ClCompile Include="gui\tabs\players_tab.cpp" />
     <ClCompile Include="gui\tabs\radar_tab.cpp" />
+    <ClCompile Include="gui\tabs\replay_tab.cpp" />
     <ClCompile Include="gui\tabs\sabotage_tab.cpp" />
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="gui\tabs\tasks_tab.cpp" />
@@ -326,6 +328,7 @@
     <ClInclude Include="gui\gui-helpers.hpp" />
     <ClInclude Include="gui\RenderCmd.hpp" />
     <ClInclude Include="gui\Renderer.hpp" />
+    <ClInclude Include="gui\replay.hpp" />
     <ClInclude Include="gui\tabs\debug_tab.h" />
     <ClInclude Include="gui\tabs\doors_tab.h" />
     <ClInclude Include="gui\tabs\esp_tab.h" />
@@ -333,6 +336,7 @@
     <ClInclude Include="gui\tabs\host_tab.h" />
     <ClInclude Include="gui\tabs\players_tab.h" />
     <ClInclude Include="gui\tabs\radar_tab.h" />
+    <ClInclude Include="gui\tabs\replay_tab.h" />
     <ClInclude Include="gui\tabs\sabotage_tab.h" />
     <ClInclude Include="gui\tabs\settings_tab.h" />
     <ClInclude Include="gui\tabs\tasks_tab.h" />

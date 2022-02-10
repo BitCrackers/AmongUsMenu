@@ -41,9 +41,31 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 		if (*value > (int)(list.size() - 1)) *value = 0;
 		return RightResponse;
 	}
-	ImGui::SameLine(0, style.ItemInnerSpacing.x);
+	ImGui::SameLine(0, spacing);
 	ImGui::Text(label);
 
+	return response;
+}
+
+bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const char*, bool>>* list, float width, ImGuiComboFlags flags) {
+	auto comboLabel = "##" + std::string(label);
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	float w = ImGui::CalcItemWidth();
+	float button_sz = ImGui::GetFrameHeight();
+	ImGui::PushItemWidth(width);
+	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
+	if (response) {
+		for (size_t i = 0; i < list->size(); i++) {
+			if (ImGui::Selectable(list->at(i).first, list->at(i).second))
+				list->at(i).second ^= 1;
+			if (list->at(i).second)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::PopItemWidth();
 	return response;
 }
 

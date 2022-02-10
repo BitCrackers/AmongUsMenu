@@ -5,7 +5,19 @@
 #include "state.hpp"
 
 namespace ConsoleGui {
-	int selectedType = 0;
+	std::vector<std::pair<const char*, bool>> exclude_filter =
+	{
+		{"Kill", false},
+		{"Vent", false},
+		{"Task", false},
+		{"Report", false},
+		{"Meeting", false},
+		{"Vote", false},
+		{"Cheat", false},
+		{"Disconnect", false},
+		{"Shapeshift", false},
+		{"Protect", false}
+	};
 
 	void Init() {
 		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
@@ -19,19 +31,16 @@ namespace ConsoleGui {
 
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
 		ImGui::BeginChild("console#filter", ImVec2(490, 20), true);
-		ImGui::Text("Filter\t");
+		ImGui::Text("Exclude\t");
 		ImGui::SameLine();
-		CustomListBoxInt("By Type", &ConsoleGui::selectedType, ConsoleGui::BY_TYPE, 100.f);
+		CustomListBoxIntMultiple("Event Types", &ConsoleGui::exclude_filter, 100.f);
 		ImGui::EndChild();
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(490, 225), true);
 		for (int i = State.consoleEvents.size() - 1; i >= 0; i--) {
-			if (State.consoleEvents[i]->getType() == EVENT_WALK)
+			if (State.consoleEvents[i]->getType() == EVENT_WALK
+				|| ConsoleGui::exclude_filter.at(State.consoleEvents[i]->getType() - 1 /* exclude EVENT_NONE */).second)
 				continue;
-
-			if (ConsoleGui::selectedType > 0)
-				if (State.consoleEvents[i]->getType() != (EVENT_TYPES)ConsoleGui::selectedType)
-					continue;
 
 			State.consoleEvents[i]->ColoredEventOutput();
 			ImGui::SameLine();
