@@ -280,7 +280,9 @@
     <ClCompile Include="gui\replay.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\replay_tab.cpp" />
+    <ClCompile Include="gui\tabs\replay_tab.cpp">
+      <Filter>gui\tabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -455,7 +457,9 @@
     <ClInclude Include="gui\replay.hpp">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="gui\tabs\replay_tab.h" />
+    <ClInclude Include="gui\tabs\replay_tab.h">
+      <Filter>gui\tabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">
