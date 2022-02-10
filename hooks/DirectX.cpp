@@ -8,6 +8,7 @@
 #include "keybinds.h"
 #include "menu.hpp"
 #include "radar.hpp"
+#include "replay.hpp"
 #include "esp.hpp"
 #include "state.hpp"
 #include "theme.hpp"
@@ -63,6 +64,11 @@ static bool CanDrawEsp()
 static bool CanDrawRadar()
 {
 	return IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
+}
+
+static bool CanDrawReplay()
+{
+    return IsInGame() && State.ShowReplay;
 }
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -197,6 +203,11 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 	{
 		ImGuiRenderer::Submit([]() { Radar::Render(); });
 	}
+
+    if (CanDrawReplay())
+    {
+        ImGuiRenderer::Submit([]() { Replay::Render(); });
+    }
 
     // Render in a separate thread
 	std::async(std::launch::async, ImGuiRenderer::ExecuteQueue);

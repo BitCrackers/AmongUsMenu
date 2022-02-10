@@ -2,6 +2,8 @@
 #include "gui-helpers.hpp"
 #include "keybinds.h"
 #include "imgui/imgui_internal.h"
+#include "state.hpp"
+#include "game.h"
 
 bool CustomListBoxInt(const char* label, int* value, const std::vector<const char*> list, float width, ImGuiComboFlags flags) {
 	auto comboLabel = "##" + std::string(label);
@@ -9,9 +11,7 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 	auto rightArrow = "##" + std::string(label) + "Right";
 
 	ImGuiStyle& style = ImGui::GetStyle();
-	float w = ImGui::CalcItemWidth();
 	float spacing = style.ItemInnerSpacing.x;
-	float button_sz = ImGui::GetFrameHeight();
 	ImGui::PushItemWidth(width);
 	const bool response = ImGui::BeginCombo(comboLabel.c_str(), list.at(*value), ImGuiComboFlags_NoArrowButton | flags);
 	if (response) {
@@ -41,9 +41,116 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 		if (*value > (int)(list.size() - 1)) *value = 0;
 		return RightResponse;
 	}
-	ImGui::SameLine(0, style.ItemInnerSpacing.x);
+	ImGui::SameLine(0, spacing);
 	ImGui::Text(label);
 
+	return response;
+}
+
+bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const char*, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
+	auto comboLabel = "##" + std::string(label);
+	auto buttonLabel = "Reset##" + std::string(label);
+	ImGuiStyle& style = ImGui::GetStyle();
+	float spacing = style.ItemInnerSpacing.x;
+	ImGui::PushItemWidth(width);
+	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
+	if (response) {
+		for (size_t i = 0; i < list->size(); i++) {
+			if (ImGui::Selectable(list->at(i).first, list->at(i).second))
+				list->at(i).second ^= 1;
+			if (list->at(i).second)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::PopItemWidth();
+
+	if (resetButton)
+	{
+		ImGui::SameLine(0, spacing);
+		const bool resetResponse = ImGui::Button(buttonLabel.c_str());
+		if (resetResponse) {
+			for (int i = 0; i < list->size(); i++)
+				list->at(i).second = false;
+			return resetResponse;
+		}
+	}
+	
+	return response;
+}
+
+bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pair<PlayerSelection, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
+	if (!IsInGame()) return false; // works only ingame
+
+	auto comboLabel = "##" + std::string(label);
+	auto buttonLabel = "Reset##" + std::string(label);
+	ImGuiStyle& style = ImGui::GetStyle();
+	float spacing = style.ItemInnerSpacing.x;
+	ImGui::PushItemWidth(width);
+	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
+	if (response) {
+		auto localData = GetPlayerData(*Game::pLocalPlayer);
+		for (auto playerData : GetAllPlayerData()) {
+			if (playerData->fields.Disconnected) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
+				continue;
+
+			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+			if (ImGui::Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), list->at(playerData->fields.PlayerId).second))
+			{
+				list->at(playerData->fields.PlayerId).second ^= 1;
+				if (list->at(playerData->fields.PlayerId).second
+					&& (!list->at(playerData->fields.PlayerId).first.has_value()
+						|| (list->at(playerData->fields.PlayerId).first.has_value()
+							&& list->at(playerData->fields.PlayerId).first.is_Disconnected())))
+				{
+					list->at(playerData->fields.PlayerId).first = PlayerSelection(playerData);
+				}
+			}
+			if (list->at(playerData->fields.PlayerId).second)
+				ImGui::SetItemDefaultFocus();
+			ImGui::SameLine();
+			ImGui::ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
+			ImGui::SameLine();
+			ImGui::PopStyleVar(2);
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+
+			ImVec4 nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
+			if (State.RevealRoles)
+			{
+				std::string roleName = GetRoleName(playerData->fields.Role);
+				playerName = playerName + " (" + roleName + ")";
+				nameColor = AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
+			}
+			else if (PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
+				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
+			else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
+				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
+
+			if (playerData->fields.IsDead)
+				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->DisabledGrey);
+
+			ImGui::TextColored(nameColor, playerName.c_str());
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::PopItemWidth();
+
+	if (resetButton)
+	{
+		ImGui::SameLine(0, spacing);
+		const bool resetResponse = ImGui::Button(buttonLabel.c_str());
+		if (resetResponse) {
+			for (int i = 0; i < list->size(); i++)
+				list->at(i).second = false;
+			return resetResponse;
+		}
+	}
+	
 	return response;
 }
 

@@ -40,7 +40,12 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Lock Radar Position", &State.LockRadar)) {
 				State.Save();
 			}
-			if (ImGui::ColorEdit4("Radar Color", (float*)&State.SelectedColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
+			if (ImGui::ColorEdit4("Radar Color",
+				(float*)&State.SelectedColor,
+				ImGuiColorEditFlags__OptionsDefault
+				| ImGuiColorEditFlags_NoInputs
+				| ImGuiColorEditFlags_AlphaBar
+				| ImGuiColorEditFlags_AlphaPreview)) {
 				State.Save();
 			}
 

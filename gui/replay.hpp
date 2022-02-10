@@ -1,7 +1,7 @@
 #pragma once
-#include <vector>
 
-namespace ConsoleGui {
+namespace Replay
+{
 	void Init();
 	void Render();
-};
+}

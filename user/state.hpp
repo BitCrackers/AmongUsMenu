@@ -4,6 +4,7 @@
 #include "_events.h"
 #include "_rpc.h"
 #include "keybinds.h"
+#include "game.h"
 
 class Settings {
 public:
@@ -61,6 +62,8 @@ public:
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
 
+    bool ShowReplay = false;
+
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;
     bool ShowEsp_Box = true;
@@ -82,7 +85,7 @@ public:
 
     bool ShowConsole = false;
     std::vector<EventInterface*> consoleEvents;
-    std::vector<EventInterface*> events[15][EVENT_TYPES_SIZE];
+    std::vector<EventInterface*> events[MAX_PLAYERS][EVENT_TYPES_SIZE];
 
     std::bitset<0xFF> voteMonitor;
 
@@ -110,6 +113,7 @@ public:
     bool FakeCameraUsage = false;
 
     ImVec4 SelectedColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
+    ImVec4 SelectedReplayMapColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
 
 	int SelectedColorId = 0;
     std::string originalName = "-";

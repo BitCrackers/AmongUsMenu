@@ -16,7 +16,8 @@ namespace PlayersTab {
 				ImGui::ListBoxHeader("", ImVec2(200, 150));
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				for (auto playerData : GetAllPlayerData()) {
-					if (playerData->fields.Disconnected) continue;
+					if (playerData->fields.Disconnected)
+						continue;
 
 					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));

@@ -37,6 +37,12 @@ void Settings::Load() {
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
         j.at("RadarColor_A").get_to(this->SelectedColor.w);
 
+        j.at("ShowReplay").get_to(this->ShowReplay);
+        j.at("ReplayColor_R").get_to(this->SelectedReplayMapColor.x);
+        j.at("ReplayColor_G").get_to(this->SelectedReplayMapColor.y);
+        j.at("ReplayColor_B").get_to(this->SelectedReplayMapColor.z);
+        j.at("ReplayColor_A").get_to(this->SelectedReplayMapColor.w);
+
         j.at("ShowEsp").get_to(this->ShowEsp);
         j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
         j.at("ShowEsp_Box").get_to(this->ShowEsp_Box);
@@ -86,6 +92,12 @@ void Settings::Save() {
             {"RadarColor_G", this->SelectedColor.y},
             {"RadarColor_B", this->SelectedColor.z},
             {"RadarColor_A", this->SelectedColor.w},
+
+            {"ShowReplay", this->ShowReplay},
+            {"ReplayColor_R", this->SelectedReplayMapColor.x},
+            {"ReplayColor_G", this->SelectedReplayMapColor.y},
+            {"ReplayColor_B", this->SelectedReplayMapColor.z},
+            {"ReplayColor_A", this->SelectedReplayMapColor.w},
 
             {"ShowEsp", this->ShowEsp},
             {"ShowEsp_Ghosts", this->ShowEsp_Ghosts},
