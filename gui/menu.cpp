@@ -37,7 +37,7 @@ namespace Menu {
 		GameTab::Render();
 		SelfTab::Render();
 		RadarTab::Render();
-		ReplayTab::Render();
+		//ReplayTab::Render();
 		EspTab::Render();
 		PlayersTab::Render();
 		TasksTab::Render();
