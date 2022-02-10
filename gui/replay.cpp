@@ -3,6 +3,7 @@
 #include "DirectX.h"
 #include "state.hpp"
 #include "gui-helpers.hpp"
+#include <sstream>
 
 namespace Replay
 {
@@ -82,14 +83,55 @@ namespace Replay
 		// for each player
 		for (int n = 0; n < MAX_PLAYERS; n++)
 		{
-			// include player filter
+			bool playerFound = false, anyPlayerFilterSelected = false;
+			for (auto player : Replay::player_filter) {
+				if (player.second
+					&& player.first.has_value()
+					&& player.first.get_PlayerId() == n)
+				{
+					playerFound = true;
+					anyPlayerFilterSelected = true;
+					break;
+				}
+				else if (player.second)
+					anyPlayerFilterSelected = true;
+			}
 
-			// for each event
-			for (int x = 0; x < EVENT_TYPES_SIZE; x++)
+			if (!playerFound && anyPlayerFilterSelected)
+				continue;
+
+			// for each event type
+			for (int m = 0; m < EVENT_TYPES_SIZE; m++)
 			{
-				// work with event vector here
-				// include event filter here
-				// visualize each event here (maybe create own class for drawing map related data ?)
+				bool typeFound = false, anyTypeFilterSelected = false;
+				for (int t = 0; t < Replay::event_filter.size(); t++) {
+					if (Replay::event_filter[t].second
+						&& t == m) { // something wrong here ? filter not working
+						typeFound = true;
+						anyTypeFilterSelected = true;
+						break;
+					}
+					else if (Replay::event_filter[m].second)
+						anyTypeFilterSelected = true;
+				}
+
+				if (!typeFound && anyTypeFilterSelected)
+					continue;
+
+				// for each entry in event vector
+				for (int i = 0; i < State.events[n][m].size(); i++)
+				{
+					EventInterface* e = State.events[n][m].at(i);
+					if (e->getType() == EVENT_TYPES::EVENT_WALK)
+					{
+						auto walkEvent = dynamic_cast<WalkEvent*>(e);
+						auto position = walkEvent->GetPosition();
+						std::ostringstream buffer;
+						buffer << "[" << walkEvent->getSource().playerName << "]" << "Position X: " << position.x << "\n"
+							<< "[" << walkEvent->getSource().playerName << "]" << "Position Y: " << position.y << "\n";
+						printf("%s", buffer.str().c_str());
+					}
+				}
 			}
 		}
 

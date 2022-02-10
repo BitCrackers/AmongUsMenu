@@ -13,3 +13,7 @@ void WalkEvent::Output() {
 void WalkEvent::ColoredEventOutput() {
 	// not needed
 }
+
+Vector2 WalkEvent::GetPosition() {
+	return this->position;
+}

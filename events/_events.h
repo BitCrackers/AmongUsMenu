@@ -185,4 +185,5 @@ public:
 	WalkEvent(EVENT_PLAYER source, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	virtual Vector2 GetPosition();
 };
