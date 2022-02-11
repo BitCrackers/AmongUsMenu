@@ -489,6 +489,9 @@
     <Image Include="resources\tick.png">
       <Filter>resources</Filter>
     </Image>
+    <Image Include="resources\player.png">
+      <Filter>resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="framework\version.def">

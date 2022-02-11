@@ -225,7 +225,18 @@ namespace Replay
 
 						if (i + 1 >= State.events[n][m].size())
 						{
-							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							IconTexture icon = icons.at(ICON_TYPES::PLAYER);
+							float player_mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+							float player_mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+							float player_mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+							float player_mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+
+							drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+								ImVec2(player_mapX, player_mapY),
+								ImVec2(player_mapXMax, player_mapYMax),
+								ImVec2(0.0f, 1.0f),
+								ImVec2(1.0f, 0.0f),
+								GetReplayPlayerColor(e->getSource().colorId));
 							continue;
 						}
 

@@ -68,6 +68,8 @@ IDB_PNG8                PNG                     "report.png"
 
 IDB_PNG9                PNG                     "tick.png"
 
+IDB_PNG10               PNG                     "player.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

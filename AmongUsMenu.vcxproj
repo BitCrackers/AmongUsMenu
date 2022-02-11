@@ -384,6 +384,7 @@
     <Image Include="resources\airship.png" />
     <Image Include="resources\kill.png" />
     <Image Include="resources\mira_hq.png" />
+    <Image Include="resources\player.png" />
     <Image Include="resources\polus.png" />
     <Image Include="resources\report.png" />
     <Image Include="resources\the_skald.png" />
