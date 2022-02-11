@@ -175,7 +175,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	app::PlayerControl_FixedUpdate(__this, method);
 }
 
-void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method) {
+void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method)
+{
 	State.PrevPlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PrevKillDistance = gameOptions->fields.KillDistance;
@@ -186,24 +187,28 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
 }
 
-void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
-
+void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
+{
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
 	{
 		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 	}
 
-	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
-void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
+void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method)
+{
+	std::optional<Vector2> targetPosition = std::nullopt;
+	if (target)
+		targetPosition = PlayerControl_GetTruePosition(target->fields._object, NULL);
 
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
+	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), targetPosition));
+	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), targetPosition));
 
 	PlayerControl_ReportDeadBody(__this, target, method);
 }

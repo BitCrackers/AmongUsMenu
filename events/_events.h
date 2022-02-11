@@ -8,27 +8,27 @@ using namespace app;
 #define EVENT_TYPES_SIZE 11
 
 enum EVENT_TYPES {
-	EVENT_KILL = 0,
-	EVENT_VENT = 1,
-	EVENT_TASK = 2,
-	EVENT_REPORT = 3,
-	EVENT_MEETING = 4,
-	EVENT_VOTE = 5,
-	EVENT_CHEAT = 6,
-	EVENT_DISCONNECT = 7,
-	EVENT_SHAPESHIFT = 8,
-	EVENT_PROTECTPLAYER = 9,
-	EVENT_WALK = 10
+	EVENT_KILL,
+	EVENT_VENT,
+	EVENT_TASK,
+	EVENT_REPORT,
+	EVENT_MEETING,
+	EVENT_VOTE,
+	EVENT_CHEAT,
+	EVENT_DISCONNECT,
+	EVENT_SHAPESHIFT,
+	EVENT_PROTECTPLAYER,
+	EVENT_WALK
 };
 
 enum VENT_ACTIONS {
-	VENT_ENTER = 0x0,
-	VENT_EXIT = 0x1
+	VENT_ENTER,
+	VENT_EXIT
 };
 
 enum CHEAT_ACTIONS {
-	CHEAT_TELEPORT = 0x0,
-	CHEAT_KILL_IMPOSTOR = 0x1
+	CHEAT_TELEPORT,
+	CHEAT_KILL_IMPOSTOR
 };
 
 const std::vector<const char*> CHEAT_ACTION_NAMES = { "Teleporting", "Killed impostor" };
@@ -96,13 +96,15 @@ class KillEvent : public EventInterface {
 private:
 	EVENT_PLAYER target;
 	Vector2 position;
+	Vector2 targetPosition;
 	SystemTypes__Enum systemType;
 public:
-	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position);
+	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position, Vector2 targetPosition);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
 	Vector2 GetPosition() { return this->position; }
+	Vector2 GetTargetPosition() { return this->targetPosition; }
 	SystemTypes__Enum GetSystemType() { return this->systemType; }
 };
 
@@ -154,13 +156,15 @@ class ReportDeadBodyEvent : public EventInterface {
 private:
 	std::optional<EVENT_PLAYER> target;
 	Vector2 position;
+	std::optional<Vector2> targetPosition;
 	SystemTypes__Enum systemType;
 public:
-	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position);
+	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position, std::optional<Vector2> targetPosition);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
 	Vector2 GetPosition() { return this->position; }
+	std::optional<Vector2> GetTargetPosition() { return this->targetPosition; }
 	SystemTypes__Enum GetSystemType() { return this->systemType; }
 };
 

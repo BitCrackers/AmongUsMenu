@@ -63,6 +63,8 @@ public:
     bool LockRadar = false;
 
     bool ShowReplay = false;
+    std::chrono::system_clock::time_point RoundStart;
+    std::chrono::system_clock::time_point RoundEnd;
 
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;

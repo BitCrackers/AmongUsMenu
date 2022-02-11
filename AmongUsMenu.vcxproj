@@ -382,9 +382,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\airship.png" />
+    <Image Include="resources\kill.png" />
     <Image Include="resources\mira_hq.png" />
     <Image Include="resources\polus.png" />
     <Image Include="resources\the_skald.png" />
+	<Image Include="resources\vent_in.png" />
+	<Image Include="resources\vent_out.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\resource_data.rc" />

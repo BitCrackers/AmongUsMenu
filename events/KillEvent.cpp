@@ -2,8 +2,9 @@
 #include "_events.h"
 #include "utility.h"
 
-KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position) : EventInterface(source, EVENT_KILL) {
+KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position, Vector2 targetPosition) : EventInterface(source, EVENT_KILL) {
 	this->target = target;
+	this->targetPosition = targetPosition;
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
 }

@@ -474,6 +474,15 @@
     <Image Include="resources\airship.png">
       <Filter>resources</Filter>
     </Image>
+    <Image Include="resources\vent_in.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\vent_out.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\kill.png">
+      <Filter>resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="framework\version.def">

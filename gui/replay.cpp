@@ -134,35 +134,70 @@ namespace Replay
 					if (e->getType() == EVENT_TYPES::EVENT_KILL)
 					{
 						auto kill_event = dynamic_cast<KillEvent*>(e);
-						auto position = kill_event->GetPosition();
-						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
-						float mapY = maps[MapType].y_offset - (position.y * maps[MapType].scale) + winpos.y;
+						auto position = kill_event->GetTargetPosition();
+						IconTexture icon = icons.at(ICON_TYPES::KILL);
+						float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+						float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
 
-						// TODO replace with proper icon
-						drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+						drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+							ImVec2(mapX, mapY),
+							ImVec2(mapXMax, mapYMax),
+							ImVec2(0.0f, 1.0f),
+							ImVec2(1.0f, 0.0f));
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_VENT)
 					{
 						auto vent_event = dynamic_cast<VentEvent*>(e);
 						auto position = vent_event->GetPosition();
-						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
-						float mapY = maps[MapType].y_offset - (position.y * maps[MapType].scale) + winpos.y;
+						ICON_TYPES iconType;
 
 						switch (vent_event->GetEventActionEnum())
 						{
 						case VENT_ACTIONS::VENT_ENTER:
-							// TODO replace with proper icon
-							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							iconType = ICON_TYPES::VENT_IN;
 							break;
 
 						case VENT_ACTIONS::VENT_EXIT:
-							// TODO replace with proper icon
-							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							iconType = ICON_TYPES::VENT_OUT;
 							break;
 
 						default:
+							iconType = ICON_TYPES::VENT_IN;
 							break;
 						}
+
+						IconTexture icon = icons.at(iconType);
+						float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+						float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+
+						drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+							ImVec2(mapX, mapY),
+							ImVec2(mapXMax, mapYMax),
+							ImVec2(0.0f, 1.0f),
+							ImVec2(1.0f, 0.0f));
+					}
+					else if (e->getType() == EVENT_TYPES::EVENT_REPORT)
+					{
+						auto report_event = dynamic_cast<ReportDeadBodyEvent*>(e);
+						Vector2 position = report_event->GetPosition();
+						auto targetPos = report_event->GetTargetPosition();
+						if (targetPos.has_value())
+							position = targetPos.value();
+						IconTexture icon = icons.at(ICON_TYPES::KILL);
+						float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+						float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+
+						drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+							ImVec2(mapX, mapY),
+							ImVec2(mapXMax, mapYMax),
+							ImVec2(0.0f, 1.0f),
+							ImVec2(1.0f, 0.0f));
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_WALK)
 					{
