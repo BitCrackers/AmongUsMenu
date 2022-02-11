@@ -387,6 +387,7 @@
     <Image Include="resources\polus.png" />
     <Image Include="resources\report.png" />
     <Image Include="resources\the_skald.png" />
+    <Image Include="resources\tick.png" />
     <Image Include="resources\vent_in.png" />
     <Image Include="resources\vent_out.png" />
   </ItemGroup>

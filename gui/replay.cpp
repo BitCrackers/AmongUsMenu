@@ -180,6 +180,22 @@ namespace Replay
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
 					}
+					else if (e->getType() == EVENT_TYPES::EVENT_TASK)
+					{
+						auto task_event = dynamic_cast<TaskCompletedEvent*>(e);
+						auto position = task_event->GetPosition();
+						IconTexture icon = icons.at(ICON_TYPES::TASK);
+						float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+						float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+						float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+
+						drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+							ImVec2(mapX, mapY),
+							ImVec2(mapXMax, mapYMax),
+							ImVec2(0.0f, 1.0f),
+							ImVec2(1.0f, 0.0f));
+					}
 					else if (e->getType() == EVENT_TYPES::EVENT_REPORT || e->getType() == EVENT_TYPES::EVENT_MEETING)
 					{
 						auto report_event = dynamic_cast<ReportDeadBodyEvent*>(e);

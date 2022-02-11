@@ -9,7 +9,8 @@ enum ICON_TYPES {
 	VENT_IN,
 	VENT_OUT,
 	KILL,
-	REPORT
+	REPORT,
+	TASK
 };
 
 struct MapTexture {
