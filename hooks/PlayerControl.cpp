@@ -203,12 +203,8 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method)
 {
-	std::optional<Vector2> targetPosition = std::nullopt;
-	if (target)
-		targetPosition = PlayerControl_GetTruePosition(target->fields._object, NULL);
-
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), targetPosition));
-	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), targetPosition));
+	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 
 	PlayerControl_ReportDeadBody(__this, target, method);
 }

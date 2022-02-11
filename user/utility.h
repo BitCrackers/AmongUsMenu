@@ -118,6 +118,7 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector);
 // some C++ wizardry to allow overloading on pointer types w/ different base type (then we can rename both to just GetEventPlayer)
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player);
+std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo);
 std::vector<Camera*> GetAllCameras();
 std::vector<ClientData*> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);

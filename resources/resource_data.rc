@@ -64,6 +64,8 @@ IDB_PNG6                PNG                     "vent_out.png"
 
 IDB_PNG7                PNG                     "kill.png"
 
+IDB_PNG8                PNG                     "report.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -431,6 +431,12 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 	return EVENT_PLAYER(playerInfo);
 }
 
+std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
+{
+	if (!playerInfo) return std::nullopt;
+	return PlayerControl_GetTruePosition(playerInfo->fields._object, NULL);
+}
+
 std::vector<Camera*> GetAllCameras() {
 	auto cameras = std::vector<Camera*>();
 

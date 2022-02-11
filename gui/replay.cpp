@@ -180,14 +180,14 @@ namespace Replay
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
 					}
-					else if (e->getType() == EVENT_TYPES::EVENT_REPORT)
+					else if (e->getType() == EVENT_TYPES::EVENT_REPORT || e->getType() == EVENT_TYPES::EVENT_MEETING)
 					{
 						auto report_event = dynamic_cast<ReportDeadBodyEvent*>(e);
-						Vector2 position = report_event->GetPosition();
+						auto position = report_event->GetPosition();
 						auto targetPos = report_event->GetTargetPosition();
 						if (targetPos.has_value())
 							position = targetPos.value();
-						IconTexture icon = icons.at(ICON_TYPES::KILL);
+						IconTexture icon = icons.at(ICON_TYPES::REPORT);
 						float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
 						float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
 						float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
