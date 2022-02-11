@@ -56,6 +56,8 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	const bool response = ImGui::BeginCombo(comboLabel.c_str(), label, flags);
 	if (response) {
 		for (size_t i = 0; i < list->size(); i++) {
+			if (strcmp(list->at(i).first, "") == 0) // ignore all entries with empty labels so we can create padding
+				continue;
 			if (ImGui::Selectable(list->at(i).first, list->at(i).second))
 				list->at(i).second ^= 1;
 			if (list->at(i).second)

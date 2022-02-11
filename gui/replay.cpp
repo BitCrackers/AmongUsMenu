@@ -17,11 +17,11 @@ namespace Replay
 		{"Task", false},
 		{"Report", false},
 		{"Meeting", false},
-		{"Vote", false},
-		{"Cheat", false},
-		{"Disconnect", false},
-		{"Shapeshift", false},
-		{"Protect", false},
+		{"", false},
+		{"", false},
+		{"", false},
+		{"", false},
+		{"", false},
 		{"Walk", false}
 	};
 
