@@ -3,14 +3,15 @@
 #include "utility.h"
 #include <chrono>
 
-VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTION action) : EventInterface(source, EVENT_VENT)
+VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action) : EventInterface(source, EVENT_VENT)
 {
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
 	this->action = action;
 }
 
-void VentEvent::Output() {
+void VentEvent::Output()
+{
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());
 	ImGui::SameLine();
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
@@ -21,7 +22,8 @@ void VentEvent::Output() {
 	else ImGui::Text(" [%dm ago]", min);
 }
 
-void VentEvent::ColoredEventOutput() {
+void VentEvent::ColoredEventOutput()
+{
 	ImGui::Text("[ VENT");
 	ImGui::SameLine();
 
@@ -31,4 +33,31 @@ void VentEvent::ColoredEventOutput() {
 	ImGui::TextColored(color, ((action == VENT_ENTER) ? "IN" : "OUT"));
 	ImGui::SameLine();
 	ImGui::Text("]");
+}
+
+Vector2 VentEvent::GetPosition()
+{
+	return this->position;
+}
+
+VENT_ACTIONS VentEvent::GetEventActionEnum()
+{
+	return this->action;
+}
+
+std::string VentEvent::GetEventActionString()
+{
+	switch (this->action)
+	{
+	default:
+	case VENT_ACTIONS::UNKNOWN:
+		return std::string("Unknown");
+		break;
+	case VENT_ACTIONS::VENT_ENTER:
+		return std::string("Enter");
+		break;
+	case VENT_ACTIONS::VENT_EXIT:
+		return std::string("Exit");
+		break;
+	}
 }

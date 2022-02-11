@@ -63,7 +63,7 @@ namespace Radar {
 			Radar::Init();
 
 		int MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F + 10, (float)maps[MapType].mapImage.imageHeight * 0.5F + 10), ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 10.f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 10.f), ImGuiCond_None);
 
 		if(State.LockRadar)
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);

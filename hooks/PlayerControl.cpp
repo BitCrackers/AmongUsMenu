@@ -4,6 +4,7 @@
 #include "state.hpp"
 #include "esp.hpp"
 #include "_rpc.h"
+#include "replay.hpp"
 #include <iostream>
 #include <optional>
 
@@ -148,11 +149,13 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 
-			// Use UpdateTimer and UpdateCount to execute this part every second
-			dPlayerControl_fixedUpdateCount++;
-			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
-				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), localPos));
+			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+			if (!State.InMeeting) {
+				if (State.events[__this->fields.PlayerId][EVENT_WALK].size() == 0
+					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back())->GetPosition().x != playerPos.x
+					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back())->GetPosition().y != playerPos.y)
+					State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), playerPos));
+
 			}
 
 			PlayerData espPlayerData;

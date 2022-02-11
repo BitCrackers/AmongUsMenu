@@ -21,12 +21,13 @@ enum EVENT_TYPES {
 	EVENT_WALK = 10
 };
 
-enum VENT_ACTION {
+enum VENT_ACTIONS {
 	VENT_ENTER = 0x0,
-	VENT_EXIT = 0x1
+	VENT_EXIT = 0x1,
+	UNKNOWN = 0xFFF
 };
 
-enum CHEAT_ACTION {
+enum CHEAT_ACTIONS {
 	CHEAT_TELEPORT = 0x0,
 	CHEAT_KILL_IMPOSTOR = 0x1
 };
@@ -106,11 +107,14 @@ class VentEvent : public EventInterface {
 private:
 	Vector2 position;
 	SystemTypes__Enum systemType;
-	VENT_ACTION action;
+	VENT_ACTIONS action;
 public:
-	VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTION action);
+	VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	virtual Vector2 GetPosition();
+	virtual VENT_ACTIONS GetEventActionEnum();
+	virtual std::string GetEventActionString();
 };
 
 class TaskCompletedEvent : public EventInterface {
@@ -146,9 +150,9 @@ public:
 
 class CheatDetectedEvent : public EventInterface {
 private:
-	CHEAT_ACTION action;
+	CHEAT_ACTIONS action;
 public:
-	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action);
+	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };

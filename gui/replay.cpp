@@ -7,6 +7,8 @@
 
 namespace Replay
 {
+	std::mutex replayEventMutex;
+
 	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> event_filter =
 	{
@@ -24,6 +26,10 @@ namespace Replay
 	};
 
 	std::vector<std::pair<PlayerSelection, bool>> player_filter;
+
+	ImU32 GetReplayPlayerColor(uint8_t colorId) {
+		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(colorId)));
+	}
 
 	void SquareConstraint(ImGuiSizeCallbackData* data)
 	{
@@ -72,10 +78,11 @@ namespace Replay
 		// TODO: Size it for map and calculate center of the parent window for proper map placement
 		ImGui::BeginChild("ReplayMap");
 
+		ImVec2 winpos = ImGui::GetWindowPos();
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
-			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F),
+			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 2.5f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 2.5f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			State.SelectedReplayMapColor);
@@ -121,15 +128,29 @@ namespace Replay
 				// for each entry in event vector
 				for (int i = 0; i < State.events[n][m].size(); i++)
 				{
+					std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 					EventInterface* e = State.events[n][m].at(i);
+
 					if (e->getType() == EVENT_TYPES::EVENT_WALK)
 					{
-						auto walkEvent = dynamic_cast<WalkEvent*>(e);
-						auto position = walkEvent->GetPosition();
-						std::ostringstream buffer;
-						buffer << "[" << walkEvent->getSource().playerName << "]" << "Position X: " << position.x << "\n"
-							<< "[" << walkEvent->getSource().playerName << "]" << "Position Y: " << position.y << "\n";
-						printf("%s", buffer.str().c_str());
+						auto walk_event = dynamic_cast<WalkEvent*>(e);
+						auto position = walk_event->GetPosition();
+						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y * maps[MapType].scale) + winpos.y;
+
+						if (i + 1 >= State.events[n][m].size())
+						{
+							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							continue;
+						}
+
+						EventInterface* e2 = State.events[n][m].at(i + 1); // get position of next walk_event
+						auto walk_event2 = dynamic_cast<WalkEvent*>(e2);
+						auto position2 = walk_event2->GetPosition();
+						float mapX2 = maps[MapType].x_offset + (position2.x * maps[MapType].scale) + winpos.x;
+						float mapY2 = maps[MapType].y_offset - (position2.y * maps[MapType].scale) + winpos.y;
+
+						drawList->AddLine(ImVec2(mapX, mapY), ImVec2(mapX2, mapY2), GetReplayPlayerColor(e->getSource().colorId));
 					}
 				}
 			}
