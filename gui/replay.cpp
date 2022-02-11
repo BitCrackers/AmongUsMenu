@@ -62,7 +62,7 @@ namespace Replay
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
-		ImGui::BeginChild("console#filter", ImVec2(560, 20), true);
+		ImGui::BeginChild("replay#filter", ImVec2(560, 20), true);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &Replay::event_filter, 100.f);
@@ -75,14 +75,14 @@ namespace Replay
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		// TODO: Size it for map and calculate center of the parent window for proper map placement
-		ImGui::BeginChild("ReplayMap");
-
+		ImGui::BeginChild("replay#map");
 		ImVec2 winpos = ImGui::GetWindowPos();
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
+		// TODO: Center image in childwindow
 		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
-			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 2.5f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 2.5f),
+			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f, (float)maps[MapType].mapImage.imageHeight * 0.5f),
+			ImVec2(5.0f, 5.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			State.SelectedReplayMapColor);
@@ -107,7 +107,6 @@ namespace Replay
 			if (!playerFound && anyPlayerFilterSelected)
 				continue;
 
-
 			bool isUsingEventFilter = false;
 			for (int t = 0; t < Replay::event_filter.size(); t++)
 			{
@@ -117,6 +116,7 @@ namespace Replay
 					break;
 				}
 			}
+
 			// for each event type
 			for (int m = 0; m < EVENT_TYPES_SIZE; m++)
 			{
@@ -131,8 +131,42 @@ namespace Replay
 					std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 					EventInterface* e = State.events[n][m].at(i);
 
-					if (e->getType() == EVENT_TYPES::EVENT_WALK)
+					if (e->getType() == EVENT_TYPES::EVENT_KILL)
 					{
+						auto kill_event = dynamic_cast<KillEvent*>(e);
+						auto position = kill_event->GetPosition();
+						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y * maps[MapType].scale) + winpos.y;
+
+						// TODO replace with proper icon
+						drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+					}
+					else if (e->getType() == EVENT_TYPES::EVENT_VENT)
+					{
+						auto vent_event = dynamic_cast<VentEvent*>(e);
+						auto position = vent_event->GetPosition();
+						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
+						float mapY = maps[MapType].y_offset - (position.y * maps[MapType].scale) + winpos.y;
+
+						switch (vent_event->GetEventActionEnum())
+						{
+						case VENT_ACTIONS::VENT_ENTER:
+							// TODO replace with proper icon
+							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							break;
+
+						case VENT_ACTIONS::VENT_EXIT:
+							// TODO replace with proper icon
+							drawList->AddCircleFilled(ImVec2(mapX, mapY), 4.5F, GetReplayPlayerColor(e->getSource().colorId));
+							break;
+
+						default:
+							break;
+						}
+					}
+					else if (e->getType() == EVENT_TYPES::EVENT_WALK)
+					{
+						// TODO: Limit lines to maybe last 5-10 positions (also possible as option)
 						auto walk_event = dynamic_cast<WalkEvent*>(e);
 						auto position = walk_event->GetPosition();
 						float mapX = maps[MapType].x_offset + (position.x * maps[MapType].scale) + winpos.x;
@@ -155,11 +189,11 @@ namespace Replay
 				}
 			}
 		}
-
 		ImGui::EndChild();
 
-		// new child (control)
+		ImGui::BeginChild("replay#control");
 		// slider based on chronos timestamp from beginning of round until now (live)
+		ImGui::EndChild();
 
 		ImGui::End();
 	}

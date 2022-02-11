@@ -23,8 +23,7 @@ enum EVENT_TYPES {
 
 enum VENT_ACTIONS {
 	VENT_ENTER = 0x0,
-	VENT_EXIT = 0x1,
-	UNKNOWN = 0xFFF
+	VENT_EXIT = 0x1
 };
 
 enum CHEAT_ACTIONS {
@@ -90,6 +89,7 @@ public:
 	virtual void ColoredEventOutput() = 0;
 	EVENT_TYPES getType() { return this->eventType; }
 	EVENT_PLAYER getSource() { return this->source; }
+	std::chrono::system_clock::time_point GetTimeStamp() { return this->timestamp; }
 };
 
 class KillEvent : public EventInterface {
@@ -101,6 +101,9 @@ public:
 	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
+	Vector2 GetPosition() { return this->position; }
+	SystemTypes__Enum GetSystemType() { return this->systemType; }
 };
 
 class VentEvent : public EventInterface {
@@ -112,9 +115,24 @@ public:
 	VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
-	virtual Vector2 GetPosition();
-	virtual VENT_ACTIONS GetEventActionEnum();
-	virtual std::string GetEventActionString();
+	Vector2 GetPosition() { return this->position; }
+	VENT_ACTIONS GetEventActionEnum() { return this->action; }
+	std::string GetEventActionString()
+	{
+		switch (this->action)
+		{
+		case VENT_ACTIONS::VENT_ENTER:
+			return std::string("Enter");
+			break;
+
+		case VENT_ACTIONS::VENT_EXIT:
+			return std::string("Exit");
+			break;
+
+		default:
+			break;
+		}
+	}
 };
 
 class TaskCompletedEvent : public EventInterface {
@@ -126,6 +144,10 @@ public:
 	TaskCompletedEvent(EVENT_PLAYER source, std::optional<TaskTypes__Enum> taskType, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	std::optional<TaskTypes__Enum> GetTaskType() { return this->taskType; }
+	Vector2 GetPosition() { return this->position; }
+	SystemTypes__Enum GetSystemType() { return this->systemType; }
+
 };
 
 class ReportDeadBodyEvent : public EventInterface {
@@ -137,6 +159,9 @@ public:
 	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
+	Vector2 GetPosition() { return this->position; }
+	SystemTypes__Enum GetSystemType() { return this->systemType; }
 };
 
 class CastVoteEvent : public EventInterface {
@@ -146,6 +171,7 @@ public:
 	CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
 };
 
 class CheatDetectedEvent : public EventInterface {
@@ -155,6 +181,7 @@ public:
 	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	CHEAT_ACTIONS GetCheatAction() { return this->action; }
 };
 
 class DisconnectEvent : public EventInterface {
@@ -171,6 +198,7 @@ public:
 	ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	EVENT_PLAYER GetTarget() { return this->target; }
 };
 
 class ProtectPlayerEvent : public EventInterface {
@@ -180,6 +208,7 @@ public:
 	ProtectPlayerEvent(EVENT_PLAYER source, EVENT_PLAYER target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
+	EVENT_PLAYER GetTarget() { return this->target; }
 };
 
 class WalkEvent : public EventInterface {
@@ -189,5 +218,5 @@ public:
 	WalkEvent(EVENT_PLAYER source, Vector2 position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
-	virtual Vector2 GetPosition();
+	Vector2 GetPosition() { return this->position; }
 };

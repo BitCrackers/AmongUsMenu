@@ -34,30 +34,3 @@ void VentEvent::ColoredEventOutput()
 	ImGui::SameLine();
 	ImGui::Text("]");
 }
-
-Vector2 VentEvent::GetPosition()
-{
-	return this->position;
-}
-
-VENT_ACTIONS VentEvent::GetEventActionEnum()
-{
-	return this->action;
-}
-
-std::string VentEvent::GetEventActionString()
-{
-	switch (this->action)
-	{
-	default:
-	case VENT_ACTIONS::UNKNOWN:
-		return std::string("Unknown");
-		break;
-	case VENT_ACTIONS::VENT_ENTER:
-		return std::string("Enter");
-		break;
-	case VENT_ACTIONS::VENT_EXIT:
-		return std::string("Exit");
-		break;
-	}
-}
