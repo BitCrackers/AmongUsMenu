@@ -123,7 +123,7 @@ namespace Radar {
 
 				Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
-				IconTexture icon = icons.at(ICON_TYPES::PLAYER); // TODO: replace with dead body icon
+				IconTexture icon = icons.at(ICON_TYPES::DEAD);
 				float radX = maps[MapType].x_offset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
 				float radY = maps[MapType].y_offset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
 				float radXMax = maps[MapType].x_offset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;

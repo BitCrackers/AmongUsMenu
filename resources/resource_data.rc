@@ -72,6 +72,8 @@ IDB_PNG10               PNG                     "player.png"
 
 IDB_PNG11               PNG                     "cross.png"
 
+IDB_PNG12               PNG                     "dead_body.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

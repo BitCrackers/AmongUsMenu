@@ -128,6 +128,7 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         icons.insert({ ICON_TYPES::TASK, { D3D11Image(Resource(IDB_PNG9), pDevice), 0.02f } });
         icons.insert({ ICON_TYPES::PLAYER, { D3D11Image(Resource(IDB_PNG10), pDevice), 0.02f } });
         icons.insert({ ICON_TYPES::CROSS, { D3D11Image(Resource(IDB_PNG11), pDevice), 0.02f } });
+        icons.insert({ ICON_TYPES::DEAD, { D3D11Image(Resource(IDB_PNG12), pDevice), 0.02f } });
 
         DirectX::hRenderSemaphore = CreateSemaphore(
             NULL,                                 // default security attributes

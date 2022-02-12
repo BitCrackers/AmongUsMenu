@@ -12,7 +12,8 @@ enum ICON_TYPES {
 	REPORT,
 	TASK,
 	PLAYER,
-	CROSS
+	CROSS,
+	DEAD
 };
 
 struct MapTexture {

@@ -495,6 +495,9 @@
     <Image Include="resources\cross.png">
       <Filter>resources</Filter>
     </Image>
+    <Image Include="resources\dead_body.png">
+      <Filter>resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="framework\version.def">
