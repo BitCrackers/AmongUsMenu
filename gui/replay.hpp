@@ -1,5 +1,6 @@
 #pragma once
 #include <mutex>
+#include "imgui/imgui.h"
 
 namespace Replay
 {
@@ -10,7 +11,7 @@ namespace Replay
 
 	struct WalkEvent_LineData
 	{
-		float mapX = 0.f;
-		float mapY = 0.f;
+		uint8_t colorId;
+		std::vector<ImVec2> points;
 	};
 }

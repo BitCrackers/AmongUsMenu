@@ -15,6 +15,11 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
         e.reset();
     State.events.clear();
 
+	for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+	{
+		State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
+	}
+
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();
 	State.pinnedDoors.clear();

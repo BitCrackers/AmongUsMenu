@@ -57,13 +57,13 @@ namespace ConsoleGui
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		for (int i = State.events.size() - 1; i >= 0; i--) {
-			if (State.events[i]->getType() == EVENT_WALK)
+			if (State.events[i].get()->getType() == EVENT_WALK)
 				continue;
 
 			bool typeFound = false, anyTypeFilterSelected = false;
 			for (int n = 0; n < ConsoleGui::event_filter.size(); n++) {
 				if (ConsoleGui::event_filter[n].second
-					&& (EVENT_TYPES)n == State.events[i]->getType()) {
+					&& (EVENT_TYPES)n == State.events[i].get()->getType()) {
 					typeFound = true;
 					anyTypeFilterSelected = true;
 					break;
@@ -79,7 +79,7 @@ namespace ConsoleGui
 			for (auto player : ConsoleGui::player_filter) {
 				if (player.second
 					&& player.first.has_value()
-					&& player.first.get_PlayerId() == State.events[i]->getSource().playerId)
+					&& player.first.get_PlayerId() == State.events[i].get()->getSource().playerId)
 				{
 					playerFound = true;
 					anyPlayerFilterSelected = true;
@@ -92,9 +92,9 @@ namespace ConsoleGui
 			if (!playerFound && anyPlayerFilterSelected)
 				continue;
 
-			State.events[i]->ColoredEventOutput();
+			State.events[i].get()->ColoredEventOutput();
 			ImGui::SameLine();
-			State.events[i]->Output();
+			State.events[i].get()->Output();
 		}
 		ImGui::EndChild();
 		ImGui::End();

@@ -689,3 +689,15 @@ RoleTypes__Enum GetRoleTypesEnum(RoleType role)
 	}
 	return RoleTypes__Enum::Crewmate;
 }
+
+float GetDistanceBetweenPoints_Unity(Vector2 p1, Vector2 p2)
+{
+	float dx = p1.x - p2.x, dy = p1.y - p2.y;
+	return sqrtf(dx * dx + dy * dy);
+}
+
+float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2)
+{
+	float dx = p1.x - p2.x, dy = p1.y - p2.y;
+	return sqrtf(dx * dx + dy * dy);
+}

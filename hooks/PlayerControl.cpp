@@ -147,11 +147,29 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			ImVec2 localScreenPosition = WorldToScreen(localPos);
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
+			Vector2 prevPlayerPos = {State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x, State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y};
+
+			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x = playerPos.x;
+			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y = playerPos.y;
 
 			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 			if (!State.InMeeting)
 			{
-				State.events.emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
+				float dist = GetDistanceBetweenPoints_Unity(playerPos, prevPlayerPos);
+				if (dist > 0.f)
+				{
+					State.events.emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
+					ImVec2 lineData = {maps[State.mapType].x_offset + (playerPos.x * maps[State.mapType].scale), maps[State.mapType].y_offset - (playerPos.y * maps[State.mapType].scale)};
+					if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
+					{
+						// initialize its value
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].points = {};
+						// bad. but not worried about micro-optimizations right now.
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = GetEventPlayerControl(__this).value().colorId;
+					}
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].points.push_back(lineData);
+				}
 			}
 
 			PlayerData espPlayerData;

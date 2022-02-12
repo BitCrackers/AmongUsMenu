@@ -29,7 +29,7 @@ namespace Replay
 	std::vector<std::pair<PlayerSelection, bool>> player_filter;
 
 	std::vector<__int64> lastWalkEventIndexPerPlayer;
-	std::vector<Replay::WalkEvent_LineData> lastWalkEventLineDataPerPlayer;
+	std::vector<ImVec2> lastWalkEventPosPerPlayer;
 
 	ImU32 GetReplayPlayerColor(uint8_t colorId) {
 		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(colorId)));
@@ -52,7 +52,7 @@ namespace Replay
 			for (int i = 0; i < MAX_PLAYERS; i++) {
 				Replay::player_filter.push_back({ PlayerSelection(), false });
 				Replay::lastWalkEventIndexPerPlayer.push_back(-1);
-				Replay::lastWalkEventLineDataPerPlayer.push_back(Replay::WalkEvent_LineData());
+				Replay::lastWalkEventPosPerPlayer.push_back(ImVec2(0.f, 0.f));
 			}
 			init = true;
 		}
@@ -61,11 +61,11 @@ namespace Replay
 	void Reset()
 	{
 		Replay::lastWalkEventIndexPerPlayer.clear();
-		Replay::lastWalkEventLineDataPerPlayer.clear();
+		Replay::lastWalkEventPosPerPlayer.clear();
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			Replay::lastWalkEventIndexPerPlayer.push_back(-1);
-			Replay::lastWalkEventLineDataPerPlayer.push_back(Replay::WalkEvent_LineData());
+			Replay::lastWalkEventPosPerPlayer.push_back(ImVec2(0.f, 0.f));
 		}
 	}
 	
@@ -252,11 +252,11 @@ namespace Replay
 				// on the first walk event per player, these values will be 0.f
 				// BUT the if statement will also be true so the 'continue' statement will be hit
 				// which will avoid drawing a line to 0,0
-				float prevMapX = lastWalkEventLineDataPerPlayer[evtPlayerSource.playerId].mapX;
-				float prevMapY = lastWalkEventLineDataPerPlayer[evtPlayerSource.playerId].mapY;
+				float prevMapX = lastWalkEventPosPerPlayer[evtPlayerSource.playerId].x;
+				float prevMapY = lastWalkEventPosPerPlayer[evtPlayerSource.playerId].y;
 
-				lastWalkEventLineDataPerPlayer[evtPlayerSource.playerId].mapX = mapX;
-				lastWalkEventLineDataPerPlayer[evtPlayerSource.playerId].mapY = mapY;
+				lastWalkEventPosPerPlayer[evtPlayerSource.playerId].x = mapX;
+				lastWalkEventPosPerPlayer[evtPlayerSource.playerId].y = mapY;
 
 				if (lastWalkEventIndexPerPlayer[evtPlayerSource.playerId] <= evtIdx)
 				{
@@ -282,14 +282,28 @@ namespace Replay
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
 
+					Profiler::EndSample("ReplayWalkEvent");
 					continue;
 				}
 
-				drawList->AddLine(ImVec2(prevMapX, prevMapY), ImVec2(mapX, mapY), GetReplayPlayerColor(evtPlayerSource.colorId));
+				//drawList->AddLine(ImVec2(prevMapX, prevMapY), ImVec2(mapX, mapY), GetReplayPlayerColor(evtPlayerSource.colorId));
 				Profiler::EndSample("ReplayWalkEvent");
 			}
 		}
 		Profiler::EndSample("ReplayLoop");
+
+		for (int plrIdx = 0; plrIdx < State.replayWalkPolylineByPlayer.size(); plrIdx++)
+		{
+			Replay::WalkEvent_LineData plrLineData = State.replayWalkPolylineByPlayer.at(plrIdx);
+			for (auto& point : plrLineData.points)
+			{
+				point.x += winpos.x;
+				point.y += winpos.y;
+			}
+			drawList->AddPolyline(plrLineData.points.data(), plrLineData.points.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
+		}
+		
+
 		ImGui::EndChild();
 
 		ImGui::BeginChild("replay#control");

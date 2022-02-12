@@ -5,6 +5,7 @@
 #include "_rpc.h"
 #include "keybinds.h"
 #include "game.h"
+#include "replay.hpp"
 
 class Settings {
 public:
@@ -87,6 +88,8 @@ public:
 
     bool ShowConsole = false;
     std::vector<std::unique_ptr<EventInterface>> events;
+    std::vector<ImVec2> lastWalkEventPosPerPlayer;
+    std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
 
     std::bitset<0xFF> voteMonitor;
 
@@ -150,6 +153,14 @@ public:
     } mapType;
 
     bool AutoOpenDoors = false;
+
+    Settings()
+    {
+        for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+        {
+            this->lastWalkEventPosPerPlayer.push_back(ImVec2(0.f, 0.f));
+        }
+    }
 
     void Load();
     void Save();

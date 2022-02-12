@@ -137,3 +137,5 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool include
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
 std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);
 RoleTypes__Enum GetRoleTypesEnum(RoleType role);
+float GetDistanceBetweenPoints_Unity(Vector2 p1, Vector2 p2);
+float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
