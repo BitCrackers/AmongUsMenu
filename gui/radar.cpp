@@ -62,7 +62,7 @@ namespace Radar {
 		if (!init)
 			Radar::Init();
 
-		int MapType = State.mapType;
+		Settings::MapType MapType = State.mapType;
 		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 10.f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 10.f), ImGuiCond_None);
 
 		if(State.LockRadar)
@@ -92,7 +92,7 @@ namespace Radar {
 			float xOffset = maps[MapType].x_offset;
 			float yOffset = maps[MapType].y_offset;
 
-			if (MapType == 0 && State.FlipSkeld) {
+			if (MapType == Settings::MapType::Ship && State.FlipSkeld) {
 				xOffset -= 50;
 			}
 

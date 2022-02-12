@@ -118,7 +118,7 @@ namespace Replay
 			}
 
 			// for each event type
-			for (int m = 0; m < EVENT_TYPES_SIZE; m++)
+			for (int m = EVENT_TYPES_SIZE - 1; m >= 0; m--)
 			{
 				// IMPORTANT:
 				// Replay::event_filter must be in same order as EVENT_TYPES enum defined in _events.h

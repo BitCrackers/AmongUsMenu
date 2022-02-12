@@ -142,13 +142,12 @@ public:
     
     std::string userName = "";
 
-    enum MapType : uint8_t
+    enum MapType
     {
         Ship = 0,
         Hq = 1,
         Pb = 2,
-        Airship = 3,
-        NotSet = 0xFF
+        Airship = 3
     } mapType;
 
     bool AutoOpenDoors = false;
