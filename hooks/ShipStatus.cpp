@@ -16,28 +16,10 @@ float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
-	Profiler::BeginSample("ClearEvents");
 	Replay::Reset();
-	for (auto& flatEvt : State.flatEvents)
-		flatEvt.reset();
-	State.flatEvents.clear();
-
-	for (auto& conEvt : State.consoleEvents)
-		conEvt.reset();
-	State.consoleEvents.clear();
-
-	for (int i = 0; i < MAX_PLAYERS; i++)
-	{
-		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-		{
-			for (auto& evt : State.events[i][j])
-			{
-				evt.reset();
-			}
-			State.events[i][j].clear();
-		}
-	}
-	Profiler::EndSample("ClearEvents");
+	for (auto& e : State.events)
+		e.reset();
+	State.events.clear();
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();

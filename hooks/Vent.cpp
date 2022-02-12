@@ -30,9 +30,7 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	State.events[pc->fields.PlayerId][EVENT_VENT].emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
-	State.consoleEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
-	State.flatEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
+	State.events.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
 
 	Vent_EnterVent(__this, pc, method);
 }
@@ -41,9 +39,7 @@ void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	State.events[pc->fields.PlayerId][EVENT_VENT].emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
-	State.consoleEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
-	State.flatEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
+	State.events.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
 
 	Vent_ExitVent(__this, pc, method);
 }

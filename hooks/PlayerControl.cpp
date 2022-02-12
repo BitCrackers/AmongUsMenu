@@ -15,9 +15,7 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	State.events[__this->fields.PlayerId][EVENT_TASK].emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.flatEvents.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.events.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 
 	PlayerControl_CompleteTask(__this, idx, method);
 }
@@ -151,16 +149,9 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
 
 			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-			if (!State.InMeeting) {
-				if (State.events[__this->fields.PlayerId][EVENT_WALK].size() == 0
-					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back().get())->GetPosition().x != playerPos.x
-					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back().get())->GetPosition().y != playerPos.y)
-				{
-					State.events[__this->fields.PlayerId][EVENT_WALK].emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
-					State.flatEvents.emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
-					//State.replayWalkPolylineByPlayer.emplace()
-				}
-
+			if (!State.InMeeting)
+			{
+				State.events.emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
 			}
 
 			PlayerData espPlayerData;
@@ -196,32 +187,24 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 {
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
 	{
-		State.events[__this->fields.PlayerId][EVENT_CHEAT].emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
-		State.consoleEvents.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
-		State.flatEvents.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.events.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 	}
 
-	State.events[__this->fields.PlayerId][EVENT_KILL].emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-	State.consoleEvents.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-	State.flatEvents.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+	State.events.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
 void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	State.consoleEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	State.flatEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.events.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 
 	PlayerControl_CmdReportDeadBody(__this, target, method);
 }
 
 void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method)
 {
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	State.consoleEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	State.flatEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.events.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
@@ -264,15 +247,11 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	State.events[__this->fields.PlayerId][EVENT_SHAPESHIFT].emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.consoleEvents.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.flatEvents.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.events.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	State.events[__this->fields.PlayerId][EVENT_PROTECTPLAYER].emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.consoleEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.flatEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.events.emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }

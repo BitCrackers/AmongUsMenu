@@ -86,10 +86,7 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<std::unique_ptr<EventInterface>> consoleEvents;
-    std::vector<std::unique_ptr<EventInterface>> events[MAX_PLAYERS][EVENT_TYPES_SIZE];
-    std::vector<std::unique_ptr<EventInterface>> flatEvents;
-    //std::map<int, std::vector<Replay::WalkEvent_LineData>> replayWalkPolylineByPlayer;
+    std::vector<std::unique_ptr<EventInterface>> events;
 
     std::bitset<0xFF> voteMonitor;
 
@@ -144,7 +141,7 @@ public:
     
     std::string userName = "";
 
-    enum MapType
+    enum MapType : uint8_t
     {
         Ship = 0,
         Hq = 1,

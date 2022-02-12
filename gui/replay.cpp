@@ -96,7 +96,7 @@ namespace Replay
 		ImVec2 winpos = ImGui::GetWindowPos();
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
-		// TODO: Center image in childwindow
+		// TODO: Center image in childwindow and calculate new cursorPos
 		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
 			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f, (float)maps[MapType].mapImage.imageHeight * 0.5f),
 			ImVec2(5.0f, 5.0f),
@@ -127,8 +127,8 @@ namespace Replay
 		// core processing loop
 		Profiler::BeginSample("ReplayLoop");
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		size_t evtIdx = State.flatEvents.size() - 1;
-		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.flatEvents.rbegin(); riter != State.flatEvents.rend(); riter++, evtIdx--)
+		size_t evtIdx = State.events.size() - 1;
+		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.events.rbegin(); riter != State.events.rend(); riter++, evtIdx--)
 		//for (__int64 evtIdx = State.flatEvents.size() - 1; evtIdx >= 0; evtIdx--)
 		{
 			EventInterface* curEvent = (*riter).get();

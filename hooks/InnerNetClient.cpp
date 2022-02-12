@@ -133,9 +133,7 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
-        State.events[data->fields.Character->fields.PlayerId][EVENT_DISCONNECT].emplace_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
-        State.consoleEvents.emplace_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
-        State.flatEvents.emplace_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.events.emplace_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
@@ -198,28 +196,10 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
-    Profiler::BeginSample("ClearEvents");
     Replay::Reset();
-    for (auto& flatEvt : State.flatEvents)
-        flatEvt.reset();
-    State.flatEvents.clear();
-
-    for (auto& conEvt : State.consoleEvents)
-        conEvt.reset();
-    State.consoleEvents.clear();
-
-    for (int i = 0; i < MAX_PLAYERS; i++)
-    {
-        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-        {
-            for (auto& evt : State.events[i][j])
-            {
-                evt.reset();
-            }
-            State.events[i][j].clear();
-        }
-    }
-    Profiler::EndSample("ClearEvents");
+    for (auto& e : State.events)
+        e.reset();
+    State.events.clear();
 
     InnerNetClient_StartEndGame(__this, method);
 }

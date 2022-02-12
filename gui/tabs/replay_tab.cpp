@@ -9,9 +9,10 @@ namespace ReplayTab {
 			if (ImGui::Checkbox("Show Replay", &State.ShowReplay)) {
 				State.Save();
 			}
+#ifdef _DEBUG
 			ImGui::SameLine();
-			ImGui::Text("Num Events: %d", State.flatEvents.size());
-
+			ImGui::Text("Num Events: %d", State.events.size());
+#endif
 			if (ImGui::ColorEdit4("Replay Map Color",
 				(float*)&State.SelectedReplayMapColor,
 				ImGuiColorEditFlags__OptionsDefault
