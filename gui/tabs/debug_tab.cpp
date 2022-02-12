@@ -50,8 +50,8 @@ namespace DebugTab {
 				std::stringstream statStream;
 				Profiler::AppendStatStringStream("ReplayRender", statStream);
 				Profiler::AppendStatStringStream("ReplayLoop", statStream);
-				Profiler::AppendStatStringStream("ReplayFilter", statStream);
-				Profiler::AppendStatStringStream("ReplayCoreLoopIter", statStream);
+				//Profiler::AppendStatStringStream("ReplayFilter", statStream);
+				//Profiler::AppendStatStringStream("ReplayCoreLoopIter", statStream);
 				Profiler::AppendStatStringStream("ReplayKillEvent", statStream);
 				Profiler::AppendStatStringStream("ReplayVentEvent", statStream);
 				Profiler::AppendStatStringStream("ReplayTaskEvent", statStream);

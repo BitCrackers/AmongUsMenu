@@ -17,6 +17,7 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 
 	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.flatEvents.push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 
 	PlayerControl_CompleteTask(__this, idx, method);
 }
@@ -154,7 +155,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				if (State.events[__this->fields.PlayerId][EVENT_WALK].size() == 0
 					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back())->GetPosition().x != playerPos.x
 					|| dynamic_cast<WalkEvent*>(State.events[__this->fields.PlayerId][EVENT_WALK].back())->GetPosition().y != playerPos.y)
+				{
 					State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), playerPos));
+					State.flatEvents.push_back(new WalkEvent(GetEventPlayerControl(__this).value(), playerPos));
+				}
 
 			}
 
@@ -193,10 +197,12 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	{
 		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.flatEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 	}
 
 	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+	State.flatEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 
 	PlayerControl_MurderPlayer(__this, target, method);
 }
@@ -205,6 +211,7 @@ void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo
 {
 	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.flatEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 
 	PlayerControl_CmdReportDeadBody(__this, target, method);
 }
@@ -213,6 +220,7 @@ void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* ta
 {
 	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.flatEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
@@ -257,11 +265,13 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
 	State.events[__this->fields.PlayerId][EVENT_SHAPESHIFT].push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	State.consoleEvents.push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.flatEvents.push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
 	State.events[__this->fields.PlayerId][EVENT_PROTECTPLAYER].push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	State.consoleEvents.push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.flatEvents.push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }

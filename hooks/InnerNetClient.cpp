@@ -5,6 +5,7 @@
 #include "game.h"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
 #include <sstream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
@@ -133,6 +134,7 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
 
         State.events[data->fields.Character->fields.PlayerId][EVENT_DISCONNECT].push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
         State.consoleEvents.push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.flatEvents.push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
@@ -195,6 +197,8 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
+    Replay::Reset();
+    State.flatEvents.clear();
     State.consoleEvents.clear();
     for (int i = 0; i < 10; i++)
         for (int j = 0; j < EVENT_TYPES_SIZE; j++)

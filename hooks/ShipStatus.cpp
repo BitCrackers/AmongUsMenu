@@ -3,6 +3,7 @@
 #include "state.hpp"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
@@ -14,6 +15,8 @@ float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
+	Replay::Reset();
+	State.flatEvents.clear();
 	State.consoleEvents.clear();
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < EVENT_TYPES_SIZE; j++)

@@ -3,11 +3,14 @@
 #include "state.hpp"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
 
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 {
 	PolusShipStatus_OnEnable(__this, method);
 
+	Replay::Reset();
+	State.flatEvents.clear();
 	State.consoleEvents.clear();
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < EVENT_TYPES_SIZE; j++)

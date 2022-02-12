@@ -59,6 +59,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			{
 				State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				State.consoleEvents.push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.flatEvents.push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				State.voteMonitor[playerData->fields.PlayerId] = true;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 			}
