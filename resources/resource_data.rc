@@ -70,6 +70,8 @@ IDB_PNG9                PNG                     "tick.png"
 
 IDB_PNG10               PNG                     "player.png"
 
+IDB_PNG11               PNG                     "cross.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

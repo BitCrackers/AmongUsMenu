@@ -237,6 +237,14 @@ namespace Replay
 								ImVec2(0.0f, 1.0f),
 								ImVec2(1.0f, 0.0f),
 								GetReplayPlayerColor(e->getSource().colorId));
+
+							if (e->getSource().isDead || e->getSource().isAngel)
+								drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
+									ImVec2(player_mapX, player_mapY),
+									ImVec2(player_mapXMax, player_mapYMax),
+									ImVec2(0.0f, 1.0f),
+									ImVec2(1.0f, 0.0f));
+								
 							continue;
 						}
 

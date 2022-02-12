@@ -96,11 +96,25 @@ namespace Radar {
 				xOffset -= 50;
 			}
 
-			float radX = xOffset + (playerPos.x * maps[MapType].scale) + winpos.x;
-			float radY = yOffset - (playerPos.y * maps[MapType].scale) + winpos.y;
+			IconTexture icon = icons.at(ICON_TYPES::PLAYER);
+			float radX = maps[MapType].x_offset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+			float radY = maps[MapType].y_offset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+			float radXMax = maps[MapType].x_offset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+			float radYMax = maps[MapType].y_offset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
 
-			drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, GetRadarPlayerColor(playerData));
-			drawList->AddCircle(ImVec2(radX, radY), 4.5F + 0.5F, GetRadarPlayerColorStatus(playerData), 0, 2.0F);
+			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+				ImVec2(radX, radY),
+				ImVec2(radXMax, radYMax),
+				ImVec2(0.0f, 1.0f),
+				ImVec2(1.0f, 0.0f),
+				GetRadarPlayerColor(playerData));
+
+			if (playerData->fields.IsDead)
+				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
+					ImVec2(radX, radY),
+					ImVec2(radXMax, radYMax),
+					ImVec2(0.0f, 1.0f),
+					ImVec2(1.0f, 0.0f));
 		}
 
 		if (State.ShowRadar_DeadBodies) {
@@ -109,10 +123,18 @@ namespace Radar {
 
 				Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
-				float radX = maps[MapType].x_offset + (bodyPos.x * maps[MapType].scale) + winpos.x;
-				float radY = maps[MapType].y_offset - (bodyPos.y * maps[MapType].scale) + winpos.y;
+				IconTexture icon = icons.at(ICON_TYPES::PLAYER); // TODO: replace with dead body icon
+				float radX = maps[MapType].x_offset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+				float radY = maps[MapType].y_offset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
+				float radXMax = maps[MapType].x_offset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
+				float radYMax = maps[MapType].y_offset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
 
-				drawList->AddText(ImGui::GetFont(), 16, ImVec2(radX - 5.F, radY - 6.75F), GetRadarPlayerColor(playerData), "X");
+				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+					ImVec2(radX, radY),
+					ImVec2(radXMax, radYMax),
+					ImVec2(0.0f, 1.0f),
+					ImVec2(1.0f, 0.0f),
+					GetRadarPlayerColor(playerData));
 			}
 		}
 

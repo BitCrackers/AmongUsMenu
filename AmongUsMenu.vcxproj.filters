@@ -492,6 +492,9 @@
     <Image Include="resources\player.png">
       <Filter>resources</Filter>
     </Image>
+    <Image Include="resources\cross.png">
+      <Filter>resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="framework\version.def">

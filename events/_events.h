@@ -37,11 +37,15 @@ struct EVENT_PLAYER {
 	uint8_t playerId;
 	uint8_t colorId;
 	std::string playerName;
+	bool isDead;
+	bool isAngel;
 
 	EVENT_PLAYER() {
 		playerId = 0;
 		colorId = 0;
 		playerName = "";
+		isDead = false;
+		isAngel = false;
 	}
 
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
@@ -70,6 +74,9 @@ struct EVENT_PLAYER {
 			colorId = 0;
 			playerName = "ERROR";
 		}
+
+		isDead = playerInfo->fields.IsDead;
+		isAngel = (playerInfo->fields.Role) ? playerInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel : false;
 	}
 };
 
