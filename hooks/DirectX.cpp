@@ -17,6 +17,7 @@
 #include "resource_data.h"
 #include "game.h"
 #include "console.hpp"
+#include "profiler.h"
 
 #include <future>
 
@@ -159,6 +160,11 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
             ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
             return oPresent(__this, SyncInterval, Flags);
         }
+    }
+
+    if (!Profiler::HasInitialized)
+    {
+        Profiler::InitProfiling();
     }
 
     WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);

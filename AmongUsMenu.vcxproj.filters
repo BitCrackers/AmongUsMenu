@@ -283,6 +283,9 @@
     <ClCompile Include="gui\tabs\replay_tab.cpp">
       <Filter>gui\tabs</Filter>
     </ClCompile>
+    <ClCompile Include="profiler.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -459,6 +462,9 @@
     </ClInclude>
     <ClInclude Include="gui\tabs\replay_tab.h">
       <Filter>gui\tabs</Filter>
+    </ClInclude>
+    <ClInclude Include="profiler.h">
+      <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

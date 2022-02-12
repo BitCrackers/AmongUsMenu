@@ -4,6 +4,7 @@
 #include "state.hpp"
 #include "gui-helpers.hpp"
 #include <sstream>
+#include "profiler.h"
 
 namespace Replay
 {
@@ -55,6 +56,7 @@ namespace Replay
 	
 	void Render()
 	{
+		Profiler::BeginSample("ReplayRender");
 		Replay::Init();
 
 		int MapType = State.mapType;
@@ -87,9 +89,11 @@ namespace Replay
 			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			State.SelectedReplayMapColor);
 
+		Profiler::BeginSample("ReplayLoop");
 		// for each player
 		for (int n = 0; n < MAX_PLAYERS; n++)
 		{
+			Profiler::BeginSample("ReplayFilter");
 			bool playerFound = false, anyPlayerFilterSelected = false;
 			for (auto player : Replay::player_filter) {
 				if (player.second
@@ -116,6 +120,7 @@ namespace Replay
 					break;
 				}
 			}
+			Profiler::EndSample("ReplayFilter");
 
 			// for each event type
 			for (int m = EVENT_TYPES_SIZE - 1; m >= 0; m--)
@@ -128,11 +133,13 @@ namespace Replay
 				// for each entry in event vector
 				for (int i = 0; i < State.events[n][m].size(); i++)
 				{
+					Profiler::BeginSample("ReplayCoreLoopIter");
 					std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 					EventInterface* e = State.events[n][m].at(i);
 
 					if (e->getType() == EVENT_TYPES::EVENT_KILL)
 					{
+						Profiler::BeginSample("ReplayKillEvent");
 						auto kill_event = dynamic_cast<KillEvent*>(e);
 						auto position = kill_event->GetTargetPosition();
 						IconTexture icon = icons.at(ICON_TYPES::KILL);
@@ -146,9 +153,11 @@ namespace Replay
 							ImVec2(mapXMax, mapYMax),
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
+						Profiler::EndSample("ReplayKillEvent");
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_VENT)
 					{
+						Profiler::BeginSample("ReplayVentEvent");
 						auto vent_event = dynamic_cast<VentEvent*>(e);
 						auto position = vent_event->GetPosition();
 						ICON_TYPES iconType;
@@ -179,9 +188,11 @@ namespace Replay
 							ImVec2(mapXMax, mapYMax),
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
+						Profiler::EndSample("ReplayVentEvent");
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_TASK)
 					{
+						Profiler::BeginSample("ReplayTaskEvent");
 						auto task_event = dynamic_cast<TaskCompletedEvent*>(e);
 						auto position = task_event->GetPosition();
 						IconTexture icon = icons.at(ICON_TYPES::TASK);
@@ -195,9 +206,11 @@ namespace Replay
 							ImVec2(mapXMax, mapYMax),
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
+						Profiler::EndSample("ReplayTaskEvent");
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_REPORT || e->getType() == EVENT_TYPES::EVENT_MEETING)
 					{
+						Profiler::BeginSample("ReplayMeetingEvent");
 						auto report_event = dynamic_cast<ReportDeadBodyEvent*>(e);
 						auto position = report_event->GetPosition();
 						auto targetPos = report_event->GetTargetPosition();
@@ -214,9 +227,11 @@ namespace Replay
 							ImVec2(mapXMax, mapYMax),
 							ImVec2(0.0f, 1.0f),
 							ImVec2(1.0f, 0.0f));
+						Profiler::EndSample("ReplayMeetingEvent");
 					}
 					else if (e->getType() == EVENT_TYPES::EVENT_WALK)
 					{
+						Profiler::BeginSample("ReplayWalkEvent");
 						// TODO: Limit lines to maybe last 5-10 positions (also possible as option)
 						auto walk_event = dynamic_cast<WalkEvent*>(e);
 						auto position = walk_event->GetPosition();
@@ -255,10 +270,13 @@ namespace Replay
 						float mapY2 = maps[MapType].y_offset - (position2.y * maps[MapType].scale) + winpos.y;
 
 						drawList->AddLine(ImVec2(mapX, mapY), ImVec2(mapX2, mapY2), GetReplayPlayerColor(e->getSource().colorId));
+						Profiler::EndSample("ReplayWalkEvent");
 					}
+					Profiler::EndSample("ReplayCoreLoopIter");
 				}
 			}
 		}
+		Profiler::EndSample("ReplayLoop");
 		ImGui::EndChild();
 
 		ImGui::BeginChild("replay#control");
@@ -266,5 +284,6 @@ namespace Replay
 		ImGui::EndChild();
 
 		ImGui::End();
+		Profiler::EndSample("ReplayRender");
 	}
 }
