@@ -128,10 +128,10 @@ namespace Replay
 		Profiler::BeginSample("ReplayLoop");
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		size_t evtIdx = State.flatEvents.size() - 1;
-		for (std::vector<EventInterface*>::reverse_iterator riter = State.flatEvents.rbegin(); riter != State.flatEvents.rend(); riter++, evtIdx--)
+		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.flatEvents.rbegin(); riter != State.flatEvents.rend(); riter++, evtIdx--)
 		//for (__int64 evtIdx = State.flatEvents.size() - 1; evtIdx >= 0; evtIdx--)
 		{
-			EventInterface* curEvent = *riter;
+			EventInterface* curEvent = (*riter).get();
 			//EventInterface* curEvent = State.flatEvents.at(evtIdx);
 			EVENT_TYPES evtType = curEvent->getType();
 			std::chrono::system_clock::time_point evtTime = curEvent->GetTimeStamp();
@@ -140,7 +140,10 @@ namespace Replay
 			// filters
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
-			if ((isUsingPlayerFilter == true) && ((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId > Replay::player_filter.size() - 1) || (Replay::player_filter[evtPlayerSource.playerId].second == false) || (Replay::player_filter[evtPlayerSource.playerId].first.has_value() == false)))
+			if ((isUsingPlayerFilter == true) && 
+				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId > Replay::player_filter.size() - 1) || 
+					(Replay::player_filter[evtPlayerSource.playerId].second == false) || 
+					(Replay::player_filter[evtPlayerSource.playerId].first.has_value() == false)))
 				continue;
 
 			// processing

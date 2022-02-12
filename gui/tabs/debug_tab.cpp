@@ -48,6 +48,7 @@ namespace DebugTab {
 				ImGui::BeginChild("debug#profiler", ImVec2(0, 0), true);
 
 				std::stringstream statStream;
+				Profiler::AppendStatStringStream("ClearEvents", statStream);
 				Profiler::AppendStatStringStream("ReplayRender", statStream);
 				Profiler::AppendStatStringStream("ReplayLoop", statStream);
 				//Profiler::AppendStatStringStream("ReplayFilter", statStream);

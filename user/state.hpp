@@ -86,9 +86,10 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<EventInterface*> consoleEvents;
-    std::vector<EventInterface*> events[MAX_PLAYERS][EVENT_TYPES_SIZE];
-    std::vector<EventInterface*> flatEvents;
+    std::vector<std::unique_ptr<EventInterface>> consoleEvents;
+    std::vector<std::unique_ptr<EventInterface>> events[MAX_PLAYERS][EVENT_TYPES_SIZE];
+    std::vector<std::unique_ptr<EventInterface>> flatEvents;
+    //std::map<int, std::vector<Replay::WalkEvent_LineData>> replayWalkPolylineByPlayer;
 
     std::bitset<0xFF> voteMonitor;
 

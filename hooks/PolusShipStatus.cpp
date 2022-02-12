@@ -4,17 +4,34 @@
 #include "logger.h"
 #include "utility.h"
 #include "replay.hpp"
+#include "profiler.h"
 
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 {
 	PolusShipStatus_OnEnable(__this, method);
 
+    Profiler::BeginSample("ClearEvents");
 	Replay::Reset();
-	State.flatEvents.clear();
-	State.consoleEvents.clear();
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-			State.events[i][j].clear();
+    for (auto& flatEvt : State.flatEvents)
+        flatEvt.reset();
+    State.flatEvents.clear();
+
+    for (auto& conEvt : State.consoleEvents)
+        conEvt.reset();
+    State.consoleEvents.clear();
+
+    for (int i = 0; i < MAX_PLAYERS; i++)
+    {
+        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
+        {
+            for (auto& evt : State.events[i][j])
+            {
+                evt.reset();
+            }
+            State.events[i][j].clear();
+        }
+    }
+    Profiler::EndSample("ClearEvents");
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();
