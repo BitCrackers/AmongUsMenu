@@ -5,6 +5,7 @@
 #include "gui-helpers.hpp"
 #include <sstream>
 #include "profiler.h"
+#include "logger.h"
 
 namespace Replay
 {
@@ -297,16 +298,46 @@ namespace Replay
 		}
 		Profiler::EndSample("ReplayLoop");
 
+		Profiler::BeginSample("ReplayPolyline");
 		for (int plrIdx = 0; plrIdx < State.replayWalkPolylineByPlayer.size(); plrIdx++)
 		{
 			Replay::WalkEvent_LineData plrLineData = State.replayWalkPolylineByPlayer.at(plrIdx);
-			for (auto& point : plrLineData.points)
+
+			// CREDIT:
+			// https://github.com/mourner/simplify-js/blob/master/simplify.js#L51
+			// https://github.com/mourner/simplify-js/blob/master/LICENSE
+			ImVec2 prevPoint = plrLineData.pendingPoints[0], point = {0.f, 0.f};
+			size_t numPendingPoints = plrLineData.pendingPoints.size();
+			size_t numNewPointsAdded = 1;
+			// always add the first point
+			plrLineData.simplifiedPoints.push_back(ImVec2(prevPoint.x + cursorPosX, prevPoint.y + cursorPosY));
+			for (size_t index = 1; index < numPendingPoints; index++)
 			{
-				point.x += cursorPosX;
-				point.y += cursorPosY;
+				point = plrLineData.pendingPoints[index];
+				float diffX = point.x - prevPoint.x, diffY = point.y - prevPoint.y;
+				if ((diffX * diffX + diffY * diffY) > 1.5f)
+				{
+					prevPoint = point;
+					point.x += cursorPosX;
+					point.y += cursorPosY;
+					// add the point if it's beyond 1.5 units squared of prev point.
+					plrLineData.simplifiedPoints.push_back(point);
+					numNewPointsAdded++;
+				}
 			}
-			drawList->AddPolyline(plrLineData.points.data(), plrLineData.points.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
+			// add the last point if it's not also the first point
+			if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
+			{
+				plrLineData.simplifiedPoints.push_back(ImVec2(point.x + cursorPosX, point.y + cursorPosY));
+				numNewPointsAdded++;
+			}
+
+			plrLineData.pendingPoints.clear();
+			//STREAM_DEBUG("Using " << numNewPointsAdded << " points out of " << numPendingPoints);
+
+			drawList->AddPolyline(plrLineData.simplifiedPoints.data(), plrLineData.simplifiedPoints.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
 		}
+		Profiler::EndSample("ReplayPolyline");
 		
 
 		ImGui::EndChild();

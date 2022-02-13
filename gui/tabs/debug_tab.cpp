@@ -38,6 +38,8 @@ namespace DebugTab {
 
 			ImGui::Dummy(ImVec2(4, 4));
 
+			ImGui::Text("Num Events: %d", State.events.size());
+
 			if (ImGui::CollapsingHeader("Profiler"))
 			{
 				if (ImGui::Button("Clear Stats"))
@@ -49,8 +51,10 @@ namespace DebugTab {
 
 				std::stringstream statStream;
 				//Profiler::AppendStatStringStream("ClearEvents", statStream);
+				Profiler::AppendStatStringStream("WalkEventCreation", statStream);
 				Profiler::AppendStatStringStream("ReplayRender", statStream);
 				Profiler::AppendStatStringStream("ReplayLoop", statStream);
+				Profiler::AppendStatStringStream("ReplayPolyline", statStream);
 				//Profiler::AppendStatStringStream("ReplayFilter", statStream);
 				//Profiler::AppendStatStringStream("ReplayCoreLoopIter", statStream);
 				Profiler::AppendStatStringStream("ReplayKillEvent", statStream);

@@ -5,6 +5,7 @@
 #include "esp.hpp"
 #include "_rpc.h"
 #include "replay.hpp"
+#include "profiler.h"
 #include <iostream>
 #include <optional>
 
@@ -152,24 +153,26 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x = playerPos.x;
 			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y = playerPos.y;
 
-			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 			if (!State.InMeeting)
 			{
+				Profiler::BeginSample("WalkEventCreation");
+				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 				float dist = GetDistanceBetweenPoints_Unity(playerPos, prevPlayerPos);
 				if (dist > 0.f)
 				{
 					State.events.emplace_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
-					ImVec2 lineData = {maps[State.mapType].x_offset + (playerPos.x * maps[State.mapType].scale), maps[State.mapType].y_offset - (playerPos.y * maps[State.mapType].scale)};
+					ImVec2 mapPos_pre = {maps[State.mapType].x_offset + (playerPos.x * maps[State.mapType].scale), maps[State.mapType].y_offset - (playerPos.y * maps[State.mapType].scale)};
 					if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
 					{
 						// initialize its value
 						State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].points = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints = {};
 						// bad. but not worried about micro-optimizations right now.
 						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = GetEventPlayerControl(__this).value().colorId;
 					}
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].points.push_back(lineData);
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints.push_back(mapPos_pre);
 				}
+				Profiler::EndSample("WalkEventCreation");
 			}
 
 			PlayerData espPlayerData;
