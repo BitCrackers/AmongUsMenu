@@ -306,34 +306,43 @@ namespace Replay
 			// CREDIT:
 			// https://github.com/mourner/simplify-js/blob/master/simplify.js#L51
 			// https://github.com/mourner/simplify-js/blob/master/LICENSE
-			ImVec2 prevPoint = plrLineData.pendingPoints[0], point = {0.f, 0.f};
+			if (plrLineData.pendingPoints.size() < 2)
+				continue;
+			ImVec2 prevPoint = plrLineData.pendingPoints[0], point = prevPoint;
 			size_t numPendingPoints = plrLineData.pendingPoints.size();
+			size_t numOldSimpPoints = plrLineData.simplifiedPoints.size();
 			size_t numNewPointsAdded = 1;
 			// always add the first point
-			plrLineData.simplifiedPoints.push_back(ImVec2(prevPoint.x + cursorPosX, prevPoint.y + cursorPosY));
+			plrLineData.simplifiedPoints.push_back(ImVec2(prevPoint.x, prevPoint.y));
 			for (size_t index = 1; index < numPendingPoints; index++)
 			{
 				point = plrLineData.pendingPoints[index];
 				float diffX = point.x - prevPoint.x, diffY = point.y - prevPoint.y;
-				if ((diffX * diffX + diffY * diffY) > 1.5f)
+				if ((diffX * diffX + diffY * diffY) > 50.f)
 				{
 					prevPoint = point;
-					point.x += cursorPosX;
-					point.y += cursorPosY;
-					// add the point if it's beyond 1.5 units squared of prev point.
+					// add the point if it's beyond 50 squared units of prev point.
 					plrLineData.simplifiedPoints.push_back(point);
 					numNewPointsAdded++;
 				}
 			}
-			// add the last point if it's not also the first point
+			// add the last point if it's not also the first point or has already been added as the last point
 			if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
 			{
-				plrLineData.simplifiedPoints.push_back(ImVec2(point.x + cursorPosX, point.y + cursorPosY));
+				plrLineData.simplifiedPoints.push_back(ImVec2(point.x, point.y));
 				numNewPointsAdded++;
 			}
 
 			plrLineData.pendingPoints.clear();
-			//STREAM_DEBUG("Using " << numNewPointsAdded << " points out of " << numPendingPoints);
+			//STREAM_DEBUG("Using " << numNewPointsAdded << " points out of " << numPendingPoints << "\n\tTotal simp points: " << plrLineData.simplifiedPoints.size());
+
+			// have to loop through any newly added simplifiedPoints and translate to map coords
+			// old simplifiedPoints are already translated so it's important we do not touch those
+			for (size_t simpIndex = numOldSimpPoints; simpIndex < plrLineData.simplifiedPoints.size(); simpIndex++)
+			{
+				plrLineData.simplifiedPoints[simpIndex].x += cursorPosX;
+				plrLineData.simplifiedPoints[simpIndex].y += cursorPosY;
+			}
 
 			drawList->AddPolyline(plrLineData.simplifiedPoints.data(), plrLineData.simplifiedPoints.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
 		}
