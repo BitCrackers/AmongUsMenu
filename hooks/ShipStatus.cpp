@@ -17,9 +17,19 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
 	Replay::Reset();
-	for (auto& e : State.events)
+	for (auto& e : State.rawEvents)
 		e.reset();
-	State.events.clear();
+	State.rawEvents.clear();
+	for (auto& e : State.liveReplayEvents)
+		e.reset();
+	State.liveReplayEvents.clear();
+	for (auto& pair : State.replayWalkPolylineByPlayer)
+	{
+		pair.second.playerId = 0;
+		pair.second.colorId = 0;
+		pair.second.pendingPoints.clear();
+		pair.second.simplifiedPoints.clear();
+	}
 
 	for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
 	{

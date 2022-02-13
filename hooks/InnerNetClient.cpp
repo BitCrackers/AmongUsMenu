@@ -133,7 +133,8 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
-        State.events.emplace_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.rawEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.liveReplayEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
@@ -197,9 +198,20 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
     Replay::Reset();
-    for (auto& e : State.events)
+    for (auto& e : State.rawEvents)
         e.reset();
-    State.events.clear();
+    State.rawEvents.clear();
+    for (auto& e : State.liveReplayEvents)
+        e.reset();
+    State.liveReplayEvents.clear();
+    for (auto& pair : State.replayWalkPolylineByPlayer)
+    {
+        pair.second.playerId = 0;
+        pair.second.colorId = 0;
+        pair.second.pendingPoints.clear();
+        pair.second.simplifiedPoints.clear();
+    }
+
 
     for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
     {

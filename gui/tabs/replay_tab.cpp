@@ -11,7 +11,8 @@ namespace ReplayTab {
 			}
 #ifdef _DEBUG
 			ImGui::SameLine();
-			ImGui::Text("Num Events: %d", State.events.size());
+			ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
+			ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
 #endif
 			if (ImGui::ColorEdit4("Replay Map Color",
 				(float*)&State.SelectedReplayMapColor,

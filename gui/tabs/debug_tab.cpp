@@ -38,7 +38,8 @@ namespace DebugTab {
 
 			ImGui::Dummy(ImVec2(4, 4));
 
-			ImGui::Text("Num Events: %d", State.events.size());
+			ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
+			ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
 
 			if (ImGui::CollapsingHeader("Profiler"))
 			{

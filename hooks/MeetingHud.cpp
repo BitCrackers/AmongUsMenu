@@ -57,7 +57,8 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
 			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId])
 			{
-				State.events.emplace_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.liveReplayEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				State.voteMonitor[playerData->fields.PlayerId] = true;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 			}

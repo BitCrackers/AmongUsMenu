@@ -87,7 +87,8 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<std::unique_ptr<EventInterface>> events;
+    std::vector<std::unique_ptr<EventInterface>> rawEvents;
+    std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::vector<ImVec2> lastWalkEventPosPerPlayer;
     std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
 

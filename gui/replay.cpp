@@ -133,8 +133,8 @@ namespace Replay
 		// core processing loop
 		Profiler::BeginSample("ReplayLoop");
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		size_t evtIdx = State.events.size() - 1;
-		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.events.rbegin(); riter != State.events.rend(); riter++, evtIdx--)
+		size_t evtIdx = State.liveReplayEvents.size() - 1;
+		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.liveReplayEvents.rbegin(); riter != State.liveReplayEvents.rend(); riter++, evtIdx--)
 		//for (__int64 evtIdx = State.flatEvents.size() - 1; evtIdx >= 0; evtIdx--)
 		{
 			EventInterface* curEvent = (*riter).get();
@@ -302,49 +302,81 @@ namespace Replay
 		for (int plrIdx = 0; plrIdx < State.replayWalkPolylineByPlayer.size(); plrIdx++)
 		{
 			Replay::WalkEvent_LineData plrLineData = State.replayWalkPolylineByPlayer.at(plrIdx);
+			size_t numPendingPoints = plrLineData.pendingPoints.size();
+			if (numPendingPoints < 1)
+				continue;
+			ImVec2 latestPos = plrLineData.pendingPoints.back();
 
 			// CREDIT:
 			// https://github.com/mourner/simplify-js/blob/master/simplify.js#L51
 			// https://github.com/mourner/simplify-js/blob/master/LICENSE
-			if (plrLineData.pendingPoints.size() < 2)
-				continue;
-			ImVec2 prevPoint = plrLineData.pendingPoints[0], point = prevPoint;
-			size_t numPendingPoints = plrLineData.pendingPoints.size();
-			size_t numOldSimpPoints = plrLineData.simplifiedPoints.size();
-			size_t numNewPointsAdded = 1;
-			// always add the first point
-			plrLineData.simplifiedPoints.push_back(ImVec2(prevPoint.x, prevPoint.y));
-			for (size_t index = 1; index < numPendingPoints; index++)
+			if (numPendingPoints >= 2)
 			{
-				point = plrLineData.pendingPoints[index];
-				float diffX = point.x - prevPoint.x, diffY = point.y - prevPoint.y;
-				if ((diffX * diffX + diffY * diffY) > 50.f)
+				ImVec2 prevPoint = plrLineData.pendingPoints[0], point = prevPoint;
+				size_t numPendingPoints = plrLineData.pendingPoints.size();
+				size_t numOldSimpPoints = plrLineData.simplifiedPoints.size();
+				size_t numNewPointsAdded = 1;
+				// always add the first point
+				plrLineData.simplifiedPoints.push_back(ImVec2(prevPoint.x, prevPoint.y));
+				for (size_t index = 1; index < numPendingPoints; index++)
 				{
-					prevPoint = point;
-					// add the point if it's beyond 50 squared units of prev point.
-					plrLineData.simplifiedPoints.push_back(point);
+					point = plrLineData.pendingPoints[index];
+					float diffX = point.x - prevPoint.x, diffY = point.y - prevPoint.y;
+					if ((diffX * diffX + diffY * diffY) > 50.f)
+					{
+						prevPoint = point;
+						// add the point if it's beyond 50 squared units of prev point.
+						plrLineData.simplifiedPoints.push_back(point);
+						numNewPointsAdded++;
+					}
+				}
+				// add the last point if it's not also the first point or has already been added as the last point
+				if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
+				{
+					plrLineData.simplifiedPoints.push_back(ImVec2(point.x, point.y));
 					numNewPointsAdded++;
 				}
-			}
-			// add the last point if it's not also the first point or has already been added as the last point
-			if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
-			{
-				plrLineData.simplifiedPoints.push_back(ImVec2(point.x, point.y));
-				numNewPointsAdded++;
-			}
 
-			plrLineData.pendingPoints.clear();
-			//STREAM_DEBUG("Using " << numNewPointsAdded << " points out of " << numPendingPoints << "\n\tTotal simp points: " << plrLineData.simplifiedPoints.size());
+				plrLineData.pendingPoints.clear();
+				//STREAM_DEBUG("Using " << numNewPointsAdded << " points out of " << numPendingPoints << "\n\tTotal simp points: " << plrLineData.simplifiedPoints.size());
 
-			// have to loop through any newly added simplifiedPoints and translate to map coords
-			// old simplifiedPoints are already translated so it's important we do not touch those
-			for (size_t simpIndex = numOldSimpPoints; simpIndex < plrLineData.simplifiedPoints.size(); simpIndex++)
-			{
-				plrLineData.simplifiedPoints[simpIndex].x += cursorPosX;
-				plrLineData.simplifiedPoints[simpIndex].y += cursorPosY;
+				// have to loop through any newly added simplifiedPoints and translate to map coords
+				// old simplifiedPoints are already translated so it's important we do not touch those
+				for (size_t simpIndex = numOldSimpPoints; simpIndex < plrLineData.simplifiedPoints.size(); simpIndex++)
+				{
+					plrLineData.simplifiedPoints[simpIndex].x += cursorPosX;
+					plrLineData.simplifiedPoints[simpIndex].y += cursorPosY;
+				}
+
+				drawList->AddPolyline(plrLineData.simplifiedPoints.data(), plrLineData.simplifiedPoints.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
 			}
 
-			drawList->AddPolyline(plrLineData.simplifiedPoints.data(), plrLineData.simplifiedPoints.size(), GetReplayPlayerColor(plrLineData.colorId), false, 1.f);
+			// draw player icon
+			IconTexture icon = icons.at(ICON_TYPES::PLAYER);
+			// latestPos.x = maps[State.mapType].x_offset + (position.x * maps[State.mapType].scale);
+			// float player_mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
+			float player_mapX = ((latestPos.x / maps[MapType].scale) - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
+			float player_mapY = ((latestPos.y / maps[MapType].scale) - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+			float player_mapXMax = ((latestPos.x / maps[MapType].scale) + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
+			float player_mapYMax = ((latestPos.y / maps[MapType].scale) + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+
+			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
+				ImVec2(player_mapX, player_mapY),
+				ImVec2(player_mapXMax, player_mapYMax),
+				ImVec2(0.0f, 0.0f),
+				ImVec2(1.0f, 1.0f),
+				GetReplayPlayerColor(plrLineData.colorId));
+
+			app::GameData_PlayerInfo* plrInfo = GetPlayerDataById(plrLineData.playerId);
+			if ((plrInfo != NULL) && 
+				((plrInfo->fields.IsDead) || 
+					((plrInfo->fields.Role != NULL) && 
+						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))))
+				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
+					ImVec2(player_mapX, player_mapY),
+					ImVec2(player_mapXMax, player_mapYMax),
+					ImVec2(0.0f, 0.0f),
+					ImVec2(1.0f, 1.0f));
 		}
 		Profiler::EndSample("ReplayPolyline");
 		
