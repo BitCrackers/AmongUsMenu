@@ -170,11 +170,15 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 						// first-time init
 						State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
 						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedPoints = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedTimeStamps = {};
 					}
 					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].playerId = __this->fields.PlayerId;
-					// bad. but not worried about micro-optimizations right now.
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = GetEventPlayerControl(__this).value().colorId;
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = State.rawEvents.back().get()->getSource().colorId;
+
 					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints.push_back(mapPos_pre);
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps.push_back(State.rawEvents.back().get()->GetTimeStamp());
 				}
 				Profiler::EndSample("WalkEventCreation");
 			}

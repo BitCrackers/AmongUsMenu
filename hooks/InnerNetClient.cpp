@@ -209,7 +209,9 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
         pair.second.playerId = 0;
         pair.second.colorId = 0;
         pair.second.pendingPoints.clear();
+        pair.second.pendingTimeStamps.clear();
         pair.second.simplifiedPoints.clear();
+        pair.second.simplifiedTimeStamps.clear();
     }
 
 
@@ -217,6 +219,8 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     {
         State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
     }
+
+    State.RoundEnd = std::chrono::system_clock::now();
 
     InnerNetClient_StartEndGame(__this, method);
 }

@@ -28,13 +28,17 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 		pair.second.playerId = 0;
 		pair.second.colorId = 0;
 		pair.second.pendingPoints.clear();
+		pair.second.pendingTimeStamps.clear();
 		pair.second.simplifiedPoints.clear();
+		pair.second.simplifiedTimeStamps.clear();
 	}
 
 	for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
 	{
 		State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
 	}
+
+	State.RoundStart = std::chrono::system_clock::now();
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();

@@ -42,6 +42,9 @@ void Settings::Load() {
         j.at("ReplayColor_G").get_to(this->SelectedReplayMapColor.y);
         j.at("ReplayColor_B").get_to(this->SelectedReplayMapColor.z);
         j.at("ReplayColor_A").get_to(this->SelectedReplayMapColor.w);
+        j.at("ReplayShowOnlyLastSeconds").get_to(this->Replay_ShowOnlyLastSeconds);
+        j.at("ReplayLastSecondsValue").get_to(this->Replay_LastSecondsValue);
+        j.at("ReplayClearAfterMeeting").get_to(this->Replay_ClearAfterMeeting);
 
         j.at("ShowEsp").get_to(this->ShowEsp);
         j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
@@ -98,6 +101,9 @@ void Settings::Save() {
             {"ReplayColor_G", this->SelectedReplayMapColor.y},
             {"ReplayColor_B", this->SelectedReplayMapColor.z},
             {"ReplayColor_A", this->SelectedReplayMapColor.w},
+            {"ReplayShowOnlyLastSeconds", this->Replay_ShowOnlyLastSeconds},
+            {"ReplayLastSecondsValue", this->Replay_LastSecondsValue},
+            {"ReplayClearAfterMeeting", this->Replay_ClearAfterMeeting},
 
             {"ShowEsp", this->ShowEsp},
             {"ShowEsp_Ghosts", this->ShowEsp_Ghosts},

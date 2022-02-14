@@ -1,6 +1,7 @@
 #pragma once
-#include <mutex>
 #include "imgui/imgui.h"
+#include <mutex>
+#include <chrono>
 
 namespace Replay
 {
@@ -14,6 +15,9 @@ namespace Replay
 		uint8_t playerId;
 		uint8_t colorId;
 		std::vector<ImVec2> pendingPoints;
+		std::vector<std::chrono::system_clock::time_point> pendingTimeStamps;
+
 		std::vector<ImVec2> simplifiedPoints;
+		std::vector<std::chrono::system_clock::time_point> simplifiedTimeStamps;
 	};
 }

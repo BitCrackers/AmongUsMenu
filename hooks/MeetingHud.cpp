@@ -3,16 +3,19 @@
 #include "state.hpp"
 #include "game.h"
 #include "logger.h"
+#include <chrono>
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.reset();
 	State.InMeeting = true;
+	State.RoundEnd = std::chrono::system_clock::now();
 
 	MeetingHud_Awake(__this, method);
 }
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	State.InMeeting = false;
+	State.RoundStart = std::chrono::system_clock::now();
 
 	MeetingHud_Close(__this, method);
 }

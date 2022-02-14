@@ -63,10 +63,6 @@ public:
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
 
-    bool ShowReplay = false;
-    std::chrono::system_clock::time_point RoundStart;
-    std::chrono::system_clock::time_point RoundEnd;
-
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;
     bool ShowEsp_Box = true;
@@ -87,6 +83,12 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
+    bool ShowReplay = false;
+    bool Replay_ShowOnlyLastSeconds = false;
+    int Replay_LastSecondsValue = 1;
+    bool Replay_ClearAfterMeeting = false;
+    std::chrono::system_clock::time_point RoundStart;
+    std::chrono::system_clock::time_point RoundEnd;
     std::vector<std::unique_ptr<EventInterface>> rawEvents;
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::vector<ImVec2> lastWalkEventPosPerPlayer;
