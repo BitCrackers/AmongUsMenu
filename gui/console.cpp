@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "gui-helpers.hpp"
 #include "state.hpp"
+#include "logger.h"
 
 namespace ConsoleGui
 {
@@ -57,13 +58,19 @@ namespace ConsoleGui
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		for (int i = State.rawEvents.size() - 1; i >= 0; i--) {
-			if (State.rawEvents[i].get()->getType() == EVENT_WALK)
+			EventInterface* evt = State.rawEvents[i].get();
+			if (evt == NULL)
+			{
+				STREAM_ERROR("State.rawEvents[" << i << "] was NULL (rawEvents.size(): " << State.rawEvents.size() << ")");
+				continue;
+			}
+			if (evt->getType() == EVENT_WALK)
 				continue;
 
 			bool typeFound = false, anyTypeFilterSelected = false;
 			for (int n = 0; n < ConsoleGui::event_filter.size(); n++) {
 				if (ConsoleGui::event_filter[n].second
-					&& (EVENT_TYPES)n == State.rawEvents[i].get()->getType()) {
+					&& (EVENT_TYPES)n == evt->getType()) {
 					typeFound = true;
 					anyTypeFilterSelected = true;
 					break;
@@ -79,7 +86,7 @@ namespace ConsoleGui
 			for (auto player : ConsoleGui::player_filter) {
 				if (player.second
 					&& player.first.has_value()
-					&& player.first.get_PlayerId() == State.rawEvents[i].get()->getSource().playerId)
+					&& player.first.get_PlayerId() == evt->getSource().playerId)
 				{
 					playerFound = true;
 					anyPlayerFilterSelected = true;
@@ -92,9 +99,9 @@ namespace ConsoleGui
 			if (!playerFound && anyPlayerFilterSelected)
 				continue;
 
-			State.rawEvents[i].get()->ColoredEventOutput();
+			evt->ColoredEventOutput();
 			ImGui::SameLine();
-			State.rawEvents[i].get()->Output();
+			evt->Output();
 		}
 		ImGui::EndChild();
 		ImGui::End();
