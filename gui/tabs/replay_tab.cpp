@@ -23,21 +23,6 @@ namespace ReplayTab {
 				State.Save();
 			}
 
-			if (ImGui::Checkbox("Show only last", &State.Replay_ShowOnlyLastSeconds))
-			{
-				State.Save();
-			}
-			ImGui::SameLine();
-			if (ImGui::SliderInt("seconds", &State.Replay_LastSecondsValue, 1, 600, "%d", ImGuiSliderFlags_AlwaysClamp))
-			{
-				State.Save();
-			}
-
-			if (ImGui::Checkbox("Clear after meeting", &State.Replay_ClearAfterMeeting))
-			{
-				State.Save();
-			}
-
 			ImGui::EndTabItem();
 		}
 	}

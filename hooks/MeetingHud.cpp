@@ -17,6 +17,11 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	State.InMeeting = false;
 	State.RoundStart = std::chrono::system_clock::now();
 
+	if (State.Replay_ClearAfterMeeting)
+	{
+		Replay::Reset(true);
+	}
+
 	MeetingHud_Close(__this, method);
 }
 

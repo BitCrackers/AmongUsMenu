@@ -198,27 +198,6 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
     Replay::Reset();
-    for (auto& e : State.rawEvents)
-        e.reset();
-    State.rawEvents.clear();
-    for (auto& e : State.liveReplayEvents)
-        e.reset();
-    State.liveReplayEvents.clear();
-    for (auto& pair : State.replayWalkPolylineByPlayer)
-    {
-        pair.second.playerId = 0;
-        pair.second.colorId = 0;
-        pair.second.pendingPoints.clear();
-        pair.second.pendingTimeStamps.clear();
-        pair.second.simplifiedPoints.clear();
-        pair.second.simplifiedTimeStamps.clear();
-    }
-
-
-    for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
-    {
-        State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
-    }
 
     State.RoundEnd = std::chrono::system_clock::now();
 

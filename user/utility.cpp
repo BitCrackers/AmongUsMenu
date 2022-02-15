@@ -4,6 +4,7 @@
 #include "game.h"
 #include "gitparams.h"
 #include "logger.h"
+#include "profiler.h"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -700,4 +701,50 @@ float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2)
 {
 	float dx = p1.x - p2.x, dy = p1.y - p2.y;
 	return sqrtf(dx * dx + dy * dy);
+}
+
+void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs)
+{
+	sqDistanceThreshold = sqDistanceThreshold - FLT_EPSILON;
+	size_t numPendingPoints = inPoints.size();
+	if (numPendingPoints < 2)
+		return;
+
+	Profiler::BeginSample("PolylineSimplification");
+	ImVec2 prevPoint = inPoints[0], point = inPoints[0];
+	std::chrono::system_clock::time_point timestamp = inTimeStamps[0];
+	size_t numNewPointsAdded = 0;
+
+	// always add the first point
+	outPoints.push_back(point);
+	outTimeStamps.push_back(timestamp);
+	numNewPointsAdded++;
+	for (size_t index = 1; index < numPendingPoints; index++)
+	{
+		point = inPoints[index];
+		timestamp = inTimeStamps[index];
+		float diffX = point.x - prevPoint.x, diffY = point.y - prevPoint.y;
+		if ((diffX * diffX + diffY * diffY) >= sqDistanceThreshold)
+		{
+			prevPoint = point;
+			// add the point if it's beyond the distance threshold of prev point.
+			outPoints.push_back(point);
+			outTimeStamps.push_back(timestamp);
+			numNewPointsAdded++;
+		}
+	}
+	// add the last point if it's not also the first point nor has already been added as the last point
+	if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
+	{
+		outPoints.push_back(point);
+		outTimeStamps.push_back(timestamp);
+		numNewPointsAdded++;
+	}
+
+	if (clearInputs)
+	{
+		inPoints.clear();
+		inTimeStamps.clear();
+	}
+	Profiler::EndSample("PolylineSimplification");
 }

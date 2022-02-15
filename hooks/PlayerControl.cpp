@@ -159,7 +159,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				Profiler::BeginSample("WalkEventCreation");
 				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 				float dist = GetDistanceBetweenPoints_Unity(playerPos, prevPlayerPos);
-				if (dist > 0.f)
+				// NOTE:
+				// the localplayer moves even while standing still, by the tiniest amount.
+				// hopefully 0.01 will be big enough to filter that out but small enough to catch every real movement
+				if (dist > 0.01f)
 				{
 					// NOTE:
 					// we do not add walkevents to liveReplayEvents. linedata contains everything we need for live visualization.

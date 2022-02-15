@@ -5,6 +5,7 @@
 #include "main.h"
 #include "game.h"
 #include "profiler.h"
+#include "logger.h"
 #include <iostream>
 #include <sstream>
 
@@ -41,6 +42,19 @@ namespace DebugTab {
 			ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
 			ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
 
+			if (ImGui::Button("Re-simplify polylines (check console)"))
+			{
+				for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
+				{
+					std::vector<ImVec2> resimplifiedPoints;
+					std::vector<std::chrono::system_clock::time_point> resimplifiedTimeStamps;
+					Replay::WalkEvent_LineData& plrLineData = playerPolylinePair.second;
+					size_t numOldSimpPoints = plrLineData.simplifiedPoints.size();
+					DoPolylineSimplification(plrLineData.simplifiedPoints, plrLineData.simplifiedTimeStamps, resimplifiedPoints, resimplifiedTimeStamps, 50.f, false);
+					STREAM_DEBUG("Player[" << playerPolylinePair.first << "]: Re-simplification could reduce " << numOldSimpPoints << " points to " << resimplifiedPoints.size());
+				}
+			}
+
 			if (ImGui::CollapsingHeader("Profiler"))
 			{
 				if (ImGui::Button("Clear Stats"))
@@ -51,18 +65,12 @@ namespace DebugTab {
 				ImGui::BeginChild("debug#profiler", ImVec2(0, 0), true);
 
 				std::stringstream statStream;
-				//Profiler::AppendStatStringStream("ClearEvents", statStream);
 				Profiler::AppendStatStringStream("WalkEventCreation", statStream);
 				Profiler::AppendStatStringStream("ReplayRender", statStream);
-				Profiler::AppendStatStringStream("ReplayLoop", statStream);
 				Profiler::AppendStatStringStream("ReplayPolyline", statStream);
-				//Profiler::AppendStatStringStream("ReplayFilter", statStream);
-				//Profiler::AppendStatStringStream("ReplayCoreLoopIter", statStream);
-				Profiler::AppendStatStringStream("ReplayKillEvent", statStream);
-				Profiler::AppendStatStringStream("ReplayVentEvent", statStream);
-				Profiler::AppendStatStringStream("ReplayTaskEvent", statStream);
-				Profiler::AppendStatStringStream("ReplayMeetingEvent", statStream);
-				Profiler::AppendStatStringStream("ReplayWalkEvent", statStream);
+				Profiler::AppendStatStringStream("PolylineSimplification", statStream);
+				Profiler::AppendStatStringStream("ReplayPlayerIcons", statStream);
+				Profiler::AppendStatStringStream("ReplayEventIcons", statStream);
 				// NOTE:
 				// can also just do this to dump all stats, but i like doing them individually so i can control the order better:
 				// Profiler::WriteStatsToStream(statStream);

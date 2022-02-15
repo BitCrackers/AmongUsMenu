@@ -139,3 +139,14 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);
 RoleTypes__Enum GetRoleTypesEnum(RoleType role);
 float GetDistanceBetweenPoints_Unity(Vector2 p1, Vector2 p2);
 float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
+
+/// <summary>
+/// Simplifies a list of points by ensuring the distance between consecutive points is greater than the squared distance threshold; all other points are discarded.
+/// </summary>
+/// <param name="inPoints">Collection of points pending simplification</param>
+/// <param name="inTimeStamps">Collection of timestamps associated with each point pending simplification</param>
+/// <param name="outPoints">Contains only the points that meet the distance filter</param>
+/// <param name="outTimeStamps">The original timestamp associated with each point</param>
+/// <param name="sqDistanceThreshold">The squared distance between two consecutive points. We use squared distance to avoid a costly sqrtf operation in the distance calculation</param>
+/// <param name="clearInputs">Whether both input collections should be cleared after processing. If no work is done they will not be cleared.</param>
+void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs);
