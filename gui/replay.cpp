@@ -79,6 +79,10 @@ namespace Replay
 		{
 			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
 		}
+
+		// Set this to true as the default value
+		// Everytime we start a new match it will actually play and not stay paused if it was paused before
+		State.Replay_IsPlaying = true; 
 	}
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, bool isUsingTimeFilter, std::chrono::system_clock::time_point timeFilter)
@@ -356,11 +360,11 @@ namespace Replay
 		Replay::Init();
 
 		int MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2(560, 420), ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.0f, (maps[MapType].mapImage.imageHeight * 0.5f) + 100.f), ImGuiCond_None);
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
-		ImGui::BeginChild("replay#filter", ImVec2(560, 20), true);
+		ImGui::BeginChild("replay#filter", ImVec2(0, 20), true);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &Replay::event_filter, 100.f);
@@ -373,13 +377,13 @@ namespace Replay
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		ImGui::BeginChild("replay#map", ImVec2(0, (maps[MapType].mapImage.imageHeight * 0.5f) + 10.f));
+		ImGui::BeginChild("replay#map", ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.f, (maps[MapType].mapImage.imageHeight * 0.5f) + 15.f));
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 		ImVec2 winSize = ImGui::GetWindowSize();
 		ImVec2 winPos = ImGui::GetWindowPos();
 
 		// calculate proper cursorPosition for centerered rendering
-		float cursorPosX = winPos.x + (winSize.x * 0.5f) - ((float)(maps[MapType].mapImage.imageWidth * 0.5f) * 0.5f);
+		float cursorPosX = winPos.x + 15.f;
 		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(maps[MapType].mapImage.imageHeight * 0.15f) * 0.5f);
 
 		// TODO: Center image in childwindow and calculate new cursorPos
@@ -423,12 +427,28 @@ namespace Replay
 		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, timeFilter);
 		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingPlayerFilter);
 		
-
 		ImGui::EndChild();
 
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(1.0f, 5.0f));
+
 		ImGui::BeginChild("replay#control");
-		// slider based on chronos timestamp from beginning of round until now (live)
-		
+
+		// slider based on chronos timestamp from beginning of match until now (live)
+		// ImGui::SameLine(0.0f, 1.0f);
+		if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PLAY).iconImage.shaderResourceView,
+			ImVec2(icons.at(ICON_TYPES::PLAY).iconImage.imageWidth * icons.at(ICON_TYPES::PLAY).scale,
+				icons.at(ICON_TYPES::PLAY).iconImage.imageHeight * icons.at(ICON_TYPES::PLAY).scale)))
+		{
+			State.Replay_IsPlaying = true;
+		}
+		ImGui::SameLine(0.0f, 1.0f);
+		if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PAUSE).iconImage.shaderResourceView,
+			ImVec2(icons.at(ICON_TYPES::PAUSE).iconImage.imageWidth * icons.at(ICON_TYPES::PAUSE).scale,
+				icons.at(ICON_TYPES::PAUSE).iconImage.imageHeight * icons.at(ICON_TYPES::PAUSE).scale)))
+		{
+			State.Replay_IsPlaying = false;
+		}
 		ImGui::EndChild();
 
 		ImGui::End();

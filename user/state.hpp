@@ -93,6 +93,7 @@ public:
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::vector<ImVec2> lastWalkEventPosPerPlayer;
     std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
+    bool Replay_IsPlaying = true;
 
     std::bitset<0xFF> voteMonitor;
 
