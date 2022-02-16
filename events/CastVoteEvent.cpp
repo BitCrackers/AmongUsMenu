@@ -14,10 +14,7 @@ void CastVoteEvent::Output() {
 	if (target.has_value()) ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(target->colorId)), target->playerName.c_str());
 	else ImGui::Text("Skipped");
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text(" [%s min ago]", formatDuration<std::chrono::system_clock::duration, std::chrono::minutes, std::chrono::seconds>(std::chrono::system_clock::now() - this->timestamp).c_str());
 }
 
 void CastVoteEvent::ColoredEventOutput() {

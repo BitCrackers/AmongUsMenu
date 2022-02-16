@@ -18,10 +18,7 @@ void KillEvent::Output() {
 	ImGui::SameLine();
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text(" [%s min ago]", formatDuration<std::chrono::system_clock::duration, std::chrono::minutes, std::chrono::seconds>(std::chrono::system_clock::now() - this->timestamp).c_str());
 }
 
 void KillEvent::ColoredEventOutput() {
