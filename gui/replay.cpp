@@ -57,11 +57,8 @@ namespace Replay
 		}
 	}
 
-	void Reset(bool keepRawEvents /*= false*/)
+	void Reset()
 	{
-		for (auto& e : State.rawEvents)
-			e.reset();
-		State.rawEvents.clear();
 		for (auto& e : State.liveReplayEvents)
 			e.reset();
 		State.liveReplayEvents.clear();

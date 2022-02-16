@@ -198,6 +198,10 @@ void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
 
     Replay::Reset();
 
+    for (auto& e : State.rawEvents)
+        e.reset();
+    State.rawEvents.clear();
+
     State.RoundEnd = std::chrono::system_clock::now();
 
     InnerNetClient_StartEndGame(__this, method);

@@ -57,51 +57,54 @@ namespace ConsoleGui
 		ImGui::EndChild();
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-		for (int i = State.rawEvents.size() - 1; i >= 0; i--) {
-			EventInterface* evt = State.rawEvents[i].get();
-			if (evt == NULL)
-			{
-				STREAM_ERROR("State.rawEvents[" << i << "] was NULL (rawEvents.size(): " << State.rawEvents.size() << ")");
-				continue;
-			}
-			if (evt->getType() == EVENT_WALK)
-				continue;
-
-			bool typeFound = false, anyTypeFilterSelected = false;
-			for (int n = 0; n < ConsoleGui::event_filter.size(); n++) {
-				if (ConsoleGui::event_filter[n].second
-					&& (EVENT_TYPES)n == evt->getType()) {
-					typeFound = true;
-					anyTypeFilterSelected = true;
-					break;
-				}
-				else if (ConsoleGui::event_filter[n].second)
-					anyTypeFilterSelected = true;
-			}
-
-			if (!typeFound && anyTypeFilterSelected)
-				continue;
-
-			bool playerFound = false, anyPlayerFilterSelected = false;
-			for (auto player : ConsoleGui::player_filter) {
-				if (player.second
-					&& player.first.has_value()
-					&& player.first.get_PlayerId() == evt->getSource().playerId)
+		size_t i = State.liveReplayEvents.size() - 1;
+		if (i >= 0) {
+			for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator rit = State.liveReplayEvents.rbegin(); rit != State.liveReplayEvents.rend(); ++rit, --i) {
+				EventInterface* evt = (*rit).get();
+				if (evt == NULL)
 				{
-					playerFound = true;
-					anyPlayerFilterSelected = true;
-					break;
+					STREAM_ERROR("State.rawEvents[" << i << "] was NULL (rawEvents.size(): " << State.liveReplayEvents.size() << ")");
+					continue;
 				}
-				else if (player.second) // if no player was selected we want to make sure that any filter was set in the first place before we continue
-					anyPlayerFilterSelected = true;
+				if (evt->getType() == EVENT_WALK)
+					continue;
+
+				bool typeFound = false, anyTypeFilterSelected = false;
+				for (int n = 0; n < ConsoleGui::event_filter.size(); n++) {
+					if (ConsoleGui::event_filter[n].second
+						&& (EVENT_TYPES)n == evt->getType()) {
+						typeFound = true;
+						anyTypeFilterSelected = true;
+						break;
+					}
+					else if (ConsoleGui::event_filter[n].second)
+						anyTypeFilterSelected = true;
+				}
+
+				if (!typeFound && anyTypeFilterSelected)
+					continue;
+
+				bool playerFound = false, anyPlayerFilterSelected = false;
+				for (auto player : ConsoleGui::player_filter) {
+					if (player.second
+						&& player.first.has_value()
+						&& player.first.get_PlayerId() == evt->getSource().playerId)
+					{
+						playerFound = true;
+						anyPlayerFilterSelected = true;
+						break;
+					}
+					else if (player.second) // if no player was selected we want to make sure that any filter was set in the first place before we continue
+						anyPlayerFilterSelected = true;
+				}
+
+				if (!playerFound && anyPlayerFilterSelected)
+					continue;
+
+				evt->ColoredEventOutput();
+				ImGui::SameLine();
+				evt->Output();
 			}
-
-			if (!playerFound && anyPlayerFilterSelected)
-				continue;
-
-			evt->ColoredEventOutput();
-			ImGui::SameLine();
-			evt->Output();
 		}
 		ImGui::EndChild();
 		ImGui::End();
