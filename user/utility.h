@@ -152,25 +152,3 @@ float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
 void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs);
 
 float getMapXOffsetSkeld(float x);
-
-template<class DurationIn>
-std::string formatDuration(DurationIn) { return {}; } // recursion termination
-
-/// <summary>
-/// <para>break down the time duration and format them into a readable string</para>
-/// <para>Credits: https://stackoverflow.com/questions/42138599/how-to-format-stdchrono-durations </para>
-/// </summary>
-/// <param name="d">Time duration you want to be formatted</param>
-template<class DurationIn, class FirstDuration, class...RestDurations>
-std::string formatDuration(DurationIn d)
-{
-	auto val = std::chrono::duration_cast<FirstDuration>(d);
-
-	std::string out = std::to_string(val.count());
-
-	if constexpr (sizeof...(RestDurations) > 0) {
-		out += ":" + formatDuration<DurationIn, RestDurations...>(d - val);
-	}
-
-	return out;
-}

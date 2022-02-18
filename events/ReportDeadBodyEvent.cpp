@@ -21,7 +21,7 @@ void ReportDeadBodyEvent::Output() {
 	}
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
 	ImGui::SameLine();
-	ImGui::Text(" [%s min ago]", formatDuration<std::chrono::system_clock::duration, std::chrono::minutes, std::chrono::seconds>(std::chrono::system_clock::now() - this->timestamp).c_str());
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
 void ReportDeadBodyEvent::ColoredEventOutput() {

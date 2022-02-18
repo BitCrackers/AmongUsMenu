@@ -13,7 +13,7 @@ void ProtectPlayerEvent::Output() {
 	ImGui::SameLine();
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(target.colorId)), target.playerName.c_str());
 	ImGui::SameLine();
-	ImGui::Text(" [%s min ago]", formatDuration<std::chrono::system_clock::duration, std::chrono::minutes, std::chrono::seconds>(std::chrono::system_clock::now() - this->timestamp).c_str());
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
 void ProtectPlayerEvent::ColoredEventOutput() {
