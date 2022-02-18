@@ -23,7 +23,7 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	else
 		State.FlipSkeld = false;
 
-	State.RoundStart = std::chrono::system_clock::now();
+	State.MatchStart = std::chrono::system_clock::now();
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();

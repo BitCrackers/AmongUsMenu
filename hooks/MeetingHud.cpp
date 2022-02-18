@@ -15,7 +15,6 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	State.InMeeting = false;
-	State.RoundStart = std::chrono::system_clock::now();
 
 	if (State.Replay_ClearAfterMeeting)
 	{
