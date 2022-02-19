@@ -486,9 +486,9 @@ namespace Replay
 		}
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
-		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
-		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
+		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
 		
 		ImGui::EndChild();
 
