@@ -87,6 +87,12 @@ namespace Replay
 		std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
+		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
+			&& (minTimeFilter >= maxTimeFilter))
+		{
+			STREAM_ERROR("Min time filter is greater than max time filter (min: " << std::format("{:%OH:%OM:%OS}", minTimeFilter) << " max: " << std::format("{:%OH:%OM:%OS}", maxTimeFilter) << ")");
+			return;
+		}
 		// this is annoying, but we have to transform the points, render, then untransform
 		// if we store the transformed points then moving the replay window will cause everything to break..
 		for (auto& point : points)
@@ -157,6 +163,12 @@ namespace Replay
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPolyline");
+		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
+			&& (minTimeFilter >= maxTimeFilter))
+		{
+			STREAM_ERROR("Min time filter is greater than max time filter (min: " << std::format("{:%OH:%OM:%OS}", minTimeFilter) << " max: " << std::format("{:%OH:%OM:%OS}", maxTimeFilter) << ")");
+			return;
+		}
 		for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
 		{
 			// first we check if the player has enough points pending simplification
@@ -194,6 +206,12 @@ namespace Replay
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
+		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
+			&& (minTimeFilter >= maxTimeFilter))
+		{
+			STREAM_ERROR("Min time filter is greater than max time filter (min: " << std::format("{:%OH:%OM:%OS}", minTimeFilter) << " max: " << std::format("{:%OH:%OM:%OS}", maxTimeFilter) << ")");
+			return;
+		}
 		// event filter
 		if ((isUsingEventFilter == true) && (Replay::event_filter[(int)EVENT_TYPES::EVENT_WALK].second == false))
 			return;
@@ -307,8 +325,14 @@ namespace Replay
 	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
-		// core processing loop
 		Profiler::BeginSample("ReplayEventIcons");
+		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
+			&& (minTimeFilter >= maxTimeFilter))
+		{
+			STREAM_ERROR("Min time filter is greater than max time filter (min: " << std::format("{:%OH:%OM:%OS}", minTimeFilter) << " max: " << std::format("{:%OH:%OM:%OS}", maxTimeFilter) << ")");
+			return;
+		}
+		
 		for (std::vector<std::unique_ptr<EventInterface>>::iterator it = State.liveReplayEvents.begin(); it != State.liveReplayEvents.end(); ++it)
 		{
 			EventInterface* curEvent = (*it).get();
@@ -478,11 +502,11 @@ namespace Replay
 			}
 		}
 
-		std::chrono::system_clock::time_point minTimeFilter = std::chrono::system_clock::now();
+		std::chrono::system_clock::time_point minTimeFilter = State.MatchStart;
 		if (State.Replay_ShowOnlyLastSeconds)
 		{
 			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
-			minTimeFilter -= seconds;
+			minTimeFilter = State.MatchCurrent - seconds;
 		}
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
