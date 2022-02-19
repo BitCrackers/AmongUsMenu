@@ -257,11 +257,8 @@ namespace Replay
 			std::chrono::system_clock::time_point evtTime = curEvent->GetTimeStamp();
 			EVENT_PLAYER evtPlayerSource = curEvent->getSource();
 
-			auto evtTimeStampMs = std::chrono::time_point_cast<std::chrono::milliseconds>(evtTime).time_since_epoch().count();
-			auto curTimeStampMs = std::chrono::time_point_cast<std::chrono::milliseconds>(State.MatchCurrent).time_since_epoch().count();
-
 			// filters
-			if (evtTimeStampMs > curTimeStampMs)
+			if (evtTime > State.MatchCurrent)
 				continue;
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
