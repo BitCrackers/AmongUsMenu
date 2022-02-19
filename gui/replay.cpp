@@ -85,7 +85,7 @@ namespace Replay
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, 
 		std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		// this is annoying, but we have to transform the points, render, then untransform
 		// if we store the transformed points then moving the replay window will cause everything to break..
@@ -118,7 +118,7 @@ namespace Replay
 					collectionHasElementsToFilterMax = true;
 				}
 			}
-
+			
 			uintptr_t startPtr = 0, endPtr = (points.size() - 1) * sizeof(ImVec2);
 			if (collectionHasElementsToFilterMin == true)
 			{
@@ -154,7 +154,7 @@ namespace Replay
 	}
 
 	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPolyline");
 		for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
@@ -191,7 +191,7 @@ namespace Replay
 	}
 
 	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
 		// event filter
@@ -305,7 +305,7 @@ namespace Replay
 	}
 
 	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		// core processing loop
 		Profiler::BeginSample("ReplayEventIcons");
@@ -484,14 +484,6 @@ namespace Replay
 			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
 			minTimeFilter -= seconds;
 		}
-
-		std::chrono::system_clock::time_point maxTimeFilter = std::chrono::system_clock::now();
-		if (State.Replay_ShowOnlyLastSeconds)
-		{
-			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
-			maxTimeFilter -= seconds;
-		}
-
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
