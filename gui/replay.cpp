@@ -83,7 +83,9 @@ namespace Replay
 		State.Replay_IsLive = true;
 	}
 
-	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, bool isUsingTimeFilter, std::chrono::system_clock::time_point timeFilter)
+	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, 
+		std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
 	{
 		// this is annoying, but we have to transform the points, render, then untransform
 		// if we store the transformed points then moving the replay window will cause everything to break..
@@ -93,37 +95,45 @@ namespace Replay
 			point.y += cursorPosY;
 		}
 
-		if (isUsingTimeFilter == true)
+		// earliestTimeIndex will be the very first event to be shown, lastTimeIndex will be the very last even to be shown
+		int earliestTimeIndex = 0, lastTimeIndex = 0;
+		bool collectionHasElementsToFilterMin = false, collectionHasElementsToFilterMax = false;
+		if ((isUsingMinTimeFilter == true) || (isUsingMaxTimeFilter))
 		{
-			// now we figure out the last index that matches the timeFilter
+			// now we figure out the last index that matches the minTimeFilter
 			// then we'll do some quik pointer mafs to pass to the AddPolyline call
-			int lastTimeIndex = timeStamps.size() - 1;
-			bool collectionHasElementsToFilter = false;
-			for (std::vector<std::chrono::system_clock::time_point>::reverse_iterator riter = timeStamps.rbegin(); riter != timeStamps.rend(); riter++, lastTimeIndex--)
+			for (int index = 0; index < timeStamps.size() - 1; index++)
 			{
-				std::chrono::system_clock::time_point timestamp = *riter;
-				if (timestamp < timeFilter)
+				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
+				if (timestamp > minTimeFilter)
 				{
-					lastTimeIndex++;
-					collectionHasElementsToFilter = true;
-					break;
+					// the first element that *matches* the minTimeFilter is where we begin drawing from
+					earliestTimeIndex = index;
+					collectionHasElementsToFilterMin = true;
+				}
+				if (timestamp > maxTimeFilter)
+				{
+					// the first element that *exceeds* the maxTimeFilter is where we stop drawing
+					lastTimeIndex = index;
+					collectionHasElementsToFilterMax = true;
 				}
 			}
-			if (collectionHasElementsToFilter == true)
+
+			uintptr_t startPtr = 0, endPtr = (points.size() - 1) * sizeof(ImVec2);
+			if (collectionHasElementsToFilterMin == true)
 			{
 				// some events occurred before the specified time filter
 				// so we want to draw only a portion of the total collection
 				// this portion starts from the index of the last matching event and should continue to the end of the collection
 				// since we're modifying the *pointer*, we have to multiply by the size of each element in the collection.
-				uintptr_t ptrOffset = lastTimeIndex * sizeof(ImVec2);
-				drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + ptrOffset), points.size() - lastTimeIndex, GetReplayPlayerColor(colorId), false, 1.f);
+				startPtr = earliestTimeIndex * sizeof(ImVec2);
 			}
-			else
+			if (collectionHasElementsToFilterMax == true)
 			{
-				// there are no events that need to be filtered (all events occur within the time filter)
-				// so just draw the polyline normally, using all points.
-				drawList->AddPolyline(points.data(), points.size(), GetReplayPlayerColor(colorId), false, 1.f);
+				endPtr = lastTimeIndex * sizeof(ImVec2);
 			}
+			int numPoints = (endPtr - startPtr) / sizeof(ImVec2);
+			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), numPoints, GetReplayPlayerColor(colorId), false, 1.f);
 		}
 		else
 		{
@@ -143,7 +153,8 @@ namespace Replay
 		}
 	}
 
-	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, bool isUsingTimeFilter, std::chrono::system_clock::time_point timeFilter)
+	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPolyline");
 		for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
@@ -171,19 +182,27 @@ namespace Replay
 				continue;
 
 			if (plrLineData.simplifiedPoints.size() > 0)
-				RenderPolyline(drawList, cursorPosX, cursorPosY, plrLineData.simplifiedPoints, plrLineData.simplifiedTimeStamps, plrLineData.colorId, isUsingTimeFilter, timeFilter);
+				RenderPolyline(drawList, cursorPosX, cursorPosY, plrLineData.simplifiedPoints, plrLineData.simplifiedTimeStamps, plrLineData.colorId, isUsingMinTimeFilter, minTimeFilter, isUsingMaxTimeFilter, maxTimeFilter);
 			// pendingPoints picks up where simplifiedPoints leaves off. there should only ever be 100 or less pendingPoints at any one time, so this is fine.
 			if (plrLineData.pendingPoints.size() > 0)
-				RenderPolyline(drawList, cursorPosX, cursorPosY, plrLineData.pendingPoints, plrLineData.pendingTimeStamps, plrLineData.colorId, isUsingTimeFilter, timeFilter);
+				RenderPolyline(drawList, cursorPosX, cursorPosY, plrLineData.pendingPoints, plrLineData.pendingTimeStamps, plrLineData.colorId, isUsingMinTimeFilter, minTimeFilter, isUsingMaxTimeFilter, maxTimeFilter);
 		}
 		Profiler::EndSample("ReplayPolyline");
 	}
 
-	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingPlayerFilter, bool isUsingEventFilter)
+	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
-		for (int plrIdx = 0; plrIdx < State.replayWalkPolylineByPlayer.size(); plrIdx++)
+		// event filter
+		if ((isUsingEventFilter == true) && (Replay::event_filter[(int)EVENT_TYPES::EVENT_WALK].second == false))
+			return;
+
+		for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
 		{
+			const int& plrIdx = playerPolylinePair.first;
+			const Replay::WalkEvent_LineData& plrLineData = playerPolylinePair.second;
+
 			// player filter
 			if ((isUsingPlayerFilter == true) &&
 				((plrIdx < 0) || (plrIdx > Replay::player_filter.size() - 1) ||
@@ -191,26 +210,65 @@ namespace Replay
 					(Replay::player_filter[plrIdx].first.has_value() == false)))
 				continue;
 
-			// event filter
-			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)EVENT_TYPES::EVENT_WALK].second == false))
-				continue;
-
-			// we get the player's latest position from the line data which is constructed from WalkEvents
+			// we get the player's position from the line data which is constructed from WalkEvents
 			// pendingPoints will have the absolute freshest data, while simplifiedPoints will be behind by ~100 points or so (depends on how often we run the simplification)
 			// if the player has not moved at all then we'll have zero line data (since there are zero WalkEvents) and we continue to the next player
-			Replay::WalkEvent_LineData& plrLineData = State.replayWalkPolylineByPlayer.at(plrIdx);
-			ImVec2 latestPos;
-			if (plrLineData.pendingPoints.size() > 0)
-				latestPos = plrLineData.pendingPoints.back();
-			else if (plrLineData.simplifiedPoints.size() > 0)
-				latestPos = plrLineData.simplifiedPoints.back();
+			bool foundMatchingPlayerPos = false;
+			ImVec2 playerPos;
+			if (isUsingMaxTimeFilter == true)
+			{
+				// now we have to loop through and find the last position that matches the time filters
+				int lastTimeIndex = plrLineData.pendingTimeStamps.size() - 1;
+				for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.pendingTimeStamps.rbegin(); riter != plrLineData.pendingTimeStamps.rend(); riter++, lastTimeIndex--)
+				{
+					const std::chrono::system_clock::time_point& timestamp = *riter;
+					if (timestamp < maxTimeFilter)
+					{
+						playerPos = plrLineData.pendingPoints[lastTimeIndex];
+						if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
+						{
+							STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+						}
+						foundMatchingPlayerPos = true;
+						break;
+					}
+				}
+				if (foundMatchingPlayerPos == false)
+				{
+					// if we couldn't find a match using pendingPoints then we must try again using simplifiedPoints.
+					lastTimeIndex = plrLineData.simplifiedTimeStamps.size() - 1;
+					for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.simplifiedTimeStamps.rbegin(); riter != plrLineData.simplifiedTimeStamps.rend(); riter++, lastTimeIndex--)
+					{
+						const std::chrono::system_clock::time_point& timestamp = *riter;
+						if (timestamp < maxTimeFilter)
+						{
+							playerPos = plrLineData.simplifiedPoints[lastTimeIndex];
+							if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
+							{
+								STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+							}
+							foundMatchingPlayerPos = true;
+							break;
+						}
+					}
+				}
+			}
 			else
 			{
-				// output a debug message for investigation
-				// if this becomes a common enough problem, we can start thinking about how else to derive a player's position from replay data
-				STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Means they haven't moved yet.");
+				// if we're not using a max time filter we can just use the absolute latest position
+				// this holds true even if we're using a min time filter
+				if (plrLineData.pendingPoints.size() > 0)
+					playerPos = plrLineData.pendingPoints.back();
+				else if (plrLineData.simplifiedPoints.size() > 0)
+					playerPos = plrLineData.simplifiedPoints.back();
+				foundMatchingPlayerPos = true;
+			}
+			if (foundMatchingPlayerPos == false)
+			{
+				STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Time filter was likely too strict or player hasn't moved yet.");
 				continue;
 			}
+
 			IconTexture icon = icons.at(ICON_TYPES::PLAYER);
 			// the latestPos variable is already pre-transformed for line rendering, so we have to un-transform and then re-transform for proper icon positioning
 			// existing transformation:
@@ -220,10 +278,10 @@ namespace Replay
 			// i'm not mathematically inclined, so i don't really know what i'm doing...
 			// but this is what i got for transforming from the existing to void*'s original:
 			float halfImageWidth = (icon.iconImage.imageWidth * icon.scale * 0.5f) * maps[MapType].scale, halfImageHeight = (icon.iconImage.imageHeight * icon.scale * 0.5f) * maps[MapType].scale;
-			float player_mapX = (latestPos.x - halfImageWidth) + cursorPosX;
-			float player_mapY = (latestPos.y - halfImageHeight) + cursorPosY;
-			float player_mapXMax = (latestPos.x + halfImageWidth) + cursorPosX;
-			float player_mapYMax = (latestPos.y + halfImageHeight) + cursorPosY;
+			float player_mapX = (playerPos.x - halfImageWidth) + cursorPosX;
+			float player_mapY = (playerPos.y - halfImageHeight) + cursorPosY;
+			float player_mapXMax = (playerPos.x + halfImageWidth) + cursorPosX;
+			float player_mapYMax = (playerPos.y + halfImageHeight) + cursorPosY;
 
 			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
 				ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY),
@@ -246,7 +304,8 @@ namespace Replay
 		Profiler::EndSample("ReplayPlayerIcons");
 	}
 
-	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, bool isUsingTimeFilter, std::chrono::system_clock::time_point timeFilter)
+	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point maxTimeFilter)
 	{
 		// core processing loop
 		Profiler::BeginSample("ReplayEventIcons");
@@ -258,7 +317,9 @@ namespace Replay
 			EVENT_PLAYER evtPlayerSource = curEvent->getSource();
 
 			// filters
-			if (evtTime > State.MatchCurrent)
+			if ((isUsingMaxTimeFilter == true) && (evtTime > maxTimeFilter))
+				continue;
+			if ((isUsingMinTimeFilter == true) && (evtTime < minTimeFilter))
 				continue;
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
@@ -266,8 +327,6 @@ namespace Replay
 				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId > Replay::player_filter.size() - 1) ||
 					(Replay::player_filter[evtPlayerSource.playerId].second == false) ||
 					(Replay::player_filter[evtPlayerSource.playerId].first.has_value() == false)))
-				continue;
-			if ((isUsingTimeFilter == true) && (curEvent->GetTimeStamp() < timeFilter))
 				continue;
 
 			// processing
@@ -419,18 +478,25 @@ namespace Replay
 			}
 		}
 
-		std::chrono::system_clock::time_point timeFilter = std::chrono::system_clock::now();
+		std::chrono::system_clock::time_point minTimeFilter = std::chrono::system_clock::now();
 		if (State.Replay_ShowOnlyLastSeconds)
 		{
 			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
-			timeFilter -= seconds;
+			minTimeFilter -= seconds;
+		}
+
+		std::chrono::system_clock::time_point maxTimeFilter = std::chrono::system_clock::now();
+		if (State.Replay_ShowOnlyLastSeconds)
+		{
+			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
+			maxTimeFilter -= seconds;
 		}
 
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, timeFilter);
-		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingPlayerFilter, isUsingEventFilter);
-		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, timeFilter);
+		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
+		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
+		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, ((State.Replay_IsLive == false) && (State.Replay_IsPlaying == true)), State.MatchCurrent);
 		
 		ImGui::EndChild();
 
