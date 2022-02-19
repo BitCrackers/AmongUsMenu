@@ -8,7 +8,6 @@
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.reset();
 	State.InMeeting = true;
-	State.RoundEnd = std::chrono::system_clock::now();
 
 	MeetingHud_Awake(__this, method);
 }

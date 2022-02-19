@@ -22,9 +22,10 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
-int dPlayerControl_fixedUpdateTimer = 50;
-int dPlayerControl_fixedUpdateCount = 0;
+float dPlayerControl_fixedUpdateTimer = 50;
+float dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
+	dPlayerControl_fixedUpdateTimer = round(1.f / Time_get_fixedDeltaTime(nullptr));
 	if (__this == *Game::pLocalPlayer) {
 		if (State.rpcCooldown == 0) {
 			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
@@ -153,6 +154,18 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x = playerPos.x;
 			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y = playerPos.y;
+
+			// only update our counter if fixedUpdate is executed on local player
+			if (__this == *Game::pLocalPlayer)
+				dPlayerControl_fixedUpdateCount++;
+
+			if (State.Replay_IsPlaying
+				&& !State.Replay_IsLive
+				&& dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer)
+			{
+				dPlayerControl_fixedUpdateCount = 0;
+				State.MatchCurrent += std::chrono::seconds(1);
+			}
 
 			if (!State.InMeeting)
 			{

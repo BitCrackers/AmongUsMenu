@@ -89,12 +89,15 @@ public:
     int Replay_LastSecondsValue = 1;
     bool Replay_ClearAfterMeeting = false;
     std::chrono::system_clock::time_point MatchStart;
+    std::chrono::system_clock::time_point MatchCurrent;
     std::chrono::system_clock::time_point MatchEnd;
+    std::chrono::system_clock::time_point MatchLive;
     std::vector<std::unique_ptr<EventInterface>> rawEvents;
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::vector<ImVec2> lastWalkEventPosPerPlayer;
     std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
     bool Replay_IsPlaying = true;
+    bool Replay_IsLive = true;
 
     std::bitset<0xFF> voteMonitor;
 

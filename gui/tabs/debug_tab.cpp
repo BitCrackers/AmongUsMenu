@@ -42,6 +42,12 @@ namespace DebugTab {
 			ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
 			ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
 
+			ImGui::Text("ReplayMatchStart: %s", std::format("{:%OH:%OM:%OS}", State.MatchStart).c_str());
+			ImGui::Text("ReplayMatchCurrent: %s", std::format("{:%OH:%OM:%OS}", State.MatchCurrent).c_str());
+			ImGui::Text("ReplayMatchLive: %s", std::format("{:%OH:%OM:%OS}", std::chrono::system_clock::now()).c_str());
+			ImGui::Text("ReplayIsLive: %s", (State.Replay_IsLive) ? "True" : "False");
+			ImGui::Text("ReplayIsPlaying: %s", (State.Replay_IsPlaying) ? "True" : "False");
+
 			if (ImGui::Button("Re-simplify polylines (check console)"))
 			{
 				for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)

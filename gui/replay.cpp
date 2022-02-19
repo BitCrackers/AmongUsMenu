@@ -80,6 +80,7 @@ namespace Replay
 		// Set this to true as the default value
 		// Everytime we start a new match it will actually play and not stay paused if it was paused before
 		State.Replay_IsPlaying = true; 
+		State.Replay_IsLive = true;
 	}
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, bool isUsingTimeFilter, std::chrono::system_clock::time_point timeFilter)
@@ -249,17 +250,19 @@ namespace Replay
 	{
 		// core processing loop
 		Profiler::BeginSample("ReplayEventIcons");
-		size_t evtIdx = State.liveReplayEvents.size() - 1;
-		for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator riter = State.liveReplayEvents.rbegin(); riter != State.liveReplayEvents.rend(); riter++, evtIdx--)
-			//for (__int64 evtIdx = State.flatEvents.size() - 1; evtIdx >= 0; evtIdx--)
+		for (std::vector<std::unique_ptr<EventInterface>>::iterator it = State.liveReplayEvents.begin(); it != State.liveReplayEvents.end(); ++it)
 		{
-			EventInterface* curEvent = (*riter).get();
-			//EventInterface* curEvent = State.flatEvents.at(evtIdx);
+			EventInterface* curEvent = (*it).get();
 			EVENT_TYPES evtType = curEvent->getType();
 			std::chrono::system_clock::time_point evtTime = curEvent->GetTimeStamp();
 			EVENT_PLAYER evtPlayerSource = curEvent->getSource();
 
+			auto evtTimeStampMs = std::chrono::time_point_cast<std::chrono::seconds>(evtTime).time_since_epoch().count();
+			auto curTimeStampMs = std::chrono::time_point_cast<std::chrono::seconds>(State.MatchCurrent).time_since_epoch().count();
+
 			// filters
+			if (evtTimeStampMs > curTimeStampMs)
+				continue;
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
 			if ((isUsingPlayerFilter == true) &&
@@ -365,7 +368,7 @@ namespace Replay
 		Replay::Init();
 
 		int MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.0f, (maps[MapType].mapImage.imageHeight * 0.5f) + 100.f), ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.0f, (maps[MapType].mapImage.imageHeight * 0.5f) + 90.f), ImGuiCond_None);
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
@@ -438,22 +441,20 @@ namespace Replay
 		ImGui::Dummy(ImVec2(1.0f, 5.0f));
 
 		ImGui::BeginChild("replay#control");
-
-		// slider based on chronos timestamp from beginning of match until now (live)
-		// ImGui::SameLine(0.0f, 1.0f);
-		if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PLAY).iconImage.shaderResourceView,
-			ImVec2(icons.at(ICON_TYPES::PLAY).iconImage.imageWidth * icons.at(ICON_TYPES::PLAY).scale,
-				icons.at(ICON_TYPES::PLAY).iconImage.imageHeight * icons.at(ICON_TYPES::PLAY).scale)))
+		
+		std::string fmt("placeholder");
+		State.MatchLive = std::chrono::system_clock::now();
+		if (State.Replay_IsLive && !State.Replay_IsPlaying)
 		{
-			State.Replay_IsPlaying = true;
+			State.MatchCurrent = State.MatchLive;
+			fmt = std::format("{:%OH:%OM:%OS}", State.MatchLive - State.MatchStart);
 		}
-		ImGui::SameLine(0.0f, 1.0f);
-		if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PAUSE).iconImage.shaderResourceView,
-			ImVec2(icons.at(ICON_TYPES::PAUSE).iconImage.imageWidth * icons.at(ICON_TYPES::PAUSE).scale,
-				icons.at(ICON_TYPES::PAUSE).iconImage.imageHeight * icons.at(ICON_TYPES::PAUSE).scale)))
+		else
 		{
-			State.Replay_IsPlaying = false;
+			fmt = std::format("{:%OH:%OM:%OS}", State.MatchCurrent - State.MatchLive);
 		}
+		SliderChrono("##replay_slider", &State.MatchCurrent, &State.MatchStart, &State.MatchLive, fmt, ImGuiSliderFlags_None);
+		
 		ImGui::EndChild();
 
 		ImGui::End();

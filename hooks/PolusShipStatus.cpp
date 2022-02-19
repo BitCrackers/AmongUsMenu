@@ -18,6 +18,7 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 		State.FlipSkeld = false;
 
 	State.MatchStart = std::chrono::system_clock::now();
+	State.MatchCurrent = State.MatchStart;
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();
