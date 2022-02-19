@@ -105,13 +105,13 @@ namespace Replay
 			for (int index = 0; index < timeStamps.size() - 1; index++)
 			{
 				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
-				if (timestamp > minTimeFilter)
+				if ((timestamp > minTimeFilter) && (collectionHasElementsToFilterMin == false))
 				{
 					// the first element that *matches* the minTimeFilter is where we begin drawing from
 					earliestTimeIndex = index;
 					collectionHasElementsToFilterMin = true;
 				}
-				if (timestamp > maxTimeFilter)
+				if ((timestamp > maxTimeFilter) && (collectionHasElementsToFilterMax == false))
 				{
 					// the first element that *exceeds* the maxTimeFilter is where we stop drawing
 					lastTimeIndex = index;
