@@ -40,6 +40,10 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 * [RealMVC](https://github.com/RealMVC) (Contributor)
 * [Kyreus](https://github.com/KyreusR) (Contributor)
 * [manianac](https://github.com/manianac) (Contributor)
+* [DarkPenguin24](https://github.com/DarkPenguin24) (Contributor)
+* [kotae4](https://github.com/kotae4) (Incredible help with the replay optimizations)
+* [KulaGGin](https://github.com/KulaGGin) (Helped with some ImGui code for replay system)
+* Everyone else who contributed to the code and I couldn't list here. Thank you!
 
 ## Contributing
 

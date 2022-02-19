@@ -78,9 +78,10 @@ namespace Replay
 		}
 
 		// Set this to true as the default value
-		// Everytime we start a new match it will actually play and not stay paused if it was paused before
-		State.Replay_IsPlaying = true; 
+		// Everytime we start a new match it will actually be in live mode
 		State.Replay_IsLive = true;
+
+		State.Replay_IsPlaying = false;
 	}
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, 
