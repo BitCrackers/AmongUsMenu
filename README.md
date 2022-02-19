@@ -33,16 +33,9 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
    <img src="screenshot.png">
 </p>
 
-## Credits
-* [void*](https://github.com/v0idp) (Maintainer & Creator)
-* [std-nullptr](https://github.com/std-nullptr) (Maintainer & IL2CPP Madman)
-* [OsOmE1](https://github.com/OsOmE1) (Maintainer)
-* [RealMVC](https://github.com/RealMVC) (Contributor)
-* [Kyreus](https://github.com/KyreusR) (Contributor)
-* [manianac](https://github.com/manianac) (Contributor)
-* [DarkPenguin24](https://github.com/DarkPenguin24) (Contributor)
-* [kotae4](https://github.com/kotae4) (Incredible help with the replay optimizations)
+## Special Thanks
 * [KulaGGin](https://github.com/KulaGGin) (Helped with some ImGui code for replay system)
+* [tomsa000](https://github.com/tomsa000) (Helped with fixing memory leaks and smart pointers)
 * Everyone else who contributed to the code and I couldn't list here. Thank you!
 
 ## Contributing
