@@ -18,11 +18,11 @@ jobs:
       
       - name: Build Release
         shell: bash
-        run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
+        run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/MSBuild.exe" -property:Configuration=Release'
         
       - name: Build Release_Version
         shell: bash
-        run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
+        run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
         
       - name: Package Release Builds
         if: ${{ github.event_name == 'push' }}
