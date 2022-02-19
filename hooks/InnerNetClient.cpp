@@ -5,6 +5,8 @@
 #include "game.h"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
+#include "profiler.h"
 #include <sstream>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
@@ -47,7 +49,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
         if (!IsInLobby()) {
             State.selectedPlayer = PlayerSelection();
-            State.FlipSkeld = false;
             State.NoClip = false;
             State.HotkeyNoClip = false;
             State.originalName = "-";
@@ -131,8 +132,8 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
-        State.events[data->fields.Character->fields.PlayerId][EVENT_DISCONNECT].push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
-        State.consoleEvents.push_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.rawEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        State.liveReplayEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
@@ -195,10 +196,13 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
-    State.consoleEvents.clear();
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-            State.events[i][j].clear();
+    Replay::Reset();
+
+    for (auto& e : State.rawEvents)
+        e.reset();
+    State.rawEvents.clear();
+
+    State.MatchEnd = std::chrono::system_clock::now();
 
     InnerNetClient_StartEndGame(__this, method);
 }

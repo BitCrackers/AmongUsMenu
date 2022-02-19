@@ -2,10 +2,11 @@
 #include "_events.h"
 #include "utility.h"
 
-ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position)
+ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position, std::optional<Vector2> targetPosition)
 	: EventInterface(source, (target.has_value() ? EVENT_REPORT : EVENT_MEETING)) {
 	this->target = target;
 	this->position = position;
+	this->targetPosition = targetPosition;
 	this->systemType = GetSystemTypes(position);
 }
 
@@ -20,10 +21,7 @@ void ReportDeadBodyEvent::Output() {
 	}
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
 void ReportDeadBodyEvent::ColoredEventOutput() {

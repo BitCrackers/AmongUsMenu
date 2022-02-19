@@ -3,6 +3,8 @@
 #include "state.hpp"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
+#include "profiler.h"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
@@ -14,10 +16,15 @@ float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* 
 void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	ShipStatus_OnEnable(__this, method);
 
-	State.consoleEvents.clear();
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-			State.events[i][j].clear();
+	Replay::Reset();
+
+	if (Constants_ShouldFlipSkeld(NULL))
+		State.FlipSkeld = true;
+	else
+		State.FlipSkeld = false;
+
+	State.MatchStart = std::chrono::system_clock::now();
+	State.MatchCurrent = State.MatchStart;
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();

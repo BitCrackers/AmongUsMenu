@@ -2,6 +2,8 @@
 #include "_hooks.h"
 #include "state.hpp"
 
+#include <memory>
+
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
 	if (State.UnlockVents) {
 		auto ventTransform = app::Component_get_transform((Component_1*)__this, NULL);
@@ -27,8 +29,9 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
-	State.events[pc->fields.PlayerId][EVENT_VENT].push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_ENTER));
-	State.consoleEvents.push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_ENTER));
+	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
+	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
+	State.liveReplayEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
 
 	Vent_EnterVent(__this, pc, method);
 }
@@ -36,8 +39,9 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
-	State.events[pc->fields.PlayerId][EVENT_VENT].push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_EXIT));
-	State.consoleEvents.push_back(new VentEvent(GetEventPlayerControl(pc).value(), {ventVector.x, ventVector.y}, VENT_EXIT));
+	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
+	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
+	State.liveReplayEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));
 
 	Vent_ExitVent(__this, pc, method);
 }

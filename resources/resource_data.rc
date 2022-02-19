@@ -58,6 +58,26 @@ IDB_PNG3                PNG                     "polus.png"
 
 IDB_PNG4                PNG                     "airship.png"
 
+IDB_PNG5                PNG                     "vent_in.png"
+
+IDB_PNG6                PNG                     "vent_out.png"
+
+IDB_PNG7                PNG                     "kill.png"
+
+IDB_PNG8                PNG                     "report.png"
+
+IDB_PNG9                PNG                     "tick.png"
+
+IDB_PNG10               PNG                     "player.png"
+
+IDB_PNG11               PNG                     "cross.png"
+
+IDB_PNG12               PNG                     "dead_body.png"
+
+IDB_PNG13               PNG                     "play.png"
+
+IDB_PNG14               PNG                     "pause.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

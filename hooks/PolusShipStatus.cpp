@@ -3,15 +3,22 @@
 #include "state.hpp"
 #include "logger.h"
 #include "utility.h"
+#include "replay.hpp"
+#include "profiler.h"
 
 void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 {
 	PolusShipStatus_OnEnable(__this, method);
 
-	State.consoleEvents.clear();
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < EVENT_TYPES_SIZE; j++)
-			State.events[i][j].clear();
+	Replay::Reset();
+
+	if (Constants_ShouldFlipSkeld(NULL))
+		State.FlipSkeld = true;
+	else
+		State.FlipSkeld = false;
+
+	State.MatchStart = std::chrono::system_clock::now();
+	State.MatchCurrent = State.MatchStart;
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();

@@ -4,6 +4,8 @@
 #include "state.hpp"
 #include "esp.hpp"
 #include "_rpc.h"
+#include "replay.hpp"
+#include "profiler.h"
 #include <iostream>
 #include <optional>
 
@@ -14,15 +16,16 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	State.events[__this->fields.PlayerId][EVENT_TASK].push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.rawEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	State.liveReplayEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
-int dPlayerControl_fixedUpdateTimer = 50;
-int dPlayerControl_fixedUpdateCount = 0;
+float dPlayerControl_fixedUpdateTimer = 50;
+float dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
+	dPlayerControl_fixedUpdateTimer = round(1.f / Time_get_fixedDeltaTime(nullptr));
 	if (__this == *Game::pLocalPlayer) {
 		if (State.rpcCooldown == 0) {
 			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
@@ -147,12 +150,53 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			ImVec2 localScreenPosition = WorldToScreen(localPos);
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
+			Vector2 prevPlayerPos = {State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x, State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y};
 
-			// Use UpdateTimer and UpdateCount to execute this part every second
-			dPlayerControl_fixedUpdateCount++;
-			if (dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer) {
+			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x = playerPos.x;
+			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y = playerPos.y;
+
+			// only update our counter if fixedUpdate is executed on local player
+			if (__this == *Game::pLocalPlayer)
+				dPlayerControl_fixedUpdateCount++;
+
+			if (State.Replay_IsPlaying
+				&& !State.Replay_IsLive
+				&& dPlayerControl_fixedUpdateCount >= dPlayerControl_fixedUpdateTimer)
+			{
 				dPlayerControl_fixedUpdateCount = 0;
-				State.events[__this->fields.PlayerId][EVENT_WALK].push_back(new WalkEvent(GetEventPlayerControl(__this).value(), localPos));
+				State.MatchCurrent += std::chrono::seconds(1);
+			}
+
+			if (!State.InMeeting)
+			{
+				Profiler::BeginSample("WalkEventCreation");
+				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+				float dist = GetDistanceBetweenPoints_Unity(playerPos, prevPlayerPos);
+				// NOTE:
+				// the localplayer moves even while standing still, by the tiniest amount.
+				// hopefully 0.01 will be big enough to filter that out but small enough to catch every real movement
+				if (dist > 0.01f)
+				{
+					// NOTE:
+					// we do not add walkevents to liveReplayEvents. linedata contains everything we need for live visualization.
+					State.rawEvents.push_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
+					ImVec2 mapPos_pre = {maps[State.mapType].x_offset + (playerPos.x * maps[State.mapType].scale), maps[State.mapType].y_offset - (playerPos.y * maps[State.mapType].scale)};
+					if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
+					{
+						// first-time init
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedPoints = {};
+						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedTimeStamps = {};
+					}
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].playerId = __this->fields.PlayerId;
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = State.rawEvents.back().get()->getSource().colorId;
+
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints.push_back(mapPos_pre);
+					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps.push_back(State.rawEvents.back().get()->GetTimeStamp());
+				}
+				Profiler::EndSample("WalkEventCreation");
 			}
 
 			PlayerData espPlayerData;
@@ -172,7 +216,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	app::PlayerControl_FixedUpdate(__this, method);
 }
 
-void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method) {
+void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method)
+{
 	State.PrevPlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
 	State.PrevKillDistance = gameOptions->fields.KillDistance;
@@ -183,25 +228,34 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
 }
 
-void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method) {
-
+void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
+{
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
 	{
-		State.events[__this->fields.PlayerId][EVENT_CHEAT].push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
-		State.consoleEvents.push_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.rawEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.liveReplayEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
 	}
 
-	State.events[__this->fields.PlayerId][EVENT_KILL].push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL)));
+	State.rawEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+	State.liveReplayEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
-void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method) {
+void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
+{
+	State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	PlayerControl_CmdReportDeadBody(__this, target, method);
+}
 
-	State.events[__this->fields.PlayerId][(GetEventPlayer(target).has_value() ? EVENT_REPORT : EVENT_MEETING)].push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-	State.consoleEvents.push_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL)));
-
+void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method)
+{
+	if (!IsHost())
+	{
+		State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	}
 	PlayerControl_ReportDeadBody(__this, target, method);
 }
 
@@ -243,13 +297,13 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	State.events[__this->fields.PlayerId][EVENT_SHAPESHIFT].push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.consoleEvents.push_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.rawEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.liveReplayEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	State.events[__this->fields.PlayerId][EVENT_PROTECTPLAYER].push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.consoleEvents.push_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.rawEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	State.liveReplayEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }

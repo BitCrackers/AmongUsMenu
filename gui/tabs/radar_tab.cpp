@@ -37,6 +37,9 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Hide Radar During Meetings", &State.HideRadar_During_Meetings)) {
 				State.Save();
 			}
+			if (ImGui::Checkbox("Draw Player Icons", &State.RadarDrawIcons)) {
+				State.Save();
+			}
 			if (ImGui::Checkbox("Lock Radar Position", &State.LockRadar)) {
 				State.Save();
 			}

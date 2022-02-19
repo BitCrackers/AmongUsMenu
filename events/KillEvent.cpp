@@ -2,8 +2,9 @@
 #include "_events.h"
 #include "utility.h"
 
-KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position) : EventInterface(source, EVENT_KILL) {
+KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position, Vector2 targetPosition) : EventInterface(source, EVENT_KILL) {
 	this->target = target;
+	this->targetPosition = targetPosition;
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
 }
@@ -17,10 +18,7 @@ void KillEvent::Output() {
 	ImGui::SameLine();
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
 void KillEvent::ColoredEventOutput() {

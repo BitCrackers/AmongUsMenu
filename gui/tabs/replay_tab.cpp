@@ -1,6 +1,7 @@
 #include "pch-il2cpp.h"
 #include "replay_tab.h"
 #include "state.hpp"
+#include <chrono>
 
 namespace ReplayTab {
 	void Render() {
@@ -9,6 +10,21 @@ namespace ReplayTab {
 			if (ImGui::Checkbox("Show Replay", &State.ShowReplay)) {
 				State.Save();
 			}
+			if (ImGui::Checkbox("Show only last", &State.Replay_ShowOnlyLastSeconds))
+			{
+				State.Save();
+			}
+			ImGui::SameLine();
+			if (ImGui::SliderInt("seconds", &State.Replay_LastSecondsValue, 1, 600, "%d", ImGuiSliderFlags_AlwaysClamp))
+			{
+				State.Save();
+			}
+
+			if (ImGui::Checkbox("Clear after meeting", &State.Replay_ClearAfterMeeting))
+			{
+				State.Save();
+			}
+
 			if (ImGui::ColorEdit4("Replay Map Color",
 				(float*)&State.SelectedReplayMapColor,
 				ImGuiColorEditFlags__OptionsDefault

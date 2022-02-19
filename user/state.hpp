@@ -5,6 +5,7 @@
 #include "_rpc.h"
 #include "keybinds.h"
 #include "game.h"
+#include "replay.hpp"
 
 class Settings {
 public:
@@ -61,8 +62,7 @@ public:
     bool HideRadar_During_Meetings = false;
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
-
-    bool ShowReplay = false;
+    bool RadarDrawIcons = true;
 
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;
@@ -84,8 +84,20 @@ public:
     bool CloseAllDoors = false;
 
     bool ShowConsole = false;
-    std::vector<EventInterface*> consoleEvents;
-    std::vector<EventInterface*> events[MAX_PLAYERS][EVENT_TYPES_SIZE];
+    bool ShowReplay = false;
+    bool Replay_ShowOnlyLastSeconds = false;
+    int Replay_LastSecondsValue = 1;
+    bool Replay_ClearAfterMeeting = false;
+    std::chrono::system_clock::time_point MatchStart;
+    std::chrono::system_clock::time_point MatchCurrent;
+    std::chrono::system_clock::time_point MatchEnd;
+    std::chrono::system_clock::time_point MatchLive;
+    std::vector<std::unique_ptr<EventInterface>> rawEvents;
+    std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
+    std::vector<ImVec2> lastWalkEventPosPerPlayer;
+    std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
+    bool Replay_IsPlaying = true;
+    bool Replay_IsLive = true;
 
     std::bitset<0xFF> voteMonitor;
 
@@ -145,11 +157,18 @@ public:
         Ship = 0,
         Hq = 1,
         Pb = 2,
-        Airship = 3,
-        NotSet = 0xFF
+        Airship = 3
     } mapType;
 
     bool AutoOpenDoors = false;
+
+    Settings()
+    {
+        for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+        {
+            this->lastWalkEventPosPerPlayer.push_back(ImVec2(0.f, 0.f));
+        }
+    }
 
     void Load();
     void Save();

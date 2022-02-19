@@ -1,27 +1,25 @@
 #include "pch-il2cpp.h"
 #include "_events.h"
 #include "utility.h"
-#include <chrono>
 
-VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTION action) : EventInterface(source, EVENT_VENT)
+VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action) : EventInterface(source, EVENT_VENT)
 {
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
 	this->action = action;
 }
 
-void VentEvent::Output() {
+void VentEvent::Output()
+{
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());
 	ImGui::SameLine();
 	ImGui::Text("(%s)", TranslateSystemTypes(systemType));
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
-void VentEvent::ColoredEventOutput() {
+void VentEvent::ColoredEventOutput()
+{
 	ImGui::Text("[ VENT");
 	ImGui::SameLine();
 

@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTION action) : EventInterface(source, EVENT_CHEAT) {
+CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action) : EventInterface(source, EVENT_CHEAT) {
 	this->action = action;
 }
 
@@ -13,10 +13,7 @@ void CheatDetectedEvent::Output() {
 	ImGui::SameLine();
 	ImGui::Text("Cheat detected: %s", CHEAT_ACTION_NAMES[this->action]);
 	ImGui::SameLine();
-	auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::seconds>(this->timestamp.time_since_epoch()).count();
-	auto min = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count() - std::chrono::duration_cast<std::chrono::minutes>(this->timestamp.time_since_epoch()).count();
-	if (sec < 60) ImGui::Text(" [%ds ago]", sec);
-	else ImGui::Text(" [%dm ago]", min);
+	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }
 
 void CheatDetectedEvent::ColoredEventOutput() {

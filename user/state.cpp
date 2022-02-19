@@ -36,12 +36,16 @@ void Settings::Load() {
         j.at("RadarColor_G").get_to(this->SelectedColor.y);
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
         j.at("RadarColor_A").get_to(this->SelectedColor.w);
+        j.at("RadarDrawIcons").get_to(this->RadarDrawIcons);
 
         j.at("ShowReplay").get_to(this->ShowReplay);
         j.at("ReplayColor_R").get_to(this->SelectedReplayMapColor.x);
         j.at("ReplayColor_G").get_to(this->SelectedReplayMapColor.y);
         j.at("ReplayColor_B").get_to(this->SelectedReplayMapColor.z);
         j.at("ReplayColor_A").get_to(this->SelectedReplayMapColor.w);
+        j.at("ReplayShowOnlyLastSeconds").get_to(this->Replay_ShowOnlyLastSeconds);
+        j.at("ReplayLastSecondsValue").get_to(this->Replay_LastSecondsValue);
+        j.at("ReplayClearAfterMeeting").get_to(this->Replay_ClearAfterMeeting);
 
         j.at("ShowEsp").get_to(this->ShowEsp);
         j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
@@ -92,12 +96,16 @@ void Settings::Save() {
             {"RadarColor_G", this->SelectedColor.y},
             {"RadarColor_B", this->SelectedColor.z},
             {"RadarColor_A", this->SelectedColor.w},
+            {"RadarDrawIcons", this->RadarDrawIcons},
 
             {"ShowReplay", this->ShowReplay},
             {"ReplayColor_R", this->SelectedReplayMapColor.x},
             {"ReplayColor_G", this->SelectedReplayMapColor.y},
             {"ReplayColor_B", this->SelectedReplayMapColor.z},
             {"ReplayColor_A", this->SelectedReplayMapColor.w},
+            {"ReplayShowOnlyLastSeconds", this->Replay_ShowOnlyLastSeconds},
+            {"ReplayLastSecondsValue", this->Replay_LastSecondsValue},
+            {"ReplayClearAfterMeeting", this->Replay_ClearAfterMeeting},
 
             {"ShowEsp", this->ShowEsp},
             {"ShowEsp_Ghosts", this->ShowEsp_Ghosts},

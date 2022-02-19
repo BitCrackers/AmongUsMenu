@@ -3,6 +3,7 @@
 #include "state.hpp"
 #include "game.h"
 #include "logger.h"
+#include <chrono>
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.reset();
@@ -13,6 +14,11 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	State.InMeeting = false;
+
+	if (State.Replay_ClearAfterMeeting)
+	{
+		Replay::Reset();
+	}
 
 	MeetingHud_Close(__this, method);
 }
@@ -57,8 +63,8 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
 			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && !State.voteMonitor[playerData->fields.PlayerId])
 			{
-				State.events[playerVoteArea->fields.TargetPlayerId][EVENT_VOTE].push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
-				State.consoleEvents.push_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				State.liveReplayEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				State.voteMonitor[playerData->fields.PlayerId] = true;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 			}
