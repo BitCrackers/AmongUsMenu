@@ -14,12 +14,13 @@ public:
         VK_DELETE,
         VK_INSERT,
         VK_HOME,
-        VK_END,
+        VK_NEXT,
         0x00,
         0x00,
         0x00,
         0x00,
-        0x00
+        0x00,
+        VK_END
     };
 
     bool ImGuiInitialized = false;

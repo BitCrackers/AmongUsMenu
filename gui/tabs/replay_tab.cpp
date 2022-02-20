@@ -1,5 +1,6 @@
 #include "pch-il2cpp.h"
 #include "replay_tab.h"
+#include "gui-helpers.hpp"
 #include "state.hpp"
 #include <chrono>
 
@@ -8,6 +9,10 @@ namespace ReplayTab {
 		if (ImGui::BeginTabItem("Replay")) {
 			ImGui::Dummy(ImVec2(4, 4));
 			if (ImGui::Checkbox("Show Replay", &State.ShowReplay)) {
+				State.Save();
+			}
+			ImGui::SameLine();
+			if (HotKey(State.KeyBinds.Toggle_Replay)) {
 				State.Save();
 			}
 			if (ImGui::Checkbox("Show only last", &State.Replay_ShowOnlyLastSeconds))

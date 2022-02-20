@@ -26,7 +26,8 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 - Show Menu - DELETE
 - Show Radar - INSERT
 - Show Console - HOME
-- Repair Sabotage - END
+- Show Replay - END
+- Repair Sabotage - PAGE DOWN (PgDn)
 
 ## Screenshot
 <p align="center">

@@ -190,7 +190,8 @@ void KeyBinds::to_json(nlohmann::ordered_json& j, KeyBinds::Config value)
         {"Close_All_Doors", value.Close_All_Doors},
         {"Toggle_Zoom", value.Toggle_Zoom},
         {"Toggle_Freecam", value.Toggle_Freecam},
-        {"Close_Current_Room_Door", value.Close_Current_Room_Door}
+        {"Close_Current_Room_Door", value.Close_Current_Room_Door},
+        {"Toggle_Replay", value.Toggle_Replay},
     };
 }
 
@@ -205,4 +206,5 @@ void KeyBinds::from_json(const nlohmann::ordered_json& j, KeyBinds::Config& valu
     j.at("Toggle_Zoom").get_to(value.Toggle_Zoom);
     j.at("Toggle_Freecam").get_to(value.Toggle_Freecam);
     j.at("Close_Current_Room_Door").get_to(value.Close_Current_Room_Door);
+    j.at("Toggle_Replay").get_to(value.Toggle_Replay);
 }
