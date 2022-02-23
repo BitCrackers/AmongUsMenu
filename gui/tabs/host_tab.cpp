@@ -32,14 +32,13 @@ namespace HostTab {
 						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
 						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
-							State.assignedRoles[index] = (int)RoleType::Crewmate;
-							State.impostors_amount--;
+							if(State.assignedRoles[index] == (int)RoleType::Shapeshifter)
+								State.assignedRoles[index] = (int)RoleType::Engineer;
+							else if(State.assignedRoles[index] == (int)RoleType::Impostor)
+								State.assignedRoles[index] = (int)RoleType::Random;
 						}
-						else if (State.shapeshifters_amount + State.impostors_amount > maxImposterAmount)
-						{
-							State.assignedRoles[index] = (int)RoleType::Engineer;
-							State.shapeshifters_amount--;
-						}
+						State.shapeshifters_amount = GetRoleCount((int)RoleType::Shapeshifter);
+						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
 
 						if (!IsInGame())
 						{
@@ -49,12 +48,27 @@ namespace HostTab {
 								auto vectors = roleRates->fields.entries[0].vector;
 								for (auto iVector = 0; iVector < 32; iVector++)
 								{
-									if (vectors[iVector].key == RoleTypes__Enum::Engineer && State.engineers_amount > vectors[iVector].value.MaxCount)
-										vectors[iVector].value.MaxCount = State.engineers_amount;
-									else if (vectors[iVector].key == RoleTypes__Enum::Scientist && State.scientists_amount > vectors[iVector].value.MaxCount)
-										vectors[iVector].value.MaxCount = State.scientists_amount;
-									else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter && State.shapeshifters_amount > vectors[iVector].value.MaxCount)
-										vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+									if (vectors[iVector].key == RoleTypes__Enum::Engineer)
+									{
+										if(State.engineers_amount > 0)
+											vectors[iVector].value.Chance = 100;
+										if(State.engineers_amount > vectors[iVector].value.MaxCount)
+											vectors[iVector].value.MaxCount = State.engineers_amount;
+									}
+									else if (vectors[iVector].key == RoleTypes__Enum::Scientist)
+									{
+										if(State.scientists_amount > 0)
+											vectors[iVector].value.Chance = 100;
+										if(State.scientists_amount > vectors[iVector].value.MaxCount)
+											vectors[iVector].value.MaxCount = State.scientists_amount;
+									}
+									else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter)
+									{
+										if(State.shapeshifters_amount > 0)
+											vectors[iVector].value.Chance = 100;
+										if(State.shapeshifters_amount > vectors[iVector].value.MaxCount)
+											vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+									}
 								}
 							}
 

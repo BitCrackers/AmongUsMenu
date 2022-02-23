@@ -95,6 +95,8 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_CmdReportDeadBody);
 	HOOKFUNC(PlayerControl_ReportDeadBody);
+	HOOKFUNC(RoleManager_SelectRoles);
+	HOOKFUNC(RoleManager_AssignRolesForTeam);
 	HOOKFUNC(RoleManager_AssignRolesFromList);
 	HOOKFUNC(PlayerControl_HandleRpc);
 	HOOKFUNC(Renderer_set_enabled);
@@ -176,6 +178,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
 	UNHOOKFUNC(PlayerControl_ReportDeadBody);
+	UNHOOKFUNC(RoleManager_SelectRoles);
+	UNHOOKFUNC(RoleManager_AssignRolesForTeam);
 	UNHOOKFUNC(RoleManager_AssignRolesFromList);
 	UNHOOKFUNC(PlayerControl_HandleRpc);
 	UNHOOKFUNC(Renderer_set_enabled);

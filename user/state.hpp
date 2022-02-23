@@ -113,7 +113,6 @@ public:
     int shapeshifters_amount = 0;
     int engineers_amount = 0;
     int scientists_amount = 0;
-    RoleOptionsData* RoleOptions = nullptr;
 
     bool Wallhack = false;
     bool FreeCam = false;
@@ -150,7 +149,7 @@ public:
     bool ShowUnityLogs = true;
 
     int LobbyTimer = -1;
-    
+
     std::string userName = "";
 
     enum MapType : uint8_t
