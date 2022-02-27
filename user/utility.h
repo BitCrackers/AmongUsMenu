@@ -28,6 +28,19 @@ enum RoleType
 	Shapeshifter = 5,
 };
 
+class RoleRates {
+public:
+	int ImposterCount = 0;
+	int ShapeshifterCount = 0;
+	int ShapeshifterChance = 0;
+	int ScientistCount = 0;
+	int ScientistChance = 0;
+	int EngineerCount = 0;
+	int EngineerChance = 0;
+	int MaxCrewmates = 15;
+	RoleRates(RoleOptionsData* roleOptions);
+};
+
 class PlayerSelection {
 	bool hasValue;
 	int32_t clientId;
