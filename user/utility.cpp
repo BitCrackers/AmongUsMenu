@@ -15,8 +15,9 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(RoleOptionsData* roleOptions) {
-	auto roleRates = roleOptions->fields.roleRates;
+RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields) {
+	this->ImposterCount = gameOptionsDataFields.NumImpostors;
+	auto roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
 	if (roleRates->fields.count != 0) {
 		auto vectors = roleRates->fields.entries[0].vector;
 		for (auto iVector = 0; iVector < 32; iVector++)

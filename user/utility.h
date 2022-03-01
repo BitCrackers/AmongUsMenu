@@ -38,7 +38,7 @@ public:
 	int EngineerCount = 0;
 	int EngineerChance = 0;
 	int MaxCrewmates = 15;
-	RoleRates(RoleOptionsData* roleOptions);
+	RoleRates(GameOptionsData__Fields gameOptionsDataFields);
 };
 
 class PlayerSelection {

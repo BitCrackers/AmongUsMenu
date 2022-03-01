@@ -11,7 +11,7 @@
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	std::vector<uint8_t> assignedPlayers;
 	auto allPlayers = GetAllPlayerControl();
-	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields.RoleOptions);
+	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields);
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
 	AssignRoles(roleRates.ShapeshifterCount, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
@@ -45,12 +45,14 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 			if (roleRates.ShapeshifterCount == 0)
 				continue;
 			roleRates.ShapeshifterCount--;
+			roleRates.ImposterCount--;
 		}
 		else if (trueRole == RoleTypes__Enum::Impostor)
 		{
 			if (roleRates.ImposterCount == 0)
 				continue;
 			roleRates.ImposterCount--;
+			roleRates.ShapeshifterCount--;
 		}
 		else if (trueRole == RoleTypes__Enum::Scientist)
 		{
