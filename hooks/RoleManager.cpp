@@ -42,27 +42,27 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 		auto trueRole = GetRoleTypesEnum((RoleType)role);
 		if (trueRole == RoleTypes__Enum::Shapeshifter)
 		{
-			if (roleRates.ShapeshifterCount == 0)
+			if (roleRates.ShapeshifterCount < 1)
 				continue;
 			roleRates.ShapeshifterCount--;
 			roleRates.ImposterCount--;
 		}
 		else if (trueRole == RoleTypes__Enum::Impostor)
 		{
-			if (roleRates.ImposterCount == 0)
+			if (roleRates.ImposterCount < 1)
 				continue;
 			roleRates.ImposterCount--;
 			roleRates.ShapeshifterCount--;
 		}
 		else if (trueRole == RoleTypes__Enum::Scientist)
 		{
-			if (roleRates.ScientistCount == 0)
+			if (roleRates.ScientistCount < 1)
 				continue;
 			roleRates.ScientistCount--;
 		}
 		else if (trueRole == RoleTypes__Enum::Engineer)
 		{
-			if (roleRates.EngineerCount == 0)
+			if (roleRates.EngineerCount < 1)
 				continue;
 			roleRates.EngineerCount--;
 		}
@@ -74,7 +74,7 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 
 void AssignRoles(int& roleCount, int roleChance, RoleTypes__Enum role, std::vector<app::PlayerControl*>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
-	if (roleCount == 0)
+	if (roleCount < 1)
 		return;
 
 	std::vector<PlayerControl*> randomEngineers;
