@@ -64,6 +64,8 @@ void Settings::Load() {
         j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
         j.at("MoveInVent").get_to(this->MoveInVent);
 
+        j.at("RevealVotes").get_to(this->RevealVotes);
+
         j.at("ShowConsole").get_to(this->ShowConsole);
         j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
     } catch (...) {
@@ -123,6 +125,8 @@ void Settings::Save() {
             {"ReadGhostMessages", this->ReadGhostMessages},
             {"AutoOpenDoors", this->AutoOpenDoors},
             {"MoveInVent", this->MoveInVent},
+
+            {"RevealVotes", this->RevealVotes},
 
             {"ShowConsole", this->ShowConsole},
             {"ShowUnityLogs", this->ShowUnityLogs}
