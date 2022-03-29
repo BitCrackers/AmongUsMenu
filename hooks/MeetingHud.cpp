@@ -106,19 +106,25 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 
-				if (playerVoteArea->fields.VotedFor != 253) {
-					for (size_t j = 0; j < playerStates->max_length; j++) {
-						auto votedForArea = playerStates->vector[j];
-						if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
-							auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-							MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
-							break;
+				// avoid duplicate votes
+				if (__this->fields.state < app::MeetingHud_VoteStates__Enum::Results) {
+					//auto isAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+					//(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+					if (playerVoteArea->fields.VotedFor != 253) {
+						for (size_t j = 0; j < playerStates->max_length; j++) {
+							auto votedForArea = playerStates->vector[j];
+							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
+								auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+								MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
+								break;
+							}
 						}
 					}
-				}
-				else if (__this->fields.SkippedVoting) {
-					auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
-					MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
+					else if (__this->fields.SkippedVoting) {
+						auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
+						MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
+					}
+					//(*Game::pGameOptionsData)->fields.AnonymousVotes = isAnonymousVotes;
 				}
 			}
 			else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())
