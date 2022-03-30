@@ -5,6 +5,7 @@
 #include "gitparams.h"
 #include "logger.h"
 #include "profiler.h"
+#include <random>
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -15,8 +16,12 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields) {
+RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount) {
 	this->ImposterCount = gameOptionsDataFields._.numImpostors;
+	auto maxImpostors = GetMaxImposterAmount(playerAmount);
+	if(this->ImposterCount > maxImpostors)
+		this->ImposterCount = maxImpostors;
+
 	auto roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
 	if (roleRates->fields.count != 0) {
 		auto vectors = roleRates->fields.entries[0].vector;
@@ -39,6 +44,68 @@ RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields) {
 			}
 		}
 	}
+}
+
+int RoleRates::GetRoleCount(RoleTypes__Enum role) {
+	switch (role)
+	{
+		case RoleTypes__Enum::Shapeshifter:
+			return this->ShapeshifterCount;
+		case RoleTypes__Enum::Impostor:
+			return this->ImposterCount;
+		case RoleTypes__Enum::Scientist:
+			return this->ScientistCount;
+		case RoleTypes__Enum::Engineer:
+			return this->EngineerCount;
+		default:
+			return this->MaxCrewmates;
+	}
+}
+
+void RoleRates::SubtractRole(RoleTypes__Enum role) {
+	if (role == RoleTypes__Enum::Shapeshifter)
+	{
+		if (this->ShapeshifterCount < 1)
+			return;
+		this->ShapeshifterCount--;
+		this->ImposterCount--;
+	}
+	else if (role == RoleTypes__Enum::Impostor)
+	{
+		if (this->ImposterCount < 1)
+			return;
+		this->ImposterCount--;
+		this->ShapeshifterCount--;
+	}
+	else if (role == RoleTypes__Enum::Scientist)
+	{
+		if (this->ScientistCount < 1)
+			return;
+		this->ScientistCount--;
+	}
+	else if (role == RoleTypes__Enum::Engineer)
+	{
+		if (this->EngineerCount < 1)
+			return;
+		this->EngineerCount--;
+	}
+}
+
+int GetMaxImposterAmount(int playerAmount)
+{
+	if(playerAmount >= 9)
+		return 3;
+	if(playerAmount >= 7)
+		return 2;
+	return 1;
+}
+
+int GenerateRandomNumber(int min, int max)
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(min, max);
+	return dist(rng);
 }
 
 PlayerSelection::PlayerSelection()

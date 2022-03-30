@@ -38,7 +38,9 @@ public:
 	int EngineerCount = 0;
 	int EngineerChance = 0;
 	int MaxCrewmates = 15;
-	RoleRates(GameOptionsData__Fields gameOptionsDataFields);
+	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
+	int GetRoleCount(RoleTypes__Enum role);
+	void SubtractRole(RoleTypes__Enum role);
 };
 
 class PlayerSelection {
@@ -107,6 +109,8 @@ bool IsInLobby();
 bool IsHost();
 bool IsInGame();
 bool IsInMultiplayerGame();
+int GetMaxImposterAmount(int playerAmount);
+int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
