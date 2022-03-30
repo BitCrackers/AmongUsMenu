@@ -38,6 +38,8 @@ public:
     bool UnlockVents = false;
     bool ShowGhosts = false;
 
+    bool RevealVotes = false;
+
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
     int PrevKillDistance = 0;
@@ -100,7 +102,7 @@ public:
     bool Replay_IsPlaying = true;
     bool Replay_IsLive = true;
 
-    std::bitset<0xFF> voteMonitor;
+    std::map<uint8_t, uint8_t> voteMonitor;
 
     std::vector<int32_t> aumUsers;
     int32_t rpcCooldown = 15;

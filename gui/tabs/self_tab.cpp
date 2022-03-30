@@ -60,6 +60,10 @@ namespace SelfTab {
                 State.Save();
             }
 
+            if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
+                State.Save();
+            }
+
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {
                 State.Save();
             }

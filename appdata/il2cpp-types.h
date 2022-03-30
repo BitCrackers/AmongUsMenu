@@ -8751,6 +8751,65 @@ namespace app
     };
 #pragma endregion
 
+#pragma region SpriteRenderer__Array
+    struct SpriteRenderer__Array
+    {
+        Il2CppObject obj;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct SpriteRenderer* vector[32];
+    };
+#pragma endregion
+
+#pragma region List_SpriteRenderer_
+    struct __declspec(align(4)) List_SpriteRenderer__Fields
+    {
+        struct SpriteRenderer__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
+
+    struct List_SpriteRenderer_
+    {
+        void* klass;
+        void* monitor;
+        struct List_SpriteRenderer__Fields fields;
+    };
+#pragma endregion
+
+#pragma region VoteSpreader
+    struct VoteSpreader__Fields {
+        struct MonoBehaviour__Fields _;
+        struct List_SpriteRenderer_* Votes;
+        void* VoteRange;
+        int32_t maxVotesBeforeSmoosh;
+        float CounterY;
+        float adjustRate;
+    };
+
+    struct VoteSpreader {
+        struct VoteSpreader__Class* klass;
+        void* monitor;
+        struct VoteSpreader__Fields fields;
+    };
+
+    struct VoteSpreader__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct VoteSpreader__Class {
+        Il2CppClass_0 _0;
+        void* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct VoteSpreader__VTable vtable;
+    };
+#pragma endregion
+
 #pragma region MeetingHud
 
 #if defined(_CPLUSPLUS_)
