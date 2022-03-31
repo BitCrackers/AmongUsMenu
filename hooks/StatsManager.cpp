@@ -6,7 +6,7 @@ bool dStatsManager_get_AmBanned(StatsManager* __this, MethodInfo* method) {
 }
 
 float dStatsManager_get_BanPoints(StatsManager* __this, MethodInfo* method) {
-	__this->fields.banPoints = 0.F;
+	__this->fields.stats->fields.banPoints = 0.F;
 	return 0.F;
 }
 

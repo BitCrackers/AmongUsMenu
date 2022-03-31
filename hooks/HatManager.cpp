@@ -1,7 +1,7 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
 
-bool dHatManager_c__GetUnlockedHats_b__11_0(HatManager_c* __this, HatBehaviour* h, MethodInfo* method) {
+bool dHatManager_c__GetUnlockedHats_b__11_0(HatManager_c* __this, HatData* h, MethodInfo* method) {
 	return true;
 }
 

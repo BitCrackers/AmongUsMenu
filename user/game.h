@@ -16,7 +16,7 @@ namespace Game {
 
 	typedef bool STEAMUSERSTATS_SETACHIEVEMENT(String* pchName);
 	typedef bool STEAMUSERSTATS_STORESTATS();
-	typedef bool HATMANAGER_C_GETUNLOCKEDHATS(HatManager_c* __this, HatBehaviour* h, MethodInfo* method);
+	typedef bool HATMANAGER_C_GETUNLOCKEDHATS(HatManager_c* __this, HatData* h, MethodInfo* method);
 	typedef bool HATMANAGER_C_GETUNLOCKEDSKINS(HatManager_c* __this, SkinData* s, MethodInfo* method);
 	typedef bool HATMANAGER_C_GETUNLOCKEDPETS(HatManager_c* __this, PetData* h, MethodInfo* method);
 	typedef bool HATMANAGER_C_GETUNLOCKEDVISORS(HatManager_c* __this, VisorData* s, MethodInfo* method);

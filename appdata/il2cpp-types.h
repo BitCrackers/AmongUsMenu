@@ -4295,8 +4295,11 @@ namespace app
     struct AccountTab__Fields
     {
         struct MonoBehaviour__Fields _;
-        void* userName;
-        void* playerImage;
+        struct TextMeshPro* userName;
+        struct TextMeshPro* friendCode;
+        struct TextMeshPro* friendCodeTitle;
+        void* playerImage; // struct PoolablePlayer, not actual img
+        struct SpriteRenderer* FriendCodeHiddenIcon;
         struct GameObject* guestMode;
         struct GameObject* offlineMode;
         struct FullAccount* loggedInMode;
@@ -4306,7 +4309,6 @@ namespace app
         struct GameObject* idCard;
         struct SpriteRenderer* actualTabSprite;
         struct GameObject* resendEmailButton;
-        void* UnlinkAccountPopup;
         void* LinkExistingAccountPopup;
         struct TextMeshPro* levelText;
         void* xpProgressBar;
@@ -4316,7 +4318,10 @@ namespace app
         struct Collider2D* clickToCloseCollider;
         struct TextMeshPro* accountIDDisplayText;
         struct GameObject* showAccountIDButton;
+        struct SpriteRenderer* SpaceBean;
+        struct SpriteRenderer* SpaceHorse;
         bool showAccountID;
+        struct String* friendCodeHiddenText;
         void* BackButton;
         void* PotentialDefaultSelections;
         void* selectableObjects;
@@ -4370,6 +4375,7 @@ namespace app
         struct String* deploymentId;
         struct String* clientId;
         struct String* clientSecret;
+        struct String* friendCode;
         bool hasRunLoginFlow;
         float platformTickTimer;
         bool platformInitialized;
@@ -4387,6 +4393,7 @@ namespace app
         uint32_t numLinkedAccounts;
         void* linkedExternalAccounts;
         void* redeemDLCChoice;
+        void* editAccountUsername;
         int32_t ageOfConsent;
         struct String* kwsUserId;
         void* continuanceToken;
@@ -4594,6 +4601,7 @@ namespace app
         void* Overlay;
         void* XMark;
         void* GAIcon;
+        void* ThumbsDown;
         struct TextMeshPro* NameText;
         struct TextMeshPro* LevelNumberText;
         bool AnimateButtonsFromLeft;
@@ -4913,6 +4921,8 @@ namespace app
         int32_t Type;
 #endif
         bool _BeginCalled_k__BackingField;
+        float _HideCountdown_k__BackingField;
+        void* _CosmeticsCache_k__BackingField;
         int32_t numScans;
     };
 
@@ -4964,8 +4974,7 @@ namespace app
 #pragma region StringNames__Enum
 
 #if defined(_CPLUSPLUS_)
-    enum class StringNames__Enum : int32_t
-    {
+    enum class StringNames__Enum : int32_t {
         ExitButton = 0x00000000,
         BackButton = 0x00000001,
         AvailableGamesLabel = 0x00000002,
@@ -5460,6 +5469,7 @@ namespace app
         ErrorNoServersAvailable = 0x000002d3,
         ErrorQuickmatchDisabled = 0x000002d4,
         ErrorTooManyGames = 0x000002d5,
+        ErrorDuplicateConnection = 0x000002d6,
         VentDirection = 0x000003e8,
         VentMove = 0x000003e9,
         MenuNavigate = 0x000003ea,
@@ -5503,6 +5513,12 @@ namespace app
         ScientistBatteryCharge = 0x000005ff,
         GuardianAngelDuration = 0x00000600,
         GuardianAngelImpostorSeeProtect = 0x00000601,
+        StatsRoleWins = 0x00000602,
+        StatsEngineerVents = 0x00000603,
+        StatsScientistChargesGained = 0x00000604,
+        StatsGuardianAngelCrewmatesProtected = 0x00000605,
+        StatsShapeshifterShiftedKills = 0x00000606,
+        ScreenShakeOption = 0x0000076c,
         QCLocationLaptop = 0x000007d0,
         QCLocationSkeld = 0x000007d1,
         QCLocationMira = 0x000007d2,
@@ -5823,7 +5839,70 @@ namespace app
         RedeemNever = 0x0000090d,
         AvailableFor = 0x0000090e,
         GuestProgressionWarning = 0x0000090f,
-        ErrorCrossPlat = 0x00000910,
+        ErrorSelfPlatformLock = 0x00000910,
+        ErrorCrossPlat = 0x00000911,
+        MaxVentUses = 0x00000a8c,
+        MaxTimeInVent = 0x00000a8d,
+        MinCrewmatesForVitals = 0x00000a8e,
+        FinalEscapeTime = 0x00000a8f,
+        AllTasksComplete = 0x00000a90,
+        EscapePrompt = 0x00000a91,
+        CrewmateFlashlightFov = 0x00000a92,
+        ImpostorFlashlightFov = 0x00000a93,
+        CrewmateLeadTime = 0x00000a94,
+        CrewmadeHideBlurb = 0x00000a95,
+        ImpostorKillBlurb = 0x00000a96,
+        HideCountdown = 0x00000a97,
+        MusicDistance = 0x00000a98,
+        ShortTaskTimeValue = 0x00000a99,
+        LongTaskTimeValue = 0x00000a9a,
+        CommonTaskTimeValue = 0x00000a9b,
+        AmongUsFriends = 0x00000af0,
+        FriendsGuestWarning = 0x00000af1,
+        PlatformFriends = 0x00000af2,
+        BlockedPlayers = 0x00000af3,
+        RecentPlayers = 0x00000af4,
+        LobbyLabel = 0x00000af5,
+        FriendCodeExplanation = 0x00000af6,
+        FriendCodeSuccess = 0x00000af7,
+        FriendRequestReceived = 0x00000af8,
+        FriendRequestSent = 0x00000af9,
+        GameLobbyInviteSent = 0x00000afa,
+        GameLobbyInviteReceived = 0x00000afb,
+        BlockPlayerConfirm = 0x00000afc,
+        RemoveFriendConfirm = 0x00000afd,
+        InviteToLobbyConfirm = 0x00000afe,
+        FriendCodeLabel = 0x00000aff,
+        FriendCodeCreationTitle = 0x00000b00,
+        FriendRequestSentFailed = 0x00000b01,
+        ErrorBadUsername = 0x00000b02,
+        ErrorUserNotFound = 0x00000b03,
+        ErrorThisIsYou = 0x00000b04,
+        ErrorFriendRequestExists = 0x00000b05,
+        ErrorAlreadyFriends = 0x00000b06,
+        GameLobbyInviteSentFailed = 0x00000b07,
+        BlockedPlayerFailed = 0x00000b08,
+        BlockedPlayer = 0x00000b09,
+        AlreadyBlocked = 0x00000b0a,
+        FriendList = 0x00000b0b,
+        NoNewRequests = 0x00000b0c,
+        AddFriendPrompt = 0x00000b0d,
+        NewRequests = 0x00000b0e,
+        Requests = 0x00000b0f,
+        AddFriend = 0x00000b10,
+        StreamWarning = 0x00000b11,
+        FriendsListPermissionsWarning = 0x00000b12,
+        AddFriendConfirm = 0x00000b13,
+        UnfriendConfirm = 0x00000b14,
+        UnblockConfirm = 0x00000b15,
+        SettingsEnableFriendInvites = 0x00000b16,
+        ErrorCrossPlatformCommunication = 0x00000b17,
+        ErrorPlatformFriends = 0x00000b18,
+        ErrorPlayerBlockedYou = 0x00000b19,
+        ErrorRecipientMaxFriendRequests = 0x00000b1a,
+        ErrorSenderMaxFriendRequests = 0x00000b1b,
+        ErrorMaxFriends = 0x00000b1c,
+        ErrorRecipientMaxFriends = 0x00000b1d,
         QCAccIsRole = 0x00000bb8,
         QCAccIsRoleNeg = 0x00000bb9,
         QCAccShapeshited = 0x00000bba,
@@ -5842,11 +5921,20 @@ namespace app
         ShowAccountID = 0x00000bc7,
         HideAccountID = 0x00000bc8,
         HiddenAccountID = 0x00000bc9,
+        ErrorLobbyFailedGettingBlockedUsers = 0x00000bca,
+        SteamOverlayDisabled = 0x00000bcb,
+        QCOnlyInfo = 0x00000bcc,
+        FreeChatInfo = 0x00000bcd,
+        FreeChatWarning = 0x00000bce,
+        TryAgain = 0x00000bcf,
+        TempDisabled = 0x00000bd0,
+        TempDisabledLinkExplain = 0x00000bd1,
+        RedeemPopup = 0x00000bd2,
+        RedeemButton = 0x00000bd3,
     };
 
 #else
-    enum StringNames__Enum
-    {
+    enum StringNames__Enum {
         StringNames__Enum_ExitButton = 0x00000000,
         StringNames__Enum_BackButton = 0x00000001,
         StringNames__Enum_AvailableGamesLabel = 0x00000002,
@@ -6341,6 +6429,7 @@ namespace app
         StringNames__Enum_ErrorNoServersAvailable = 0x000002d3,
         StringNames__Enum_ErrorQuickmatchDisabled = 0x000002d4,
         StringNames__Enum_ErrorTooManyGames = 0x000002d5,
+        StringNames__Enum_ErrorDuplicateConnection = 0x000002d6,
         StringNames__Enum_VentDirection = 0x000003e8,
         StringNames__Enum_VentMove = 0x000003e9,
         StringNames__Enum_MenuNavigate = 0x000003ea,
@@ -6384,6 +6473,12 @@ namespace app
         StringNames__Enum_ScientistBatteryCharge = 0x000005ff,
         StringNames__Enum_GuardianAngelDuration = 0x00000600,
         StringNames__Enum_GuardianAngelImpostorSeeProtect = 0x00000601,
+        StringNames__Enum_StatsRoleWins = 0x00000602,
+        StringNames__Enum_StatsEngineerVents = 0x00000603,
+        StringNames__Enum_StatsScientistChargesGained = 0x00000604,
+        StringNames__Enum_StatsGuardianAngelCrewmatesProtected = 0x00000605,
+        StringNames__Enum_StatsShapeshifterShiftedKills = 0x00000606,
+        StringNames__Enum_ScreenShakeOption = 0x0000076c,
         StringNames__Enum_QCLocationLaptop = 0x000007d0,
         StringNames__Enum_QCLocationSkeld = 0x000007d1,
         StringNames__Enum_QCLocationMira = 0x000007d2,
@@ -6704,7 +6799,70 @@ namespace app
         StringNames__Enum_RedeemNever = 0x0000090d,
         StringNames__Enum_AvailableFor = 0x0000090e,
         StringNames__Enum_GuestProgressionWarning = 0x0000090f,
-        StringNames__Enum_ErrorCrossPlat = 0x00000910,
+        StringNames__Enum_ErrorSelfPlatformLock = 0x00000910,
+        StringNames__Enum_ErrorCrossPlat = 0x00000911,
+        StringNames__Enum_MaxVentUses = 0x00000a8c,
+        StringNames__Enum_MaxTimeInVent = 0x00000a8d,
+        StringNames__Enum_MinCrewmatesForVitals = 0x00000a8e,
+        StringNames__Enum_FinalEscapeTime = 0x00000a8f,
+        StringNames__Enum_AllTasksComplete = 0x00000a90,
+        StringNames__Enum_EscapePrompt = 0x00000a91,
+        StringNames__Enum_CrewmateFlashlightFov = 0x00000a92,
+        StringNames__Enum_ImpostorFlashlightFov = 0x00000a93,
+        StringNames__Enum_CrewmateLeadTime = 0x00000a94,
+        StringNames__Enum_CrewmadeHideBlurb = 0x00000a95,
+        StringNames__Enum_ImpostorKillBlurb = 0x00000a96,
+        StringNames__Enum_HideCountdown = 0x00000a97,
+        StringNames__Enum_MusicDistance = 0x00000a98,
+        StringNames__Enum_ShortTaskTimeValue = 0x00000a99,
+        StringNames__Enum_LongTaskTimeValue = 0x00000a9a,
+        StringNames__Enum_CommonTaskTimeValue = 0x00000a9b,
+        StringNames__Enum_AmongUsFriends = 0x00000af0,
+        StringNames__Enum_FriendsGuestWarning = 0x00000af1,
+        StringNames__Enum_PlatformFriends = 0x00000af2,
+        StringNames__Enum_BlockedPlayers = 0x00000af3,
+        StringNames__Enum_RecentPlayers = 0x00000af4,
+        StringNames__Enum_LobbyLabel = 0x00000af5,
+        StringNames__Enum_FriendCodeExplanation = 0x00000af6,
+        StringNames__Enum_FriendCodeSuccess = 0x00000af7,
+        StringNames__Enum_FriendRequestReceived = 0x00000af8,
+        StringNames__Enum_FriendRequestSent = 0x00000af9,
+        StringNames__Enum_GameLobbyInviteSent = 0x00000afa,
+        StringNames__Enum_GameLobbyInviteReceived = 0x00000afb,
+        StringNames__Enum_BlockPlayerConfirm = 0x00000afc,
+        StringNames__Enum_RemoveFriendConfirm = 0x00000afd,
+        StringNames__Enum_InviteToLobbyConfirm = 0x00000afe,
+        StringNames__Enum_FriendCodeLabel = 0x00000aff,
+        StringNames__Enum_FriendCodeCreationTitle = 0x00000b00,
+        StringNames__Enum_FriendRequestSentFailed = 0x00000b01,
+        StringNames__Enum_ErrorBadUsername = 0x00000b02,
+        StringNames__Enum_ErrorUserNotFound = 0x00000b03,
+        StringNames__Enum_ErrorThisIsYou = 0x00000b04,
+        StringNames__Enum_ErrorFriendRequestExists = 0x00000b05,
+        StringNames__Enum_ErrorAlreadyFriends = 0x00000b06,
+        StringNames__Enum_GameLobbyInviteSentFailed = 0x00000b07,
+        StringNames__Enum_BlockedPlayerFailed = 0x00000b08,
+        StringNames__Enum_BlockedPlayer = 0x00000b09,
+        StringNames__Enum_AlreadyBlocked = 0x00000b0a,
+        StringNames__Enum_FriendList = 0x00000b0b,
+        StringNames__Enum_NoNewRequests = 0x00000b0c,
+        StringNames__Enum_AddFriendPrompt = 0x00000b0d,
+        StringNames__Enum_NewRequests = 0x00000b0e,
+        StringNames__Enum_Requests = 0x00000b0f,
+        StringNames__Enum_AddFriend = 0x00000b10,
+        StringNames__Enum_StreamWarning = 0x00000b11,
+        StringNames__Enum_FriendsListPermissionsWarning = 0x00000b12,
+        StringNames__Enum_AddFriendConfirm = 0x00000b13,
+        StringNames__Enum_UnfriendConfirm = 0x00000b14,
+        StringNames__Enum_UnblockConfirm = 0x00000b15,
+        StringNames__Enum_SettingsEnableFriendInvites = 0x00000b16,
+        StringNames__Enum_ErrorCrossPlatformCommunication = 0x00000b17,
+        StringNames__Enum_ErrorPlatformFriends = 0x00000b18,
+        StringNames__Enum_ErrorPlayerBlockedYou = 0x00000b19,
+        StringNames__Enum_ErrorRecipientMaxFriendRequests = 0x00000b1a,
+        StringNames__Enum_ErrorSenderMaxFriendRequests = 0x00000b1b,
+        StringNames__Enum_ErrorMaxFriends = 0x00000b1c,
+        StringNames__Enum_ErrorRecipientMaxFriends = 0x00000b1d,
         StringNames__Enum_QCAccIsRole = 0x00000bb8,
         StringNames__Enum_QCAccIsRoleNeg = 0x00000bb9,
         StringNames__Enum_QCAccShapeshited = 0x00000bba,
@@ -6723,9 +6881,20 @@ namespace app
         StringNames__Enum_ShowAccountID = 0x00000bc7,
         StringNames__Enum_HideAccountID = 0x00000bc8,
         StringNames__Enum_HiddenAccountID = 0x00000bc9,
+        StringNames__Enum_ErrorLobbyFailedGettingBlockedUsers = 0x00000bca,
+        StringNames__Enum_SteamOverlayDisabled = 0x00000bcb,
+        StringNames__Enum_QCOnlyInfo = 0x00000bcc,
+        StringNames__Enum_FreeChatInfo = 0x00000bcd,
+        StringNames__Enum_FreeChatWarning = 0x00000bce,
+        StringNames__Enum_TryAgain = 0x00000bcf,
+        StringNames__Enum_TempDisabled = 0x00000bd0,
+        StringNames__Enum_TempDisabledLinkExplain = 0x00000bd1,
+        StringNames__Enum_RedeemPopup = 0x00000bd2,
+        StringNames__Enum_RedeemButton = 0x00000bd3,
     };
 
 #endif
+
 #pragma endregion
 
 #pragma region SwitchSystem
@@ -7439,6 +7608,8 @@ namespace app
     struct __declspec(align(4)) GameData_PlayerInfo__Fields
     {
         uint8_t PlayerId;
+        struct String* FriendCode;
+        struct String* Puid;
         struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_* Outfits;
         uint32_t PlayerLevel;
         bool Disconnected;
@@ -8147,7 +8318,7 @@ namespace app
     struct ChatBubble__Fields
     {
         struct PoolableBehavior__Fields _;
-        void* Player;
+        void* Player; // struct PoolablePlayer
         struct SpriteRenderer* Xmark;
         struct SpriteRenderer* votedMark;
         struct TextMeshPro* NameText;
@@ -8155,6 +8326,8 @@ namespace app
         struct SpriteRenderer* Background;
         struct SpriteRenderer* MaskArea;
         void* PlatformIcon;
+        struct GameData_PlayerInfo* playerInfo;
+        int32_t maskLayer;
     };
 
     struct ChatBubble
@@ -8256,29 +8429,55 @@ namespace app
     };
 #pragma endregion
 
+#pragma region SkinLayer
+
+    struct SkinLayer__Fields {
+        struct MonoBehaviour__Fields _;
+        struct SpriteRenderer* layer;
+        void* animator;
+        void* skin;
+    };
+
+    struct SkinLayer {
+        struct SkinLayer__Class* klass;
+        MonitorData* monitor;
+        struct SkinLayer__Fields fields;
+    };
+
+    struct SkinLayer__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct SkinLayer__StaticFields {
+    };
+
+    struct SkinLayer__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct SkinLayer__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct SkinLayer__VTable vtable;
+    };
+
+#pragma endregion
+
 #pragma region PlayerPhysics
     struct PlayerPhysics__Fields
     {
         struct InnerNetObject__Fields _;
         uint8_t lastClimbLadderSid;
+        void* AnimationGroups;
+        void* CurrentAnimationGroup;
         float Speed;
         float GhostSpeed;
         void* body;
         struct PlayerControl* myPlayer;
-        void* Animator;
         void* GlowAnimator;
-        struct SpriteRenderer* rend;
-        void* RunAnim;
-        void* IdleAnim;
-        void* GhostIdleAnim;
-        void* EnterVentAnim;
-        void* ExitVentAnim;
-        void* SpawnAnim;
-        void* SpawnGlowAnim;
-        void* ClimbAnim;
-        void* ClimbDownAnim;
-        void* GhostGuardianAngelAnim;
-        void* Skin;
+        struct SkinLayer* Skin;
         void* ImpostorDiscoveredSound;
         void* inputHandler;
     };
@@ -8326,8 +8525,13 @@ namespace app
         struct InnerNetObject__Fields _;
         int32_t LastStartCounter;
         uint8_t PlayerId;
+        struct String* FriendCode;
+        struct String* Puid;
         float MaxReportDistance;
         bool moveable;
+        void* BodySprites;
+        void* CurrentBodySprite;
+        void* NormalBodySprite;
 #if defined(_CPLUSPLUS_)
         PlayerOutfitType__Enum _CurrentOutfitType_k__BackingField;
 #else
@@ -8338,6 +8542,7 @@ namespace app
         bool shapeshifting;
         struct GameData_PlayerInfo* _cachedData;
         bool protectedByGuardian;
+        float flashlightAngle;
         void* FootSteps;
         void* KillSfx;
         void* KillAnimations;
@@ -8352,8 +8557,8 @@ namespace app
         void* CurrentPet;
         void* HatRenderer;
         void* VisorSlot;
-        struct SpriteRenderer* myRend;
         void* myAnim;
+        void* horseAnim;
         void* hitBuffer;
         struct List_1_PlayerTask_* myTasks;
         struct Vector3 defaultPlayerScale;
@@ -8526,6 +8731,7 @@ namespace app
         struct Camera* UICamera;
         void* MeetingPrefab;
         void* KillButton;
+        void* AdminButton;
         void* SabotageButton;
         void* ImpostorVentButton;
         void* UseButton;
@@ -8560,8 +8766,8 @@ namespace app
         float consoleUIHorizontalShift;
         struct GameObject* playerListPrompt;
         void* tasksString;
-        bool isIntroDisplayed;
         void* lightFlashHandle;
+        bool _IsIntroDisplayed_k__BackingField;
     };
 
     struct HudManager
@@ -8983,6 +9189,7 @@ namespace app
         void* DefaultButtonSelected;
         void* ControllerSelectable;
         void* disableOnStartup;
+        void* cosmicubeManager;
     };
 
     struct MainMenuManager
@@ -9017,8 +9224,7 @@ namespace app
 
 #pragma region DisconnectReasons__Enum
 #if defined(_CPLUSPLUS_)
-    enum class DisconnectReasons__Enum : int32_t
-    {
+    enum class DisconnectReasons__Enum : int32_t {
         ExitGame = 0x00000000,
         GameFull = 0x00000001,
         GameStarted = 0x00000002,
@@ -9050,17 +9256,18 @@ namespace app
         Sanctions = 0x00000070,
         ServerError = 0x00000071,
         SelfPlatformLock = 0x00000072,
+        DuplicateConnectionDetected = 0x00000073,
         IntentionalLeaving = 0x000000d0,
         FocusLostBackground = 0x000000cf,
         FocusLost = 0x000000d1,
         NewConnection = 0x000000d2,
         PlatformParentalControlsBlock = 0x000000d3,
         PlatformUserBlock = 0x000000d4,
+        PlatformFailedToGetUserBlock = 0x000000d5,
     };
 
 #else
-    enum DisconnectReasons__Enum
-    {
+    enum DisconnectReasons__Enum {
         DisconnectReasons__Enum_ExitGame = 0x00000000,
         DisconnectReasons__Enum_GameFull = 0x00000001,
         DisconnectReasons__Enum_GameStarted = 0x00000002,
@@ -9092,13 +9299,15 @@ namespace app
         DisconnectReasons__Enum_Sanctions = 0x00000070,
         DisconnectReasons__Enum_ServerError = 0x00000071,
         DisconnectReasons__Enum_SelfPlatformLock = 0x00000072,
+        DisconnectReasons__Enum_DuplicateConnectionDetected = 0x00000073,
         DisconnectReasons__Enum_IntentionalLeaving = 0x000000d0,
         DisconnectReasons__Enum_FocusLostBackground = 0x000000cf,
         DisconnectReasons__Enum_FocusLost = 0x000000d1,
         DisconnectReasons__Enum_NewConnection = 0x000000d2,
         DisconnectReasons__Enum_PlatformParentalControlsBlock = 0x000000d3,
         DisconnectReasons__Enum_PlatformUserBlock = 0x000000d4,
-    };
+        DisconnectReasons__Enum_PlatformFailedToGetUserBlock = 0x000000d5,
+};
 
 #endif
 #pragma endregion
@@ -9280,6 +9489,22 @@ namespace app
 
 #endif
 
+#if defined(_CPLUSPLUS_)
+    enum class CrossplayPrivilegeErrorType__Enum : int32_t {
+        None = 0x00000000,
+        Crossplay = 0x00000001,
+        CrossplayCommunication = 0x00000002,
+    };
+
+#else
+    enum CrossplayPrivilegeErrorType__Enum {
+        CrossplayPrivilegeErrorType__Enum_None = 0x00000000,
+        CrossplayPrivilegeErrorType__Enum_Crossplay = 0x00000001,
+        CrossplayPrivilegeErrorType__Enum_CrossplayCommunication = 0x00000002,
+    };
+
+#endif
+
     struct AmongUsClient__Fields
     {
         struct InnerNetClient__Fields _;
@@ -9297,6 +9522,11 @@ namespace app
 #endif
         void* DisconnectHandlers;
         void* GameListHandlers;
+#if defined(_CPLUSPLUS_)
+        CrossplayPrivilegeErrorType__Enum CrossplayPrivilegeError;
+#else
+        int32_t CrossplayPrivilegeError;
+#endif
     };
 
     struct AmongUsClient
@@ -9356,6 +9586,8 @@ namespace app
         uint32_t PlayerLevel;
         void* PlatformData;
         struct String* PlayerName;
+        struct String* ProductUserId;
+        struct String* FriendCode;
         int32_t ColorId;
     };
 
@@ -9865,6 +10097,260 @@ namespace app
     };
 #pragma endregion
 
+#pragma region ScriptableObject
+    struct ScriptableObject__Fields
+    {
+        struct Object_1__Fields _;
+    };
+
+    struct ScriptableObject
+    {
+        struct ScriptableObject__Class* klass;
+        MonitorData* monitor;
+        struct ScriptableObject__Fields fields;
+    };
+
+    struct ScriptableObject__VTable
+    {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct ScriptableObject__StaticFields
+    {
+    };
+
+    struct ScriptableObject__Class
+    {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ScriptableObject__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ScriptableObject__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region LimitedTime
+    struct LimitedTime {
+        int32_t limitedDay;
+        int32_t limitedMonth;
+        int32_t limitedYear;
+        int32_t limitedHour;
+        int32_t limitedMinute;
+    };
+
+#pragma endregion
+
+#pragma region LimitedTimeStartEnd
+    struct LimitedTimeStartEnd {
+        struct LimitedTime timeStart;
+        struct LimitedTime timeEnd;
+    };
+#pragma endregion
+
+#pragma region CosmeticData
+    struct CosmeticData__Fields
+    {
+        struct ScriptableObject__Fields _;
+        void* unlockOnSelectPlatforms;
+        bool freeRedeemableCosmetic;
+        int32_t redeemPopUpColor;
+        struct String* epicId;
+        struct String* BundleId;
+        struct String* ProductId;
+        struct Vector2 ChipOffset;
+        int32_t beanCost;
+        int32_t starCost;
+        bool paidOnMobile;
+        struct LimitedTimeStartEnd limitedTime;
+        int32_t displayOrder;
+    };
+    struct CosmeticData
+    {
+        struct CosmeticData__Class* klass;
+        MonitorData* monitor;
+        struct CosmeticData__Fields fields;
+    };
+    struct CosmeticData__VTable
+    {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_ProdId;
+        VirtualInvokeData get_BeanCost;
+        VirtualInvokeData get_StarCost;
+        VirtualInvokeData get_PaidOnMobile;
+        VirtualInvokeData get_LimitedTimeAvailable;
+        VirtualInvokeData PreviewOnPlayer;
+        VirtualInvokeData GetItemCategory;
+        VirtualInvokeData SetProdId;
+    };
+
+    struct CosmeticData__StaticFields
+    {
+    };
+
+    struct CosmeticData__Class
+    {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct CosmeticData__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct CosmeticData__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region HatData
+
+    struct HatData__Fields {
+        struct CosmeticData__Fields _;
+        void* ViewDataRef;
+        bool InFront;
+        bool NoBounce;
+        bool BlocksVisors;
+        bool NotInStore;
+        bool Free;
+        struct String* StoreName;
+        struct SkinData* RelatedSkin;
+        void* hatViewData;
+    };
+
+    struct HatData {
+        struct HatData__Class* klass;
+        MonitorData* monitor;
+        struct HatData__Fields fields;
+    };
+
+    struct HatData__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_ProdId;
+        VirtualInvokeData get_BeanCost;
+        VirtualInvokeData get_StarCost;
+        VirtualInvokeData get_PaidOnMobile;
+        VirtualInvokeData get_LimitedTimeAvailable;
+        VirtualInvokeData PreviewOnPlayer;
+        VirtualInvokeData GetItemCategory;
+        VirtualInvokeData SetProdId;
+        VirtualInvokeData CoLoadIcon;
+    };
+
+    struct HatData__StaticFields {
+    };
+
+    struct HatData__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct HatData__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct HatData__VTable vtable;
+    };
+
+#pragma endregion
+
+#pragma region HatData__Array
+
+    struct HatData__Array {
+    struct HatData__Array__Class* klass;
+    MonitorData* monitor;
+    Il2CppArrayBounds* bounds;
+    il2cpp_array_size_t max_length;
+    struct HatData* vector[32];
+    };
+
+    struct HatData__Array__VTable {
+    };
+
+    struct HatData__Array__StaticFields {
+    };
+
+    struct HatData__Array__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct HatData__Array__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct HatData__Array__VTable vtable;
+    };
+
+#pragma endregion
+
+#pragma region List_1_HatData_
+
+    struct __declspec(align(4)) List_1_HatData___Fields {
+        struct HatData__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
+
+    struct List_1_HatData_ {
+    struct List_1_HatData___Class* klass;
+    MonitorData* monitor;
+    struct List_1_HatData___Fields fields;
+    };
+
+    struct List_1_HatData___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Item;
+        VirtualInvokeData set_Item;
+        VirtualInvokeData IndexOf;
+        VirtualInvokeData Insert;
+        VirtualInvokeData RemoveAt;
+        VirtualInvokeData get_Count;
+        VirtualInvokeData System_Collections_Generic_ICollection_T__get_IsReadOnly;
+        VirtualInvokeData Add;
+        VirtualInvokeData Clear;
+        VirtualInvokeData Contains;
+        VirtualInvokeData CopyTo;
+        VirtualInvokeData Remove;
+        VirtualInvokeData System_Collections_Generic_IEnumerable_T__GetEnumerator;
+        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
+        VirtualInvokeData System_Collections_IList_get_Item;
+        VirtualInvokeData System_Collections_IList_set_Item;
+        VirtualInvokeData System_Collections_IList_Add;
+        VirtualInvokeData System_Collections_IList_Contains;
+        VirtualInvokeData Clear_1;
+        VirtualInvokeData System_Collections_IList_get_IsReadOnly;
+        VirtualInvokeData System_Collections_IList_get_IsFixedSize;
+        VirtualInvokeData System_Collections_IList_IndexOf;
+        VirtualInvokeData System_Collections_IList_Insert;
+        VirtualInvokeData System_Collections_IList_Remove;
+        VirtualInvokeData RemoveAt_1;
+        VirtualInvokeData System_Collections_ICollection_CopyTo;
+        VirtualInvokeData get_Count_1;
+        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
+        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData get_Item_1;
+        VirtualInvokeData get_Count_2;
+    };
+
+    struct List_1_HatData___StaticFields {
+        struct HatData__Array* _emptyArray;
+    };
+
+    struct List_1_HatData___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct List_1_HatData___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct List_1_HatData___VTable vtable;
+    };
+
+#pragma endregion
+
 #pragma region HatManager
 
     struct DestroyableSingleton_1_HatManager___Fields
@@ -9876,10 +10362,13 @@ namespace app
     struct HatManager__Fields
     {
         struct DestroyableSingleton_1_HatManager___Fields _;
-        void* DefaultHatShader;
+        void* DefaultShader;
+        void* PlayerMaterial;
+        void* MaskedPlayerMaterial;
+        void* MaskedMaterial;
         void* AllStarBundles;
         struct List_1_PetData_* AllPets;
-        struct List_1_HatBehaviour_* AllHats;
+        struct List_1_HatData_* AllHats;
         struct List_1_SkinData_* AllSkins;
         void* AllVisors;
         void* AllNamePlates;
@@ -9937,11 +10426,22 @@ namespace app
     struct HatManager_c__StaticFields
     {
         struct HatManager_c* __9;
-        void* __9__9_0;
-        void* __9__11_0;
-        void* __9__12_0;
-        void* __9__15_0;
-        void* __9__17_0;
+        /* these are all a bunch of func ptrs. worth checking out in cpp scaffolding to see their actual types. */
+        void* __9__26_1;
+        void* __9__27_0;
+        void* __9__27_1;
+        void* __9__28_1;
+        void* __9__29_0;
+        void* __9__29_1;
+        void* __9__30_0;
+        void* __9__30_1;
+        void* __9__31_1;
+        void* __9__32_0;
+        void* __9__32_1;
+        void* __9__33_1;
+        void* __9__34_0;
+        void* __9__34_1;
+        void* __9__35_1;
     };
 
     struct HatManager_c__Class
@@ -9956,187 +10456,13 @@ namespace app
 
 #pragma endregion
 
-#pragma region ScriptableObject
-    struct ScriptableObject__Fields
-    {
-        struct Object_1__Fields _;
-    };
-
-    struct ScriptableObject
-    {
-        struct ScriptableObject__Class* klass;
-        MonitorData* monitor;
-        struct ScriptableObject__Fields fields;
-    };
-
-    struct ScriptableObject__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct ScriptableObject__StaticFields
-    {
-    };
-
-    struct ScriptableObject__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct ScriptableObject__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct ScriptableObject__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region CosmeticData
-    struct CosmeticData__Fields
-    {
-        struct ScriptableObject__Fields _;
-        struct String* epicId;
-        struct String* BundleId;
-        struct String* ProductId;
-        struct Vector2 ChipOffset;
-        int32_t beanCost;
-        int32_t starCost;
-        bool paidOnMobile;
-    };
-    struct CosmeticData
-    {
-        struct CosmeticData__Class* klass;
-        MonitorData* monitor;
-        struct CosmeticData__Fields fields;
-    };
-    struct CosmeticData__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_ProdId;
-        VirtualInvokeData get_BeanCost;
-        VirtualInvokeData get_StarCost;
-        VirtualInvokeData get_PaidOnMobile;
-        VirtualInvokeData get_LimitedTimeAvailable;
-        VirtualInvokeData PreviewOnPlayer;
-        VirtualInvokeData GetItemCategory;
-        VirtualInvokeData SetProdId;
-    };
-
-    struct CosmeticData__StaticFields
-    {
-    };
-
-    struct CosmeticData__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct CosmeticData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct CosmeticData__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region HatBehaviour
-    struct HatBehaviour__Fields
-    {
-        struct CosmeticData__Fields _;
-        void* MainImage;
-        void* BackImage;
-        void* LeftMainImage;
-        void* LeftBackImage;
-        void* ClimbImage;
-        void* FloorImage;
-        void* LeftClimbImage;
-        void* LeftFloorImage;
-        bool InFront;
-        bool NoBounce;
-        bool BlocksVisors;
-        bool NotInStore;
-        bool Free;
-        void* AltShader;
-        void* RelatedSkin;
-        struct String* StoreName;
-        int32_t Order;
-    };
-
-    struct HatBehaviour
-    {
-        struct HatBehaviour__Class* klass;
-        MonitorData* monitor;
-        struct HatBehaviour__Fields fields;
-    };
-    struct HatBehaviour__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_ProdId;
-        VirtualInvokeData get_BeanCost;
-        VirtualInvokeData get_StarCost;
-        VirtualInvokeData get_PaidOnMobile;
-        VirtualInvokeData get_LimitedTimeAvailable;
-        VirtualInvokeData PreviewOnPlayer;
-        VirtualInvokeData GetItemCategory;
-        VirtualInvokeData SetProdId;
-    };
-
-    struct HatBehaviour__StaticFields
-    {
-    };
-
-    struct HatBehaviour__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatBehaviour__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatBehaviour__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region HatBehaviour__Array
-    struct HatBehaviour__Array
-    {
-        struct HatBehaviour__Array__Class* klass;
-        void* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct HatBehaviour* vector[32];
-    };
-
-    struct HatBehaviour__Array__VTable
-    {
-    };
-
-    struct HatBehaviour__Array__StaticFields
-    {
-    };
-
-    struct HatBehaviour__Array__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatBehaviour__Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatBehaviour__Array__VTable vtable;
-    };
-#pragma endregion
-
 #pragma region NamePlateData
     struct NamePlateData__Fields {
         struct CosmeticData__Fields _;
-        void* Image;
+        void* ViewDataRef;
         bool Free;
-        int32_t Order;
         bool NotInStore;
+        void* viewData;
     };
 
     struct NamePlateData {
@@ -10149,13 +10475,10 @@ namespace app
 #pragma region VisorData
     struct VisorData__Fields {
         struct CosmeticData__Fields _;
-        void* IdleFrame;
-        void* LeftIdleFrame;
-        void* ClimbFrame;
-        void* FloorFrame;
-        int32_t Order;
+        void* ViewDataRef;
         bool Free;
         bool NotInStore;
+        void* viewData;
     };
 
     struct VisorData {
@@ -10197,7 +10520,8 @@ namespace app
 #else
         int32_t StoreName;
 #endif
-        struct PetBehaviour* PetPrefab;
+        void* PetPrefabRef;
+        void* viewData;
     };
 
     struct PetData {
@@ -10227,110 +10551,15 @@ namespace app
     };
 #pragma endregion
 
-#pragma region List_1_HatBehaviour_
-    struct __declspec(align(4)) List_1_HatBehaviour___Fields
-    {
-        struct HatBehaviour__Array* _items;
-        int32_t _size;
-        int32_t _version;
-        struct Object* _syncRoot;
-    };
-
-    struct List_1_HatBehaviour_
-    {
-        struct List_1_HatBehaviour___Class* klass;
-        MonitorData* monitor;
-        struct List_1_HatBehaviour___Fields fields;
-    };
-    struct List_1_HatBehaviour___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData IndexOf;
-        VirtualInvokeData Insert;
-        VirtualInvokeData RemoveAt;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_T__get_IsReadOnly;
-        VirtualInvokeData Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_T__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IList_get_Item;
-        VirtualInvokeData System_Collections_IList_set_Item;
-        VirtualInvokeData System_Collections_IList_Add;
-        VirtualInvokeData System_Collections_IList_Contains;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IList_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IList_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IList_IndexOf;
-        VirtualInvokeData System_Collections_IList_Insert;
-        VirtualInvokeData System_Collections_IList_Remove;
-        VirtualInvokeData RemoveAt_1;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Item_1;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct List_1_HatBehaviour___StaticFields
-    {
-        struct HatBehaviour__Array* _emptyArray;
-    };
-
-    struct List_1_HatBehaviour___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct List_1_HatBehaviour___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct List_1_HatBehaviour___VTable vtable;
-    };
-#pragma endregion
-
 #pragma region SkinData
     struct SkinData__Fields
     {
         struct CosmeticData__Fields _;
-        void* IdleFrame;
-        void* IdleAnim;
-        void* RunAnim;
-        void* EnterVentAnim;
-        void* ExitVentAnim;
-        void* ClimbAnim;
-        void* ClimbDownAnim;
-        void* KillTongueImpostor;
-        void* KillTongueVictim;
-        void* KillShootImpostor;
-        void* KillShootVictim;
-        void* KillNeckImpostor;
-        void* KillNeckVictim;
-        void* KillStabImpostor;
-        void* KillStabVictim;
-        void* KillRHMVictim;
-        void* EjectFrame;
-        void* SpawnAnim;
-        void* IdleLeftAnim;
-        void* RunLeftAnim;
-        void* EnterLeftVentAnim;
-        void* ExitLeftVentAnim;
-        void* SpawnLeftAnim;
-        void* KillAnims;
+        void* ViewDataRef;
         bool NotInStore;
         bool Free;
-        struct HatBehaviour* RelatedHat;
-        void* RelatedVisor;
         struct String* StoreName;
-        int32_t Order;
+        void* viewData;
     };
 
     struct SkinData
@@ -10353,6 +10582,7 @@ namespace app
         VirtualInvokeData PreviewOnPlayer;
         VirtualInvokeData GetItemCategory;
         VirtualInvokeData SetProdId;
+        VirtualInvokeData CoLoadIcon;
     };
 
     struct SkinData__StaticFields
@@ -10469,6 +10699,45 @@ namespace app
     };
 #pragma endregion
 
+#pragma region GameOptionsDataParent
+    struct __declspec(align(4)) GameOptionsDataParent__Fields {
+        float playerSpeedMod;
+        int32_t killDistance;
+        float killCooldown;
+        int32_t numCommonTasks;
+        int32_t numLongTasks;
+        int32_t numShortTasks;
+        int32_t numImpostors;
+        bool isDefaults;
+    };
+
+    struct GameOptionsDataParent {
+        struct GameOptionsDataParent__Class* klass;
+        MonitorData* monitor;
+        struct GameOptionsDataParent__Fields fields;
+    };
+
+    struct GameOptionsDataParent__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct GameOptionsDataParent__StaticFields {
+    };
+
+    struct GameOptionsDataParent__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct GameOptionsDataParent__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct GameOptionsDataParent__VTable vtable;
+    };
+
+#pragma endregion
+
 #pragma region GameOptionsData
 
 #if defined(_CPLUSPLUS_)
@@ -10541,8 +10810,21 @@ namespace app
 
 #endif
 
-    struct __declspec(align(4)) GameOptionsData__Fields
+#if defined(_CPLUSPLUS_)
+    enum class GameType__Enum : int32_t {
+        Normal = 0x00000000,
+    };
+
+#else
+    enum GameType__Enum {
+        GameType__Enum_Normal = 0x00000000,
+    };
+
+#endif
+
+    struct GameOptionsData__Fields
     {
+        struct GameOptionsDataParent__Fields _;
         int32_t MaxPlayers;
 #if defined(_CPLUSPLUS_)
         GameKeywords__Enum Keywords;
@@ -10550,20 +10832,13 @@ namespace app
         uint32_t Keywords;
 #endif
         uint8_t MapId;
-        float PlayerSpeedMod;
-        float CrewLightMod;
-        float ImpostorLightMod;
-        float KillCooldown;
-        int32_t NumCommonTasks;
-        int32_t NumLongTasks;
-        int32_t NumShortTasks;
         int32_t NumEmergencyMeetings;
         int32_t EmergencyCooldown;
-        int32_t NumImpostors;
-        bool GhostsDoTasks;
-        int32_t KillDistance;
+        bool ghostsDoTasks;
         int32_t DiscussionTime;
         int32_t VotingTime;
+        float CrewLightMod;
+        float ImpostorLightMod;
         bool ConfirmImpostor;
         bool VisualTasks;
         bool AnonymousVotes;
@@ -10573,7 +10848,11 @@ namespace app
         int32_t TaskBarMode;
 #endif
         struct RoleOptionsData* RoleOptions;
-        bool isDefaults;
+#if defined(_CPLUSPLUS_)
+        GameType__Enum gameType;
+#else
+        int32_t gameType;
+#endif
         void* settings;
     };
 
@@ -11316,29 +11595,52 @@ namespace app
     };
 #pragma endregion
 
+#pragma region StatsManager_Stats
+
+    struct __declspec(align(4)) StatsManager_Stats__Fields {
+        float banPoints;
+        int64_t lastGameStarted;
+        void* gameplayStats;
+        void* winReasons;
+        void* loseReasons;
+        void* drawReasons;
+        void* mapWins;
+        void* roleWins;
+    };
+
+    struct StatsManager_Stats {
+        struct StatsManager_Stats__Class* klass;
+        MonitorData* monitor;
+        struct StatsManager_Stats__Fields fields;
+    };
+
+    struct StatsManager_Stats__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct StatsManager_Stats__StaticFields {
+        void* SimpleStats;
+    };
+
+    struct StatsManager_Stats__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct StatsManager_Stats__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct StatsManager_Stats__VTable vtable;
+    };
+
+#pragma endregion
+
 #pragma region StatsManager
     struct __declspec(align(4)) StatsManager__Fields
     {
+        struct StatsManager_Stats* stats;
         bool loadedStats;
-        uint32_t bodiesReported;
-        uint32_t emergenciesCalls;
-        uint32_t tasksCompleted;
-        uint32_t completedAllTasks;
-        uint32_t sabsFixed;
-        uint32_t impostorKills;
-        uint32_t timesMurdered;
-        uint32_t timesEjected;
-        uint32_t crewmateStreak;
-        uint32_t timesImpostor;
-        uint32_t timesCrewmate;
-        uint32_t gamesStarted;
-        uint32_t gamesFinished;
-        float banPoints;
-        int64_t lastGameStarted;
-        void* MapWins;
-        void* WinReasons;
-        void* DrawReasons;
-        void* LoseReasons;
     };
 
     struct StatsManager
@@ -11377,6 +11679,24 @@ namespace app
 #pragma region NormalPlayerTask
 
 #if defined(_CPLUSPLUS_)
+    enum class NormalPlayerTask_TaskLength__Enum : int32_t {
+        None = 0x00000000,
+        Common = 0x00000001,
+        Short = 0x00000002,
+        Long = 0x00000003,
+    };
+
+#else
+    enum NormalPlayerTask_TaskLength__Enum {
+        NormalPlayerTask_TaskLength__Enum_None = 0x00000000,
+        NormalPlayerTask_TaskLength__Enum_Common = 0x00000001,
+        NormalPlayerTask_TaskLength__Enum_Short = 0x00000002,
+        NormalPlayerTask_TaskLength__Enum_Long = 0x00000003,
+    };
+
+#endif
+
+#if defined(_CPLUSPLUS_)
     enum class NormalPlayerTask_TimerState__Enum : int32_t
     {
         NotStarted = 0x00000000,
@@ -11397,6 +11717,11 @@ namespace app
     struct NormalPlayerTask__Fields
     {
         struct PlayerTask__Fields _;
+#if defined(_CPLUSPLUS_)
+        NormalPlayerTask_TaskLength__Enum Length;
+#else
+        int32_t Length;
+#endif
         int32_t taskStep;
         int32_t MaxStep;
         bool ShowTaskStep;
@@ -11559,6 +11884,7 @@ namespace app
         bool loadedStats;
         bool loadedAnnounce;
         bool loadedQCFavorites;
+        bool loadedCachedPurchases;
         struct String* lastPlayerName;
         uint8_t sfxVolume;
         uint8_t musicVolume;
@@ -11572,6 +11898,7 @@ namespace app
         struct String* birthDateSetDate;
         struct String* epicAccountId;
         bool vsync;
+        bool screenshake;
         bool censorChat;
         int32_t chatModeType;
         bool isGuest;
@@ -11602,6 +11929,7 @@ namespace app
         uint32_t playerXpRequiredForNextLevel;
         bool crossplayAllPlatforms;
         bool enableMouseMovement;
+        bool enableFriendsListInvites;
         struct Announcement lastAnnounce;
         void* quickChatFavorites;
         void* purchaseFile;
@@ -11667,6 +11995,7 @@ namespace app
         struct Vent* currentTarget;
         float cooldownSecondsRemaining;
         float inVentTimeRemaining;
+        float usesRemaining;
     };
 
     struct EngineerRole

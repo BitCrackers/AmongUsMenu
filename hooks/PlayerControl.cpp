@@ -218,10 +218,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method)
 {
-	State.PrevPlayerSpeed = gameOptions->fields.PlayerSpeedMod;
-	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
-	State.PrevKillDistance = gameOptions->fields.KillDistance;
-	State.KillDistance = gameOptions->fields.KillDistance;
+	State.PrevPlayerSpeed = gameOptions->fields._.playerSpeedMod;
+	State.PlayerSpeed = gameOptions->fields._.playerSpeedMod;
+	State.PrevKillDistance = gameOptions->fields._.killDistance;
+	State.KillDistance = gameOptions->fields._.killDistance;
 	State.PrevTaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
 
@@ -270,7 +270,10 @@ void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {
 			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
 			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
 			{
-				if (((Renderer*)player->fields.MyPhysics->fields.rend) == __this) {
+				// TO-DO:
+				// figure out if a reference to the Renderer component can be gotten, otherwise just use UnityEngine's GetComponentInChildren<T> function
+				// was: player->fields.MyPhysics->fields.rend
+				if (((Renderer*)player->fields.MyPhysics->fields.Skin->fields.layer) == __this) {
 					value = true;
 				}
 			}

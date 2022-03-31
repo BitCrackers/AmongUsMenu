@@ -14,7 +14,7 @@ float dStatsManager_get_BanPoints(StatsManager* __this, MethodInfo* method);
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method);
 GameOptionsData* dGameOptionsData_Deserialize(BinaryReader* reader, MethodInfo* method);
 GameOptionsData* dGameOptionsData_Deserialize_1(MessageReader* reader, MethodInfo* method);
-HatBehaviour__Array* dHatManager_GetUnlockedHats(HatManager* __this, MethodInfo* method);
+HatData__Array* dHatManager_GetUnlockedHats(HatManager* __this, MethodInfo* method);
 int32_t dStatsManager_get_BanMinutesLeft(StatsManager* __this, MethodInfo* method);
 PetData__Array* dHatManager_GetUnlockedPets(HatManager* __this, MethodInfo* method);
 SkinData__Array* dHatManager_GetUnlockedSkins(HatManager* __this, MethodInfo* method);
@@ -74,7 +74,7 @@ void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int3
 void dPlayerPhysics_FixedUpdate (PlayerPhysics* __this, MethodInfo* method);
 
 // 55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 3F 80 78 50 00
-bool dHatManager_c__GetUnlockedHats_b__11_0(HatManager_c* __this, HatBehaviour* h, MethodInfo* method);
+bool dHatManager_c__GetUnlockedHats_b__11_0(HatManager_c* __this, HatData* h, MethodInfo* method);
 
 // 55 8B EC 80 3D ? ? ? ? ? 75 14 68 ? ? ? ? E8 ? ? ? ? 83 C4 04 C6 05 ? ? ? ? ? 8B 45 0C 85 C0 74 42 80 B8 ? ? ? ? ?
 bool dHatManager_c__GetUnlockedSkins_b__12_0(HatManager_c* __this, SkinData* s, MethodInfo* method);
