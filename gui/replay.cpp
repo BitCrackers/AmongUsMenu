@@ -136,7 +136,7 @@ namespace Replay
 		// untransform the points before returning
 		for (auto& point : points)
 		{
-			point.x = getMapXOffsetSkeld(point.x) - cursorPosX;
+			point.x = getMapXOffsetSkeld(point.x) + 100.f - cursorPosX;
 			point.y -= cursorPosY;
 		}
 	}
