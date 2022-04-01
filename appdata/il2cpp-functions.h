@@ -198,3 +198,5 @@ DO_APP_FUNC(void, RoleManager_AssignRolesFromList, (List_1_GameData_PlayerInfo_*
 DO_APP_FUNC(void, InnerNetClient_EnqueueDisconnect, (InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::EnqueueDisconnect(DisconnectReasons, System.String)");
 
 DO_APP_FUNC(void, PlayerPhysics_FixedUpdate, (PlayerPhysics* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::FixedUpdate()");
+
+DO_APP_FUNC(bool, SaveManager_GetPurchase, (String* itemKey, String* bundleKey, MethodInfo* method), "Assembly-CSharp, System.Boolean SaveManager::GetPurchase(System.String, System.String)");

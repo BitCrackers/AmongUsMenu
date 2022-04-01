@@ -76,6 +76,7 @@
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -187,7 +188,6 @@
     </ClCompile>
     <ClCompile Include="hooks\Chat.cpp" />
     <ClCompile Include="hooks\Doors.cpp" />
-    <ClCompile Include="hooks\HatManager.cpp" />
     <ClCompile Include="hooks\KeyboardJoystick.cpp" />
     <ClCompile Include="hooks\MeetingHud.cpp" />
     <ClCompile Include="hooks\PlayerControl.cpp" />
@@ -437,7 +437,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Version|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>

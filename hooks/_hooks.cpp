@@ -56,16 +56,6 @@ void DetourInitilization() {
 		}
 	}
 
-	// TO-DO:
-	// update signatures in user/game.cpp
-	/*
-	HOOKFUNC(HatManager_c__GetUnlockedHats_b__11_0);
-	HOOKFUNC(HatManager_c__GetUnlockedSkins_b__12_0);
-	HOOKFUNC(HatManager_c__GetUnlockedPets_b__9_0);
-	HOOKFUNC(HatManager_c__GetUnlockedVisors_b__15_0);
-	HOOKFUNC(HatManager_c__GetUnlockedNamePlates_b__17_0);
-	*/
-
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(PlayerControl_FixedUpdate);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
@@ -131,6 +121,8 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
+	HOOKFUNC(SaveManager_GetPurchase);
+
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -142,16 +134,7 @@ void DetourUninitialization()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	// TO-DO:
-	// update signatures in user/game.cpp
-	/*
-	UNHOOKFUNC(HatManager_c__GetUnlockedHats_b__11_0);
-	UNHOOKFUNC(HatManager_c__GetUnlockedSkins_b__12_0);
-	UNHOOKFUNC(HatManager_c__GetUnlockedPets_b__9_0);
-	UNHOOKFUNC(HatManager_c__GetUnlockedVisors_b__15_0);
-	UNHOOKFUNC(HatManager_c__GetUnlockedNamePlates_b__17_0);
-	*/
-
+	UNHOOKFUNC(SaveManager_GetPurchase);
 	UNHOOKFUNC(PlayerPhysics_FixedUpdate);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);

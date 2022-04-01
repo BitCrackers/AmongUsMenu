@@ -70,9 +70,6 @@
     <ClCompile Include="hooks\GameOptionsData.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\HatManager.cpp">
-      <Filter>hooks</Filter>
-    </ClCompile>
     <ClCompile Include="hooks\HudManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -268,9 +265,9 @@
     <ClCompile Include="events\ProtectPlayerEvent.cpp">
       <Filter>events</Filter>
     </ClCompile>
-	<ClInclude Include="hooks\RoleManager.hpp">
-	  <Filter>hooks</Filter>
-	</ClInclude>
+    <ClInclude Include="hooks\RoleManager.hpp">
+      <Filter>hooks</Filter>
+    </ClInclude>
     <ClCompile Include="hooks\RoleManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
@@ -288,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="profiler.cpp">
       <Filter>user</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveManager.cpp">
+      <Filter>hooks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
