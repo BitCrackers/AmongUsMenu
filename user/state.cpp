@@ -36,6 +36,7 @@ void Settings::Load() {
         j.at("RadarColor_G").get_to(this->SelectedColor.y);
         j.at("RadarColor_B").get_to(this->SelectedColor.z);
         j.at("RadarColor_A").get_to(this->SelectedColor.w);
+        j.at("RadarDrawIcons").get_to(this->RadarDrawIcons);
 
         j.at("ShowReplay").get_to(this->ShowReplay);
         j.at("ReplayColor_R").get_to(this->SelectedReplayMapColor.x);
@@ -95,6 +96,7 @@ void Settings::Save() {
             {"RadarColor_G", this->SelectedColor.y},
             {"RadarColor_B", this->SelectedColor.z},
             {"RadarColor_A", this->SelectedColor.w},
+            {"RadarDrawIcons", this->RadarDrawIcons},
 
             {"ShowReplay", this->ShowReplay},
             {"ReplayColor_R", this->SelectedReplayMapColor.x},

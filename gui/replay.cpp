@@ -91,7 +91,7 @@ namespace Replay
 		// if we store the transformed points then moving the replay window will cause everything to break..
 		for (auto& point : points)
 		{
-			point.x += cursorPosX;
+			point.x = getMapXOffsetSkeld(point.x) + cursorPosX;
 			point.y += cursorPosY;
 		}
 
@@ -136,7 +136,7 @@ namespace Replay
 		// untransform the points before returning
 		for (auto& point : points)
 		{
-			point.x -= cursorPosX;
+			point.x = getMapXOffsetSkeld(point.x) - cursorPosX;
 			point.y -= cursorPosY;
 		}
 	}
@@ -177,7 +177,7 @@ namespace Replay
 		Profiler::EndSample("ReplayPolyline");
 	}
 
-	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingPlayerFilter)
+	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingPlayerFilter, bool isUsingEventFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
 		for (int plrIdx = 0; plrIdx < State.replayWalkPolylineByPlayer.size(); plrIdx++)
@@ -187,6 +187,10 @@ namespace Replay
 				((plrIdx < 0) || (plrIdx > Replay::player_filter.size() - 1) ||
 					(Replay::player_filter[plrIdx].second == false) ||
 					(Replay::player_filter[plrIdx].first.has_value() == false)))
+				continue;
+
+			// event filter
+			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)EVENT_TYPES::EVENT_WALK].second == false))
 				continue;
 
 			// we get the player's latest position from the line data which is constructed from WalkEvents
@@ -220,8 +224,8 @@ namespace Replay
 			float player_mapYMax = (latestPos.y + halfImageHeight) + cursorPosY;
 
 			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-				ImVec2(player_mapX, player_mapY),
-				ImVec2(player_mapXMax, player_mapYMax),
+				ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY),
+				ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax),
 				ImVec2(0.0f, 0.0f),
 				ImVec2(1.0f, 1.0f),
 				GetReplayPlayerColor(plrLineData.colorId));
@@ -232,8 +236,8 @@ namespace Replay
 					((plrInfo->fields.Role != NULL) &&
 						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))))
 				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
-					ImVec2(player_mapX, player_mapY),
-					ImVec2(player_mapXMax, player_mapYMax),
+					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY),
+					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax),
 					ImVec2(0.0f, 0.0f),
 					ImVec2(1.0f, 1.0f));
 		}
@@ -277,8 +281,8 @@ namespace Replay
 				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(mapX, mapY),
-					ImVec2(mapXMax, mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -310,8 +314,8 @@ namespace Replay
 				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(mapX, mapY),
-					ImVec2(mapXMax, mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -326,8 +330,8 @@ namespace Replay
 				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(mapX, mapY),
-					ImVec2(mapXMax, mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -345,8 +349,8 @@ namespace Replay
 				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(mapX, mapY),
-					ImVec2(mapXMax, mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -424,8 +428,8 @@ namespace Replay
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, timeFilter);
+		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingPlayerFilter, isUsingEventFilter);
 		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, timeFilter);
-		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingPlayerFilter);
 		
 		ImGui::EndChild();
 

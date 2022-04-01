@@ -49,7 +49,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 
         if (!IsInLobby()) {
             State.selectedPlayer = PlayerSelection();
-            State.FlipSkeld = false;
             State.NoClip = false;
             State.HotkeyNoClip = false;
             State.originalName = "-";

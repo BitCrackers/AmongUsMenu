@@ -62,6 +62,7 @@ public:
     bool HideRadar_During_Meetings = false;
     bool ShowRadar_RightClick_Teleport = false;
     bool LockRadar = false;
+    bool RadarDrawIcons = true;
 
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;

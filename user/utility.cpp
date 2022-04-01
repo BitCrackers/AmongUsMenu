@@ -748,3 +748,8 @@ void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::ch
 	}
 	Profiler::EndSample("PolylineSimplification");
 }
+
+float getMapXOffsetSkeld(float x)
+{
+	return (State.mapType == Settings::MapType::Ship && State.FlipSkeld) ? x - 50.0f : x;
+}

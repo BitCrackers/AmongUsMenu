@@ -150,3 +150,5 @@ float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
 /// <param name="sqDistanceThreshold">The squared distance between two consecutive points. We use squared distance to avoid a costly sqrtf operation in the distance calculation</param>
 /// <param name="clearInputs">Whether both input collections should be cleared after processing. If no work is done they will not be cleared.</param>
 void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs);
+
+float getMapXOffsetSkeld(float x);

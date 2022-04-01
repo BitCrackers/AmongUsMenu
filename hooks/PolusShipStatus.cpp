@@ -12,6 +12,11 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 
 	Replay::Reset();
 
+	if (Constants_ShouldFlipSkeld(NULL))
+		State.FlipSkeld = true;
+	else
+		State.FlipSkeld = false;
+
 	State.RoundStart = std::chrono::system_clock::now();
 
 	State.selectedDoor = SystemTypes__Enum::Hallway;

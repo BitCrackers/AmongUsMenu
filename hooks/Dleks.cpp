@@ -3,8 +3,13 @@
 #include "state.hpp"
 
 bool dConstants_ShouldFlipSkeld(MethodInfo* method) {
+	bool orig_return = Constants_ShouldFlipSkeld(method);
 	if (State.FlipSkeld) {
 		return true;
 	}
-	return Constants_ShouldFlipSkeld(method);
+	else if (orig_return)
+	{
+		State.FlipSkeld = true;
+	}
+	return orig_return;
 }

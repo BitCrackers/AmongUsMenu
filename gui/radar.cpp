@@ -3,6 +3,7 @@
 #include "DirectX.h"
 #include "utility.h"
 #include "state.hpp"
+#include "gui-helpers.hpp"
 
 namespace Radar {
 	ImU32 GetRadarPlayerColor(GameData_PlayerInfo* playerData) {
@@ -12,7 +13,9 @@ namespace Radar {
 	ImU32 GetRadarPlayerColorStatus(GameData_PlayerInfo* playerData) {
 		if (playerData->fields.IsDead)
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->HalfWhite));
-		else if (State.RevealRoles && playerData->fields.Role != nullptr && playerData->fields.Role->fields.StringName != StringNames__Enum::Crewmate)
+		else if (State.RevealRoles
+			&& playerData->fields.Role != nullptr
+			&& playerData->fields.Role->fields.TeamType == RoleTeamTypes__Enum::Impostor)
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role)));
 		else
 			return ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0));
@@ -70,8 +73,6 @@ namespace Radar {
 		else
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
 
-		ImDrawList* drawList = ImGui::GetWindowDrawList();
-
 		ImVec2 winpos = ImGui::GetWindowPos();
 
 		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
@@ -87,54 +88,20 @@ namespace Radar {
 			if (!playerData || (!State.ShowRadar_Ghosts && playerData->fields.IsDead))
 				continue;
 
-			Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
-
-			float xOffset = maps[MapType].x_offset;
-			float yOffset = maps[MapType].y_offset;
-
-			if (MapType == Settings::MapType::Ship && State.FlipSkeld) {
-				xOffset -= 50;
-			}
-
-			IconTexture icon = icons.at(ICON_TYPES::PLAYER);
-			float radX = maps[MapType].x_offset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
-			float radY = maps[MapType].y_offset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
-			float radXMax = maps[MapType].x_offset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
-			float radYMax = maps[MapType].y_offset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
-
-			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-				ImVec2(radX, radY),
-				ImVec2(radXMax, radYMax),
-				ImVec2(0.0f, 1.0f),
-				ImVec2(1.0f, 0.0f),
-				GetRadarPlayerColor(playerData));
-
-			if (playerData->fields.IsDead)
-				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
-					ImVec2(radX, radY),
-					ImVec2(radXMax, radYMax),
-					ImVec2(0.0f, 1.0f),
-					ImVec2(1.0f, 0.0f));
+			if (State.RadarDrawIcons)
+				drawPlayerIcon(player, winpos, GetRadarPlayerColor(playerData));
+			else
+				drawPlayerDot(player, winpos, GetRadarPlayerColor(playerData), GetRadarPlayerColorStatus(playerData));
 		}
 
 		if (State.ShowRadar_DeadBodies) {
 			for (auto deadBody : GetAllDeadBodies()) {
 				auto playerData = GetPlayerDataById(deadBody->fields.ParentId);
 
-				Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
-
-				IconTexture icon = icons.at(ICON_TYPES::DEAD);
-				float radX = maps[MapType].x_offset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
-				float radY = maps[MapType].y_offset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
-				float radXMax = maps[MapType].x_offset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + winpos.x;
-				float radYMax = maps[MapType].y_offset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + winpos.y;
-
-				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(radX, radY),
-					ImVec2(radXMax, radYMax),
-					ImVec2(0.0f, 1.0f),
-					ImVec2(1.0f, 0.0f),
-					GetRadarPlayerColor(playerData));
+				if (State.RadarDrawIcons)
+					drawDeadPlayerIcon(deadBody, winpos, GetRadarPlayerColor(playerData));
+				else
+					drawDeadPlayerDot(deadBody, winpos, GetRadarPlayerColor(playerData));
 			}
 		}
 
