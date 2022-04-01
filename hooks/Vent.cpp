@@ -28,6 +28,7 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
 	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ENTER));
@@ -38,6 +39,7 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
 	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_EXIT));

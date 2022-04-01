@@ -132,6 +132,7 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
+        std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
         State.rawEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
         State.liveReplayEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
     }
@@ -196,6 +197,7 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
     State.aumUsers.clear();
 
+    std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
     Replay::Reset();
 
     for (auto& e : State.rawEvents)

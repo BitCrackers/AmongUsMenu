@@ -16,6 +16,7 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	State.rawEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 	State.liveReplayEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 
@@ -230,6 +231,7 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
 {
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
 	{
 		State.rawEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
@@ -244,6 +246,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	PlayerControl_CmdReportDeadBody(__this, target, method);
@@ -253,6 +256,7 @@ void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* ta
 {
 	if (!IsHost())
 	{
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	}
@@ -264,17 +268,31 @@ void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageRead
 	PlayerControl_HandleRpc(__this, callId, reader, NULL);
 }
 
-void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method) {
-	if (IsInGame() && !value) { //If we're already rendering it, lets skip checking if we should
-		for (auto player : GetAllPlayerControl()) {
-			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
-			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
+{
+	//If we're already rendering it, lets skip checking if we should
+	if (IsInGame() && !value)
+	{
+		Transform* rendererTrans = app::Component_get_transform(reinterpret_cast<app::Component_1*>(__this), NULL);
+		if (rendererTrans != NULL)
+		{
+			Transform* root = app::Transform_GetRoot(rendererTrans, NULL); // docs say GetRoot never returns NULL, so no need to check it
+			for (auto player : GetAllPlayerControl())
 			{
-				// TO-DO:
-				// figure out if a reference to the Renderer component can be gotten, otherwise just use UnityEngine's GetComponentInChildren<T> function
-				// was: player->fields.MyPhysics->fields.rend
-				if (((Renderer*)player->fields.MyPhysics->fields.Skin->fields.layer) == __this) {
-					value = true;
+				if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
+
+				if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+				{
+					// TO-DO:
+					// figure out if a reference to the Renderer component can be gotten, otherwise just use UnityEngine's GetComponentInChildren<T> function
+					// was: player->fields.MyPhysics->fields.rend
+					Transform* playerTrans = app::Component_get_transform(reinterpret_cast<app::Component_1*>(player), NULL);
+					if (playerTrans == NULL) continue;
+					Transform* playerRoot = app::Transform_GetRoot(playerTrans, NULL); // docs say GetRoot never returns NULL, so no need to check it
+					if (root == playerRoot)
+					{
+						value = true;
+					}
 				}
 			}
 		}
@@ -300,12 +318,14 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	State.rawEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	State.liveReplayEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
+	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	State.rawEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	State.liveReplayEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);

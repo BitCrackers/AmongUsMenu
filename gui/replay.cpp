@@ -12,6 +12,9 @@
 
 namespace Replay
 {
+	// NOTE:
+	// any code that modifies State.rawEvents or State.liveReplayEvents or any other collection should use this mutex
+	// failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
 	std::mutex replayEventMutex;
 
 	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
@@ -59,6 +62,7 @@ namespace Replay
 
 	void Reset()
 	{
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		for (auto& e : State.liveReplayEvents)
 			e.reset();
 		State.liveReplayEvents.clear();
