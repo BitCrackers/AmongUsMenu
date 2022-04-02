@@ -57,6 +57,7 @@ namespace ConsoleGui
 		ImGui::EndChild();
 		ImGui::Separator();
 		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		size_t i = State.liveReplayEvents.size() - 1;
 		if (i >= 0) {
 			for (std::vector<std::unique_ptr<EventInterface>>::reverse_iterator rit = State.liveReplayEvents.rbegin(); rit != State.liveReplayEvents.rend(); ++rit, --i) {

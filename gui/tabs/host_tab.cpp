@@ -72,8 +72,8 @@ namespace HostTab {
 								}
 							}
 
-							if((*Game::pGameOptionsData)->fields.NumImpostors <= State.impostors_amount + State.shapeshifters_amount)
-								(*Game::pGameOptionsData)->fields.NumImpostors = State.impostors_amount + State.shapeshifters_amount;
+							if((*Game::pGameOptionsData)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
+								(*Game::pGameOptionsData)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;
 						}
 					}
 				}

@@ -13,14 +13,14 @@ namespace GameTab {
 			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				if (!IsInGame()) State.PlayerSpeed = State.PrevPlayerSpeed;
 				else {
-					(*Game::pGameOptionsData)->fields.PlayerSpeedMod = State.PlayerSpeed;
+					(*Game::pGameOptionsData)->fields._.playerSpeedMod = State.PlayerSpeed;
 					State.PrevPlayerSpeed = State.PlayerSpeed;
 				}
 			}
 			if (CustomListBoxInt("Kill Distance", &State.KillDistance, KILL_DISTANCE)) {
 				if (!IsInGame()) State.KillDistance = State.PrevKillDistance;
 				else {
-					(*Game::pGameOptionsData)->fields.KillDistance = State.KillDistance;
+					(*Game::pGameOptionsData)->fields._.killDistance = State.KillDistance;
 					State.PrevKillDistance = State.KillDistance;
 				}
 			}

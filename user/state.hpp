@@ -11,16 +11,16 @@ class Settings {
 public:
 
     KeyBinds::Config KeyBinds = {
-        VK_DELETE,
-        VK_INSERT,
-        VK_HOME,
-        VK_NEXT,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        VK_END
+        VK_DELETE, // toggle menu
+        VK_INSERT, // toggle radar
+        VK_HOME, // toggle console
+        VK_NEXT, // repair sabotage
+        0x00, // noclip
+        0x00, // close all doors
+        0x00, // toggle zoom
+        0x00, // toggle freecam
+        0x00, // close current room door
+        VK_END // toggle replay
     };
 
     bool ImGuiInitialized = false;
@@ -95,6 +95,9 @@ public:
     std::chrono::system_clock::time_point MatchCurrent;
     std::chrono::system_clock::time_point MatchEnd;
     std::chrono::system_clock::time_point MatchLive;
+    // NOTE:
+    // any code that modifies State.rawEvents or State.liveReplayEvents or any other collection should use the Replay.replayEventMutex
+    // failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
     std::vector<std::unique_ptr<EventInterface>> rawEvents;
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::vector<ImVec2> lastWalkEventPosPerPlayer;

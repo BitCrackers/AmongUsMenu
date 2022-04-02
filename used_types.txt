@@ -140,9 +140,9 @@ DestroyableSingleton_1_HatManager___Fields
 HatManager
 HatManager_c
 ScriptableObject
+LimitedTime
+LimitedTimeStartEnd
 CosmeticData
-HatBehaviour
-HatBehaviour__Array
 NamePlateData
 VisorData
 PetBehaviour
@@ -201,3 +201,9 @@ SaveManager
 DestroyableSingleton_1_RoleManager_
 EngineerRole
 RoleManager
+HatData
+HatData__Array
+List_1_HatData_
+GameOptionsDataParent
+StatsManager_Stats
+SkinLayer
