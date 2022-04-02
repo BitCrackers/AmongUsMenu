@@ -109,13 +109,4 @@ namespace HostTab {
 	{
 		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](int i) {return i == role; });
 	}
-
-	int GetMaxImposterAmount(size_t playerAmount)
-	{
-		if(playerAmount >= 9)
-			return 3;
-		if(playerAmount >= 7)
-			return 2;
-		return 1;
-	}
 }

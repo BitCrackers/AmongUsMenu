@@ -5,20 +5,18 @@
 #include "logger.h"
 #include "utility.h"
 #include "game.h"
-#include <random>
-#include <algorithm>
 
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	std::vector<uint8_t> assignedPlayers;
 	auto allPlayers = GetAllPlayerControl();
-	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields);
+	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields, allPlayers.size());
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
-	AssignRoles(roleRates.ShapeshifterCount, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
-	AssignRoles(roleRates.ImposterCount, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
-	AssignRoles(roleRates.ScientistCount, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
-	AssignRoles(roleRates.EngineerCount, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
-	AssignRoles(roleRates.MaxCrewmates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
 }
 
 void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
@@ -31,74 +29,67 @@ void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int3
 
 void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPlayers)
 {
-	for (int i = 0; i < State.assignedRolesPlayer.size(); i++) {
+	for (int i = 0; i < State.assignedRolesPlayer.size(); i++)
+	{
 		auto role = State.assignedRoles[i];
 		auto player = State.assignedRolesPlayer[i];
-		if (player == nullptr)
-			break;
-		if (role == (int)RoleType::Random)
+		if (!CanPlayerBeAssignedToRole(player, assignedPlayers) || role == (int)RoleType::Random)
 			continue;
 
 		auto trueRole = GetRoleTypesEnum((RoleType)role);
-		if (trueRole == RoleTypes__Enum::Shapeshifter)
-		{
-			if (roleRates.ShapeshifterCount < 1)
-				continue;
-			roleRates.ShapeshifterCount--;
-			roleRates.ImposterCount--;
-		}
-		else if (trueRole == RoleTypes__Enum::Impostor)
-		{
-			if (roleRates.ImposterCount < 1)
-				continue;
-			roleRates.ImposterCount--;
-			roleRates.ShapeshifterCount--;
-		}
-		else if (trueRole == RoleTypes__Enum::Scientist)
-		{
-			if (roleRates.ScientistCount < 1)
-				continue;
-			roleRates.ScientistCount--;
-		}
-		else if (trueRole == RoleTypes__Enum::Engineer)
-		{
-			if (roleRates.EngineerCount < 1)
-				continue;
-			roleRates.EngineerCount--;
-		}
+		roleRates.SubtractRole(trueRole);
 
 		PlayerControl_RpcSetRole(player, trueRole, NULL);
 		assignedPlayers.push_back(player->fields.PlayerId);
 	}
 }
 
-void AssignRoles(int& roleCount, int roleChance, RoleTypes__Enum role, std::vector<app::PlayerControl*>& allPlayers, std::vector<uint8_t>& assignedPlayers)
+void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, std::vector<app::PlayerControl*>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
+	auto roleCount = roleRates.GetRoleCount(role);
 	if (roleCount < 1)
 		return;
 
-	std::vector<PlayerControl*> randomEngineers;
-	std::sample(allPlayers.begin(), allPlayers.end(), std::back_inserter(randomEngineers), roleCount, std::mt19937{ std::random_device{}() });
-	for (auto player : randomEngineers) {
-		if (player == nullptr) {
+	auto playerAmount = allPlayers.size();
+
+	for (auto i = 0; i < roleCount; i++)
+	{
+		if(assignedPlayers.size() >= playerAmount)
 			break;
-		}
-		if (std::find(assignedPlayers.begin(), assignedPlayers.end(), player->fields.PlayerId) != assignedPlayers.end()) {
+
+		if (!ShouldRoleBeAssigned(roleChance))
 			continue;
-		}
 
-		if (roleChance < 100)
+		int sanityCheck = 1000;
+		while (sanityCheck > 0)
 		{
-			std::random_device dev;
-			std::mt19937 rng(dev());
-			std::uniform_int_distribution<std::mt19937::result_type> dist100(1, 100);
-			auto chance = 100 - dist100(rng);
-
-			if (chance <= roleChance)
-				continue;
+			sanityCheck--;
+			auto playerIndex = GenerateRandomNumber(0, playerAmount - 1);
+			auto player = allPlayers[playerIndex];
+			if (CanPlayerBeAssignedToRole(player, assignedPlayers))
+			{
+				roleRates.SubtractRole(role);
+				PlayerControl_RpcSetRole(player, role, NULL);
+				assignedPlayers.push_back(player->fields.PlayerId);
+				break;
+			}
 		}
-
-		PlayerControl_RpcSetRole(player, role, NULL);
-		assignedPlayers.push_back(player->fields.PlayerId);
+		if (sanityCheck == 0)
+			STREAM_ERROR("Sanity check failed, could not assign roles to all players (roleCount " << roleCount << ", playerAmount " << playerAmount << ")");
 	}
+}
+
+bool ShouldRoleBeAssigned(int roleChance)
+{
+	if (roleChance == 100)
+		return true;
+
+	return roleChance >= GenerateRandomNumber(1, 100);
+}
+
+bool CanPlayerBeAssignedToRole(app::PlayerControl* player, std::vector<uint8_t>& assignedPlayers)
+{
+	if (player == nullptr || std::find(assignedPlayers.begin(), assignedPlayers.end(), player->fields.PlayerId) != assignedPlayers.end())
+		return false;
+	return true;
 }
