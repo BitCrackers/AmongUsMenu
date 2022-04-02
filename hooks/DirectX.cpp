@@ -77,6 +77,16 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (!State.ImGuiInitialized)
         return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 
+    if (uMsg == WM_SIZE) {
+        // RenderTarget needs to be released because the resolution has changed 
+        WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
+        if (pRenderTargetView) {
+            pRenderTargetView->Release();
+            pRenderTargetView = nullptr;
+        }
+        ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
+    }
+
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
@@ -171,6 +181,19 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     }
 
     WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
+
+    // resolution changed
+    if (!pRenderTargetView) {
+        ID3D11Texture2D* pBackBuffer = nullptr;
+        __this->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+        assert(pBackBuffer);
+        pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
+        pBackBuffer->Release();
+
+        ImVec2 size = DirectX::GetWindowSize();
+        STREAM_DEBUG("Unity Window Resolution: " << +Screen_get_width(nullptr) << "x" << +Screen_get_height(nullptr));
+        STREAM_DEBUG("DirectX Window Size: " << +size.x << "x" << +size.y);
+    }
 
     il2cpp_gc_disable();
 
