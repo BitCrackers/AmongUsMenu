@@ -60,8 +60,10 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, std
 		if (!ShouldRoleBeAssigned(roleChance))
 			continue;
 
-		while (true)
+		int sanityCheck = 1000;
+		while (sanityCheck > 0)
 		{
+			sanityCheck--;
 			auto playerIndex = GenerateRandomNumber(0, playerAmount - 1);
 			auto player = allPlayers[playerIndex];
 			if (CanPlayerBeAssignedToRole(player, assignedPlayers))
@@ -72,6 +74,8 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, std
 				break;
 			}
 		}
+		if (sanityCheck == 0)
+			STREAM_ERROR("Sanity check failed, could not assign roles to all players (roleCount " << roleCount << ", playerAmount " << playerAmount << ")");
 	}
 }
 
