@@ -145,12 +145,12 @@ namespace Replay
 				endPtr = lastTimeIndex * sizeof(ImVec2);
 			}
 			int numPoints = (endPtr - startPtr) / sizeof(ImVec2);
-			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), numPoints, GetReplayPlayerColor(colorId), false, 1.f);
+			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 		else
 		{
 			// we're not using any time filter, so just draw the polyline normally.
-			drawList->AddPolyline(points.data(), points.size(), GetReplayPlayerColor(colorId), false, 1.f);
+			drawList->AddPolyline(points.data(), points.size(), GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 
 		// untransform the points before returning

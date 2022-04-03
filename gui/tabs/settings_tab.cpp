@@ -7,6 +7,7 @@
 #include "achievements.hpp"
 #include "DirectX.h"
 #include "imgui/imgui_impl_win32.h" // ImGui_ImplWin32_GetDpiScaleForHwnd
+#include "theme.hpp" // ApplyTheme
 
 namespace SettingsTab {
 	void Render() {
@@ -34,9 +35,18 @@ namespace SettingsTab {
 				else {
 					State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(DirectX::window);
 				}
-				ImGui::GetStyle().ScaleAllSizes(State.dpiScale);
+				ApplyTheme();
 				State.Save();
 			}
+#ifdef _DEBUG
+			static const std::vector<const char*> DPI_SCALING_LEVEL = { "100%", "125%", "150%", "175%", "200%", "225%", "250%", "275%", "300%" };
+			ImGui::SameLine();
+			int scaleIndex =(int(std::clamp(State.dpiScale, 1.0f, 3.0f) * 100.0f) - 100) / 25;
+			if (CustomListBoxInt("Scaling Level", &scaleIndex, DPI_SCALING_LEVEL, 100 * State.dpiScale)) {
+				State.dpiScale = (scaleIndex * 25 + 100) / 100.0f;
+				ApplyTheme();
+			}
+#endif
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
 #ifdef _DEBUG

@@ -80,7 +80,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (uMsg == WM_DPICHANGED && State.AdjustByDPI) {
         float dpi = HIWORD(wParam);
         State.dpiScale = dpi / 96.0f;
-        ImGui::GetStyle().ScaleAllSizes(State.dpiScale);
+        ApplyTheme();
         STREAM_DEBUG("DPI Scale: " << State.dpiScale);
     }
 
