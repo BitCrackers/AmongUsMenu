@@ -317,11 +317,12 @@ void drawPlayerDot(PlayerControl* player, ImVec2 winPos, ImU32 color, ImU32 stat
 		xOffset -= 50;
 	}
 
-	float radX = xOffset + (playerPos.x * maps[State.mapType].scale) + winPos.x;
-	float radY = yOffset - (playerPos.y * maps[State.mapType].scale) + winPos.y;
+	float radX = xOffset + (playerPos.x * maps[State.mapType].scale);
+	float radY = yOffset - (playerPos.y * maps[State.mapType].scale);
+	const ImVec2& center = ImVec2(radX, radY) * State.dpiScale + winPos;
 
-	drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, color);
-	drawList->AddCircle(ImVec2(radX, radY), 4.5F + 0.5F, statusColor, 0, 2.0F);
+	drawList->AddCircleFilled(center, 4.5F * State.dpiScale, color);
+	drawList->AddCircle(center, (4.5F + 0.5F) * State.dpiScale, statusColor, 0, 2.0F);
 }
 
 void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
@@ -338,15 +339,22 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 	}
 
 	IconTexture icon = icons.at(ICON_TYPES::PLAYER);
-	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
-	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
+	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
 
-	drawList->AddImage((void*)icon.iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
+	const ImVec2& p_min = ImVec2(radX, radY) * State.dpiScale + winPos;
+	const ImVec2& p_max = ImVec2(radXMax, radYMax) * State.dpiScale + winPos;
+
+	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
+		p_min, p_max,
+		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
 
 	if (GetPlayerData(player)->fields.IsDead)
-		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, 
+			p_min, p_max,
+			ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 }
 
 void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
@@ -362,10 +370,11 @@ void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 		xOffset -= 50;
 	}
 
-	float radX = xOffset + (bodyPos.x * maps[State.mapType].scale) + winPos.x;
-	float radY = yOffset - (bodyPos.y * maps[State.mapType].scale) + winPos.y;
+	float radX = xOffset + (bodyPos.x * maps[State.mapType].scale);
+	float radY = yOffset - (bodyPos.y * maps[State.mapType].scale);
 
-	drawList->AddText(GetFont(), 16, ImVec2(radX - 5.F, radY - 6.75F), color, "X");
+	drawList->AddText(GetFont(), 16 * State.dpiScale, 
+		ImVec2(radX - 5.F, radY - 6.75F) * State.dpiScale + winPos, color, "X");
 }
 
 void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
@@ -382,10 +391,13 @@ void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 	}
 
 	IconTexture icon = icons.at(ICON_TYPES::DEAD);
-	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
-	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
+	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
 
-	drawList->AddImage((void*)icon.iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
+	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
+		ImVec2(radX, radY) * State.dpiScale + winPos,
+		ImVec2(radXMax, radYMax) * State.dpiScale + winPos,
+		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
 }

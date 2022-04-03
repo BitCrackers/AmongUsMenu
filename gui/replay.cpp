@@ -100,10 +100,10 @@ namespace Replay
 		}
 		// this is annoying, but we have to transform the points, render, then untransform
 		// if we store the transformed points then moving the replay window will cause everything to break..
-		auto offsetX = getMapXOffsetSkeld(0);
+		auto xOffset = getMapXOffsetSkeld(0);
 		for (auto& point : points)
 		{
-			point.x = (point.x + offsetX) * State.dpiScale + cursorPosX;
+			point.x = (point.x + xOffset) * State.dpiScale + cursorPosX;
 			point.y = point.y * State.dpiScale + cursorPosY;
 		}
 
@@ -156,8 +156,8 @@ namespace Replay
 		// untransform the points before returning
 		for (auto& point : points)
 		{
-			point.x = (point.x - cursorPosX) / State.dpiScale - offsetX;
-			point.y = (point.y -cursorPosY) / State.dpiScale;
+			point.x = (point.x - cursorPosX) / State.dpiScale - xOffset;
+			point.y = (point.y - cursorPosY) / State.dpiScale;
 		}
 	}
 
