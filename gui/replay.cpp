@@ -100,10 +100,11 @@ namespace Replay
 		}
 		// this is annoying, but we have to transform the points, render, then untransform
 		// if we store the transformed points then moving the replay window will cause everything to break..
+		auto offsetX = getMapXOffsetSkeld(0);
 		for (auto& point : points)
 		{
-			point.x = getMapXOffsetSkeld(point.x) + cursorPosX;
-			point.y += cursorPosY;
+			point.x = (point.x + offsetX) * State.dpiScale + cursorPosX;
+			point.y = point.y * State.dpiScale + cursorPosY;
 		}
 
 		// earliestTimeIndex will be the very first event to be shown, lastTimeIndex will be the very last even to be shown
@@ -155,12 +156,8 @@ namespace Replay
 		// untransform the points before returning
 		for (auto& point : points)
 		{
-			float xPoint = getMapXOffsetSkeld(point.x);
-			if (xPoint != point.x)
-				xPoint += 100.f;
-
-			point.x = xPoint - cursorPosX;
-			point.y -= cursorPosY;
+			point.x = (point.x - cursorPosX) / State.dpiScale - offsetX;
+			point.y = (point.y -cursorPosY) / State.dpiScale;
 		}
 	}
 
@@ -301,14 +298,14 @@ namespace Replay
 			// i'm not mathematically inclined, so i don't really know what i'm doing...
 			// but this is what i got for transforming from the existing to void*'s original:
 			float halfImageWidth = (icon.iconImage.imageWidth * icon.scale * 0.5f) * maps[MapType].scale, halfImageHeight = (icon.iconImage.imageHeight * icon.scale * 0.5f) * maps[MapType].scale;
-			float player_mapX = (playerPos.x - halfImageWidth) + cursorPosX;
-			float player_mapY = (playerPos.y - halfImageHeight) + cursorPosY;
-			float player_mapXMax = (playerPos.x + halfImageWidth) + cursorPosX;
-			float player_mapYMax = (playerPos.y + halfImageHeight) + cursorPosY;
+			float player_mapX = (playerPos.x - halfImageWidth);
+			float player_mapY = (playerPos.y - halfImageHeight);
+			float player_mapXMax = (playerPos.x + halfImageWidth);
+			float player_mapYMax = (playerPos.y + halfImageHeight);
 
 			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-				ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY),
-				ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax),
+				ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+				ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 				ImVec2(0.0f, 0.0f),
 				ImVec2(1.0f, 1.0f),
 				GetReplayPlayerColor(plrLineData.colorId));
@@ -319,8 +316,8 @@ namespace Replay
 					((plrInfo->fields.Role != NULL) &&
 						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))))
 				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY),
-					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax),
+					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(0.0f, 0.0f),
 					ImVec2(1.0f, 1.0f));
 		}
@@ -364,14 +361,14 @@ namespace Replay
 				auto kill_event = dynamic_cast<KillEvent*>(curEvent);
 				auto position = kill_event->GetTargetPosition();
 				IconTexture icon = icons.at(ICON_TYPES::KILL);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(mapX), mapY),
-					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -397,14 +394,14 @@ namespace Replay
 				}
 
 				IconTexture icon = icons.at(iconType);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(mapX), mapY),
-					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -413,14 +410,14 @@ namespace Replay
 				auto task_event = dynamic_cast<TaskCompletedEvent*>(curEvent);
 				auto position = task_event->GetPosition();
 				IconTexture icon = icons.at(ICON_TYPES::TASK);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(mapX), mapY),
-					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -432,14 +429,14 @@ namespace Replay
 				if (targetPos.has_value())
 					position = targetPos.value();
 				IconTexture icon = icons.at(ICON_TYPES::REPORT);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosY;
+				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(mapX), mapY),
-					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax),
+					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					ImVec2(getMapXOffsetSkeld(mapXMax), mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(0.0f, 1.0f),
 					ImVec2(1.0f, 0.0f));
 			}
@@ -477,13 +474,13 @@ namespace Replay
 		ImVec2 winPos = ImGui::GetWindowPos();
 
 		// calculate proper cursorPosition for centerered rendering
-		float cursorPosX = winPos.x + 15.f;
-		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(maps[MapType].mapImage.imageHeight * 0.15f) * 0.5f);
+		float cursorPosX = winPos.x + 15.f * State.dpiScale;
+		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(maps[MapType].mapImage.imageHeight * 0.15f) * 0.5f) * State.dpiScale;
 
 		// TODO: Center image in childwindow and calculate new cursorPos
 		drawList->AddImage((void*)maps[MapType].mapImage.shaderResourceView,
-			ImVec2(cursorPosX + 5.0f, cursorPosY + 5.0f),
-			ImVec2(cursorPosX + 5.0f + ((float)maps[MapType].mapImage.imageWidth * 0.5f), cursorPosY + 5.0f + ((float)maps[MapType].mapImage.imageHeight * 0.5f)),
+			ImVec2(cursorPosX, cursorPosY) + 5.0f * State.dpiScale,
+			ImVec2(cursorPosX, cursorPosY) + ImVec2(5.0f + ((float)maps[MapType].mapImage.imageWidth * 0.5f),  5.0f + ((float)maps[MapType].mapImage.imageHeight * 0.5f)) * State.dpiScale,
 			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			ImGui::GetColorU32(State.SelectedReplayMapColor));

@@ -216,6 +216,10 @@ struct ImVec2
     // begin of AUM
     ImVec2 operator* (float scalar) { return ImVec2(x * scalar, y * scalar); }
     ImVec2 operator/ (float scalar) { return ImVec2(x / scalar, y / scalar); }
+    ImVec2 operator+ (float offset) { return ImVec2(x + offset, y + offset); }
+    ImVec2 operator- (float offset) { return ImVec2(x - offset, y - offset); }
+    ImVec2 operator+ (const ImVec2& vec) { return ImVec2(x + vec.x, y + vec.y); }
+    ImVec2 operator- (const ImVec2& vec) { return ImVec2(x - vec.x, y - vec.y); }
     // end of AUM
     float  operator[] (size_t idx) const    { IM_ASSERT(idx <= 1); return (&x)[idx]; }    // We very rarely use this [] operator, the assert overhead is fine.
     float& operator[] (size_t idx)          { IM_ASSERT(idx <= 1); return (&x)[idx]; }    // We very rarely use this [] operator, the assert overhead is fine.
