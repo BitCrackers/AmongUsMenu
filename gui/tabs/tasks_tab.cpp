@@ -3,6 +3,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "utility.h"
+#include "gui-helpers.hpp"
 
 namespace TasksTab {
 	void Render() {

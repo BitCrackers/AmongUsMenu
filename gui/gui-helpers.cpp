@@ -1,10 +1,6 @@
 #include "pch-il2cpp.h"
 #include "gui-helpers.hpp"
 #include "keybinds.h"
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
-#include "imgui/imgui_internal.h"
 #include "state.hpp"
 #include "game.h"
 #include "DirectX.h"

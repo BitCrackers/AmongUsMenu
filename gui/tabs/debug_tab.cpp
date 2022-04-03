@@ -8,6 +8,7 @@
 #include "logger.h"
 #include <iostream>
 #include <sstream>
+#include "gui-helpers.hpp"
 
 namespace DebugTab {
 

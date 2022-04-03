@@ -16,6 +16,7 @@
 #include "tabs/debug_tab.h"
 #endif
 #include "state.hpp"
+#include "gui-helpers.hpp"
 
 namespace Menu {
 	void Init() {
