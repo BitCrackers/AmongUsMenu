@@ -30,6 +30,8 @@ public:
     bool showDebugTab = false;
 #endif
 
+    float dpiScale = 1.f;
+
     std::string CurrentScene;
 
     bool MaxVision = false;

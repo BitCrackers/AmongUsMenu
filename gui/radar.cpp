@@ -66,7 +66,7 @@ namespace Radar {
 			Radar::Init();
 
 		Settings::MapType MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 10.f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 10.f), ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 10.f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
 
 		if(State.LockRadar)
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
@@ -76,7 +76,7 @@ namespace Radar {
 		ImVec2 winpos = ImGui::GetWindowPos();
 
 		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
-			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F),
+			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F) * State.dpiScale,
 			ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),

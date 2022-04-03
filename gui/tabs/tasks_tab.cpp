@@ -8,7 +8,7 @@ namespace TasksTab {
 	void Render() {
 		if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.Tasks != NULL) {
 			if (ImGui::BeginTabItem("Tasks")) {
-				ImGui::Dummy(ImVec2(4, 4));
+				ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 				if (!PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer))) {
 					auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
 
@@ -34,9 +34,9 @@ namespace TasksTab {
 							, TranslateTaskTypes(task->fields._.TaskType));
 					}
 
-					ImGui::Dummy(ImVec2(7, 7));
+					ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 					ImGui::Separator();
-					ImGui::Dummy(ImVec2(7, 7));
+					ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				}
 
 				if (ImGui::Button("Play Shields Animation"))

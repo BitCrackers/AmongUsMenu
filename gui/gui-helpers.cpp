@@ -80,7 +80,7 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 		SameLine(0, spacing);
 		const bool resetResponse = Button(buttonLabel.c_str());
 		if (resetResponse) {
-			for (int i = 0; i < list->size(); i++)
+			for (size_t i = 0; i < list->size(); i++)
 				list->at(i).second = false;
 			return resetResponse;
 		}
@@ -105,8 +105,8 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 				continue;
 
 			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
-			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
+			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), list->at(playerData->fields.PlayerId).second))
 			{
 				list->at(playerData->fields.PlayerId).second ^= 1;
@@ -124,7 +124,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 			ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 			SameLine();
 			PopStyleVar(2);
-			Dummy(ImVec2(0, 0));
+			Dummy(ImVec2(0, 0) * State.dpiScale);
 			SameLine();
 
 			ImVec4 nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
@@ -154,7 +154,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 		SameLine(0, spacing);
 		const bool resetResponse = Button(buttonLabel.c_str());
 		if (resetResponse) {
-			for (int i = 0; i < list->size(); i++)
+			for (size_t i = 0; i < list->size(); i++)
 				list->at(i).second = false;
 			return resetResponse;
 		}
@@ -190,7 +190,7 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 		State.Replay_IsPlaying = true;
 	}
 
-	ImGui::SameLine(0.0f, 1.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
 
 	if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PAUSE).iconImage.shaderResourceView,
 		ImVec2(icons.at(ICON_TYPES::PAUSE).iconImage.imageWidth * icons.at(ICON_TYPES::PAUSE).scale,
@@ -199,7 +199,7 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 		State.Replay_IsPlaying = State.Replay_IsLive = false;
 	}
 
-	ImGui::SameLine(0.0f, 1.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
 
 	ImGuiContext& g = *GImGui;
 	const ImGuiStyle& style = g.Style;
@@ -272,12 +272,12 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 	if (label_size.x > 0.0f)
 		RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
 
-	ImGui::SameLine(0.0f, 10.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 10.0f * State.dpiScale);
 
 	ImU32 liveColor = (State.Replay_IsLive) ? ImGui::ColorConvertFloat4ToU32(ImVec4(255.0f, 0.f, 0.f, 255.0f)) : ImGui::ColorConvertFloat4ToU32(ImVec4(128.f, 128.f, 128.f, 255.0f));
-	const ImVec2 circlePos(window->DC.CursorPos.x, window->DC.CursorPos.y + 9.5f);
-	window->DrawList->AddCircleFilled(circlePos, 5.0f, liveColor);
-	ImGui::SameLine(0.0f, 18.f);
+	const ImVec2 circlePos(window->DC.CursorPos.x, window->DC.CursorPos.y + 9.5f * State.dpiScale);
+	window->DrawList->AddCircleFilled(circlePos, 5.0f * State.dpiScale, liveColor);
+	ImGui::SameLine(0.0f * State.dpiScale, 18.f * State.dpiScale);
 	ImGui::Text("Live");
 
 

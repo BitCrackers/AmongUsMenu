@@ -19,7 +19,7 @@
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
@@ -30,6 +30,7 @@ namespace Menu {
 			Menu::Init();
 
 		ImGui::Begin("AmongUsMenu", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::SetWindowFontScale(State.dpiScale);
 		ImGui::BeginTabBar("AmongUs#TopBar", ImGuiTabBarFlags_NoTabListScrollingButtons);
 
 		if(!firstRender)

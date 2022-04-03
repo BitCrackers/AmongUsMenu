@@ -80,8 +80,8 @@ void Esp::Render()
 			/////////////////////////////////
 			if (State.ShowEsp_Box)
 			{
-				float width = GetScaleFromValue(35.0f);
-				float height = GetScaleFromValue(120.0f);
+				float width = GetScaleFromValue(35.0f * State.dpiScale);
+				float height = GetScaleFromValue(120.0f * State.dpiScale);
 
 				ImVec2 top{ it.Position.x + width, it.Position.y };
 				ImVec2 bottom{ it.Position.x - width, it.Position.y - height };
@@ -93,7 +93,7 @@ void Esp::Render()
 			/////////////////////////////////
 			if (State.ShowEsp_Distance)
 			{
-				const ImVec2 position{ it.Position.x, it.Position.y + 15.0f };
+				const ImVec2 position{ it.Position.x, it.Position.y + 15.0f * State.dpiScale };
 
 				char distance[32];
 				sprintf_s(distance, "[%.0fm]", it.Distance);

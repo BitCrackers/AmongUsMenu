@@ -74,6 +74,17 @@ static bool CanDrawReplay()
 }
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    if (uMsg == WM_DPICHANGED) {
+        float dpi = HIWORD(wParam);
+        State.dpiScale = dpi / 96.0f;
+        ImGui::GetStyle().ScaleAllSizes(State.dpiScale);
+        LPCRECT rc = (LPCRECT)lParam;
+        ::SetWindowPos(hWnd, nullptr,
+            rc->left, rc->top, rc->right - rc->left, rc->bottom - rc->top, 
+            SWP_NOZORDER | SWP_NOACTIVATE);
+        STREAM_DEBUG("DPI Scale: " << State.dpiScale);
+    }
+
     if (!State.ImGuiInitialized)
         return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 
@@ -107,10 +118,11 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
         pBackBuffer->Release();
         oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
+        State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(window);
 
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->ClearFonts();
+        io.Fonts->Clear();
         ImFontConfig config;
         io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &config, io.Fonts->GetGlyphRangesCyrillic());
         io.Fonts->Build();
@@ -174,10 +186,10 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     il2cpp_gc_disable();
 
+    ApplyTheme();
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-    ApplyTheme();
 
     if (State.ShowMenu)
     {
@@ -194,12 +206,13 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 		ImGuiRenderer::Submit([&]()
 		{
 			//Push ImGui flags
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f * State.dpiScale);
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, { 0.0f, 0.0f, 0.0f, 0.0f });
 
 			//Setup BackBuffer
 			ImGui::Begin("BackBuffer", reinterpret_cast<bool*>(true),
 				ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoScrollbar);
+            ImGui::SetWindowFontScale(State.dpiScale);
 
 			s_Cache.Winsize = DirectX::GetWindowSize();
 			s_Cache.Window = ImGui::GetCurrentWindow();

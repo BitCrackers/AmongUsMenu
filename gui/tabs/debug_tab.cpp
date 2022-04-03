@@ -13,16 +13,16 @@ namespace DebugTab {
 
 	void Render() {
 		if (ImGui::BeginTabItem("Debug")) {
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 #ifndef _VERSION
 			if (ImGui::Button("Unload DLL"))
 			{
 				SetEvent(hUnloadEvent);
 			}
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 #endif
 			ImGui::Checkbox("Enable Occlusion Culling", &State.OcclusionCulling);
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
 			if (ImGui::Button("Force Load Settings"))
 			{
@@ -33,11 +33,11 @@ namespace DebugTab {
 				State.Save();
 			}
 
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
 			ImGui::Checkbox("Log Unity Debug Messages", &State.ShowUnityLogs);
 
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
 			ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
 			ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
@@ -68,7 +68,7 @@ namespace DebugTab {
 					Profiler::ClearStats();
 				}
 
-				ImGui::BeginChild("debug#profiler", ImVec2(0, 0), true);
+				ImGui::BeginChild("debug#profiler", ImVec2(0, 0) * State.dpiScale, true);
 
 				std::stringstream statStream;
 				Profiler::AppendStatStringStream("WalkEventCreation", statStream);

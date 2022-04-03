@@ -1,5 +1,6 @@
 #include "pch-il2cpp.h"
 #include "theme.hpp"
+#include "state.hpp"
 #include <imgui/imgui.h>
 
 #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
@@ -10,7 +11,10 @@
 
 void ApplyTheme()
 {
+	static const ImGuiStyle defaultStyle;
+
 	auto& style = ImGui::GetStyle();
+	style = defaultStyle;
 	style.Colors[ImGuiCol_Text] = IMGUI_TEXT(0.78f);
 	style.Colors[ImGuiCol_TextDisabled] = IMGUI_TEXT(0.28f);
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
@@ -71,4 +75,7 @@ void ApplyTheme()
 	style.WindowBorderSize = 0.0f;
 
 	style.ChildBorderSize = 0.0f;
+
+	// scale by dpi
+	style.ScaleAllSizes(State.dpiScale);
 }

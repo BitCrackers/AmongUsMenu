@@ -9,7 +9,7 @@
 namespace SettingsTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Settings")) {
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 			ImGui::Text("Show/Hide Menu Keybind:");
 			ImGui::SameLine();
 			if (HotKey(State.KeyBinds.Toggle_Menu)) {
@@ -22,13 +22,13 @@ namespace SettingsTab {
 				State.Save();
 			}
 #ifdef _DEBUG
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			if (ImGui::Checkbox("Show Debug Tab", &State.showDebugTab)) {
 				State.Save();
 			}
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 #endif
 			//Change this to in game only once account is overridden
 			{
@@ -38,9 +38,9 @@ namespace SettingsTab {
 				}
 			}
 
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			if (ImGui::Button("Unlock all Steam achievements"))
 			{
 				for (const char* achievement : steamAchievements)
