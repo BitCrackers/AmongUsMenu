@@ -64,6 +64,8 @@ void Settings::Load() {
         j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
         j.at("MoveInVent").get_to(this->MoveInVent);
 
+        j.at("AdjustByDPI").get_to(this->AdjustByDPI);
+
         j.at("RevealVotes").get_to(this->RevealVotes);
 
         j.at("ShowConsole").get_to(this->ShowConsole);
@@ -127,6 +129,7 @@ void Settings::Save() {
             {"MoveInVent", this->MoveInVent},
 
             {"RevealVotes", this->RevealVotes},
+            {"AdjustByDPI", this->AdjustByDPI},
 
             {"ShowConsole", this->ShowConsole},
             {"ShowUnityLogs", this->ShowUnityLogs}

@@ -26,7 +26,7 @@ namespace ConsoleGui
 
 	bool init = false;
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_None);
 		ImGui::SetNextWindowBgAlpha(1.F);
 
 		if (!init)
@@ -57,7 +57,7 @@ namespace ConsoleGui
 		}
 		ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("console#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		size_t i = State.liveReplayEvents.size() - 1;
 		if (i >= 0) {

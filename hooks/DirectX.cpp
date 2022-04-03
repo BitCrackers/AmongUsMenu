@@ -23,7 +23,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-HWND window;
+HWND DirectX::window;
 ID3D11Device* pDevice;
 ID3D11DeviceContext* pContext;
 ID3D11RenderTargetView* pRenderTargetView;
@@ -74,19 +74,15 @@ static bool CanDrawReplay()
 }
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    if (uMsg == WM_DPICHANGED) {
+    if (!State.ImGuiInitialized)
+        return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+
+    if (uMsg == WM_DPICHANGED && State.AdjustByDPI) {
         float dpi = HIWORD(wParam);
         State.dpiScale = dpi / 96.0f;
         ImGui::GetStyle().ScaleAllSizes(State.dpiScale);
-        LPCRECT rc = (LPCRECT)lParam;
-        ::SetWindowPos(hWnd, nullptr,
-            rc->left, rc->top, rc->right - rc->left, rc->bottom - rc->top, 
-            SWP_NOZORDER | SWP_NOACTIVATE);
         STREAM_DEBUG("DPI Scale: " << State.dpiScale);
     }
-
-    if (!State.ImGuiInitialized)
-        return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
@@ -112,13 +108,18 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         pDevice->GetImmediateContext(&pContext);
         DXGI_SWAP_CHAIN_DESC sd;
         pSwapChain->GetDesc(&sd);
-        window = sd.OutputWindow;
+        DirectX::window = sd.OutputWindow;
         ID3D11Texture2D* pBackBuffer = NULL;
         pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
         pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
         pBackBuffer->Release();
-        oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
-        State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(window);
+        oWndProc = (WNDPROC)SetWindowLongPtr(DirectX::window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
+        if (State.AdjustByDPI) {
+            State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(DirectX::window);
+        }
+        else {
+            State.dpiScale = 1.0f;
+        }
 
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -127,7 +128,7 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &config, io.Fonts->GetGlyphRangesCyrillic());
         io.Fonts->Build();
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-        ImGui_ImplWin32_Init(window);
+        ImGui_ImplWin32_Init(DirectX::window);
         ImGui_ImplDX11_Init(pDevice, pContext);
 
         maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });

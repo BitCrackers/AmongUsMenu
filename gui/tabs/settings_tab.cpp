@@ -5,6 +5,8 @@
 #include "state.hpp"
 #include "game.h"
 #include "achievements.hpp"
+#include "DirectX.h"
+#include "imgui/imgui_impl_win32.h" // ImGui_ImplWin32_GetDpiScaleForHwnd
 
 namespace SettingsTab {
 	void Render() {
@@ -21,10 +23,23 @@ namespace SettingsTab {
 			if (HotKey(State.KeyBinds.Toggle_Console)) {
 				State.Save();
 			}
-#ifdef _DEBUG
-			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
+
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale); 
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
+			if (ImGui::Checkbox("Adjust by DPI", &State.AdjustByDPI)) {
+				if (!State.AdjustByDPI) {
+					State.dpiScale = 1.0f;
+				}
+				else {
+					State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(DirectX::window);
+				}
+				ImGui::GetStyle().ScaleAllSizes(State.dpiScale);
+				State.Save();
+			}
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
+
+#ifdef _DEBUG
 			if (ImGui::Checkbox("Show Debug Tab", &State.showDebugTab)) {
 				State.Save();
 			}
