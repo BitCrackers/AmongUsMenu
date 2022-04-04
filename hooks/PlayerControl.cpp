@@ -49,7 +49,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
 		Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-		std::string playerName = convert_from_string(GetPlayerOutfit(playerData, true)->fields._playerName);
+		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
+		std::string playerName = "<Unknown>";
+		if (outfit != NULL)
+			playerName = convert_from_string(outfit->fields._playerName);
 		if (State.RevealRoles)
 		{
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
@@ -199,11 +202,19 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				}
 				Profiler::EndSample("WalkEventCreation");
 			}
-
+			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			PlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
-			espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId));
-			espPlayerData.Name = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			if (outfit != NULL)
+			{
+				espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId));
+				espPlayerData.Name = convert_from_string(outfit->fields._playerName);
+			}
+			else
+			{
+				espPlayerData.Color = ImVec4(0.f, 0.f, 0.f, 1.f);
+				espPlayerData.Name = "<Unknown>";
+			}
 			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
 			espPlayerData.Distance = Vector2_Distance(localPos, playerPos, nullptr);
 			espPlayerData.playerData = PlayerSelection(__this);

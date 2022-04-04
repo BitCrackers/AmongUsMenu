@@ -7,6 +7,7 @@
 #include "imgui/imgui_internal.h"
 #include "state.hpp"
 #include "game.h"
+#include "logger.h"
 #include "DirectX.h"
 #include <DirectX.h>
 
@@ -104,7 +105,9 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 			if (playerData->fields.Disconnected) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
 				continue;
 
-			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+			if (outfit == NULL) return false;
+			std::string playerName = convert_from_string(outfit->fields._playerName);
 			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), list->at(playerData->fields.PlayerId).second))
@@ -121,7 +124,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 			if (list->at(playerData->fields.PlayerId).second)
 				SetItemDefaultFocus();
 			SameLine();
-			ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
+			ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 			SameLine();
 			PopStyleVar(2);
 			Dummy(ImVec2(0, 0));
@@ -343,7 +346,13 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
 	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
 
-	drawList->AddImage((void*)icon.iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
+	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
+		ImVec2(radX, radY), 
+		ImVec2(radXMax, radYMax), 
+		ImVec2(0.0f, 1.0f), 
+		ImVec2(1.0f, 0.0f), 
+		color);
+	
 
 	if (GetPlayerData(player)->fields.IsDead)
 		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
