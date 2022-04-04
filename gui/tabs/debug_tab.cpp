@@ -39,7 +39,7 @@ namespace DebugTab {
 
 			ImGui::Dummy(ImVec2(4, 4));
 
-			if (ImGui::CollapsingHeader("debug##Replay"))
+			if (ImGui::CollapsingHeader("Replay##debug"))
 			{
 				ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
 				ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
@@ -64,7 +64,7 @@ namespace DebugTab {
 				}
 			}
 
-			if (ImGui::CollapsingHeader("debug##Colors"))
+			if (ImGui::CollapsingHeader("Colors##debug"))
 			{
 				app::Color32__Array* colArr = app::Palette__TypeInfo->static_fields->PlayerColors;
 				CorrectedColor32* colArr_raw = (CorrectedColor32*)app::Palette__TypeInfo->static_fields->PlayerColors->vector;
@@ -78,14 +78,12 @@ namespace DebugTab {
 				}
 			}
 
-			if (ImGui::CollapsingHeader("Profiler"))
+			if (ImGui::CollapsingHeader("Profiler##debug"))
 			{
 				if (ImGui::Button("Clear Stats"))
 				{
 					Profiler::ClearStats();
 				}
-
-				ImGui::BeginChild("debug#profiler", ImVec2(0, 0), true);
 
 				std::stringstream statStream;
 				Profiler::AppendStatStringStream("WalkEventCreation", statStream);
@@ -99,8 +97,6 @@ namespace DebugTab {
 				// Profiler::WriteStatsToStream(statStream);
 
 				ImGui::TextUnformatted(statStream.str().c_str());
-
-				ImGui::EndChild();
 			}
 
 			ImGui::EndTabItem();
