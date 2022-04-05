@@ -83,9 +83,9 @@ namespace GameTab {
 
 			if (Game::pGameOptionsData != NULL)
 			{
-				ImGui::Dummy(ImVec2(7, 7));
+				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();
-				ImGui::Dummy(ImVec2(7, 7));
+				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
 				app::GameOptionsData* options = *Game::pGameOptionsData;
 				if (options != NULL)
@@ -98,33 +98,33 @@ namespace GameTab {
 					ImGui::Text("Confirm Impostor: %s", (options->fields.ConfirmImpostor == true ? "on" : "off"));
 					ImGui::Text("Kill CD: %.2f", options->fields._.killCooldown);
 
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Engineers: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::Engineer));
 					ImGui::Text("Engineer CD: %.2f", options->fields.RoleOptions->fields.EngineerCooldown);
 					ImGui::Text("Engineer Duration: %.2f", options->fields.RoleOptions->fields.EngineerInVentMaxTime);
 
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Angels: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::GuardianAngel));
 					ImGui::Text("Angel CD: %.2f", options->fields.RoleOptions->fields.GuardianAngelCooldown);
 					ImGui::Text("Angel Duration: %.2f", options->fields.RoleOptions->fields.ProtectionDurationSeconds);
 
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Shapeshifters: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::Shapeshifter));
 					ImGui::Text("Shapeshifter CD: %.2f", options->fields.RoleOptions->fields.ShapeshifterCooldown);
 					ImGui::Text("Shapeshifter Duration: %.2f", options->fields.RoleOptions->fields.ShapeshifterDuration);
 
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
-					ImGui::Dummy(ImVec2(3, 3));
+					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 				}
 			}
 
