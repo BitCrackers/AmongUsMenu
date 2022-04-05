@@ -3,6 +3,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "utility.h"
+#include "gui-helpers.hpp"
 
 namespace PlayersTab {
 
@@ -12,8 +13,8 @@ namespace PlayersTab {
 	void Render() {
 		if (IsInGame() || IsInLobby()) {
 			if (ImGui::BeginTabItem("Players")) {
-				ImGui::BeginChild("players#list", ImVec2(200, 0), true);
-				ImGui::ListBoxHeader("", ImVec2(200, 150));
+				ImGui::BeginChild("players#list", ImVec2(200, 0) * State.dpiScale, true);
+				ImGui::ListBoxHeader("###players#list", ImVec2(200, 150) * State.dpiScale);
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				for (auto playerData : GetAllPlayerData()) {
 					if (playerData->fields.Disconnected)
@@ -22,8 +23,8 @@ namespace PlayersTab {
 					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 					if (outfit == NULL) continue;
 					std::string playerName = convert_from_string(outfit->fields._playerName);
-					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
 						State.selectedPlayer = PlayerSelection(playerData);
 					}
@@ -31,7 +32,7 @@ namespace PlayersTab {
 					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 					ImGui::SameLine();
 					ImGui::PopStyleVar(2);
-					ImGui::Dummy(ImVec2(0, 0));
+					ImGui::Dummy(ImVec2(0, 0) * State.dpiScale);
 					ImGui::SameLine();
 
 					ImVec4 nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
@@ -68,7 +69,7 @@ namespace PlayersTab {
 
 				ImGui::EndChild();
 				ImGui::SameLine();
-				ImGui::BeginChild("players#actions", ImVec2(200, 0), true);
+				ImGui::BeginChild("players#actions", ImVec2(200, 0) * State.dpiScale, true);
 
 				if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
 					if (ImGui::Button("Call Meeting")) {
@@ -214,7 +215,7 @@ namespace PlayersTab {
 							ImGui::Text("Tasks:");
 						}
 
-						ImGui::ListBoxHeader("", ImVec2(181, 94));
+						ImGui::ListBoxHeader("###tasks#list", ImVec2(181, 94) * State.dpiScale);
 
 						if (State.selectedPlayer.get_PlayerControl()->fields.myTasks == NULL)
 						{

@@ -26,7 +26,7 @@ namespace ConsoleGui
 
 	bool init = false;
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_None);
 		ImGui::SetNextWindowBgAlpha(1.F);
 
 		if (!init)
@@ -44,19 +44,20 @@ namespace ConsoleGui
 		ConsoleGui::Init();
 
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::BeginChild("console#filter", ImVec2(520, 20), true);
+		ImGui::SetWindowFontScale(State.dpiScale);
+		ImGui::BeginChild("console#filter", ImVec2(520, 20) * State.dpiScale, true);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
-		CustomListBoxIntMultiple("Event Types", &ConsoleGui::event_filter, 100.f);
+		CustomListBoxIntMultiple("Event Types", &ConsoleGui::event_filter, 100.f * State.dpiScale);
 		if (IsInGame()) {
-			ImGui::SameLine(0.f, 5.f);
+			ImGui::SameLine(0.f * State.dpiScale, 5.f * State.dpiScale);
 			ImGui::Text("Player Filter: ");
 			ImGui::SameLine();
-			CustomListBoxPlayerSelectionMultiple("Players", &ConsoleGui::player_filter, 150.f);
+			CustomListBoxPlayerSelectionMultiple("Players", &ConsoleGui::player_filter, 150.f * State.dpiScale);
 		}
 		ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild("console#scroll", ImVec2(511, 270), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("console#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		size_t i = State.liveReplayEvents.size() - 1;
 		if (i >= 0) {
@@ -71,7 +72,7 @@ namespace ConsoleGui
 					continue;
 
 				bool typeFound = false, anyTypeFilterSelected = false;
-				for (int n = 0; n < ConsoleGui::event_filter.size(); n++) {
+				for (size_t n = 0; n < ConsoleGui::event_filter.size(); n++) {
 					if (ConsoleGui::event_filter[n].second
 						&& (EVENT_TYPES)n == evt->getType()) {
 						typeFound = true;

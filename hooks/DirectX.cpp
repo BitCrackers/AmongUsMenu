@@ -23,7 +23,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-HWND window;
+HWND DirectX::window;
 ID3D11Device* pDevice = NULL;
 ID3D11DeviceContext* pContext = NULL;
 ID3D11RenderTargetView* pRenderTargetView = NULL;
@@ -77,6 +77,13 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (!State.ImGuiInitialized)
         return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 
+    if (uMsg == WM_DPICHANGED && State.AdjustByDPI) {
+        float dpi = HIWORD(wParam);
+        State.dpiScale = dpi / 96.0f;
+        ApplyTheme();
+        STREAM_DEBUG("DPI Scale: " << State.dpiScale);
+    }
+
     if (uMsg == WM_SIZE) {
         // RenderTarget needs to be released because the resolution has changed 
         WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
@@ -111,21 +118,27 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         pDevice->GetImmediateContext(&pContext);
         DXGI_SWAP_CHAIN_DESC sd;
         pSwapChain->GetDesc(&sd);
-        window = sd.OutputWindow;
+        DirectX::window = sd.OutputWindow;
         ID3D11Texture2D* pBackBuffer = NULL;
         pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
         pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
         pBackBuffer->Release();
-        oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
+        oWndProc = (WNDPROC)SetWindowLongPtr(DirectX::window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
+        if (State.AdjustByDPI) {
+            State.dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(DirectX::window);
+        }
+        else {
+            State.dpiScale = 1.0f;
+        }
 
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->ClearFonts();
+        io.Fonts->Clear();
         ImFontConfig config;
         io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &config, io.Fonts->GetGlyphRangesCyrillic());
         io.Fonts->Build();
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-        ImGui_ImplWin32_Init(window);
+        ImGui_ImplWin32_Init(DirectX::window);
         ImGui_ImplDX11_Init(pDevice, pContext);
 
         maps.push_back({ D3D11Image(Resource(IDB_PNG1), pDevice), 277.F, 77.F, 11.5F });
@@ -199,10 +212,10 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 
     il2cpp_gc_disable();
 
+    ApplyTheme();
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-    ApplyTheme();
 
     if (State.ShowMenu)
     {
@@ -219,12 +232,13 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 		ImGuiRenderer::Submit([&]()
 		{
 			//Push ImGui flags
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f * State.dpiScale);
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, { 0.0f, 0.0f, 0.0f, 0.0f });
 
 			//Setup BackBuffer
 			ImGui::Begin("BackBuffer", reinterpret_cast<bool*>(true),
 				ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoScrollbar);
+            ImGui::SetWindowFontScale(State.dpiScale);
 
 			s_Cache.Winsize = DirectX::GetWindowSize();
 			s_Cache.Window = ImGui::GetCurrentWindow();

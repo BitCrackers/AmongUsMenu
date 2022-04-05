@@ -1,10 +1,6 @@
 #include "pch-il2cpp.h"
 #include "gui-helpers.hpp"
 #include "keybinds.h"
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
-#include "imgui/imgui_internal.h"
 #include "state.hpp"
 #include "game.h"
 #include "logger.h"
@@ -81,7 +77,7 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 		SameLine(0, spacing);
 		const bool resetResponse = Button(buttonLabel.c_str());
 		if (resetResponse) {
-			for (int i = 0; i < list->size(); i++)
+			for (size_t i = 0; i < list->size(); i++)
 				list->at(i).second = false;
 			return resetResponse;
 		}
@@ -108,8 +104,8 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) return false;
 			std::string playerName = convert_from_string(outfit->fields._playerName);
-			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
+			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), list->at(playerData->fields.PlayerId).second))
 			{
 				list->at(playerData->fields.PlayerId).second ^= 1;
@@ -127,7 +123,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 			ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 			SameLine();
 			PopStyleVar(2);
-			Dummy(ImVec2(0, 0));
+			Dummy(ImVec2(0, 0) * State.dpiScale);
 			SameLine();
 
 			ImVec4 nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->White);
@@ -157,7 +153,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 		SameLine(0, spacing);
 		const bool resetResponse = Button(buttonLabel.c_str());
 		if (resetResponse) {
-			for (int i = 0; i < list->size(); i++)
+			for (size_t i = 0; i < list->size(); i++)
 				list->at(i).second = false;
 			return resetResponse;
 		}
@@ -193,7 +189,7 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 		State.Replay_IsPlaying = true;
 	}
 
-	ImGui::SameLine(0.0f, 1.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
 
 	if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PAUSE).iconImage.shaderResourceView,
 		ImVec2(icons.at(ICON_TYPES::PAUSE).iconImage.imageWidth * icons.at(ICON_TYPES::PAUSE).scale,
@@ -202,7 +198,7 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 		State.Replay_IsPlaying = State.Replay_IsLive = false;
 	}
 
-	ImGui::SameLine(0.0f, 1.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
 
 	ImGuiContext& g = *GImGui;
 	const ImGuiStyle& style = g.Style;
@@ -275,12 +271,12 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 	if (label_size.x > 0.0f)
 		RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
 
-	ImGui::SameLine(0.0f, 10.0f);
+	ImGui::SameLine(0.0f * State.dpiScale, 10.0f * State.dpiScale);
 
 	ImU32 liveColor = (State.Replay_IsLive) ? ImGui::ColorConvertFloat4ToU32(ImVec4(255.0f, 0.f, 0.f, 255.0f)) : ImGui::ColorConvertFloat4ToU32(ImVec4(128.f, 128.f, 128.f, 255.0f));
-	const ImVec2 circlePos(window->DC.CursorPos.x, window->DC.CursorPos.y + 9.5f);
-	window->DrawList->AddCircleFilled(circlePos, 5.0f, liveColor);
-	ImGui::SameLine(0.0f, 18.f);
+	const ImVec2 circlePos(window->DC.CursorPos.x, window->DC.CursorPos.y + 9.5f * State.dpiScale);
+	window->DrawList->AddCircleFilled(circlePos, 5.0f * State.dpiScale, liveColor);
+	ImGui::SameLine(0.0f * State.dpiScale, 18.f * State.dpiScale);
 	ImGui::Text("Live");
 
 
@@ -320,11 +316,12 @@ void drawPlayerDot(PlayerControl* player, ImVec2 winPos, ImU32 color, ImU32 stat
 		xOffset -= 50;
 	}
 
-	float radX = xOffset + (playerPos.x * maps[State.mapType].scale) + winPos.x;
-	float radY = yOffset - (playerPos.y * maps[State.mapType].scale) + winPos.y;
+	float radX = xOffset + (playerPos.x * maps[State.mapType].scale);
+	float radY = yOffset - (playerPos.y * maps[State.mapType].scale);
+	const ImVec2& center = ImVec2(radX, radY) * State.dpiScale + winPos;
 
-	drawList->AddCircleFilled(ImVec2(radX, radY), 4.5F, color);
-	drawList->AddCircle(ImVec2(radX, radY), 4.5F + 0.5F, statusColor, 0, 2.0F);
+	drawList->AddCircleFilled(center, 4.5F * State.dpiScale, color);
+	drawList->AddCircle(center, (4.5F + 0.5F) * State.dpiScale, statusColor, 0, 2.0F);
 }
 
 void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
@@ -341,21 +338,24 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 	}
 
 	IconTexture icon = icons.at(ICON_TYPES::PLAYER);
-	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
-	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
+	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+
+	const ImVec2& p_min = ImVec2(radX, radY) * State.dpiScale + winPos;
+	const ImVec2& p_max = ImVec2(radXMax, radYMax) * State.dpiScale + winPos;
 
 	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
-		ImVec2(radX, radY), 
-		ImVec2(radXMax, radYMax), 
-		ImVec2(0.0f, 1.0f), 
-		ImVec2(1.0f, 0.0f), 
+		p_min, p_max,
+		ImVec2(0.0f, 1.0f),
+		ImVec2(1.0f, 0.0f),
 		color);
-	
 
 	if (GetPlayerData(player)->fields.IsDead)
-		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, 
+			p_min, p_max,
+			ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 }
 
 void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
@@ -371,10 +371,11 @@ void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 		xOffset -= 50;
 	}
 
-	float radX = xOffset + (bodyPos.x * maps[State.mapType].scale) + winPos.x;
-	float radY = yOffset - (bodyPos.y * maps[State.mapType].scale) + winPos.y;
+	float radX = xOffset + (bodyPos.x * maps[State.mapType].scale);
+	float radY = yOffset - (bodyPos.y * maps[State.mapType].scale);
 
-	drawList->AddText(GetFont(), 16, ImVec2(radX - 5.F, radY - 6.75F), color, "X");
+	drawList->AddText(GetFont(), 16 * State.dpiScale, 
+		ImVec2(radX - 5.F, radY - 6.75F) * State.dpiScale + winPos, color, "X");
 }
 
 void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
@@ -391,10 +392,13 @@ void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 	}
 
 	IconTexture icon = icons.at(ICON_TYPES::DEAD);
-	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
-	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.x;
-	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale + winPos.y;
+	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
 
-	drawList->AddImage((void*)icon.iconImage.shaderResourceView, ImVec2(radX, radY), ImVec2(radXMax, radYMax), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
+	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
+		ImVec2(radX, radY) * State.dpiScale + winPos,
+		ImVec2(radXMax, radYMax) * State.dpiScale + winPos,
+		ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f), color);
 }

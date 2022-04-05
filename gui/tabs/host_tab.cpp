@@ -10,12 +10,12 @@ namespace HostTab {
 		if (IsHost() && IsInLobby()) {
 			if (ImGui::BeginTabItem("Host")) {
 				ImGui::Text("Select Roles:");
-				ImGui::BeginChild("host#list", ImVec2(200, 0), true);
-				ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150));
+				ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true);
+				ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
 				auto allPlayers = GetAllPlayerData();
 				auto playerAmount = allPlayers.size();
 				auto maxImposterAmount = GetMaxImposterAmount(playerAmount);
-				for (int index = 0; index < playerAmount; index++) {
+				for (size_t index = 0; index < playerAmount; index++) {
 					auto playerData = allPlayers[index];
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 
@@ -26,7 +26,7 @@ namespace HostTab {
 					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 					if (outfit == NULL) continue;
 					std::string playerName = convert_from_string(outfit->fields._playerName);
-					if (CustomListBoxInt(playerName.c_str(), &State.assignedRoles[index], ROLE_NAMES, 80))
+					if (CustomListBoxInt(playerName.c_str(), &State.assignedRoles[index], ROLE_NAMES, 80 * State.dpiScale))
 					{
 						State.engineers_amount = GetRoleCount((int)RoleType::Engineer);
 						State.scientists_amount = GetRoleCount((int)RoleType::Scientist);
@@ -82,10 +82,10 @@ namespace HostTab {
 				ImGui::ListBoxFooter();
 				ImGui::EndChild();
 				ImGui::SameLine();
-				ImGui::BeginChild("host#actions", ImVec2(200, 0), true);
+				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
 
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
-				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75)) {
+				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {
 							(*Game::pGameOptionsData)->fields.MapId = 0;
@@ -97,7 +97,7 @@ namespace HostTab {
 						}
 					}
 				}
-				ImGui::Dummy(ImVec2(7, 7));
+				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				if (IsInLobby() && ImGui::Button("Force Start of Game"))
 				{
 					app::InnerNetClient_SendStartGame((InnerNetClient*)(*Game::pAmongUsClient), NULL);
