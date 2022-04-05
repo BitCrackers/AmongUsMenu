@@ -10,8 +10,8 @@ namespace DoorsTab {
 	void Render() {
 		if (IsInGame() && !State.mapDoors.empty()) {
 			if (ImGui::BeginTabItem("Doors")) {
-				ImGui::BeginChild("doors#list", ImVec2(200, 0), true);
-				ImGui::ListBoxHeader("", ImVec2(200, 150));
+				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true);
+				bool shouldEndListBox = ImGui::ListBoxHeader("###doors#list", ImVec2(200, 150) * State.dpiScale);
 				for (size_t i = 0; i < State.mapDoors.size(); i++) {
 					auto systemType = State.mapDoors[i];
 					if (systemType == SystemTypes__Enum::Decontamination || systemType == SystemTypes__Enum::Decontamination2) continue;
@@ -36,11 +36,12 @@ namespace DoorsTab {
 							State.selectedDoor = systemType;
 					}
 				}
-				ImGui::ListBoxFooter();
+				if (shouldEndListBox) 
+					ImGui::ListBoxFooter();
 				ImGui::EndChild();
 
 				ImGui::SameLine();
-				ImGui::BeginChild("doors#options", ImVec2(200, 0));
+				ImGui::BeginChild("doors#options", ImVec2(200, 0) * State.dpiScale);
 
 				if (ImGui::Button("Close All Doors"))
 				{
@@ -99,7 +100,7 @@ namespace DoorsTab {
 				}
 				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
 				{
-					ImGui::Dummy(ImVec2(4, 4));
+					ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
 						State.Save();
 					}

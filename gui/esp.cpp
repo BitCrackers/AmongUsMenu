@@ -3,8 +3,7 @@
 #include "DirectX.h"
 #include "utility.h"
 #include "game.h"
-
-#include <imgui/imgui_internal.h>
+#include "gui-helpers.hpp"
 
 drawing_t* Esp::s_Instance = new drawing_t();
 ImGuiWindow* CurrentWindow = nullptr;
@@ -23,8 +22,8 @@ static void RenderText(const char* text, const ImVec2& pos, const ImVec4& color,
 	if (outlined)
 	{
 		CurrentWindow->DrawList->AddText(nullptr, 0.f,
-		{ ImScreen.x - 1.f, ImScreen.y + 1.f },
-		ImGui::GetColorU32(IM_COL32_BLACK), text);
+			ImScreen + 0.5f * State.dpiScale,
+			ImGui::GetColorU32(IM_COL32_BLACK), text);
 	}
 
 	CurrentWindow->DrawList->AddText(nullptr, 0.f, ImScreen, ImGui::GetColorU32(color), text);
@@ -35,27 +34,39 @@ static void RenderLine(const ImVec2& start, const ImVec2& end, const ImVec4& col
 	if (shadow)
 	{
 		CurrentWindow->DrawList->AddLine(
-		{ start.x + 1.0f, start.y + 1.0f },
-		{ end.x + 1.0f, end.y + 1.0f },
-		ImGui::GetColorU32(color) & IM_COL32_A_MASK);
+			start + 0.5f * State.dpiScale,
+			end + 0.5f * State.dpiScale,
+			ImGui::GetColorU32(color) & IM_COL32_A_MASK, 1.0f * State.dpiScale);
 	}
 
-	CurrentWindow->DrawList->AddLine(start, end, ImGui::GetColorU32(color));
+	CurrentWindow->DrawList->AddLine(start, end, ImGui::GetColorU32(color), 1.0f * State.dpiScale);
 }
 
 static void RenderBox(const ImVec2 top, const ImVec2 bottom, const float height, const float width, const ImVec4& color, const bool wantsShadow = true)
 {
-	RenderLine(bottom, { bottom.x, ((float)(int)(bottom.y * 0.75f + top.y * 0.25f)) }, color, wantsShadow);
-	RenderLine(bottom, { ((float)(int)(bottom.x * 0.75f + top.x * 0.25f)), bottom.y }, color, wantsShadow);
+	const ImVec2 points[] = {
+		bottom, { bottom.x, ((float)(int)(bottom.y * 0.75f + top.y * 0.25f)) },
+		{ bottom.x - 0.5f * State.dpiScale, bottom.y }, { ((float)(int)(bottom.x * 0.75f + top.x * 0.25f)), bottom.y },
 
-	RenderLine({ top.x, bottom.y }, { ((float)(int)(top.x * 0.75f + bottom.x * 0.25f)), bottom.y }, color, wantsShadow);
-	RenderLine({ top.x - 1.0f, bottom.y }, { top.x - 1.0f, ((float)(int)(bottom.y * 0.75f + top.y * 0.25f)) }, color, wantsShadow);
+		{ top.x + 0.5f * State.dpiScale, bottom.y }, { ((float)(int)(top.x * 0.75f + bottom.x * 0.25f)), bottom.y },
+		{ top.x, bottom.y }, { top.x, ((float)(int)(bottom.y * 0.75f + top.y * 0.25f)) },
 
-	RenderLine({ bottom.x, top.y }, { bottom.x, ((float)(int)(top.y * 0.75f + bottom.y * 0.25f)) }, color, wantsShadow);
-	RenderLine({ bottom.x, top.y - 1.0f }, { ((float)(int)(bottom.x * 0.75f + top.x * 0.25f)), top.y - 1.0f }, color, wantsShadow);
+		{ bottom.x, top.y }, { bottom.x, ((float)(int)(top.y * 0.75f + bottom.y * 0.25f)) },
+		{ bottom.x - 0.5f * State.dpiScale, top.y }, { ((float)(int)(bottom.x * 0.75f + top.x * 0.25f)), top.y },
 
-	RenderLine({ top.x - 0.5f, top.y - 1.0f }, { ((float)(int)(top.x * 0.75f + bottom.x * 0.25f)), top.y - 1.0f }, color, wantsShadow);
-	RenderLine({ top.x - 1.0f, top.y }, { top.x - 1.0f, ((float)(int)(top.y * 0.75f + bottom.y * 0.25f)) }, color, wantsShadow);
+		top, { ((float)(int)(top.x * 0.75f + bottom.x * 0.25f)), top.y },
+		{ top.x, top.y + 0.5f * State.dpiScale }, { top.x, ((float)(int)(top.y * 0.75f + bottom.y * 0.25f)) }
+	};
+
+	if (wantsShadow) {
+		const ImVec4& shadowColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(color) & IM_COL32_A_MASK);
+		for (size_t i = 0; i < std::size(points); i += 2) {
+			RenderLine(points[i] + 0.5f * State.dpiScale, points[i + 1] + 0.5f * State.dpiScale, shadowColor, false);
+		}
+	}
+	for (size_t i = 0; i < std::size(points); i += 2) {
+		RenderLine(points[i], points[i + 1], color, false);
+	}
 }
 
 void Esp::Render()
@@ -93,7 +104,7 @@ void Esp::Render()
 			/////////////////////////////////
 			if (State.ShowEsp_Distance)
 			{
-				const ImVec2 position{ it.Position.x, it.Position.y + 15.0f };
+				const ImVec2 position{ it.Position.x, it.Position.y + 15.0f * State.dpiScale };
 
 				char distance[32];
 				sprintf_s(distance, "[%.0fm]", it.Distance);

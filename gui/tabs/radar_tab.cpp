@@ -7,7 +7,7 @@
 namespace RadarTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Radar")) {
-			ImGui::Dummy(ImVec2(4, 4));
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 			if (ImGui::Checkbox("Show Radar", &State.ShowRadar)) {
 				State.Save();
 			}
@@ -16,9 +16,9 @@ namespace RadarTab {
 				State.Save();
 			}
 
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
 			if (ImGui::Checkbox("Show Dead Bodies", &State.ShowRadar_DeadBodies)) {
 				State.Save();
@@ -30,9 +30,9 @@ namespace RadarTab {
 				State.Save();
 			}
 
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();
-			ImGui::Dummy(ImVec2(7, 7));
+			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
 			if (ImGui::Checkbox("Hide Radar During Meetings", &State.HideRadar_During_Meetings)) {
 				State.Save();

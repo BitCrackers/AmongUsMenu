@@ -8,7 +8,7 @@
 namespace SelfTab {
     void Render() {
         if (ImGui::BeginTabItem("Self")) {
-            ImGui::Dummy(ImVec2(4, 4));
+            ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
             if (ImGui::Checkbox("Max Vision", &State.MaxVision)) {
                 State.Save();
             }
@@ -26,19 +26,19 @@ namespace SelfTab {
                 State.Save();
             }
 
-            ImGui::SameLine(145.0f);
+            ImGui::SameLine(145.0f * State.dpiScale);
             SteppedSliderFloat("  ", &State.FreeCamSpeed, 0.5f, 3.f, 0.25f, "%.2fx Speed", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
 
             ImGui::Checkbox("Zoom", &State.EnableZoom);
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Zoom);
 
-            ImGui::SameLine(145.0f);
+            ImGui::SameLine(145.0f * State.dpiScale);
             SteppedSliderFloat("   ", &State.CameraHeight, 1.0f, 20.0f, 1.0f, "%.2fx Zoom", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
 
-            ImGui::Dummy(ImVec2(7, 7));
+            ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
             ImGui::Separator();
-            ImGui::Dummy(ImVec2(7, 7));
+            ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
             if (ImGui::Checkbox("Always show Chat Button", &State.ChatAlwaysActive)) {
                 State.Save();
@@ -47,9 +47,9 @@ namespace SelfTab {
                 State.Save();
             }
 
-            ImGui::Dummy(ImVec2(7, 7));
+            ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
             ImGui::Separator();
-            ImGui::Dummy(ImVec2(7, 7));
+            ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
             if (ImGui::Checkbox("Reveal Roles", &State.RevealRoles)) {
                 State.Save();
