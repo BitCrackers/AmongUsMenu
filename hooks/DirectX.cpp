@@ -24,9 +24,9 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 HWND window;
-ID3D11Device* pDevice;
-ID3D11DeviceContext* pContext;
-ID3D11RenderTargetView* pRenderTargetView;
+ID3D11Device* pDevice = NULL;
+ID3D11DeviceContext* pContext = NULL;
+ID3D11RenderTargetView* pRenderTargetView = NULL;
 D3D_PRESENT_FUNCTION oPresent;
 WNDPROC oWndProc;
 
@@ -107,7 +107,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
-    if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
+    if ((pDevice != NULL) || (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))) {
         pDevice->GetImmediateContext(&pContext);
         DXGI_SWAP_CHAIN_DESC sd;
         pSwapChain->GetDesc(&sd);
@@ -158,8 +158,10 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
 std::once_flag init_d3d;
 HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
     std::call_once(init_d3d, [&] {
-        __this->GetDevice(__uuidof(pDevice), reinterpret_cast<void**>(&pDevice));
-        pDevice->GetImmediateContext(&pContext);
+        if (SUCCEEDED(__this->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
+        {
+            pDevice->GetImmediateContext(&pContext);
+        }
     });
 	if (!State.ImGuiInitialized) {
         if (ImGuiInitialization(__this)) {
