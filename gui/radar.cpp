@@ -7,7 +7,10 @@
 
 namespace Radar {
 	ImU32 GetRadarPlayerColor(GameData_PlayerInfo* playerData) {
-		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4((GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId))));
+		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+		if (outfit == NULL) return ImU32(0);
+
+		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4((GetPlayerColor(outfit->fields.ColorId))));
 	}
 
 	ImU32 GetRadarPlayerColorStatus(GameData_PlayerInfo* playerData) {

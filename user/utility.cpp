@@ -625,18 +625,19 @@ std::string GetGitBranch()
 
 void ImpersonateName(PlayerSelection player)
 {
-	if (!(IsInGame() || IsInLobby())) return;
-	if (convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName).length() < 10) {
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	if (!(IsInGame() || IsInLobby() || outfit)) return;
+	if (convert_from_string(outfit->fields._playerName).length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName) + " "));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName)));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
 	}
 }
 
@@ -652,7 +653,9 @@ int GetRandomColorId()
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
 			{
-				if (i == GetPlayerOutfit(GetPlayerData(player))->fields.ColorId)
+				app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(player));
+				if (outfit == NULL) continue;
+				if (i == outfit->fields.ColorId)
 				{
 					colorAvailable = false;
 					break;
@@ -675,12 +678,14 @@ int GetRandomColorId()
 void SaveOriginalAppearance()
 {
 	PlayerSelection player = *Game::pLocalPlayer;
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(GetPlayerOutfit(player.get_PlayerData())->fields._playerName);
-	State.originalSkin = GetPlayerOutfit(player.get_PlayerData())->fields.SkinId;
-	State.originalHat = GetPlayerOutfit(player.get_PlayerData())->fields.HatId;
-	State.originalPet = GetPlayerOutfit(player.get_PlayerData())->fields.PetId;
-	State.originalColor = GetPlayerOutfit(player.get_PlayerData())->fields.ColorId;
+	State.originalName = convert_from_string(outfit->fields._playerName);
+	State.originalSkin = outfit->fields.SkinId;
+	State.originalHat = outfit->fields.HatId;
+	State.originalPet = outfit->fields.PetId;
+	State.originalColor = outfit->fields.ColorId;
 	State.activeImpersonation = false;
 }
 
@@ -694,6 +699,7 @@ void ResetOriginalAppearance()
 }
 
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted) {
+	if (player == NULL) return NULL;
 	auto arr = player->fields.Outfits->fields.entries;
 	auto outfitCount = player->fields.Outfits->fields.count;
 	GameData_PlayerOutfit* playerOutfit = NULL;

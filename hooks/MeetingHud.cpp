@@ -68,11 +68,12 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
+		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 
-		if (playerData && localData) {
+		if (playerData && localData && outfit) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
 			Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-			std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+			std::string playerName = convert_from_string(outfit->fields._playerName);
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);

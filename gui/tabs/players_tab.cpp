@@ -20,14 +20,16 @@ namespace PlayersTab {
 					if (playerData->fields.Disconnected)
 						continue;
 
-					std::string playerName = convert_from_string(GetPlayerOutfit(playerData)->fields._playerName);
+					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+					if (outfit == NULL) continue;
+					std::string playerName = convert_from_string(outfit->fields._playerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
 						State.selectedPlayer = PlayerSelection(playerData);
 					}
 					ImGui::SameLine();
-					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(GetPlayerOutfit(playerData)->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
+					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
 					ImGui::SameLine();
 					ImGui::PopStyleVar(2);
 					ImGui::Dummy(ImVec2(0, 0) * State.dpiScale);
@@ -135,32 +137,36 @@ namespace PlayersTab {
 					}
 					if ((IsInGame() || IsInLobby())) {
 						if (!State.selectedPlayer.is_LocalPlayer()) {
-							if (ImGui::Button("Impersonate")) {
-								auto petId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.PetId;
-								auto skinId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.SkinId;
-								auto hatId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.HatId;
-								auto visorId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.VisorId;
-								auto colorId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.ColorId;
-								auto namePlateId = GetPlayerOutfit(State.selectedPlayer.get_PlayerData())->fields.NamePlateId;
-								std::queue<RPCInterface*>* queue = nullptr;
+							app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(State.selectedPlayer.get_PlayerData());
+							if (outfit != NULL) {
+								if (ImGui::Button("Impersonate")) {
 
-								if (IsInGame())
-									queue = &State.rpcQueue;
-								else if (IsInLobby())
-									queue = &State.lobbyRpcQueue;
-								
-								if (queue != nullptr) {
-									if (IsHost())
-										queue->push(new RpcSetColor(colorId, true));
-									else
-										queue->push(new RpcSetColor(GetRandomColorId()));
-									queue->push(new RpcSetPet(petId));
-									queue->push(new RpcSetSkin(skinId));
-									queue->push(new RpcSetVisor(visorId));
-									queue->push(new RpcSetHat(hatId));
-									queue->push(new RpcSetNamePlate(namePlateId));
-									ImpersonateName(State.selectedPlayer);
-									State.activeImpersonation = true;
+									auto petId = outfit->fields.PetId;
+									auto skinId = outfit->fields.SkinId;
+									auto hatId = outfit->fields.HatId;
+									auto visorId = outfit->fields.VisorId;
+									auto colorId = outfit->fields.ColorId;
+									auto namePlateId = outfit->fields.NamePlateId;
+									std::queue<RPCInterface*>* queue = nullptr;
+
+									if (IsInGame())
+										queue = &State.rpcQueue;
+									else if (IsInLobby())
+										queue = &State.lobbyRpcQueue;
+
+									if (queue != nullptr) {
+										if (IsHost())
+											queue->push(new RpcSetColor(colorId, true));
+										else
+											queue->push(new RpcSetColor(GetRandomColorId()));
+										queue->push(new RpcSetPet(petId));
+										queue->push(new RpcSetSkin(skinId));
+										queue->push(new RpcSetVisor(visorId));
+										queue->push(new RpcSetHat(hatId));
+										queue->push(new RpcSetNamePlate(namePlateId));
+										ImpersonateName(State.selectedPlayer);
+										State.activeImpersonation = true;
+									}
 								}
 							}
 						}

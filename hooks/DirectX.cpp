@@ -24,9 +24,9 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 HWND DirectX::window;
-ID3D11Device* pDevice;
-ID3D11DeviceContext* pContext;
-ID3D11RenderTargetView* pRenderTargetView;
+ID3D11Device* pDevice = NULL;
+ID3D11DeviceContext* pContext = NULL;
+ID3D11RenderTargetView* pRenderTargetView = NULL;
 D3D_PRESENT_FUNCTION oPresent;
 WNDPROC oWndProc;
 
@@ -84,6 +84,16 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         STREAM_DEBUG("DPI Scale: " << State.dpiScale);
     }
 
+    if (uMsg == WM_SIZE) {
+        // RenderTarget needs to be released because the resolution has changed 
+        WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
+        if (pRenderTargetView) {
+            pRenderTargetView->Release();
+            pRenderTargetView = nullptr;
+        }
+        ReleaseSemaphore(DirectX::hRenderSemaphore, 1, NULL);
+    }
+
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
@@ -104,7 +114,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
-    if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
+    if ((pDevice != NULL) || (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))) {
         pDevice->GetImmediateContext(&pContext);
         DXGI_SWAP_CHAIN_DESC sd;
         pSwapChain->GetDesc(&sd);
@@ -161,8 +171,10 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
 std::once_flag init_d3d;
 HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
     std::call_once(init_d3d, [&] {
-        __this->GetDevice(__uuidof(pDevice), reinterpret_cast<void**>(&pDevice));
-        pDevice->GetImmediateContext(&pContext);
+        if (SUCCEEDED(__this->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
+        {
+            pDevice->GetImmediateContext(&pContext);
+        }
     });
 	if (!State.ImGuiInitialized) {
         if (ImGuiInitialization(__this)) {
@@ -184,6 +196,19 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     }
 
     WaitForSingleObject(DirectX::hRenderSemaphore, INFINITE);
+
+    // resolution changed
+    if (!pRenderTargetView) {
+        ID3D11Texture2D* pBackBuffer = nullptr;
+        __this->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+        assert(pBackBuffer);
+        pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pRenderTargetView);
+        pBackBuffer->Release();
+
+        ImVec2 size = DirectX::GetWindowSize();
+        STREAM_DEBUG("Unity Window Resolution: " << +Screen_get_width(nullptr) << "x" << +Screen_get_height(nullptr));
+        STREAM_DEBUG("DirectX Window Size: " << +size.x << "x" << +size.y);
+    }
 
     il2cpp_gc_disable();
 
