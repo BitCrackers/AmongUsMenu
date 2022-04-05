@@ -425,9 +425,6 @@ namespace Replay
 			{
 				auto report_event = dynamic_cast<ReportDeadBodyEvent*>(curEvent);
 				auto position = report_event->GetPosition();
-				auto targetPos = report_event->GetTargetPosition();
-				if (targetPos.has_value())
-					position = targetPos.value();
 				IconTexture icon = icons.at(ICON_TYPES::REPORT);
 				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
 				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
