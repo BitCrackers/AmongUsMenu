@@ -9,6 +9,8 @@
 void new_console() {
 	AllocConsole();
 	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+	// solve the disorder codes in the CJK character show
+	SetConsoleOutputCP(CP_UTF8);
 }
 
 std::string utf16_to_utf8(std::u16string u16_string) {
@@ -233,6 +235,13 @@ void output_assembly_methods(const Il2CppAssembly* assembly) {
 }
 bool cctor_finished(Il2CppClass* klass)
 {
+	if (!klass->initialized) {
+		// enforce to call 'Class::Init'
+		auto size = il2cpp_class_get_bitmap_size(klass);
+		std::vector<size_t> buffer(size / sizeof(size_t));
+		il2cpp_class_get_bitmap(klass, buffer.data());
+	}
+
 	constexpr int CCTOR_TIMEOUT = 5000; //Time in milliseconds to wait for class to initialize
 	int timeout = CCTOR_TIMEOUT; //Five second timeout
 	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
@@ -252,6 +261,10 @@ bool cctor_finished(Il2CppClass* klass)
 	timeout = CCTOR_TIMEOUT;
 
 	if (!klass->has_cctor) return true; //If we don't have a static constructor, no need to wait
+	if (!klass->cctor_finished) {
+		// enforce to call 'Runtime::ClassInit'
+		il2cpp_runtime_class_init(klass);
+	}
 	while (!klass->cctor_finished && (timeout >= 0))
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
