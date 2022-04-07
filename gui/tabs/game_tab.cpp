@@ -81,7 +81,7 @@ namespace GameTab {
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
 
-			if (Game::pGameOptionsData != NULL)
+			if ((IsInGame() || IsInLobby()) && Game::pGameOptionsData != NULL)
 			{
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();

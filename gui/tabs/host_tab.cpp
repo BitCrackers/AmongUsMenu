@@ -47,8 +47,8 @@ namespace HostTab {
 							auto roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
 							if(roleRates->fields.count != 0)
 							{
-								auto vectors = roleRates->fields.entries[0].vector;
-								for (auto iVector = 0; iVector < 32; iVector++)
+								auto vectors = roleRates->fields.entries->vector;
+								for (size_t iVector = 0; iVector < roleRates->fields.entries->max_length; iVector++)
 								{
 									if (vectors[iVector].key == RoleTypes__Enum::Engineer)
 									{

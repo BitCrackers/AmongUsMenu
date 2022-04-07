@@ -24,8 +24,8 @@ RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAm
 
 	auto roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
 	if (roleRates->fields.count != 0) {
-		auto vectors = roleRates->fields.entries[0].vector;
-		for (auto iVector = 0; iVector < 32; iVector++)
+		auto vectors = roleRates->fields.entries->vector;
+		for (size_t iVector = 0; iVector < roleRates->fields.entries->max_length; iVector++)
 		{
 			if (vectors[iVector].key == RoleTypes__Enum::Engineer)
 			{
@@ -42,6 +42,11 @@ RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAm
 				this->ShapeshifterChance = vectors[iVector].value.Chance;
 				this->ShapeshifterCount = vectors[iVector].value.MaxCount;
 			}
+			else if (vectors[iVector].key == RoleTypes__Enum::GuardianAngel)
+			{
+				this->GuardianAngelChance = vectors[iVector].value.Chance;
+				this->GuardianAngelCount = vectors[iVector].value.MaxCount;
+			}
 		}
 	}
 }
@@ -57,8 +62,15 @@ int RoleRates::GetRoleCount(RoleTypes__Enum role) {
 			return this->ScientistCount;
 		case RoleTypes__Enum::Engineer:
 			return this->EngineerCount;
-		default:
+		case RoleTypes__Enum::GuardianAngel:
+			return this->GuardianAngelCount;
+		case RoleTypes__Enum::Crewmate:
 			return this->MaxCrewmates;
+		default:
+#ifdef _DEBUG
+			assert(false);
+#endif
+			return 0;
 	}
 }
 
@@ -88,6 +100,12 @@ void RoleRates::SubtractRole(RoleTypes__Enum role) {
 		if (this->EngineerCount < 1)
 			return;
 		this->EngineerCount--;
+	}
+	else if (role == RoleTypes__Enum::GuardianAngel)
+	{
+		if (this->GuardianAngelCount < 1)
+			return;
+		this->GuardianAngelCount--;
 	}
 }
 

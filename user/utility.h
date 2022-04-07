@@ -37,6 +37,8 @@ public:
 	int ScientistChance = 0;
 	int EngineerCount = 0;
 	int EngineerChance = 0;
+	int GuardianAngelCount = 0;
+	int GuardianAngelChance = 0;
 	int MaxCrewmates = 15;
 	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
