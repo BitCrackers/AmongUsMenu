@@ -450,7 +450,6 @@ namespace Replay
 		ImGui::SetNextWindowSize(ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.0f, (maps[MapType].mapImage.imageHeight * 0.5f) + 90.f) * State.dpiScale, ImGuiCond_None);
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
-		ImGui::SetWindowFontScale(State.dpiScale);
 
 		ImGui::BeginChild("replay#filter", ImVec2(0, 20) * State.dpiScale, true);
 		ImGui::Text("Event Filter: ");

@@ -80,7 +80,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (uMsg == WM_DPICHANGED && State.AdjustByDPI) {
         float dpi = HIWORD(wParam);
         State.dpiScale = dpi / 96.0f;
-        ApplyTheme();
+        State.dpiChanged = true;
         STREAM_DEBUG("DPI Scale: " << State.dpiScale);
     }
 
@@ -130,13 +130,10 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         else {
             State.dpiScale = 1.0f;
         }
+        State.dpiChanged = true;
 
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->Clear();
-        ImFontConfig config;
-        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &config, io.Fonts->GetGlyphRangesCyrillic());
-        io.Fonts->Build();
         io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
         ImGui_ImplWin32_Init(DirectX::window);
         ImGui_ImplDX11_Init(pDevice, pContext);
@@ -210,6 +207,16 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         STREAM_DEBUG("DirectX Window Size: " << +size.x << "x" << +size.y);
     }
 
+    if (State.dpiChanged) {
+        State.dpiChanged = false;
+        ImGui_ImplDX11_InvalidateDeviceObjects();
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.Fonts->Clear();
+        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14 * State.dpiScale, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+        io.Fonts->Build();
+    }
+
     il2cpp_gc_disable();
 
     ApplyTheme();
@@ -238,7 +245,6 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
 			//Setup BackBuffer
 			ImGui::Begin("BackBuffer", reinterpret_cast<bool*>(true),
 				ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoScrollbar);
-            ImGui::SetWindowFontScale(State.dpiScale);
 
 			s_Cache.Winsize = DirectX::GetWindowSize();
 			s_Cache.Window = ImGui::GetCurrentWindow();
@@ -268,7 +274,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     }
 
     // Render in a separate thread
-	std::async(std::launch::async, ImGuiRenderer::ExecuteQueue);
+	std::async(std::launch::async, ImGuiRenderer::ExecuteQueue).wait();
 
     ImGui::EndFrame();
     ImGui::Render();

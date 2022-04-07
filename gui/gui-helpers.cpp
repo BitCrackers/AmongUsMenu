@@ -17,12 +17,15 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	const bool response = BeginCombo(comboLabel.c_str(), list.at(*value), ImGuiComboFlags_NoArrowButton | flags);
+	bool response = BeginCombo(comboLabel.c_str(), list.at(*value), ImGuiComboFlags_NoArrowButton | flags);
 	if (response) {
+		response = false;
 		for (size_t i = 0; i < list.size(); i++) {
 			bool is_selected = (*value == i);
-			if (Selectable(list.at(i), is_selected))
+			if (Selectable(list.at(i), is_selected)) {
 				*value = i;
+				response = true;
+			}
 			if (is_selected)
 				SetItemDefaultFocus();
 		}
@@ -57,13 +60,16 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	const bool response = BeginCombo(comboLabel.c_str(), label, flags);
+	bool response = BeginCombo(comboLabel.c_str(), label, flags);
 	if (response) {
+		response = false;
 		for (size_t i = 0; i < list->size(); i++) {
 			if (strcmp(list->at(i).first, "") == 0) // ignore all entries with empty labels so we can create padding
 				continue;
-			if (Selectable(list->at(i).first, list->at(i).second))
+			if (Selectable(list->at(i).first, list->at(i).second)) {
 				list->at(i).second ^= 1;
+				response = true;
+			}
 			if (list->at(i).second)
 				SetItemDefaultFocus();
 		}
@@ -94,8 +100,9 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	const bool response = BeginCombo(comboLabel.c_str(), label, flags);
+	bool response = BeginCombo(comboLabel.c_str(), label, flags);
 	if (response) {
+		response = false;
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		for (auto playerData : GetAllPlayerData()) {
 			if (playerData->fields.Disconnected) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
@@ -116,6 +123,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 				{
 					list->at(playerData->fields.PlayerId).first = PlayerSelection(playerData);
 				}
+				response = true;
 			}
 			if (list->at(playerData->fields.PlayerId).second)
 				SetItemDefaultFocus();

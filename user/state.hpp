@@ -32,6 +32,7 @@ public:
 
     bool AdjustByDPI = true;
     float dpiScale = 1.f;
+    bool dpiChanged = false;
 
     std::string CurrentScene;
 

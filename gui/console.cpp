@@ -44,7 +44,6 @@ namespace ConsoleGui
 		ConsoleGui::Init();
 
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::SetWindowFontScale(State.dpiScale);
 		ImGui::BeginChild("console#filter", ImVec2(520, 20) * State.dpiScale, true);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
