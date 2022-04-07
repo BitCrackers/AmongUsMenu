@@ -71,7 +71,6 @@ namespace Radar {
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 		else
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
-		ImGui::SetWindowFontScale(State.dpiScale);
 
 		ImVec2 winpos = ImGui::GetWindowPos();
 
