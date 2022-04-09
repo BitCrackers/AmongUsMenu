@@ -705,6 +705,8 @@ void SaveOriginalAppearance()
 	State.originalPet = outfit->fields.PetId;
 	State.originalColor = outfit->fields.ColorId;
 	State.activeImpersonation = false;
+	State.originalVisor = outfit->fields.VisorId; 
+	State.originalNamePlate = outfit->fields.NamePlateId;
 }
 
 void ResetOriginalAppearance()
@@ -714,6 +716,8 @@ void ResetOriginalAppearance()
 	State.originalHat = nullptr;
 	State.originalPet = nullptr;
 	State.originalColor = 0xFF;
+	State.originalVisor = nullptr;
+	State.originalNamePlate = nullptr;
 }
 
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted) {

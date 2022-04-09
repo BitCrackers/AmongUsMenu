@@ -4,7 +4,7 @@
 
 RpcSetPet::RpcSetPet(String* petId)
 {
-	this->PetId = petId;
+	this->PetId = petId ? petId : convert_to_string("0");
 }
 
 void RpcSetPet::Process()
@@ -14,7 +14,7 @@ void RpcSetPet::Process()
 
 RpcSetSkin::RpcSetSkin(String* skinId)
 {
-	this->SkinId = skinId;
+	this->SkinId = skinId ? skinId : convert_to_string("0");
 }
 
 void RpcSetSkin::Process()
@@ -24,7 +24,7 @@ void RpcSetSkin::Process()
 
 RpcSetHat::RpcSetHat(String* hatId)
 {
-	this->HatId = hatId;
+	this->HatId = hatId ? hatId : convert_to_string("0");
 }
 
 void RpcSetHat::Process()
@@ -34,7 +34,7 @@ void RpcSetHat::Process()
 
 RpcSetVisor::RpcSetVisor(String* visorId)
 {
-	this->VisorId = visorId;
+	this->VisorId = visorId ? visorId : convert_to_string("");
 }
 
 void RpcSetVisor::Process()
@@ -44,7 +44,7 @@ void RpcSetVisor::Process()
 
 RpcSetNamePlate::RpcSetNamePlate(String* namePlateId)
 {
-	this->NamePlateId = namePlateId;
+	this->NamePlateId = namePlateId ? namePlateId : convert_to_string("");
 }
 
 void RpcSetNamePlate::Process()
