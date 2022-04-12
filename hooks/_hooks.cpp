@@ -40,12 +40,20 @@ void DetourInitilization() {
 		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
 		return;
 	} else {
-		HMODULE steamApiModule = GetModuleHandleA("GameOverlayRenderer.dll");
-		if (steamApiModule != NULL)
-			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("55 8B EC 53 8B 5D ? F6 C3 01 74 ? 53 FF 75 ? FF 75 ? FF 15 ? ? ? ? 5B 5D C2", steamApiModule);
-		if (!oPresent)
-		{
-			if (steamApiModule && MessageBox(NULL, L"Failed to hook the Steam overlay D3DPresent function.  This may cause the menu to be visible to streaming applications.  Do you wish to continue?", L"Error", MB_YESNO | MB_ICONERROR) == IDNO)
+		// Attempting to hook the Steam overlay
+		do {
+			if (oPresent)
+				break;
+			HMODULE hModule = GetModuleHandleA("GameOverlayRenderer.dll");
+			if (!hModule)
+				break;
+			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("55 8B EC 53 8B 5D ? F6 C3 01 74 ? 53 FF 75 ? FF 75 ? FF 15 ? ? ? ? 5B 5D C2", hModule);
+			if (oPresent)
+				break;
+			if (MessageBox(NULL,
+				L"Failed to hook the Steam overlay D3DPresent function.\nThis may cause the menu to be visible to streaming applications.  Do you wish to continue?",
+				L"Error",
+				MB_YESNO | MB_ICONWARNING) == IDNO)
 			{
 #ifndef _VERSION
 				SetEvent(hUnloadEvent); //Might as well unload the DLL if we're not going to render anything
@@ -53,7 +61,29 @@ void DetourInitilization() {
 				return;
 			}
 			oPresent = d3d11.presentFunction;
-		}
+		} while (0);
+		// Attempting to hook the Epic overlay
+		do {
+			if (oPresent)
+				break;
+			HMODULE hModule = GetModuleHandleA("EOSOVH-Win32-Shipping.dll");
+			if (!hModule)
+				break;
+			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("56 8B 74 24 08 8D 44 24 08 6A 01 56 50 E8 ? ? ? ? 83 C4 0C 83 7C 24 ? ? 74 1C 8D 44 24 08 56 50 E8 ? ? ? ? 8B 44 24 10 83 C4 08 85 C0 74 06 8B 08 50 FF 51 08 FF 74 24 10 A1 ? ? ? ? FF 74 24 10 56 FF D0 5E C2 0C 00 ", hModule);
+			if (oPresent)
+				break;
+			if (MessageBox(NULL,
+				L"Failed to hook the Epic overlay D3DPresent function.\nThis may cause the menu to be visible to streaming applications.  Do you wish to continue?",
+				L"Error",
+				MB_YESNO | MB_ICONWARNING) == IDNO)
+			{
+#ifndef _VERSION
+				SetEvent(hUnloadEvent); //Might as well unload the DLL if we're not going to render anything
+#endif
+				return;
+			}
+			oPresent = d3d11.presentFunction;
+		} while (0);
 	}
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);

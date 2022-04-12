@@ -27,7 +27,7 @@ HWND DirectX::window;
 ID3D11Device* pDevice = NULL;
 ID3D11DeviceContext* pContext = NULL;
 ID3D11RenderTargetView* pRenderTargetView = NULL;
-D3D_PRESENT_FUNCTION oPresent;
+D3D_PRESENT_FUNCTION oPresent = nullptr;
 WNDPROC oWndProc;
 
 HANDLE DirectX::hRenderSemaphore;
@@ -121,6 +121,8 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         DirectX::window = sd.OutputWindow;
         ID3D11Texture2D* pBackBuffer = NULL;
         pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+        if (!pBackBuffer)
+            return false;
         pDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
         pBackBuffer->Release();
         oWndProc = (WNDPROC)SetWindowLongPtr(DirectX::window, GWLP_WNDPROC, (LONG_PTR)dWndProc);
