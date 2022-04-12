@@ -69,7 +69,7 @@ void DetourInitilization() {
 			HMODULE hModule = GetModuleHandleA("EOSOVH-Win32-Shipping.dll");
 			if (!hModule)
 				break;
-			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("56 8B 74 24 08 8D 44 24 08 6A 01 56 50 E8 ? ? ? ? 83 C4 0C 83 7C 24 ? ? 74 1C 8D 44 24 08 56 50 E8 ? ? ? ? 8B 44 24 10 83 C4 08 85 C0 74 06 8B 08 50 FF 51 08 FF 74 24 10 A1 ? ? ? ? FF 74 24 10 56 FF D0 5E C2 0C 00 ", hModule);
+			oPresent = SignatureScan<D3D_PRESENT_FUNCTION>("56 8B 74 24 08 8D 44 24 08 6A 01 56 50 E8 ? ? ? ? 83 C4 0C 83 7C 24 ? ? 74 1C 8D 44 24 08 56 50 E8 ? ? ? ? 8B 44 24 10 83 C4 08 85 C0 74 06 8B 08 50 FF 51 08 FF 74 24 10 A1 ? ? ? ? FF 74 24 10 56 FF D0 5E C2 0C 00", hModule);
 			if (oPresent)
 				break;
 			if (MessageBox(NULL,
@@ -84,6 +84,8 @@ void DetourInitilization() {
 			}
 			oPresent = d3d11.presentFunction;
 		} while (0);
+		if (!oPresent)
+			oPresent = d3d11.presentFunction;
 	}
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
