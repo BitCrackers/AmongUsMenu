@@ -120,8 +120,9 @@ void DetourInitilization() {
 	HOOKFUNC(GameOptionsData_Deserialize_1);
 	HOOKFUNC(PlayerControl_MurderPlayer);
 	HOOKFUNC(PlayerControl_CompleteTask);
-	HOOKFUNC(PlayerControl_CmdReportDeadBody);
-	HOOKFUNC(PlayerControl_ReportDeadBody);
+	//HOOKFUNC(PlayerControl_CmdReportDeadBody);
+	//HOOKFUNC(PlayerControl_ReportDeadBody);
+	HOOKFUNC(PlayerControl_CoStartMeeting);
 	HOOKFUNC(RoleManager_SelectRoles);
 	HOOKFUNC(RoleManager_AssignRolesForTeam);
 	HOOKFUNC(RoleManager_AssignRolesFromList);
@@ -201,8 +202,9 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameOptionsData_Deserialize_1);
 	UNHOOKFUNC(PlayerControl_MurderPlayer);
 	UNHOOKFUNC(PlayerControl_CompleteTask);
-	UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
-	UNHOOKFUNC(PlayerControl_ReportDeadBody);
+	//UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
+	//UNHOOKFUNC(PlayerControl_ReportDeadBody);
+	UNHOOKFUNC(PlayerControl_CoStartMeeting);
 	UNHOOKFUNC(RoleManager_SelectRoles);
 	UNHOOKFUNC(RoleManager_AssignRolesForTeam);
 	UNHOOKFUNC(RoleManager_AssignRolesFromList);

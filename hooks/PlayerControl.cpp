@@ -255,6 +255,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
+/*  Use dPlayerControl_CoStartMeeting instead
 void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
 	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
@@ -272,6 +273,16 @@ void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* ta
 		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	}
 	PlayerControl_ReportDeadBody(__this, target, method);
+}*/
+
+void* dPlayerControl_CoStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
+{
+	do {
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+		State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	} while (0);
+	return PlayerControl_CoStartMeeting(__this, target, method);
 }
 
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
