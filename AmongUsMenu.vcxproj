@@ -70,13 +70,12 @@
     <ClCompile Include="hooks\PlayerPhysics.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\RoleManager.cpp" />
+    <ClCompile Include="hooks\SaveManager.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
-    <ClCompile Include="profiler.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
-    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -204,6 +203,7 @@
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
     <ClCompile Include="gui\tabs\self_tab.cpp" />
     <ClCompile Include="user\logger.cpp" />
+    <ClCompile Include="user\profiler.cpp" />
     <ClCompile Include="user\resources.cpp" />
     <ClCompile Include="user\utility.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -349,13 +349,13 @@
     <ClInclude Include="includes\directx11.h" />
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
-    <ClInclude Include="profiler.h" />
     <ClInclude Include="user\achievements.hpp" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />
     <ClInclude Include="gui\tabs\self_tab.h" />
     <ClInclude Include="user\logger.h" />
+    <ClInclude Include="user\profiler.h" />
     <ClInclude Include="user\resources.h" />
     <ClInclude Include="user\utility.h" />
     <ClInclude Include="framework\il2cpp-appdata.h" />

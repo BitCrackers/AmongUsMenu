@@ -283,10 +283,10 @@
     <ClCompile Include="gui\tabs\replay_tab.cpp">
       <Filter>gui\tabs</Filter>
     </ClCompile>
-    <ClCompile Include="profiler.cpp">
+    <ClCompile Include="user\profiler.cpp">
       <Filter>user</Filter>
     </ClCompile>
-    <ClCompile Include="SaveManager.cpp">
+    <ClCompile Include="hooks\SaveManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
   </ItemGroup>
@@ -466,7 +466,7 @@
     <ClInclude Include="gui\tabs\replay_tab.h">
       <Filter>gui\tabs</Filter>
     </ClInclude>
-    <ClInclude Include="profiler.h">
+    <ClInclude Include="user\profiler.h">
       <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
