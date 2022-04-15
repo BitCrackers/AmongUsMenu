@@ -60,17 +60,31 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	bool response = BeginCombo(comboLabel.c_str(), label, flags);
+	size_t countSelected = 0;
+	for (auto& pair : *list) {
+		if (pair.second) {
+			countSelected++;
+		}
+	}
+	std::string preview;
+	if (countSelected > 0) {
+		char buf[32] = { 0 };
+		sprintf_s(buf, "%zu item(s) selected", countSelected);
+		preview = buf;
+	}
+	else
+		preview = label;
+	bool response = BeginCombo(comboLabel.c_str(), preview.c_str(), flags);
 	if (response) {
 		response = false;
-		for (size_t i = 0; i < list->size(); i++) {
-			if (strcmp(list->at(i).first, "") == 0) // ignore all entries with empty labels so we can create padding
+		for (auto& pair : *list) {
+			if (strcmp(pair.first, "") == 0) // ignore all entries with empty labels so we can create padding
 				continue;
-			if (Selectable(list->at(i).first, list->at(i).second)) {
-				list->at(i).second ^= 1;
+			if (Selectable(pair.first, pair.second)) {
+				pair.second ^= 1;
 				response = true;
 			}
-			if (list->at(i).second)
+			if (pair.second)
 				SetItemDefaultFocus();
 		}
 		EndCombo();
@@ -83,8 +97,8 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 		SameLine(0, spacing);
 		const bool resetResponse = Button(buttonLabel.c_str());
 		if (resetResponse) {
-			for (size_t i = 0; i < list->size(); i++)
-				list->at(i).second = false;
+			for (auto& pair : *list)
+				pair.second = false;
 			return resetResponse;
 		}
 	}
@@ -100,7 +114,21 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	bool response = BeginCombo(comboLabel.c_str(), label, flags);
+	size_t countSelected = 0;
+	for (auto& pair : *list) {
+		if (pair.second) {
+			countSelected++;
+		}
+	}
+	std::string preview;
+	if (countSelected > 0) {
+		char buf[32] = { 0 };
+		sprintf_s(buf, "%zu player(s) selected", countSelected);
+		preview = buf;
+	}
+	else
+		preview = label;
+	bool response = BeginCombo(comboLabel.c_str(), preview.c_str(), flags);
 	if (response) {
 		response = false;
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
@@ -110,22 +138,20 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pa
 
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) return false;
+			auto& item = list->at(playerData->fields.PlayerId);
 			std::string playerName = convert_from_string(outfit->fields._playerName);
 			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
 			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
-			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), list->at(playerData->fields.PlayerId).second))
+			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), item.second))
 			{
-				list->at(playerData->fields.PlayerId).second ^= 1;
-				if (list->at(playerData->fields.PlayerId).second
-					&& (!list->at(playerData->fields.PlayerId).first.has_value()
-						|| (list->at(playerData->fields.PlayerId).first.has_value()
-							&& list->at(playerData->fields.PlayerId).first.is_Disconnected())))
+				item.second ^= 1;
+				if (item.second && (!item.first.has_value() || item.first.is_Disconnected()))
 				{
-					list->at(playerData->fields.PlayerId).first = PlayerSelection(playerData);
+					item.first = PlayerSelection(playerData);
 				}
 				response = true;
 			}
-			if (list->at(playerData->fields.PlayerId).second)
+			if (item.second)
 				SetItemDefaultFocus();
 			SameLine();
 			ColorButton(std::string("##" + playerName + "_ConsoleColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
