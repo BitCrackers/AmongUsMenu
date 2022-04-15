@@ -24,11 +24,11 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 	State.mapDoors.clear();
 	State.pinnedDoors.clear();
 
-	auto allDoors = __this->fields._.AllDoors;
+	il2cpp::Array allDoors = __this->fields._.AllDoors;
 
-	for (il2cpp_array_size_t i = 0; i < allDoors->max_length; i++) {
-		if (std::find(State.mapDoors.begin(), State.mapDoors.end(), allDoors->vector[i]->fields.Room) == State.mapDoors.end())
-			State.mapDoors.push_back(allDoors->vector[i]->fields.Room);
+	for (auto door : allDoors) {
+		if (std::find(State.mapDoors.begin(), State.mapDoors.end(), door->fields.Room) == State.mapDoors.end())
+			State.mapDoors.push_back(door->fields.Room);
 	}
 
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());

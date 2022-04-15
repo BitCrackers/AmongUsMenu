@@ -22,33 +22,29 @@ RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAm
 	if(this->ImposterCount > maxImpostors)
 		this->ImposterCount = maxImpostors;
 
-	auto roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
-	if (roleRates->fields.count != 0) {
-		auto vectors = roleRates->fields.entries->vector;
-		for (size_t iVector = 0; iVector < roleRates->fields.entries->max_length; iVector++)
+		for (auto& kvp : il2cpp::Dictionary(gameOptionsDataFields.RoleOptions->fields.roleRates))
 		{
-			if (vectors[iVector].key == RoleTypes__Enum::Engineer)
+			if (kvp.key == RoleTypes__Enum::Engineer)
 			{
-				this->EngineerChance = vectors[iVector].value.Chance;
-				this->EngineerCount = vectors[iVector].value.MaxCount;
+				this->EngineerChance = kvp.value.Chance;
+				this->EngineerCount = kvp.value.MaxCount;
 			}
-			else if (vectors[iVector].key == RoleTypes__Enum::Scientist)
+			else if (kvp.key == RoleTypes__Enum::Scientist)
 			{
-				this->ScientistChance = vectors[iVector].value.Chance;
-				this->ScientistCount = vectors[iVector].value.MaxCount;
+				this->ScientistChance = kvp.value.Chance;
+				this->ScientistCount = kvp.value.MaxCount;
 			}
-			else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter)
+			else if (kvp.key == RoleTypes__Enum::Shapeshifter)
 			{
-				this->ShapeshifterChance = vectors[iVector].value.Chance;
-				this->ShapeshifterCount = vectors[iVector].value.MaxCount;
+				this->ShapeshifterChance = kvp.value.Chance;
+				this->ShapeshifterCount = kvp.value.MaxCount;
 			}
-			else if (vectors[iVector].key == RoleTypes__Enum::GuardianAngel)
+			else if (kvp.key == RoleTypes__Enum::GuardianAngel)
 			{
-				this->GuardianAngelChance = vectors[iVector].value.Chance;
-				this->GuardianAngelCount = vectors[iVector].value.MaxCount;
+				this->GuardianAngelChance = kvp.value.Chance;
+				this->GuardianAngelCount = kvp.value.MaxCount;
 			}
 		}
-	}
 }
 
 int RoleRates::GetRoleCount(RoleTypes__Enum role) {
@@ -298,17 +294,9 @@ PlayerControl* GetPlayerControlById(uint8_t id) {
 }
 
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
-	static std::string deadBodyType = translate_type_name("PlainDoor, Assembly-CSharp");
+	il2cpp::Array deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
 
-	std::vector<PlainDoor*> doors = std::vector<PlainDoor*>();
-
-	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
-	PlainDoor__Array* deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
-
-	for (il2cpp_array_size_t i = 0; i < deadBodyArray->max_length; i++)
-		doors.push_back(deadBodyArray->vector[i]);
-
-	for (PlainDoor* door : doors)
+	for (auto door : deadBodyArray)
 	{
 		if (door->fields.Room == room)
 		{
@@ -319,84 +307,37 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	return nullptr;
 }
 
-std::vector<PlainDoor*> GetAllPlainDoors() {
-	static std::string deadBodyType = translate_type_name("PlainDoor, Assembly-CSharp");
-
-	std::vector<PlainDoor*> doors = std::vector<PlainDoor*>();
-
-	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
-	PlainDoor__Array* deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
-
-	for (il2cpp_array_size_t i = 0; i < deadBodyArray->max_length; i++)
-		doors.push_back(deadBodyArray->vector[i]);
-
-	return doors;
+il2cpp::Array<PlainDoor__Array> GetAllPlainDoors() {
+	return (*Game::pShipStatus)->fields.AllDoors;
 }
 
-std::vector<PlayerControl*> GetAllPlayerControl() {
-	static PlayerControl* (*getItem)(List_1_PlayerControl_*, int32_t, MethodInfo*);
-	static int32_t(*getCount)(List_1_PlayerControl_*, MethodInfo*);
-	if (getItem == NULL) getItem = decltype(getItem)(find_method((Il2CppClass*)(*Game::pAllPlayerControls)->klass, "PlayerControl", "get_Item", "System.Int32"));
-	if (getCount == NULL) getCount = decltype(getCount)(find_method((Il2CppClass*)(*Game::pAllPlayerControls)->klass, "System.Int32", "get_Count", ""));
-
-	std::vector<PlayerControl*> players = std::vector<PlayerControl*>();
-
-	if (getItem != NULL && getCount != NULL) {
-		for (int i = 0; i < getCount((*Game::pAllPlayerControls), NULL); i++)
-			players.push_back(getItem((*Game::pAllPlayerControls), i, NULL));
-	}
-
-	return players;
+il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl() {
+	return *Game::pAllPlayerControls;
 }
 
-std::vector<GameData_PlayerInfo*> GetAllPlayerData() {
-	static GameData_PlayerInfo* (*getItem)(List_1_GameData_PlayerInfo_*, int32_t, MethodInfo*);
-	static int32_t(*getCount)(List_1_GameData_PlayerInfo_*, MethodInfo*);
-	if (getItem == NULL) getItem = decltype(getItem)(find_method((Il2CppClass*)(Il2CppClass*)(*Game::pGameData)->fields.AllPlayers->klass, "GameData.PlayerInfo", "get_Item", "System.Int32"));
-	if (getCount == NULL) getCount = decltype(getCount)(find_method((Il2CppClass*)(Il2CppClass*)(*Game::pGameData)->fields.AllPlayers->klass, "System.Int32", "get_Count", ""));
-
-	std::vector<GameData_PlayerInfo*> players = std::vector<GameData_PlayerInfo*>();
-
-	if (getItem != NULL && getCount != NULL) {
-		for (int i = 0; i < getCount((*Game::pGameData)->fields.AllPlayers, NULL); i++)
-			players.push_back(getItem((*Game::pGameData)->fields.AllPlayers, i, NULL));
-	}
-
-	return players;
+il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData() {
+	return (*Game::pGameData)->fields.AllPlayers;
 }
 
-std::vector<DeadBody*> GetAllDeadBodies() {
+il2cpp::Array<DeadBody__Array> GetAllDeadBodies() {
 	static std::string deadBodyType = translate_type_name("DeadBody, Assembly-CSharp");
 
 	std::vector<DeadBody*> deadBodies = std::vector<DeadBody*>();
 
 	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
-	DeadBody__Array* deadBodyArray = (DeadBody__Array*)app::Object_1_FindObjectsOfType(deadBody_Type, NULL);
-
-	for (il2cpp_array_size_t i = 0; i < deadBodyArray->max_length; i++)
-		deadBodies.push_back(deadBodyArray->vector[i]);
-
-	return deadBodies;
+	return (DeadBody__Array*)app::Object_1_FindObjectsOfType(deadBody_Type, NULL);
 }
 
-std::vector<PlayerTask*> GetPlayerTasks(PlayerControl* player) {
-	static PlayerTask* (*getItem)(List_1_PlayerTask_*, int32_t, MethodInfo*) = decltype(getItem)(find_method((Il2CppClass*)(Il2CppClass*)player->fields.myTasks->klass, "PlayerTask", "get_Item", "System.Int32"));
-	static int32_t(*getCount)(List_1_PlayerTask_*, MethodInfo*) = decltype(getCount)(find_method((Il2CppClass*)(Il2CppClass*)player->fields.myTasks->klass, "System.Int32", "get_Count", ""));
-
-	std::vector<PlayerTask*> playerTasks = std::vector<PlayerTask*>();
-
-	if (getItem != NULL && getCount != NULL)
-		for (int i = 0; i < getCount(player->fields.myTasks, NULL); i++)
-			playerTasks.push_back(getItem(player->fields.myTasks, i, NULL));
-
-	return playerTasks;
+il2cpp::List<List_1_PlayerTask_> GetPlayerTasks(PlayerControl* player) {
+	return player->fields.myTasks;
 }
 
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player) {
 	static std::string normalPlayerTaskType = translate_type_name("NormalPlayerTask");
 
-	std::vector<PlayerTask*> playerTasks = GetPlayerTasks(player);
-	std::vector<NormalPlayerTask*> normalPlayerTasks = std::vector<NormalPlayerTask*>();
+	auto playerTasks = GetPlayerTasks(player);
+	std::vector<NormalPlayerTask*> normalPlayerTasks;
+	normalPlayerTasks.reserve(playerTasks.size());
 
 	for (auto playerTask : playerTasks)
 		if (normalPlayerTaskType == playerTask->klass->_0.name || normalPlayerTaskType == playerTask->klass->_0.parent->name)
@@ -408,7 +349,7 @@ std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player) {
 SabotageTask* GetSabotageTask(PlayerControl* player) {
 	static std::string sabotageTaskType = translate_type_name("SabotageTask");
 
-	std::vector<PlayerTask*> playerTasks = GetPlayerTasks(player);
+	auto playerTasks = GetPlayerTasks(player);
 
 	for (auto playerTask : playerTasks)
 		if (sabotageTaskType == playerTask->klass->_0.name || sabotageTaskType == playerTask->klass->_0.parent->name)
@@ -521,10 +462,9 @@ std::string getGameVersion() {
 SystemTypes__Enum GetSystemTypes(Vector2 vector) {
 	if (*Game::pShipStatus) {
 		auto shipStatus = *Game::pShipStatus;
-		auto allRooms = shipStatus->fields._AllRooms_k__BackingField;
-
-		for (size_t i = 0; i < allRooms->max_length; i++)
-			if (allRooms->vector[i]->fields.roomArea != nullptr && app::Collider2D_OverlapPoint(allRooms->vector[i]->fields.roomArea, vector, NULL)) return allRooms->vector[i]->fields.RoomId;
+		for (auto room : il2cpp::Array(shipStatus->fields._AllRooms_k__BackingField))
+			if (room->fields.roomArea != nullptr && app::Collider2D_OverlapPoint(room->fields.roomArea, vector, NULL)) 
+				return room->fields.RoomId;
 	}
 	return SystemTypes__Enum::Outside;
 }
@@ -662,11 +602,13 @@ void ImpersonateName(PlayerSelection player)
 int GetRandomColorId()
 {
 	int colorId = 0;
+	auto PlayerColors = il2cpp::Array(app::Palette__TypeInfo->static_fields->PlayerColors);
+	assert(PlayerColors.size() > 0);
 	if (IsInGame() || IsInLobby())
 	{
 		auto players = GetAllPlayerControl();
 		std::vector<int> availableColors = { };
-		for (il2cpp_array_size_t i = 0; i < app::Palette__TypeInfo->static_fields->PlayerColors->max_length; i++)
+		for (size_t i = 0; i < PlayerColors.size(); i++)
 		{
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
@@ -688,7 +630,7 @@ int GetRandomColorId()
 	}
 	else
 	{
-		colorId = randi(0, app::Palette__TypeInfo->static_fields->PlayerColors->max_length - 1);
+		colorId = randi(0, PlayerColors.size() - 1);
 	}
 	return colorId;
 }
@@ -721,12 +663,9 @@ void ResetOriginalAppearance()
 }
 
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted) {
-	if (player == NULL) return NULL;
-	auto arr = player->fields.Outfits->fields.entries;
-	auto outfitCount = player->fields.Outfits->fields.count;
-	GameData_PlayerOutfit* playerOutfit = NULL;
-	for (int i = 0; i < outfitCount; i++) {
-		auto kvp = arr->vector[i];
+	if (!player) return nullptr;
+	GameData_PlayerOutfit* playerOutfit = nullptr;
+	for (auto& kvp : il2cpp::Dictionary(player->fields.Outfits)) {
 		if (kvp.key == PlayerOutfitType__Enum::Default) {
 			if(playerOutfit == nullptr)
 				playerOutfit = kvp.value;
@@ -738,7 +677,7 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool include
 			break;
 		}
 	}
-	return playerOutfit ? playerOutfit : 0;
+	return playerOutfit;
 }
 
 bool PlayerIsImpostor(GameData_PlayerInfo* player) {

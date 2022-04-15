@@ -207,3 +207,4 @@ List_1_HatData_
 GameOptionsDataParent
 StatsManager_Stats
 SkinLayer
+VoteSpreader__Fields

@@ -233,46 +233,46 @@ void output_assembly_methods(const Il2CppAssembly* assembly) {
 		output_class_methods(const_cast<Il2CppClass*>(il2cpp_image_get_class(assembly->image, i)));
 	}
 }
+
+class ScopedThreadAttacher
+{
+public:
+	ScopedThreadAttacher() : m_AttachedThread(nullptr) {
+		m_AttachedThread = il2cpp_thread_attach(il2cpp_domain_get());
+	}
+	~ScopedThreadAttacher() {
+		if (m_AttachedThread)
+			il2cpp_thread_detach(m_AttachedThread);
+	}
+
+private:
+	Il2CppThread* m_AttachedThread;
+};
+
 bool cctor_finished(Il2CppClass* klass)
 {
+	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
+	// make sure we're attached before we call il2cpp_runtime_class_init
+	ScopedThreadAttacher managedThreadAttached;
 	if (!klass->initialized) {
 		// enforce to call 'Class::Init'
 		auto size = il2cpp_class_get_bitmap_size(klass);
 		std::vector<size_t> buffer(size / sizeof(size_t));
 		il2cpp_class_get_bitmap(klass, buffer.data());
+		if (!klass->initialized) {
+			STREAM_ERROR("Class " << klass->name << " il2cpp_class_get_bitmap() failure");
+			return false;
+		}
 	}
-
-	constexpr int CCTOR_TIMEOUT = 5000; //Time in milliseconds to wait for class to initialize
-	int timeout = CCTOR_TIMEOUT; //Five second timeout
-	STREAM_DEBUG("Class " << klass->name << " Has Static Constructor: " << (klass->has_cctor ? "true" : "false"));
-	//First we wait for the class itself to finish initializing
-	while (!(klass->initialized || klass->initialized_and_no_error) && (timeout >= 0)) //Bails on either initialization setting
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		timeout -= 10;
-	}
-
-	if (timeout <= 0)
-	{
-		STREAM_DEBUG("Class " << klass->name << " Timed out waiting for initialized || initialized_and_no_error");
-		return false;
-	}
-	//Then we wait for the static constructor to finish
-	timeout = CCTOR_TIMEOUT;
-
-	if (!klass->has_cctor) return true; //If we don't have a static constructor, no need to wait
+	//If we don't have a static constructor, no need to wait
+	if (!klass->has_cctor) return true; 
 	if (!klass->cctor_finished) {
 		// enforce to call 'Runtime::ClassInit'
 		il2cpp_runtime_class_init(klass);
+		if (!klass->cctor_finished) {
+			STREAM_ERROR("Class " << klass->name << " il2cpp_runtime_class_init() failure");
+			return false;
+		}
 	}
-	while (!klass->cctor_finished && (timeout >= 0))
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		timeout -= 10;
-	}
-	if (timeout <= 0)
-	{
-		STREAM_DEBUG("Class " << klass->name << " Timed out waiting for cctor_finished");
-	}
-	return (timeout > 0);
+	return true;
 }
