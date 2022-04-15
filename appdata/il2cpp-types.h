@@ -8967,8 +8967,8 @@ namespace app
     };
 #pragma endregion
 
-#pragma region List_SpriteRenderer_
-    struct __declspec(align(4)) List_SpriteRenderer__Fields
+#pragma region List_1_UnityEngine_SpriteRenderer_
+    struct __declspec(align(4)) List_1_UnityEngine_SpriteRenderer___Fields
     {
         struct SpriteRenderer__Array* _items;
         int32_t _size;
@@ -8976,18 +8976,18 @@ namespace app
         struct Object* _syncRoot;
     };
 
-    struct List_SpriteRenderer_
+    struct List_1_UnityEngine_SpriteRenderer_
     {
         void* klass;
         void* monitor;
-        struct List_SpriteRenderer__Fields fields;
+        struct List_1_UnityEngine_SpriteRenderer___Fields fields;
     };
 #pragma endregion
 
 #pragma region VoteSpreader
     struct VoteSpreader__Fields {
         struct MonoBehaviour__Fields _;
-        struct List_SpriteRenderer_* Votes;
+        struct List_1_UnityEngine_SpriteRenderer_* Votes;
         void* VoteRange;
         int32_t maxVotesBeforeSmoosh;
         float CounterY;
@@ -8996,7 +8996,7 @@ namespace app
 
     struct VoteSpreader {
         struct VoteSpreader__Class* klass;
-        void* monitor;
+        MonitorData* monitor;
         struct VoteSpreader__Fields fields;
     };
 
@@ -9009,7 +9009,8 @@ namespace app
 
     struct VoteSpreader__Class {
         Il2CppClass_0 _0;
-        void* static_fields;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct VoteSpreader__StaticFields* static_fields;
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct VoteSpreader__VTable vtable;
@@ -10906,6 +10907,14 @@ namespace app
         struct List_1_GameData_PlayerInfo___Class* klass;
         void* monitor;
         struct List_1_GameData_PlayerInfo___Fields fields;
+    };
+
+    struct GameData_PlayerInfo__Array {
+        struct GameData_PlayerInfo__Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct GameData_PlayerInfo* vector[32];
     };
 
     struct List_1_GameData_PlayerInfo___VTable

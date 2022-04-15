@@ -49,44 +49,22 @@ namespace SabotageTab {
                 ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
                 if (ImGui::Checkbox("Disable Lights", &State.DisableLights)) {
-                    if (State.DisableLights) {
-                        SwitchSystem* switchSystem = nullptr;
-                        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
-
-                        for (auto system : systems) {
-                            if (system.first == SystemTypes__Enum::Electrical) {
-                                switchSystem = (SwitchSystem*)system.second;
-                            }
+                    SwitchSystem* switchSystem = nullptr;
+                    for (auto& kvp : il2cpp::Dictionary((*Game::pShipStatus)->fields.Systems)) {
+                        if (kvp.key == SystemTypes__Enum::Electrical) {
+                            switchSystem = (SwitchSystem*)kvp.value;
+                            break;
                         }
+                    }
 
-                        if (switchSystem != nullptr) {
-                            auto actualSwitches = switchSystem->fields.ActualSwitches;
-                            auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
+                    if (switchSystem != nullptr) {
+                        auto actualSwitches = switchSystem->fields.ActualSwitches;
+                        auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
 
-                            auto switchMask = 1 << (0 & 0x1F);
+                        auto switchMask = 1 << ((State.DisableLights ? 0 : 5) & 0x1F);
 
-                            if ((actualSwitches & switchMask) != (~expectedSwitches & switchMask))
-                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 5));
-                        }
-                    } else {
-                        SwitchSystem* switchSystem = nullptr;
-                        std::vector<std::pair<SystemTypes__Enum, ISystemType*>> systems = GetEntriesFromDictionary<Dictionary_2_SystemTypes_ISystemType_*, SystemTypes__Enum, ISystemType*>((*Game::pShipStatus)->fields.Systems);
-
-                        for (auto system : systems) {
-                            if (system.first == SystemTypes__Enum::Electrical) {
-                                switchSystem = (SwitchSystem*)system.second;
-                            }
-                        }
-
-                        if (switchSystem != nullptr) {
-                            auto actualSwitches = switchSystem->fields.ActualSwitches;
-                            auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
-
-                            auto switchMask = 1 << (5 & 0x1F);
-
-                            if ((actualSwitches & switchMask) != (expectedSwitches & switchMask))
-                                State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 5));
-                        }
+                        if ((actualSwitches & switchMask) != ((State.DisableLights ? ~expectedSwitches : expectedSwitches) & switchMask))
+                            State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 5));
                     }
                 }
 

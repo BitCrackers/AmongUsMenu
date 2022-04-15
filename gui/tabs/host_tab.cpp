@@ -44,35 +44,30 @@ namespace HostTab {
 
 						if (!IsInGame())
 						{
-							auto roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
-							if(roleRates->fields.count != 0)
-							{
-								auto vectors = roleRates->fields.entries->vector;
-								for (size_t iVector = 0; iVector < roleRates->fields.entries->max_length; iVector++)
+								for (auto& kvp : il2cpp::Dictionary((*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates))
 								{
-									if (vectors[iVector].key == RoleTypes__Enum::Engineer)
+									if (kvp.key == RoleTypes__Enum::Engineer)
 									{
 										if(State.engineers_amount > 0)
-											vectors[iVector].value.Chance = 100;
-										if(State.engineers_amount > vectors[iVector].value.MaxCount)
-											vectors[iVector].value.MaxCount = State.engineers_amount;
+											kvp.value.Chance = 100;
+										if(State.engineers_amount > kvp.value.MaxCount)
+											kvp.value.MaxCount = State.engineers_amount;
 									}
-									else if (vectors[iVector].key == RoleTypes__Enum::Scientist)
+									else if (kvp.key == RoleTypes__Enum::Scientist)
 									{
 										if(State.scientists_amount > 0)
-											vectors[iVector].value.Chance = 100;
-										if(State.scientists_amount > vectors[iVector].value.MaxCount)
-											vectors[iVector].value.MaxCount = State.scientists_amount;
+											kvp.value.Chance = 100;
+										if(State.scientists_amount > kvp.value.MaxCount)
+											kvp.value.MaxCount = State.scientists_amount;
 									}
-									else if (vectors[iVector].key == RoleTypes__Enum::Shapeshifter)
+									else if (kvp.key == RoleTypes__Enum::Shapeshifter)
 									{
 										if(State.shapeshifters_amount > 0)
-											vectors[iVector].value.Chance = 100;
-										if(State.shapeshifters_amount > vectors[iVector].value.MaxCount)
-											vectors[iVector].value.MaxCount = State.shapeshifters_amount;
+											kvp.value.Chance = 100;
+										if(State.shapeshifters_amount > kvp.value.MaxCount)
+											kvp.value.MaxCount = State.shapeshifters_amount;
 									}
 								}
-							}
 
 							if((*Game::pGameOptionsData)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
 								(*Game::pGameOptionsData)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;

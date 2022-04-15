@@ -67,10 +67,10 @@ namespace DebugTab {
 
 			if (ImGui::CollapsingHeader("Colors##debug"))
 			{
-				app::Color32__Array* colArr = app::Palette__TypeInfo->static_fields->PlayerColors;
-				CorrectedColor32* colArr_raw = (CorrectedColor32*)app::Palette__TypeInfo->static_fields->PlayerColors->vector;
-				int length = colArr->max_length;
-				for (int i = 0; i < length; i++)
+				il2cpp::Array colArr = app::Palette__TypeInfo->static_fields->PlayerColors;
+				CorrectedColor32* colArr_raw = (CorrectedColor32*)colArr.begin();
+				size_t length = colArr.size();
+				for (size_t i = 0; i < length; i++)
 				{
 					CorrectedColor32 col = colArr_raw[i];
 					ImVec4 conv_col = AmongUsColorToImVec4(col);

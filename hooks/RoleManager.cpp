@@ -29,7 +29,7 @@ void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int3
 
 void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPlayers)
 {
-	for (int i = 0; i < State.assignedRolesPlayer.size(); i++)
+	for (size_t i = 0; i < State.assignedRolesPlayer.size(); i++)
 	{
 		auto role = State.assignedRoles[i];
 		auto player = State.assignedRolesPlayer[i];
@@ -44,7 +44,7 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 	}
 }
 
-void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, std::vector<app::PlayerControl*>& allPlayers, std::vector<uint8_t>& assignedPlayers)
+void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2cpp::List<List_1_PlayerControl_>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
 	auto roleCount = roleRates.GetRoleCount(role);
 	if (roleCount < 1)

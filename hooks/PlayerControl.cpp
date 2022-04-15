@@ -282,7 +282,7 @@ void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageRead
 void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
 {
 	//If we're already rendering it, lets skip checking if we should
-	if (IsInGame() && !value)
+	if (IsInGame() && !value && State.ShowGhosts)
 	{
 		Transform* rendererTrans = app::Component_get_transform(reinterpret_cast<app::Component_1*>(__this), NULL);
 		if (rendererTrans != NULL)
@@ -290,9 +290,10 @@ void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
 			Transform* root = app::Transform_GetRoot(rendererTrans, NULL); // docs say GetRoot never returns NULL, so no need to check it
 			for (auto player : GetAllPlayerControl())
 			{
-				if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
+				auto playerInfo = GetPlayerData(player);
+				if (!playerInfo) break; //This happens sometimes during loading
 
-				if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+				if (playerInfo->fields.IsDead)
 				{
 					// TO-DO:
 					// figure out if a reference to the Renderer component can be gotten, otherwise just use UnityEngine's GetComponentInChildren<T> function
@@ -313,10 +314,11 @@ void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
 
 void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 {
-	if (IsInGame() && !value) { //If we're already rendering it, lets skip checking if we should
+	if (IsInGame() && !value && State.ShowGhosts) { //If we're already rendering it, lets skip checking if we should
 		for (auto player : GetAllPlayerControl()) {
-			if (GetPlayerData(player) == NULL) break; //This happens sometimes during loading
-			if (GetPlayerData(player)->fields.IsDead && State.ShowGhosts)
+			auto playerInfo = GetPlayerData(player);
+			if (!playerInfo) break; //This happens sometimes during loading
+			if (playerInfo->fields.IsDead)
 			{
 				auto nameObject = Component_get_gameObject((Component_1*)player->fields.nameText, NULL);
 				if (nameObject == __this) {

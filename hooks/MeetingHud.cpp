@@ -32,23 +32,18 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 static void Transform_RemoveAllVotes(app::Transform* transform) {
 	auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
 	if (!voteSpreader) return;
-	auto votes = voteSpreader->fields.Votes;
-	if (votes->fields._size == 0) return;
-	for (size_t j = 0; j < votes->fields._size; j++) {
-		auto spriteRenderer = votes->fields._items->vector[j];
+	auto votes = il2cpp::List(voteSpreader->fields.Votes);
+	if (votes.size() == 0) return;
+	for (auto spriteRenderer : votes) {
 		app::Object_DestroyImmediate((app::Object_1*)spriteRenderer, nullptr);
 	}
-	//TODO: List_Clear
-	votes->fields._size = 0;
-	votes->fields._version++;
+	votes.clear();
 }
 
 void dMeetingHud_PopulateResults(MeetingHud* __this, void* states, MethodInfo* method) {
 	// remove all votes before populating results
 	do {
-		PlayerVoteArea__Array* playerStates = __this->fields.playerStates;
-		for (size_t i = 0; i < playerStates->max_length; i++) {
-			auto votedForArea = playerStates->vector[i];
+		for (auto votedForArea : il2cpp::Array(__this->fields.playerStates)) {
 			auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 			Transform_RemoveAllVotes(transform);
 		}
@@ -62,9 +57,8 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, void* states, MethodInfo* m
 }
 
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
-	PlayerVoteArea__Array* playerStates = __this->fields.playerStates;
-	for (size_t i = 0; i < playerStates->max_length; i++) {
-		PlayerVoteArea* playerVoteArea = playerStates->vector[i];
+	il2cpp::Array playerStates(__this->fields.playerStates);
+	for (auto playerVoteArea : playerStates) {
 		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
@@ -113,8 +107,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 					//auto isAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
 					//(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
 					if (playerVoteArea->fields.VotedFor != 253) {
-						for (size_t j = 0; j < playerStates->max_length; j++) {
-							auto votedForArea = playerStates->vector[j];
+						for (auto votedForArea : playerStates) {
 							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
 								auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 								MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
@@ -136,10 +129,8 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				State.voteMonitor.erase(it); //Likely disconnected player
 
 				// Remove all votes for disconnected player 
-				for (size_t i = 0; i < playerStates->max_length; i++) {
-					auto votedForArea = playerStates->vector[i];
-					if (playerStates->vector[i]->fields.TargetPlayerId == votedFor) {
-						auto votedForArea = playerStates->vector[i];
+				for (auto votedForArea : playerStates) {
+					if (votedForArea->fields.TargetPlayerId == votedFor) {
 						auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 						Transform_RemoveAllVotes(transform);
 						break;
@@ -156,14 +147,11 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			break;
 		}
 
-		for (size_t i = 0; i < playerStates->max_length; i++) {
-			auto votedForArea = playerStates->vector[i];
+		for (auto votedForArea : playerStates) {
 			auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 			auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
 			if (!voteSpreader) continue;
-			auto votes = voteSpreader->fields.Votes;
-			for (size_t j = 0; j < votes->fields._size; j++) {
-				auto spriteRenderer = votes->fields._items->vector[j];
+			for (auto spriteRenderer : il2cpp::List(voteSpreader->fields.Votes)) {
 				auto gameObject = app::Component_get_gameObject((app::Component_1*)spriteRenderer, nullptr);
 				app::GameObject_SetActive(gameObject, State.RevealVotes, nullptr);
 			}

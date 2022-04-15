@@ -66,44 +66,6 @@ public:
 	bool is_Disconnected();
 };
 
-template < typename T, typename K, typename V >
-std::vector<std::pair<K, V>> GetEntriesFromDictionary(T d) {
-	auto entries = d->fields.entries;
-	int length = d->fields.count;
-
-	std::vector<std::pair<K, V>> vec(length);
-	for (int i = 0; i < length; i++) {
-		K key = entries->vector[i].key;
-		V value = entries->vector[i].value;
-		vec[i] = { key, value };
-	}
-	return vec;
-}
-
-template < typename T, typename E >
-std::vector<E> GetElementsFromList(T l) {
-	auto elements = l->fields._items;
-	int length = l->fields._size;
-
-	std::vector<E> vec(length);
-	for (int i = 0; i < length; i++) {
-		vec[i] = elements->vector[i];
-	}
-	return vec;
-}
-
-template < typename T, typename E >
-std::vector<E> GetElementsFromArray(T a) {
-	auto elements = a;
-	int length = a->max_length;
-
-	std::vector<E> vec(length);
-	for (int i = 0; i < length; i++) {
-		vec[i] = elements->vector[i];
-	}
-	return vec;
-}
-
 int randi(int lo, int hi);
 ImVec4 AmongUsColorToImVec4(Color color);
 ImVec4 AmongUsColorToImVec4(CorrectedColor32 color);
@@ -118,11 +80,11 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
 PlayerControl* GetPlayerControlById(uint8_t id);
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
-std::vector<PlainDoor*> GetAllPlainDoors();
-std::vector<PlayerControl*> GetAllPlayerControl();
-std::vector<GameData_PlayerInfo*> GetAllPlayerData();
-std::vector<DeadBody*> GetAllDeadBodies();
-std::vector<PlayerTask*> GetPlayerTasks(PlayerControl* player);
+il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
+il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
+il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
+il2cpp::Array<DeadBody__Array> GetAllDeadBodies();
+il2cpp::List<List_1_PlayerTask_> GetPlayerTasks(PlayerControl* player);
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player);
 SabotageTask* GetSabotageTask(PlayerControl* player);
 void RepairSabotage(PlayerControl* player);

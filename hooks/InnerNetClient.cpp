@@ -159,8 +159,8 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
     int32_t distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
     auto killDistance = std::clamp((*Game::pGameOptionsData)->fields._.killDistance, 0, 2);
-    auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, true);
-    auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (*Game::pGameData)->fields.AllPlayers->fields._size, false);
+    auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), true);
+    auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), false);
     if (Equals(initialSpawnLocation, newPosition)) return false;
     if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
     if (IsAirshipSpawnLocation(newPosition)) return false;

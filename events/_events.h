@@ -2,6 +2,7 @@
 #include <optional>
 #include <chrono>
 #include <format>
+#include "il2cpp-helpers.h"
 
 using namespace app;
 
@@ -52,11 +53,9 @@ struct EVENT_PLAYER {
 		playerId = playerInfo->fields.PlayerId;
 
 		// rolling GetPlayerOutfit into this func to avoid circular dependencies
-		GameData_PlayerOutfit* outfit = 0;
-		auto arr = playerInfo->fields.Outfits->fields.entries;
-		for (int i = 0; i < playerInfo->fields.Outfits->fields.count; i++)
+		GameData_PlayerOutfit* outfit = nullptr;
+		for (auto& kvp : il2cpp::Dictionary(playerInfo->fields.Outfits))
 		{
-			auto kvp = arr->vector[i];
 			if (kvp.key == PlayerOutfitType__Enum::Default)
 			{
 				outfit = kvp.value;
@@ -64,7 +63,7 @@ struct EVENT_PLAYER {
 			}
 		}
 
-		if (outfit != 0)
+		if (outfit != nullptr)
 		{
 			colorId = outfit->fields.ColorId;
 			playerName = convert_from_string(outfit->fields._playerName);
