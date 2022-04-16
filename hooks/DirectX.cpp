@@ -5,6 +5,8 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "imgui/imstb_truetype.h"
 #include "keybinds.h"
 #include "menu.hpp"
 #include "radar.hpp"
@@ -216,6 +218,20 @@ static void RebuildFont() {
             if (::GetFontData(hdc, dwTableTag, 0, fontData, dwSize) != dwSize)
                 break;
             ImFontConfig config;
+            if (dwTableTag != 0) {
+                // Get index of font within TTC
+                DWORD dwTTFSize = ::GetFontData(hdc, 0, 0, 0, 0);
+                if (dwTTFSize < dwSize) {
+                    auto offsetTTF = dwSize - dwTTFSize;
+                    int n = stbtt_GetNumberOfFonts((unsigned char*)fontData);
+                    for (int index = 0; index<n; index++) {
+                        if (offsetTTF == ttULONG((unsigned char*)fontData + 12 + index * 4)) {
+                            config.FontNo = index;
+                            break;
+                        }
+                    }
+                }
+            }
             config.MergeMode = true;
             io.Fonts->AddFontFromMemoryTTF(fontData, dwSize, 14 * State.dpiScale, &config, glyph_ranges);
             fontData = nullptr;
