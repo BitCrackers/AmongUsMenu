@@ -623,14 +623,14 @@ int GetRandomColorId()
 			}
 
 			if (colorAvailable)
-				availableColors.push_back(i);
+				availableColors.push_back((int)i);
 		}
 
-		colorId = availableColors.at(randi(0, availableColors.size() - 1));
+		colorId = availableColors.at(randi(0, (int)availableColors.size() - 1));
 	}
 	else
 	{
-		colorId = randi(0, PlayerColors.size() - 1);
+		colorId = randi(0, (int)PlayerColors.size() - 1);
 	}
 	return colorId;
 }

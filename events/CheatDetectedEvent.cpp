@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action) : EventInterface(source, EVENT_CHEAT) {
+CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_CHEAT) {
 	this->action = action;
 }
 
@@ -11,7 +11,7 @@ void CheatDetectedEvent::Output() {
 	ImGui::SameLine();
 	ImGui::Text(">");
 	ImGui::SameLine();
-	ImGui::Text("Cheat detected: %s", CHEAT_ACTION_NAMES[this->action]);
+	ImGui::Text("Cheat detected: %s", CHEAT_ACTION_NAMES[(int)this->action]);
 	ImGui::SameLine();
 	ImGui::Text("[%s ago]", std::format("{:%OM:%OS}", (std::chrono::system_clock::now() - this->timestamp)).c_str());
 }

@@ -40,7 +40,7 @@ std::unordered_map<ICON_TYPES, IconTexture> icons;
 
 typedef struct Cache
 {
-	ImGuiWindow* Window;  //Window instance
+	ImGuiWindow* Window = nullptr;  //Window instance
 	ImVec2       Winsize; //Size of the window
 } cache_t;
 

@@ -108,7 +108,7 @@ namespace Replay
 		}
 
 		// earliestTimeIndex will be the very first event to be shown, lastTimeIndex will be the very last even to be shown
-		int earliestTimeIndex = 0, lastTimeIndex = 0;
+		size_t earliestTimeIndex = 0, lastTimeIndex = 0;
 		bool collectionHasElementsToFilterMin = false, collectionHasElementsToFilterMax = false;
 		if ((isUsingMinTimeFilter == true) || (isUsingMaxTimeFilter))
 		{
@@ -144,13 +144,13 @@ namespace Replay
 			{
 				endPtr = lastTimeIndex * sizeof(ImVec2);
 			}
-			int numPoints = (endPtr - startPtr) / sizeof(ImVec2);
-			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
+			size_t numPoints = (endPtr - startPtr) / sizeof(ImVec2);
+			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), (int)numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 		else
 		{
 			// we're not using any time filter, so just draw the polyline normally.
-			drawList->AddPolyline(points.data(), points.size(), GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
+			drawList->AddPolyline(points.data(), (int)points.size(), GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 
 		// untransform the points before returning
@@ -161,7 +161,7 @@ namespace Replay
 		}
 	}
 
-	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPolyline");
@@ -186,7 +186,7 @@ namespace Replay
 			// now the actual rendering, which should be filtered
 			// player filter
 			if ((isUsingPlayerFilter == true) &&
-				((playerPolylinePair.first < 0) || (playerPolylinePair.first > Replay::player_filter.size() - 1) ||
+				((playerPolylinePair.first < 0) || ((size_t)playerPolylinePair.first >= Replay::player_filter.size()) ||
 					(Replay::player_filter[playerPolylinePair.first].second == false) ||
 					(Replay::player_filter[playerPolylinePair.first].first.has_value() == false)))
 				continue;
@@ -204,7 +204,7 @@ namespace Replay
 		Profiler::EndSample("ReplayPolyline");
 	}
 
-	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
@@ -225,7 +225,7 @@ namespace Replay
 
 			// player filter
 			if ((isUsingPlayerFilter == true) &&
-				((plrIdx < 0) || (plrIdx > Replay::player_filter.size() - 1) ||
+				((plrIdx < 0) || ((size_t)plrIdx >= Replay::player_filter.size()) ||
 					(Replay::player_filter[plrIdx].second == false) ||
 					(Replay::player_filter[plrIdx].first.has_value() == false)))
 				continue;
@@ -238,7 +238,7 @@ namespace Replay
 			if (isUsingMaxTimeFilter == true)
 			{
 				// now we have to loop through and find the last position that matches the time filters
-				int lastTimeIndex = plrLineData.pendingTimeStamps.size() - 1;
+				size_t lastTimeIndex = plrLineData.pendingTimeStamps.size() - 1;
 				for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.pendingTimeStamps.rbegin(); riter != plrLineData.pendingTimeStamps.rend(); riter++, lastTimeIndex--)
 				{
 					const std::chrono::system_clock::time_point& timestamp = *riter;
@@ -290,14 +290,15 @@ namespace Replay
 			}
 
 			IconTexture icon = icons.at(ICON_TYPES::PLAYER);
+			const auto& map = maps[(size_t)MapType];
 			// the latestPos variable is already pre-transformed for line rendering, so we have to un-transform and then re-transform for proper icon positioning
 			// existing transformation:
-			// latestPos.x = maps[State.mapType].x_offset + (position.x * maps[State.mapType].scale);
+			// latestPos.x = map.x_offset + (position.x * map.scale);
 			// void*'s original transformation for icon positioning:
-			// float player_mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale + cursorPosX;
+			// float player_mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale + cursorPosX;
 			// i'm not mathematically inclined, so i don't really know what i'm doing...
 			// but this is what i got for transforming from the existing to void*'s original:
-			float halfImageWidth = (icon.iconImage.imageWidth * icon.scale * 0.5f) * maps[MapType].scale, halfImageHeight = (icon.iconImage.imageHeight * icon.scale * 0.5f) * maps[MapType].scale;
+			float halfImageWidth = (icon.iconImage.imageWidth * icon.scale * 0.5f) * map.scale, halfImageHeight = (icon.iconImage.imageHeight * icon.scale * 0.5f) * map.scale;
 			float player_mapX = (playerPos.x - halfImageWidth);
 			float player_mapY = (playerPos.y - halfImageHeight);
 			float player_mapXMax = (playerPos.x + halfImageWidth);
@@ -324,7 +325,7 @@ namespace Replay
 		Profiler::EndSample("ReplayPlayerIcons");
 	}
 
-	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, int MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
+	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter,
 		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayEventIcons");
@@ -334,6 +335,8 @@ namespace Replay
 			STREAM_ERROR("Min time filter is greater than max time filter (min: " << std::format("{:%OH:%OM:%OS}", minTimeFilter) << " max: " << std::format("{:%OH:%OM:%OS}", maxTimeFilter) << ")");
 			return;
 		}
+
+		const auto& map = maps[(size_t)MapType];
 		
 		for (std::vector<std::unique_ptr<EventInterface>>::iterator it = State.liveReplayEvents.begin(); it != State.liveReplayEvents.end(); ++it)
 		{
@@ -361,10 +364,10 @@ namespace Replay
 				auto kill_event = dynamic_cast<KillEvent*>(curEvent);
 				auto position = kill_event->GetTargetPosition();
 				IconTexture icon = icons.at(ICON_TYPES::KILL);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapY = map.y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+				float mapXMax = map.x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapYMax = map.y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
@@ -394,10 +397,10 @@ namespace Replay
 				}
 
 				IconTexture icon = icons.at(iconType);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapY = map.y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+				float mapXMax = map.x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapYMax = map.y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
@@ -410,10 +413,10 @@ namespace Replay
 				auto task_event = dynamic_cast<TaskCompletedEvent*>(curEvent);
 				auto position = task_event->GetPosition();
 				IconTexture icon = icons.at(ICON_TYPES::TASK);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapY = map.y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+				float mapXMax = map.x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapYMax = map.y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
@@ -426,10 +429,10 @@ namespace Replay
 				auto report_event = dynamic_cast<ReportDeadBodyEvent*>(curEvent);
 				auto position = report_event->GetPosition();
 				IconTexture icon = icons.at(ICON_TYPES::REPORT);
-				float mapX = maps[MapType].x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapY = maps[MapType].y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapXMax = maps[MapType].x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[MapType].scale;
-				float mapYMax = maps[MapType].y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[MapType].scale;
+				float mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapY = map.y_offset - (position.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+				float mapXMax = map.x_offset + (position.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+				float mapYMax = map.y_offset - (position.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 				drawList->AddImage((void*)icon.iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(mapX), mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
@@ -446,8 +449,8 @@ namespace Replay
 		Profiler::BeginSample("ReplayRender");
 		Replay::Init();
 
-		int MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.0f, (maps[MapType].mapImage.imageHeight * 0.5f) + 90.f) * State.dpiScale, ImGuiCond_None);
+		const auto& map = maps[(size_t)State.mapType];
+		ImGui::SetNextWindowSize(ImVec2((map.mapImage.imageWidth * 0.5f) + 50.0f, (map.mapImage.imageHeight * 0.5f) + 90.f) * State.dpiScale, ImGuiCond_None);
 
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
@@ -464,21 +467,21 @@ namespace Replay
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		ImGui::BeginChild("replay#map", ImVec2((maps[MapType].mapImage.imageWidth * 0.5f) + 50.f, (maps[MapType].mapImage.imageHeight * 0.5f) + 15.f) * State.dpiScale);
+		ImGui::BeginChild("replay#map", ImVec2((map.mapImage.imageWidth * 0.5f) + 50.f, (map.mapImage.imageHeight * 0.5f) + 15.f) * State.dpiScale);
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 		ImVec2 winSize = ImGui::GetWindowSize();
 		ImVec2 winPos = ImGui::GetWindowPos();
 
 		// calculate proper cursorPosition for centerered rendering
 		float cursorPosX = winPos.x + 15.f * State.dpiScale;
-		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(maps[MapType].mapImage.imageHeight * 0.15f) * 0.5f) * State.dpiScale;
+		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(map.mapImage.imageHeight * 0.15f) * 0.5f) * State.dpiScale;
 
 		// TODO: Center image in childwindow and calculate new cursorPos
-		drawList->AddImage((void*)maps[MapType].mapImage.shaderResourceView,
+		drawList->AddImage((void*)map.mapImage.shaderResourceView,
 			ImVec2(cursorPosX, cursorPosY) + 5.0f * State.dpiScale,
-			ImVec2(cursorPosX, cursorPosY) + ImVec2(5.0f + ((float)maps[MapType].mapImage.imageWidth * 0.5f),  5.0f + ((float)maps[MapType].mapImage.imageHeight * 0.5f)) * State.dpiScale,
-			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
+			ImVec2(cursorPosX, cursorPosY) + ImVec2(5.0f + ((float)map.mapImage.imageWidth * 0.5f),  5.0f + ((float)map.mapImage.imageHeight * 0.5f)) * State.dpiScale,
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			ImGui::GetColorU32(State.SelectedReplayMapColor));
 
 		// pre-processing of filters
@@ -509,9 +512,9 @@ namespace Replay
 		}
 
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		RenderWalkPaths(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		RenderEventIcons(drawList, cursorPosX, cursorPosY, MapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
 		
 		ImGui::EndChild();
 

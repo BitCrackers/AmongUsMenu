@@ -82,7 +82,7 @@ namespace ConsoleGui
 					STREAM_ERROR("State.liveReplayEvents[" << i << "] was NULL (liveReplayEvents.size(): " << State.liveReplayEvents.size() << ")");
 					continue;
 				}
-				if (evt->getType() == EVENT_WALK)
+				if (evt->getType() == EVENT_TYPES::EVENT_WALK)
 					continue;
 
 				if (isUsingEventFilter && ConsoleGui::event_filter.at((size_t)evt->getType()).second == false)

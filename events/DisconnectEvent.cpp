@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-DisconnectEvent::DisconnectEvent(EVENT_PLAYER source) : EventInterface(source, EVENT_DISCONNECT) { }
+DisconnectEvent::DisconnectEvent(EVENT_PLAYER source) : EventInterface(source, EVENT_TYPES::EVENT_DISCONNECT) { }
 
 void DisconnectEvent::Output() {
 	ImGui::TextColored(AmongUsColorToImVec4(GetPlayerColor(source.colorId)), source.playerName.c_str());

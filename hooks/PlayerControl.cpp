@@ -184,7 +184,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 					// NOTE:
 					// we do not add walkevents to liveReplayEvents. linedata contains everything we need for live visualization.
 					State.rawEvents.push_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
-					ImVec2 mapPos_pre = {maps[State.mapType].x_offset + (playerPos.x * maps[State.mapType].scale), maps[State.mapType].y_offset - (playerPos.y * maps[State.mapType].scale)};
+					const auto& map = maps[(size_t)State.mapType];
+					ImVec2 mapPos_pre = {map.x_offset + (playerPos.x * map.scale), map.y_offset - (playerPos.y * map.scale)};
 					if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
 					{
 						// first-time init
@@ -245,8 +246,8 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
 	{
-		State.rawEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
-		State.liveReplayEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_KILL_IMPOSTOR));
+		State.rawEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+		State.liveReplayEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
 	}
 
 	State.rawEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));

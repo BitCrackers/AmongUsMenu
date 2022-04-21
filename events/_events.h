@@ -8,7 +8,7 @@ using namespace app;
 
 #define EVENT_TYPES_SIZE 11
 
-enum EVENT_TYPES {
+enum class EVENT_TYPES {
 	EVENT_KILL,
 	EVENT_VENT,
 	EVENT_TASK,
@@ -22,12 +22,12 @@ enum EVENT_TYPES {
 	EVENT_WALK
 };
 
-enum VENT_ACTIONS {
+enum class VENT_ACTIONS {
 	VENT_ENTER,
 	VENT_EXIT
 };
 
-enum CHEAT_ACTIONS {
+enum class CHEAT_ACTIONS {
 	CHEAT_TELEPORT,
 	CHEAT_KILL_IMPOSTOR
 };
