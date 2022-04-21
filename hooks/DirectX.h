@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <imgui/imgui.h>
 
-enum ICON_TYPES {
+enum class ICON_TYPES {
 	VENT_IN,
 	VENT_OUT,
 	KILL,

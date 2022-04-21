@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action) : EventInterface(source, EVENT_VENT)
+VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_VENT)
 {
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
@@ -24,9 +24,9 @@ void VentEvent::ColoredEventOutput()
 	ImGui::SameLine();
 
 	ImVec4 color;
-	((action == VENT_ENTER) ? color = ImVec4(0.f, 1.f, 0.f, 1.f) : color = ImVec4(1.f, 0.f, 0.f, 1.f));
+	((action == VENT_ACTIONS::VENT_ENTER) ? color = ImVec4(0.f, 1.f, 0.f, 1.f) : color = ImVec4(1.f, 0.f, 0.f, 1.f));
 
-	ImGui::TextColored(color, ((action == VENT_ENTER) ? "IN" : "OUT"));
+	ImGui::TextColored(color, ((action == VENT_ACTIONS::VENT_ENTER) ? "IN" : "OUT"));
 	ImGui::SameLine();
 	ImGui::Text("]");
 }

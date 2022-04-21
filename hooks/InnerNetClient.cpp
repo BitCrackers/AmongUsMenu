@@ -157,10 +157,10 @@ bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
     if (GameObject_get_layer(app::Component_get_gameObject((Component_1*)player.get_PlayerControl(), NULL), NULL) == LayerMask_NameToLayer(convert_to_string("Ghost"), NULL))
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
-    int32_t distanceToTarget = Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
+    auto distanceToTarget = (int32_t)Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
     auto killDistance = std::clamp((*Game::pGameOptionsData)->fields._.killDistance, 0, 2);
-    auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), true);
-    auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), false);
+    auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), true);
+    auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), false);
     if (Equals(initialSpawnLocation, newPosition)) return false;
     if (Equals(meetingSpawnLocation, newPosition)) return false;  //You are warped to your spawn at meetings and start of games
     if (IsAirshipSpawnLocation(newPosition)) return false;

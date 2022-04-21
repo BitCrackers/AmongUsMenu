@@ -85,7 +85,7 @@ public:
     bool ChatActiveOriginalState = false;
     bool ReadGhostMessages = false;
 
-    SystemTypes__Enum selectedDoor;
+    SystemTypes__Enum selectedDoor = SystemTypes__Enum::Hallway;
     std::vector<SystemTypes__Enum> mapDoors;
     std::vector<SystemTypes__Enum> pinnedDoors;
     bool CloseAllDoors = false;
@@ -161,13 +161,13 @@ public:
 
     std::string userName = "";
 
-    enum MapType : uint8_t
+    enum class MapType : uint8_t
     {
         Ship = 0,
         Hq = 1,
         Pb = 2,
         Airship = 3
-    } mapType;
+    } mapType = MapType::Ship;
 
     bool AutoOpenDoors = false;
 

@@ -11,14 +11,14 @@ struct CorrectedColor32 {
 	uint8_t a;
 };
 
-enum MapType {
+enum class MapType {
 	MAP_SKELD = 0,
 	MAP_MIRAHQ = 1,
 	MAP_POLUS = 2,
 	MAP_AIRSHIP = 3
 };
 
-enum RoleType
+enum class RoleType
 {
 	Random = 0,
 	Crewmate = 1,

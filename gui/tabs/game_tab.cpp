@@ -91,7 +91,7 @@ namespace GameTab {
 				if (options != NULL)
 				{
 					auto allPlayers = GetAllPlayerControl();
-					RoleRates roleRates = RoleRates(options->fields, allPlayers.size());
+					RoleRates roleRates = RoleRates(options->fields, (int)allPlayers.size());
 					// this should be all the major ones. if people want more they're simple enough to add.
 					ImGui::Text("Visual Tasks: %s", (options->fields.VisualTasks == true ? "on" : "off"));
 					ImGui::Text("Taskbar Update Mode: %s", (options->fields.TaskBarMode == app::TaskBarMode__Enum::Normal ? "Normal" : "MeetingOnly"));

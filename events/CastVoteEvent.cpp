@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-CastVoteEvent::CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target) : EventInterface(source, EVENT_VOTE) {
+CastVoteEvent::CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target) : EventInterface(source, EVENT_TYPES::EVENT_VOTE) {
 	this->target = target;
 }
 
