@@ -1,0 +1,45 @@
+.code
+
+extern oGetFileVersionInfoA:PTR
+extern oGetFileVersionInfoByHandle:PTR
+extern oGetFileVersionInfoExA:PTR
+extern oGetFileVersionInfoExW:PTR
+extern oGetFileVersionInfoSizeA:PTR
+extern oGetFileVersionInfoSizeExA:PTR
+extern oGetFileVersionInfoSizeExW:PTR
+extern oGetFileVersionInfoSizeW:PTR
+extern oGetFileVersionInfoW:PTR
+extern oVerFindFileA:PTR
+extern oVerFindFileW:PTR
+extern oVerInstallFileA:PTR
+extern oVerInstallFileW:PTR
+extern oVerLanguageNameA:PTR
+extern oVerLanguageNameW:PTR
+extern oVerQueryValueA:PTR
+extern oVerQueryValueW:PTR
+
+WRAPPER_GENFUNC macro name, addr
+    name proc
+        jmp addr
+    name endp
+endm
+
+WRAPPER_GENFUNC _GetFileVersionInfoA, oGetFileVersionInfoA
+WRAPPER_GENFUNC _GetFileVersionInfoByHandle, oGetFileVersionInfoByHandle
+WRAPPER_GENFUNC _GetFileVersionInfoExA, oGetFileVersionInfoExA
+WRAPPER_GENFUNC _GetFileVersionInfoExW, oGetFileVersionInfoExW
+WRAPPER_GENFUNC _GetFileVersionInfoSizeA, oGetFileVersionInfoSizeA
+WRAPPER_GENFUNC _GetFileVersionInfoSizeExA, oGetFileVersionInfoSizeExA
+WRAPPER_GENFUNC _GetFileVersionInfoSizeExW, oGetFileVersionInfoSizeExW
+WRAPPER_GENFUNC _GetFileVersionInfoSizeW, oGetFileVersionInfoSizeW
+WRAPPER_GENFUNC _GetFileVersionInfoW, oGetFileVersionInfoW
+WRAPPER_GENFUNC _VerFindFileA, oVerFindFileA
+WRAPPER_GENFUNC _VerFindFileW, oVerFindFileW
+WRAPPER_GENFUNC _VerInstallFileA, oVerInstallFileA
+WRAPPER_GENFUNC _VerInstallFileW, oVerInstallFileW
+WRAPPER_GENFUNC _VerLanguageNameA, oVerLanguageNameA
+WRAPPER_GENFUNC _VerLanguageNameW, oVerLanguageNameW
+WRAPPER_GENFUNC _VerQueryValueA, oVerQueryValueA
+WRAPPER_GENFUNC _VerQueryValueW, oVerQueryValueW
+
+end

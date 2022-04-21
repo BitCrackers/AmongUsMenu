@@ -6,13 +6,21 @@
 
 HMODULE version_dll;
 
+#if defined(_X86_)
 #define WRAPPER_GENFUNC(name) \
 	FARPROC o##name; \
 	__declspec(naked) void _##name() \
 	{ \
 		__asm jmp[o##name] \
 	}
+#elif defined(_WIN64)
+#define WRAPPER_GENFUNC(name) \
+	FARPROC o##name;
+#endif
 
+#if defined(_WIN64)
+extern "C" {
+#endif
 WRAPPER_GENFUNC(GetFileVersionInfoA)
 WRAPPER_GENFUNC(GetFileVersionInfoByHandle)
 WRAPPER_GENFUNC(GetFileVersionInfoExW)
@@ -30,6 +38,9 @@ WRAPPER_GENFUNC(VerLanguageNameA)
 WRAPPER_GENFUNC(VerLanguageNameW)
 WRAPPER_GENFUNC(VerQueryValueA)
 WRAPPER_GENFUNC(VerQueryValueW)
+#if defined(_WIN64)
+}
+#endif
 
 #define WRAPPER_FUNC(name) o##name = GetProcAddress(version_dll, ###name);
 
