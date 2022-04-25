@@ -14,7 +14,7 @@ namespace HostTab {
 				bool shouldEndListBox = ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
 				auto allPlayers = GetAllPlayerData();
 				auto playerAmount = allPlayers.size();
-				auto maxImposterAmount = GetMaxImposterAmount(playerAmount);
+				auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
 				for (size_t index = 0; index < playerAmount; index++) {
 					auto playerData = allPlayers[index];
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
@@ -28,10 +28,10 @@ namespace HostTab {
 					std::string playerName = convert_from_string(outfit->fields._playerName);
 					if (CustomListBoxInt(playerName.c_str(), &State.assignedRoles[index], ROLE_NAMES, 80 * State.dpiScale))
 					{
-						State.engineers_amount = GetRoleCount((int)RoleType::Engineer);
-						State.scientists_amount = GetRoleCount((int)RoleType::Scientist);
-						State.shapeshifters_amount = GetRoleCount((int)RoleType::Shapeshifter);
-						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
+						State.engineers_amount = (int)GetRoleCount((int)RoleType::Engineer);
+						State.scientists_amount = (int)GetRoleCount((int)RoleType::Scientist);
+						State.shapeshifters_amount = (int)GetRoleCount((int)RoleType::Shapeshifter);
+						State.impostors_amount = (int)GetRoleCount((int)RoleType::Impostor);
 						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
 							if(State.assignedRoles[index] == (int)RoleType::Shapeshifter)
@@ -39,8 +39,8 @@ namespace HostTab {
 							else if(State.assignedRoles[index] == (int)RoleType::Impostor)
 								State.assignedRoles[index] = (int)RoleType::Random;
 						}
-						State.shapeshifters_amount = GetRoleCount((int)RoleType::Shapeshifter);
-						State.impostors_amount = GetRoleCount((int)RoleType::Impostor);
+						State.shapeshifters_amount = (int)GetRoleCount((int)RoleType::Shapeshifter);
+						State.impostors_amount = (int)GetRoleCount((int)RoleType::Impostor);
 
 						if (!IsInGame())
 						{
@@ -103,7 +103,7 @@ namespace HostTab {
 			}
 		}
 	}
-	const ptrdiff_t& GetRoleCount(int role)
+	const ptrdiff_t GetRoleCount(int role)
 	{
 		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](int i) {return i == role; });
 	}

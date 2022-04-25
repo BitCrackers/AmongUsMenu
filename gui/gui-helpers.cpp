@@ -23,7 +23,7 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 		for (size_t i = 0; i < list.size(); i++) {
 			bool is_selected = (*value == i);
 			if (Selectable(list.at(i), is_selected)) {
-				*value = i;
+				*value = (int)i;
 				response = true;
 			}
 			if (is_selected)
@@ -38,7 +38,7 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 	const bool LeftResponse = ArrowButton(leftArrow.c_str(), ImGuiDir_Left);
 	if (LeftResponse) {
 		*value -= 1;
-		if (*value < 0) *value = (list.size() - 1);
+		if (*value < 0) *value = int(list.size() - 1);
 		return LeftResponse;
 	}
 	SameLine(0, spacing);
@@ -343,15 +343,12 @@ void drawPlayerDot(PlayerControl* player, ImVec2 winPos, ImU32 color, ImU32 stat
 
 	Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
-	float xOffset = maps[State.mapType].x_offset;
-	float yOffset = maps[State.mapType].y_offset;
+	const auto& map = maps[(size_t)State.mapType];
+	float xOffset = getMapXOffsetSkeld(map.x_offset);
+	float yOffset = map.y_offset;
 
-	if (State.mapType == Settings::MapType::Ship && State.FlipSkeld) {
-		xOffset -= 50;
-	}
-
-	float radX = xOffset + (playerPos.x * maps[State.mapType].scale);
-	float radY = yOffset - (playerPos.y * maps[State.mapType].scale);
+	float radX = xOffset + (playerPos.x * map.scale);
+	float radY = yOffset - (playerPos.y * map.scale);
 	const ImVec2& center = ImVec2(radX, radY) * State.dpiScale + winPos;
 
 	drawList->AddCircleFilled(center, 4.5F * State.dpiScale, color);
@@ -364,18 +361,15 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 
 	Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
-	float xOffset = maps[State.mapType].x_offset;
-	float yOffset = maps[State.mapType].y_offset;
-
-	if (State.mapType == Settings::MapType::Ship && State.FlipSkeld) {
-		xOffset -= 50;
-	}
+	const auto& map = maps[(size_t)State.mapType];
+	float xOffset = getMapXOffsetSkeld(map.x_offset);
+	float yOffset = map.y_offset;
 
 	IconTexture icon = icons.at(ICON_TYPES::PLAYER);
-	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 	const ImVec2& p_min = ImVec2(radX, radY) * State.dpiScale + winPos;
 	const ImVec2& p_max = ImVec2(radXMax, radYMax) * State.dpiScale + winPos;
@@ -398,15 +392,12 @@ void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 
 	Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
-	float xOffset = maps[State.mapType].x_offset;
-	float yOffset = maps[State.mapType].y_offset;
+	const auto& map = maps[(size_t)State.mapType];
+	float xOffset = getMapXOffsetSkeld(map.x_offset);
+	float yOffset = map.y_offset;
 
-	if (State.mapType == Settings::MapType::Ship && State.FlipSkeld) {
-		xOffset -= 50;
-	}
-
-	float radX = xOffset + (bodyPos.x * maps[State.mapType].scale);
-	float radY = yOffset - (bodyPos.y * maps[State.mapType].scale);
+	float radX = xOffset + (bodyPos.x * map.scale);
+	float radY = yOffset - (bodyPos.y * map.scale);
 
 	drawList->AddText(GetFont(), 16 * State.dpiScale, 
 		ImVec2(radX - 5.F, radY - 6.75F) * State.dpiScale + winPos, color, "X");
@@ -418,18 +409,15 @@ void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 
 	Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
-	float xOffset = maps[State.mapType].x_offset;
-	float yOffset = maps[State.mapType].y_offset;
-
-	if (State.mapType == Settings::MapType::Ship && State.FlipSkeld) {
-		xOffset -= 50;
-	}
+	const auto& map = maps[(size_t)State.mapType];
+	float xOffset = getMapXOffsetSkeld(map.x_offset);
+	float yOffset = map.y_offset;
 
 	IconTexture icon = icons.at(ICON_TYPES::DEAD);
-	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * maps[State.mapType].scale;
-	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * maps[State.mapType].scale;
+	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+	float radY = yOffset - (bodyPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+	float radXMax = xOffset + (bodyPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
+	float radYMax = yOffset - (bodyPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
 
 	drawList->AddImage((void*)icon.iconImage.shaderResourceView, 
 		ImVec2(radX, radY) * State.dpiScale + winPos,

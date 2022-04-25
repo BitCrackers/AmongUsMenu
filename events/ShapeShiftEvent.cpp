@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-ShapeShiftEvent::ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_SHAPESHIFT) {
+ShapeShiftEvent::ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_TYPES::EVENT_SHAPESHIFT) {
 	this->target = target;
 }
 

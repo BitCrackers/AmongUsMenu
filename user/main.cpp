@@ -21,7 +21,7 @@ HANDLE hUnloadEvent;
 
 std::string GetCRC32(std::filesystem::path filePath) {
 	CRC32 crc32;
-	char buffer[4096];
+	char buffer[4096] = { 0 };
 
 	std::ifstream fin(filePath, std::ifstream::binary);
 

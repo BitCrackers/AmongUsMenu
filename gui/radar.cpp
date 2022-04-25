@@ -34,7 +34,6 @@ namespace Radar {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
-			int MapType = State.mapType;
 
 			if (mouse.x < winpos.x
 				|| mouse.x > winpos.x + winsize.x
@@ -42,12 +41,13 @@ namespace Radar {
 				|| mouse.y > winpos.y + winsize.y)
 				return;
 
-			float xOffset = getMapXOffsetSkeld(maps[MapType].x_offset);
-			float yOffset = maps[MapType].y_offset;
+			const auto& map = maps[(size_t)State.mapType];
+			float xOffset = getMapXOffsetSkeld(map.x_offset);
+			float yOffset = map.y_offset;
 
 			Vector2 target = {
-				((mouse.x - winpos.x) / State.dpiScale - xOffset) / maps[MapType].scale,
-				(((mouse.y - winpos.y) / State.dpiScale - yOffset) * -1.F) / maps[MapType].scale
+				((mouse.x - winpos.x) / State.dpiScale - xOffset) / map.scale,
+				(((mouse.y - winpos.y) / State.dpiScale - yOffset) * -1.F) / map.scale
 			};
 
 			State.rpcQueue.push(new RpcSnapTo(target));
@@ -64,8 +64,8 @@ namespace Radar {
 		if (!init)
 			Radar::Init();
 
-		Settings::MapType MapType = State.mapType;
-		ImGui::SetNextWindowSize(ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5f + 10.f, (float)maps[MapType].mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
+		const auto& map = maps[(size_t)State.mapType];
+		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5f + 10.f, (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
 
 		if(State.LockRadar)
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
@@ -74,11 +74,11 @@ namespace Radar {
 
 		ImVec2 winpos = ImGui::GetWindowPos();
 
-		ImGui::Image((void*)maps[MapType].mapImage.shaderResourceView,
-			ImVec2((float)maps[MapType].mapImage.imageWidth * 0.5F, (float)maps[MapType].mapImage.imageHeight * 0.5F) * State.dpiScale,
+		ImGui::Image((void*)map.mapImage.shaderResourceView,
+			ImVec2((float)map.mapImage.imageWidth * 0.5F, (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
 			ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && MapType == 0) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && MapType == 0) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			State.SelectedColor);
 
 		for (auto player : GetAllPlayerControl()) {

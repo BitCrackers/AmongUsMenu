@@ -5,6 +5,8 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "imgui/imstb_truetype.h"
 #include "keybinds.h"
 #include "menu.hpp"
 #include "radar.hpp"
@@ -38,7 +40,7 @@ std::unordered_map<ICON_TYPES, IconTexture> icons;
 
 typedef struct Cache
 {
-	ImGuiWindow* Window;  //Window instance
+	ImGuiWindow* Window = nullptr;  //Window instance
 	ImVec2       Winsize; //Size of the window
 } cache_t;
 
@@ -167,6 +169,82 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
     return false;
 }
 
+static void RebuildFont() {
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->Clear();
+    io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14 * State.dpiScale, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+    do {
+        const ImWchar* glyph_ranges;
+        wchar_t locale[LOCALE_NAME_MAX_LENGTH] = { 0 };
+        ::GetUserDefaultLocaleName(locale, LOCALE_NAME_MAX_LENGTH);
+        if (!_wcsnicmp(locale, L"zh-", 3)) {
+            // China
+            glyph_ranges = io.Fonts->GetGlyphRangesChineseSimplifiedCommon();
+        }
+        else if (!_wcsnicmp(locale, L"ja-", 3)) {
+            // Japan
+            glyph_ranges = io.Fonts->GetGlyphRangesJapanese();
+        }
+        else if (!_wcsnicmp(locale, L"ko-", 3)) {
+            // Korea
+            glyph_ranges = io.Fonts->GetGlyphRangesKorean();
+        }
+        else {
+            break;
+        }
+        NONCLIENTMETRICSW nm = { sizeof(NONCLIENTMETRICSW) };
+        if (!::SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, nm.cbSize, &nm, 0))
+            break;
+        auto hMessageFont = ::CreateFontIndirectW(&nm.lfMessageFont);
+        if (!hMessageFont)
+            break;
+        void* fontData = nullptr;
+        HDC hdc = ::GetDC(DirectX::window);
+        auto hDefaultFont = ::SelectObject(hdc, hMessageFont);
+        do {
+            // Try to get TTC first
+            DWORD dwTableTag = 0x66637474;/*TTCTag*/
+            DWORD dwSize = ::GetFontData(hdc, dwTableTag, 0, 0, 0);
+            if (dwSize == GDI_ERROR) {
+                // Maybe TTF
+                dwTableTag = 0;
+                dwSize = ::GetFontData(hdc, 0, 0, 0, 0);
+                if (dwSize == GDI_ERROR)
+                    break;
+            }
+            fontData = IM_ALLOC(dwSize);
+            if (!fontData)
+                break;
+            if (::GetFontData(hdc, dwTableTag, 0, fontData, dwSize) != dwSize)
+                break;
+            ImFontConfig config;
+            if (dwTableTag != 0) {
+                // Get index of font within TTC
+                DWORD dwTTFSize = ::GetFontData(hdc, 0, 0, 0, 0);
+                if (dwTTFSize < dwSize) {
+                    auto offsetTTF = dwSize - dwTTFSize;
+                    int n = stbtt_GetNumberOfFonts((unsigned char*)fontData);
+                    for (int index = 0; index<n; index++) {
+                        if (offsetTTF == ttULONG((unsigned char*)fontData + 12 + index * 4)) {
+                            config.FontNo = index;
+                            break;
+                        }
+                    }
+                }
+            }
+            config.MergeMode = true;
+            io.Fonts->AddFontFromMemoryTTF(fontData, dwSize, 14 * State.dpiScale, &config, glyph_ranges);
+            fontData = nullptr;
+        } while (0);
+        if (fontData)
+            IM_FREE(fontData);
+        ::SelectObject(hdc, hDefaultFont);
+        ::DeleteObject(hMessageFont);
+        ::ReleaseDC(DirectX::window, hdc);
+    } while (0);
+    io.Fonts->Build();
+}
+
 std::once_flag init_d3d;
 HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags) {
     std::call_once(init_d3d, [&] {
@@ -212,11 +290,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     if (State.dpiChanged) {
         State.dpiChanged = false;
         ImGui_ImplDX11_InvalidateDeviceObjects();
-
-        ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->Clear();
-        io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14 * State.dpiScale, nullptr, io.Fonts->GetGlyphRangesCyrillic());
-        io.Fonts->Build();
+        RebuildFont();
     }
 
     il2cpp_gc_disable();

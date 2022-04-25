@@ -9,7 +9,7 @@
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	std::vector<uint8_t> assignedPlayers;
 	auto allPlayers = GetAllPlayerControl();
-	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields, allPlayers.size());
+	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields, (int)allPlayers.size());
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
 	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
@@ -64,7 +64,7 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2
 		while (sanityCheck > 0)
 		{
 			sanityCheck--;
-			auto playerIndex = GenerateRandomNumber(0, playerAmount - 1);
+			auto playerIndex = GenerateRandomNumber(0, (int)playerAmount - 1);
 			auto player = allPlayers[playerIndex];
 			if (CanPlayerBeAssignedToRole(player, assignedPlayers))
 			{
