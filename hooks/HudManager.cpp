@@ -36,17 +36,18 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 
 		if (!State.InMeeting)
 		{
-			app::RoleBehaviour *playerRole = localData->fields.Role;
+			app::RoleBehaviour *playerRole = localData->fields.Role; // Nullable
+			app::RoleTypes__Enum role = playerRole != nullptr ? playerRole->fields.Role : app::RoleTypes__Enum::Crewmate;
 			GameObject* ImpostorVentButton = app::Component_get_gameObject((Component_1*)__this->fields.ImpostorVentButton, NULL);
 
-			if (playerRole->fields.Role == RoleTypes__Enum::Engineer && State.UnlockVents)
+			if (role == RoleTypes__Enum::Engineer && State.UnlockVents)
 			{
 				app::EngineerRole *engineerRole = (app::EngineerRole*)playerRole;
 				if (engineerRole->fields.cooldownSecondsRemaining > 0.0f)
 					engineerRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
 				engineerRole->fields.inVentTimeRemaining = 30.0f; //Can be anything as it will always be written
 			}
-			else if(playerRole->fields.Role == RoleTypes__Enum::GuardianAngel)
+			else if(role == RoleTypes__Enum::GuardianAngel)
 			{
 				app::GameObject_SetActive(ImpostorVentButton, false, nullptr);
 			}
