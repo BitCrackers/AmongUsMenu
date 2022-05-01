@@ -343,15 +343,27 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-	State.rawEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.liveReplayEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	{
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+		State.rawEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+		State.liveReplayEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	}
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-	State.rawEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-	State.liveReplayEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	{
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+		State.rawEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+		State.liveReplayEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	}
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
+}
+
+void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method) {
+	{
+		std::lock_guard lock(State.protectMutex);
+		app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, method);
+		State.protectMonitor[__this->fields.PlayerId] = { colorId, app::Time_get_time(nullptr) };
+	}
 }

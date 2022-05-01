@@ -17,8 +17,7 @@ namespace Radar {
 		if (playerData->fields.IsDead)
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->HalfWhite));
 		else if (State.RevealRoles
-			&& playerData->fields.Role != nullptr
-			&& playerData->fields.Role->fields.TeamType == RoleTeamTypes__Enum::Impostor)
+			&& PlayerIsImpostor(playerData))
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role)));
 		else
 			return ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0));

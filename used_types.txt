@@ -208,3 +208,7 @@ GameOptionsDataParent
 StatsManager_Stats
 SkinLayer
 VoteSpreader__Fields
+RoleOptionsData__Fields
+RoleEffectAnimation_EffectType__Enum
+RoleEffectAnimation__Fields
+PlayerControl__Fields
