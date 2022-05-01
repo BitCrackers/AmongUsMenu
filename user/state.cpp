@@ -67,6 +67,7 @@ void Settings::Load() {
         j.at("AdjustByDPI").get_to(this->AdjustByDPI);
 
         j.at("RevealVotes").get_to(this->RevealVotes);
+        j.at("ShowProtections").get_to(this->ShowProtections);
 
         j.at("ShowConsole").get_to(this->ShowConsole);
         j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
@@ -130,6 +131,7 @@ void Settings::Save() {
 
             {"RevealVotes", this->RevealVotes},
             {"AdjustByDPI", this->AdjustByDPI},
+            {"ShowProtections", this->ShowProtections},
 
             {"ShowConsole", this->ShowConsole},
             {"ShowUnityLogs", this->ShowUnityLogs}

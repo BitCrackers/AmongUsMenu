@@ -71,3 +71,4 @@ void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleO
 void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method);
 void dPlayerPhysics_FixedUpdate (PlayerPhysics* __this, MethodInfo* method);
 bool dSaveManager_GetPurchase(String* itemKey, String* bundleKey, MethodInfo* method);
+void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method);

@@ -4,8 +4,10 @@
 #include "gui-helpers.hpp"
 #include "utility.h"
 #include "state.hpp"
+#include "logger.h"
 
 namespace SelfTab {
+    void _SeeProtect();
     void Render() {
         if (ImGui::BeginTabItem("Self")) {
             ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
@@ -67,6 +69,13 @@ namespace SelfTab {
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {
                 State.Save();
             }
+
+            if (ImGui::Checkbox("See Protections", &State.ShowProtections))
+            {
+                State.Save();
+                _SeeProtect();
+            }
+
             if (ImGui::Checkbox("Unlock Vents", &State.UnlockVents)) {
                 State.Save();
             }
@@ -94,6 +103,43 @@ namespace SelfTab {
             }
 
             ImGui::EndTabItem();
+        }
+    }
+
+    void _SeeProtect() {
+        if (!IsInGame())
+            return;
+        auto self = GetPlayerData(*Game::pLocalPlayer);
+        if (self->fields.IsDead)
+            return;
+        if (PlayerIsImpostor(self)
+            && (*Game::pGameOptionsData)->fields.RoleOptions->fields.ImpostorsCanSeeProtect)
+            return;
+        float& _Duration = (*Game::pGameOptionsData)->fields.RoleOptions->fields.ProtectionDurationSeconds;
+        const float ProtectionDurationSeconds = _Duration;
+        for (auto player : GetAllPlayerControl()) {
+            if (!player->fields.protectedByGuardian)
+                continue;
+            //if (GetPlayerData(player)->fields.IsDead)
+            //    continue;
+            bool isPlaying = false;
+            for (auto anim : il2cpp::List(player->fields.currentRoleAnimations))
+                if (anim->fields.effectType == RoleEffectAnimation_EffectType__Enum::ProtectLoop) {
+                    isPlaying = true;
+                    break;
+                }
+            if (isPlaying == State.ShowProtections)
+                continue;
+            if (!State.ShowProtections)
+                app::PlayerControl_RemoveProtection(player, nullptr);
+            do {
+                std::lock_guard lock(State.protectMutex);
+                auto pair = State.protectMonitor[player->fields.PlayerId];
+                _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+                if (_Duration > 0.f)
+                    app::PlayerControl_TurnOnProtection(player, State.ShowProtections, pair.first, nullptr);
+                _Duration = ProtectionDurationSeconds;
+            } while (0);
         }
     }
 }

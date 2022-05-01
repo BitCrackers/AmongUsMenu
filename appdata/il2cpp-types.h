@@ -2974,11 +2974,15 @@ namespace app
 #pragma region Color32
     struct Color32
     {
-        int32_t rgba;
-        uint8_t r;
-        uint8_t g;
-        uint8_t b;
-        uint8_t a;
+        union {
+            int32_t rgba;
+            struct {
+                uint8_t r;
+                uint8_t g;
+                uint8_t b;
+                uint8_t a;
+            };
+        };
     };
 #pragma endregion
 
@@ -8106,6 +8110,69 @@ namespace app
     };
 #pragma endregion
 
+#pragma region List_1_RoleEffectAnimation_
+struct __declspec(align(4)) List_1_RoleEffectAnimation___Fields {
+    struct RoleEffectAnimation__Array *_items;
+    int32_t _size;
+    int32_t _version;
+    struct Object *_syncRoot;
+};
+
+struct List_1_RoleEffectAnimation_ {
+    void *klass;
+    MonitorData *monitor;
+    struct List_1_RoleEffectAnimation___Fields fields;
+};
+
+#if defined(_CPLUSPLUS_)
+enum class RoleEffectAnimation_EffectType__Enum : int32_t {
+    Default = 0x00000000,
+    ProtectLoop = 0x00000001,
+    Shapeshift = 0x00000002,
+};
+
+#else
+enum RoleEffectAnimation_EffectType__Enum {
+    RoleEffectAnimation_EffectType__Enum_Default = 0x00000000,
+    RoleEffectAnimation_EffectType__Enum_ProtectLoop = 0x00000001,
+    RoleEffectAnimation_EffectType__Enum_Shapeshift = 0x00000002,
+};
+
+#endif
+#pragma endregion
+
+#pragma region RoleEffectAnimation
+struct RoleEffectAnimation__Fields {
+    struct MonoBehaviour__Fields _;
+#if defined(_CPLUSPLUS_)
+    RoleEffectAnimation_EffectType__Enum effectType;
+#else
+    int32_t effectType;
+#endif
+    struct AnimationClip* Clip;
+    struct SpriteAnim* Animator;
+    struct Action* MidAnimCB;
+    struct SpriteRenderer* Renderer;
+    struct AudioClip* UseSound;
+    struct AudioSource* AudioSource;
+    struct PlayerControl* parent;
+};
+
+struct RoleEffectAnimation {
+    void* klass;
+    MonitorData* monitor;
+    struct RoleEffectAnimation__Fields fields;
+};
+
+struct RoleEffectAnimation__Array {
+    void* klass;
+    MonitorData* monitor;
+    Il2CppArrayBounds* bounds;
+    il2cpp_array_size_t max_length;
+    struct RoleEffectAnimation* vector[32];
+};
+#pragma endregion
+
 #pragma region List_1_PlayerTask_
     struct __declspec(align(4)) List_1_PlayerTask___Fields
     {
@@ -8564,7 +8631,7 @@ namespace app
         struct Vector3 defaultPlayerScale;
         void* ScannerAnims;
         void* ScannersImages;
-        void* currentRoleAnimations;
+        struct List_1_RoleEffectAnimation_* currentRoleAnimations;
         void* closest;
         bool isNew;
         bool isDummy;

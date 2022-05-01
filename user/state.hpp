@@ -42,6 +42,10 @@ public:
     bool UnlockVents = false;
     bool ShowGhosts = false;
 
+    bool ShowProtections = false;
+    std::map<uint8_t/*PlayerId*/, std::pair<int32_t/*ColorId*/, float/*Time*/>> protectMonitor;
+    std::mutex protectMutex;
+
     bool RevealVotes = false;
 
     bool RevealRoles = false;
