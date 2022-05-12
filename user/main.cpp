@@ -19,6 +19,70 @@
 HMODULE hModule;
 HANDLE hUnloadEvent;
 
+#include <ehdata.h>
+#include <dbghelp.h>
+#pragma comment(lib,"Dbghelp.lib")
+LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = nullptr;
+constexpr size_t DEPTH = 8;
+std::string getStackTrace(PEXCEPTION_POINTERS ExceptionInfo)
+{
+	std::string stacktrace;
+	if (!ExceptionInfo || !SymInitialize(GetCurrentProcess(), nullptr, TRUE))
+	{
+		return stacktrace;
+	}
+
+	size_t i = 0;
+	STACKFRAME stackFrame = { 0 };
+	stackFrame.AddrPC.Mode = AddrModeFlat;
+	stackFrame.AddrPC.Offset = ExceptionInfo->ContextRecord->Eip;
+	stackFrame.AddrStack.Mode = AddrModeFlat;
+	stackFrame.AddrStack.Offset = ExceptionInfo->ContextRecord->Esp;
+	stackFrame.AddrFrame.Mode = AddrModeFlat;
+	stackFrame.AddrFrame.Offset = ExceptionInfo->ContextRecord->Ebp;
+
+	auto symbolBuffer = std::string(sizeof(SYMBOL_INFO) + MAX_PATH, 0);
+	auto symbol = reinterpret_cast<PSYMBOL_INFO>(symbolBuffer.data());
+	symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+	symbol->MaxNameLen = MAX_PATH;
+
+	while (StackWalk(IMAGE_FILE_MACHINE_I386, GetCurrentProcess(), GetCurrentThread(),
+		&stackFrame, ExceptionInfo->ContextRecord, nullptr,
+		SymFunctionTableAccess, SymGetModuleBase, nullptr))
+	{
+		if (i++ < 2) continue;
+		if (i - 2 > DEPTH) break;
+
+		if (!SymFromAddr(GetCurrentProcess(), stackFrame.AddrPC.Offset, 0, symbol)) {
+			symbol->Name[0] = 0;
+		}
+
+		auto ModuleBase = SymGetModuleBase(GetCurrentProcess(), stackFrame.AddrPC.Offset);
+		stacktrace += std::format("\t{:#x} ({}) {}\n",
+			(stackFrame.AddrPC.Offset - ModuleBase),
+			getModulePath((HMODULE)ModuleBase).stem().string(),
+			symbol->Name);
+	}
+
+	SymCleanup(GetCurrentProcess());
+	return stacktrace;
+}
+
+LONG WINAPI AumExceptionFilter(PEXCEPTION_POINTERS ExceptionInfo) {
+	static std::mutex mtx;
+	std::scoped_lock locker(mtx);
+	const auto record = (EHExceptionRecord*)ExceptionInfo->ExceptionRecord;
+	if (!PER_IS_MSVC_PURE_OR_NATIVE_EH(record)) {
+		return prevExceptionFilter(ExceptionInfo);
+	}
+	auto msg = std::format("Exception: {}\n{}",
+		record->params.pThrowInfo->pCatchableTypeArray[0].arrayOfCatchableTypes[0]->pType->name,
+		getStackTrace(ExceptionInfo));
+	Log.Error("AUM", msg);
+	::MessageBoxA(nullptr, ("AU: " + getGameVersion() + "\nAUM: " + GetGitCommit().erase(6) + "\n" + msg).c_str(), "AUM C++ Runtime Error", MB_ICONERROR);
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+
 std::string GetCRC32(std::filesystem::path filePath) {
 	CRC32 crc32;
 	char buffer[4096] = { 0 };
@@ -75,6 +139,8 @@ void Run(LPVOID lpParam) {
 	new_console();
 #endif
 	Log.Create();
+	// log c++ runtime error
+	prevExceptionFilter = ::SetUnhandledExceptionFilter(AumExceptionFilter);
 	if (!GameVersionCheck()) {
 		fclose(stdout);
 		FreeConsole();
@@ -124,6 +190,7 @@ void Run(LPVOID lpParam) {
 	DetourInitilization();
 #if _DEBUG
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
+	::SetUnhandledExceptionFilter(prevExceptionFilter);
 	if (dwWaitResult != WAIT_OBJECT_0) {
 		STREAM_ERROR("Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError());
 		return;
