@@ -29,6 +29,10 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 	//HudManager_SetHudActive(__this, State.ShowHud, NULL);
 	if (IsInGame()) {
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
+		if (!localData) {
+			// oops: game bug
+			return;
+		}
 		GameObject* shadowLayerObject = Component_get_gameObject((Component_1*)__this->fields.ShadowQuad, NULL);
 		GameObject_SetActive(shadowLayerObject,
 			!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack) && !localData->fields.IsDead,
