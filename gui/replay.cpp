@@ -108,44 +108,44 @@ namespace Replay
 		}
 
 		// earliestTimeIndex will be the very first event to be shown, lastTimeIndex will be the very last even to be shown
-		size_t earliestTimeIndex = 0, lastTimeIndex = 0;
+		size_t earliestTimeIndex = 0, lastTimeIndex = points.size() - 1;
 		bool collectionHasElementsToFilterMin = false, collectionHasElementsToFilterMax = false;
 		if ((isUsingMinTimeFilter == true) || (isUsingMaxTimeFilter))
 		{
 			// now we figure out the last index that matches the minTimeFilter
 			// then we'll do some quik pointer mafs to pass to the AddPolyline call
-			for (size_t index = 0; index < timeStamps.size() - 1; index++)
+			for (size_t index = 0; isUsingMinTimeFilter && index < timeStamps.size(); index++)
 			{
 				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
-				if ((timestamp > minTimeFilter) && (collectionHasElementsToFilterMin == false))
+				if (timestamp > minTimeFilter)
 				{
 					// the first element that *matches* the minTimeFilter is where we begin drawing from
 					earliestTimeIndex = index;
 					collectionHasElementsToFilterMin = true;
+					break;
 				}
-				if ((timestamp > maxTimeFilter) && (collectionHasElementsToFilterMax == false))
+			}
+			for (ptrdiff_t index = timeStamps.size() - 1; isUsingMaxTimeFilter && index >= (ptrdiff_t)earliestTimeIndex; index--)
+			{
+				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
+				if (timestamp < maxTimeFilter)
 				{
 					// the first element that *exceeds* the maxTimeFilter is where we stop drawing
 					lastTimeIndex = index;
 					collectionHasElementsToFilterMax = true;
+					break;
 				}
 			}
 			
-			uintptr_t startPtr = 0, endPtr = (points.size() - 1) * sizeof(ImVec2);
-			if (collectionHasElementsToFilterMin == true)
-			{
+			if (!isUsingMinTimeFilter || collectionHasElementsToFilterMin) {
 				// some events occurred before the specified time filter
 				// so we want to draw only a portion of the total collection
 				// this portion starts from the index of the last matching event and should continue to the end of the collection
-				// since we're modifying the *pointer*, we have to multiply by the size of each element in the collection.
-				startPtr = earliestTimeIndex * sizeof(ImVec2);
+				if (!isUsingMaxTimeFilter || collectionHasElementsToFilterMax) {
+					size_t numPoints = lastTimeIndex - earliestTimeIndex  + 1;
+					drawList->AddPolyline(points.data() + earliestTimeIndex, (int)numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
+				}
 			}
-			if (collectionHasElementsToFilterMax == true)
-			{
-				endPtr = lastTimeIndex * sizeof(ImVec2);
-			}
-			size_t numPoints = (endPtr - startPtr) / sizeof(ImVec2);
-			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), (int)numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 		else
 		{
@@ -353,7 +353,7 @@ namespace Replay
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
 			if ((isUsingPlayerFilter == true) &&
-				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId > Replay::player_filter.size() - 1) ||
+				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId >= Replay::player_filter.size()) ||
 					(Replay::player_filter[evtPlayerSource.playerId].second == false) ||
 					(Replay::player_filter[evtPlayerSource.playerId].first.has_value() == false)))
 				continue;
