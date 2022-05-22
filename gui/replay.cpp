@@ -76,9 +76,10 @@ namespace Replay
 			pair.second.simplifiedTimeStamps.clear();
 		}
 
-		for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+		for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
 		{
 			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
+			State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
 		}
 
 		// Set this to true as the default value
@@ -315,7 +316,8 @@ namespace Replay
 			if ((plrInfo != NULL) &&
 				((plrInfo->fields.IsDead) ||
 					((plrInfo->fields.Role != NULL) &&
-						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))))
+						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))) &&
+							(!isUsingMaxTimeFilter || maxTimeFilter >= State.replayDeathTimePerPlayer[plrLineData.playerId]))
 				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),

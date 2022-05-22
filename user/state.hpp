@@ -108,7 +108,8 @@ public:
     // failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
     std::vector<std::unique_ptr<EventInterface>> rawEvents;
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
-    std::vector<ImVec2> lastWalkEventPosPerPlayer;
+    std::array<ImVec2, MAX_PLAYERS> lastWalkEventPosPerPlayer;
+    std::array<std::chrono::system_clock::time_point, MAX_PLAYERS> replayDeathTimePerPlayer;
     std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
     bool Replay_IsPlaying = true;
     bool Replay_IsLive = true;
@@ -177,10 +178,7 @@ public:
 
     Settings()
     {
-        for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
-        {
-            this->lastWalkEventPosPerPlayer.push_back(ImVec2(0.f, 0.f));
-        }
+        Replay::Reset();
     }
 
     void Load();
