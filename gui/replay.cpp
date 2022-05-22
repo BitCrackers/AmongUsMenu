@@ -248,7 +248,7 @@ namespace Replay
 						playerPos = plrLineData.pendingPoints[lastTimeIndex];
 						if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 						{
-							STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+							//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
 						}
 						foundMatchingPlayerPos = true;
 						break;
@@ -266,7 +266,7 @@ namespace Replay
 							playerPos = plrLineData.simplifiedPoints[lastTimeIndex];
 							if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 							{
-								STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+								//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
 							}
 							foundMatchingPlayerPos = true;
 							break;
@@ -286,7 +286,7 @@ namespace Replay
 			}
 			if (foundMatchingPlayerPos == false)
 			{
-				STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Time filter was likely too strict or player hasn't moved yet.");
+				//STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Time filter was likely too strict or player hasn't moved yet.");
 				continue;
 			}
 
