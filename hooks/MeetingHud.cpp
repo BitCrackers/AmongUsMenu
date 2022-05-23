@@ -171,7 +171,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (__this->fields.SkippedVoting) {
 			bool showSkipped = false;
-			for (auto pair : State.voteMonitor) {
+			for (const auto& pair : State.voteMonitor) {
 				if (pair.second == 253) {
 					showSkipped = State.RevealVotes;
 					break;
