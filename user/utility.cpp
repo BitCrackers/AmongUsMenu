@@ -257,23 +257,23 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return OnlineInLobby && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return OnlineInLobby && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsHost() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
 	return app::InnerNetClient_get_AmHost((InnerNetClient*)(*Game::pAmongUsClient), NULL);
 }
 
 bool IsInGame() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return (LocalInGame || OnlineInGame || TutorialScene) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return (LocalInGame || OnlineInGame || TutorialScene) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsInMultiplayerGame() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return (LocalInGame || OnlineInGame) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
@@ -812,4 +812,14 @@ void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::ch
 float getMapXOffsetSkeld(float x)
 {
 	return (State.mapType == Settings::MapType::Ship && State.FlipSkeld) ? x - 50.0f : x;
+}
+
+bool Object_1_IsNotNull(app::Object_1* obj)
+{
+	return app::Object_1_op_Implicit(obj, nullptr);
+}
+
+bool Object_1_IsNull(app::Object_1* obj)
+{
+	return !Object_1_IsNotNull(obj);
 }

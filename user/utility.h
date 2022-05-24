@@ -133,3 +133,6 @@ float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
 void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs);
 
 float getMapXOffsetSkeld(float x);
+
+bool Object_1_IsNotNull(app::Object_1* unity_object);
+bool Object_1_IsNull(app::Object_1* unity_object);

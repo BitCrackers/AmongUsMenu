@@ -21,9 +21,9 @@ private:
 };
 #define _log_source (std::string() + "AUM - " + __func__)
 
-#define LOG_INFO(x) Log.Info(_log_source, x);
-#define LOG_DEBUG(x) Log.Debug(_log_source, x);
-#define LOG_ERROR(x) Log.Error(_log_source, x);
+#define LOG_INFO(x) Log.Info(_log_source, x)
+#define LOG_DEBUG(x) Log.Debug(_log_source, x)
+#define LOG_ERROR(x) Log.Error(_log_source, x)
 
 #define STREAM_DEBUG(x) \
 	do { \
