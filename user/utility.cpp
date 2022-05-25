@@ -486,6 +486,10 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
+	if (Object_1_IsNull((Object_1*)playerInfo->fields._object)) {
+		// TODO: Replace all "playerInfo->fields._object" with "GameData_PlayerInfo_get_Object(playerInfo)"
+		return std::nullopt;
+	}
 	return PlayerControl_GetTruePosition(playerInfo->fields._object, NULL);
 }
 
