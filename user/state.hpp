@@ -47,6 +47,7 @@ public:
     std::mutex protectMutex;
 
     bool RevealVotes = false;
+    bool RevealAnonymousVotes = false;
 
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
@@ -113,7 +114,9 @@ public:
     bool Replay_IsPlaying = true;
     bool Replay_IsLive = true;
 
-    std::map<uint8_t, uint8_t> voteMonitor;
+    using Voter = uint8_t;
+    using VotedFor = uint8_t;
+    std::map<Voter, VotedFor> voteMonitor;
 
     std::vector<int32_t> aumUsers;
     int32_t rpcCooldown = 15;

@@ -70,7 +70,7 @@ DO_APP_FUNC(void, MeetingHud_Awake, (MeetingHud* __this, MethodInfo* method), "A
 DO_APP_FUNC(void, MeetingHud_Close, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Close()");
 DO_APP_FUNC(void, MeetingHud_Update, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Update()");
 DO_APP_FUNC(void, MeetingHud_BloopAVoteIcon, (MeetingHud* __this, GameData_PlayerInfo* voterPlayer, int index, Transform* parent, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::BloopAVoteIcon(GameData.PlayerInfo, System.Int32, UnityEngine.Transform)");
-DO_APP_FUNC(void, MeetingHud_PopulateResults, (MeetingHud* __this, void* states, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::PopulateResults(MeetingHud.VoterState[])");
+DO_APP_FUNC(void, MeetingHud_PopulateResults, (MeetingHud* __this, Il2CppArraySize* states, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::PopulateResults(MeetingHud.VoterState[])");
 
 DO_APP_FUNC(void, MovingPlatformBehaviour_SetSide, (MovingPlatformBehaviour* __this, bool isLeft, MethodInfo* method), "Assembly-CSharp, System.Void MovingPlatformBehaviour::SetSide(System.Boolean)");
 
@@ -108,6 +108,8 @@ DO_APP_FUNC(void, PlayerControl_RpcSetNamePlate, (PlayerControl* __this, String*
 DO_APP_FUNC(bool, PlayerControl_RpcSendChat, (PlayerControl* __this, String* message, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::RpcSendChat(System.String)");
 DO_APP_FUNC(void, PlayerControl_Shapeshift, (PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::Shapeshift(PlayerControl, System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_ProtectPlayer, (PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ProtectPlayer(PlayerControl, System.Int32)");
+DO_APP_FUNC(void, PlayerControl_SetPlayerMaterialColors_1, (int32_t colorId, Renderer* rend, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetPlayerMaterialColors(System.Int32, UnityEngine.Renderer)");
+DO_APP_FUNC(void, PlayerControl_SetPlayerMaterialColors_2, (Color color, Renderer* rend, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetPlayerMaterialColors(UnityEngine.Color, UnityEngine.Renderer)");
 
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");
 
