@@ -6,6 +6,8 @@
 #include "state.hpp"
 #include "logger.h"
 
+extern void RevealAnonymousVotes(); // in MeetingHud.cpp
+
 namespace SelfTab {
     void _SeeProtect();
     void Render() {
@@ -64,6 +66,11 @@ namespace SelfTab {
 
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
+                State.Save();
+                RevealAnonymousVotes();
             }
 
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {

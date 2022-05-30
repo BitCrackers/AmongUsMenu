@@ -26,7 +26,7 @@ void dScreenJoystick_FixedUpdate(ScreenJoystick* __this, MethodInfo* method);
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method);
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method);
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method);
-void dMeetingHud_PopulateResults(MeetingHud* __this, void* states, MethodInfo* method);
+void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, MethodInfo* method);
 void dPlainDoor_SetDoorway(PlainDoor* __this, bool open, MethodInfo* method);
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method);
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method);

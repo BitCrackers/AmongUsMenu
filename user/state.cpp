@@ -78,6 +78,8 @@ void Settings::Load() {
 
         JSON_TRYGET("ShowConsole", this->ShowConsole);
         JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
+
+        JSON_TRYGET("RevealAnonymousVotes", this->RevealAnonymousVotes);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
@@ -137,6 +139,7 @@ void Settings::Save() {
             {"MoveInVent", this->MoveInVent},
 
             {"RevealVotes", this->RevealVotes},
+            {"RevealAnonymousVotes", this->RevealAnonymousVotes},
             {"AdjustByDPI", this->AdjustByDPI},
             {"ShowProtections", this->ShowProtections},
 

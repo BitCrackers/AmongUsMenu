@@ -6,6 +6,7 @@
 #include <chrono>
 
 static app::Type* voteSpreaderType;
+constexpr Settings::VotedFor HasNotVoted = 255, MissedVote = 254, SkippedVote = 253, DeadVote = 252;
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.clear();
@@ -40,24 +41,79 @@ static void Transform_RemoveAllVotes(app::Transform* transform) {
 	votes.clear();
 }
 
-void dMeetingHud_PopulateResults(MeetingHud* __this, void* states, MethodInfo* method) {
-	// remove all votes before populating results
-	do {
-		for (auto votedForArea : il2cpp::Array(__this->fields.playerStates)) {
-			if (!votedForArea) {
-				// oops: game bug
-				continue;
+static void Transform_RevealAnonymousVotes(app::Transform* transform, Settings::VotedFor votedFor) {
+	if (!transform) return;
+	auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
+	if (!voteSpreader) return;
+	auto votes = il2cpp::List(voteSpreader->fields.Votes);
+	if (State.RevealAnonymousVotes) {
+		size_t idx = 0;
+		for (auto& pair : State.voteMonitor) {
+			if (pair.second == votedFor) {
+				if (idx >= votes.size()) {
+					STREAM_ERROR("votedFor " << +votedFor << ", index " << idx << ", expected less than " << votes.size());
+					break;
+				}
+				auto outfit = GetPlayerOutfit(GetPlayerDataById(pair.first));
+				if (!outfit)
+					continue;
+				auto ColorId = outfit->fields.ColorId;
+				auto spriteRenderer = votes[idx++];
+				app::PlayerControl_SetPlayerMaterialColors_1(ColorId, (app::Renderer*)spriteRenderer, nullptr);
 			}
-			auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-			Transform_RemoveAllVotes(transform);
 		}
-		if (__this->fields.SkippedVoting) {
-			auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
-			Transform_RemoveAllVotes(transform);
+	}
+	else {
+		for (auto spriteRenderer : votes) {
+			app::PlayerControl_SetPlayerMaterialColors_2(
+				app::Palette__TypeInfo->static_fields->DisabledGrey,
+				(app::Renderer*)spriteRenderer, nullptr);
 		}
-	} while (false);
+	}
+}
 
-	MeetingHud_PopulateResults(__this, states, method);
+void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, MethodInfo* method) {
+	// remove all votes before populating results
+	for (auto votedForArea : il2cpp::Array(__this->fields.playerStates)) {
+        if (!votedForArea) {
+			// oops: game bug
+			continue;
+		}
+		auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+		Transform_RemoveAllVotes(transform);
+	}
+	if (__this->fields.SkippedVoting) {
+		auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
+		Transform_RemoveAllVotes(transform);
+	}
+
+	auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+	if (prevAnonymousVotes && State.RevealAnonymousVotes)
+		(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+	__try {
+		MeetingHud_PopulateResults(__this, states, method);
+	}
+	__finally {
+		(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
+	}
+}
+
+void RevealAnonymousVotes() {
+	if (!State.InMeeting
+		|| !app::MeetingHud__TypeInfo
+		|| !app::MeetingHud__TypeInfo->static_fields->Instance
+		|| !(*Game::pGameOptionsData)->fields.AnonymousVotes)
+		return;
+	auto meetingHud = app::MeetingHud__TypeInfo->static_fields->Instance;
+	for (auto votedForArea : il2cpp::Array(meetingHud->fields.playerStates)) {
+		if (!votedForArea) continue;
+		auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+		Transform_RevealAnonymousVotes(transform, votedForArea->fields.TargetPlayerId);
+	}
+	if (meetingHud->fields.SkippedVoting) {
+		auto transform = app::GameObject_get_transform(meetingHud->fields.SkippedVoting, nullptr);
+		Transform_RevealAnonymousVotes(transform, SkippedVote);
+	}
 }
 
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
@@ -99,10 +155,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (playerData)
 		{
-			bool didVote = (playerVoteArea->fields.VotedFor != 0xFF);
+			bool didVote = (playerVoteArea->fields.VotedFor != HasNotVoted);
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
-			// votedFor will either contain the id of the person they voted for, -1 if they skipped, or -2 if they didn't vote. We don't want to record people who didn't vote
-			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != -2 && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
+			// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
+			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
 			{
 				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 				State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
@@ -112,9 +168,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 				// avoid duplicate votes
 				if (__this->fields.state < app::MeetingHud_VoteStates__Enum::Results) {
-					//auto isAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
-					//(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
-					if (playerVoteArea->fields.VotedFor != 253) {
+					auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+					if (prevAnonymousVotes && State.RevealAnonymousVotes)
+						(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+					if (playerVoteArea->fields.VotedFor != SkippedVote) {
 						for (auto votedForArea : playerStates) {
 							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
 								auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
@@ -127,18 +184,18 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 						auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
 						MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
 					}
-					//(*Game::pGameOptionsData)->fields.AnonymousVotes = isAnonymousVotes;
+					(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
 				}
 			}
 			else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())
 			{
 				auto it = State.voteMonitor.find(playerData->fields.PlayerId);
-				auto votedFor = it->second;
+				auto dcPlayer = it->second;
 				State.voteMonitor.erase(it); //Likely disconnected player
 
 				// Remove all votes for disconnected player 
 				for (auto votedForArea : playerStates) {
-					if (votedForArea->fields.TargetPlayerId == votedFor) {
+					if (votedForArea->fields.TargetPlayerId == dcPlayer) {
 						auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 						Transform_RemoveAllVotes(transform);
 						break;
@@ -172,7 +229,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		if (__this->fields.SkippedVoting) {
 			bool showSkipped = false;
 			for (const auto& pair : State.voteMonitor) {
-				if (pair.second == 253) {
+				if (pair.second == SkippedVote) {
 					showSkipped = State.RevealVotes;
 					break;
 				}
