@@ -71,6 +71,8 @@ void Settings::Load() {
 
         j.at("ShowConsole").get_to(this->ShowConsole);
         j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
+
+        j.at("RevealAnonymousVotes").get_to(this->RevealAnonymousVotes);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
@@ -130,6 +132,7 @@ void Settings::Save() {
             {"MoveInVent", this->MoveInVent},
 
             {"RevealVotes", this->RevealVotes},
+            {"RevealAnonymousVotes", this->RevealAnonymousVotes},
             {"AdjustByDPI", this->AdjustByDPI},
             {"ShowProtections", this->ShowProtections},
 
