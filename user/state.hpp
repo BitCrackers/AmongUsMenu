@@ -82,6 +82,7 @@ public:
     bool ShowEsp_Tracers = true;
     bool ShowEsp_Distance = true;
     bool HideEsp_During_Meetings = false;
+    bool ShowEsp_RoleBased = false;
 
     bool InMeeting = false;
     bool PlayMedbayScan = false;

@@ -11,7 +11,7 @@ ImGuiWindow* CurrentWindow = nullptr;
 static void RenderText(const char* text, const ImVec2& pos, const ImVec4& color, const bool outlined = true, const bool centered = true)
 {
 	if (!text) return;
-	ImVec2& ImScreen = *(ImVec2*)&pos; // Type punning is safe here
+	ImVec2 ImScreen = pos;
 	if (centered)
 	{
 		auto size = ImGui::CalcTextSize(text);

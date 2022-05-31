@@ -7,21 +7,27 @@
 namespace EspTab {
 
 	void Render() {
-		if (IsInGame())
-		{
-			if (ImGui::BeginTabItem("Esp"))
-			{
-				ImGui::Checkbox("Enable", &State.ShowEsp);
+		if (not IsInGame())
+			return;
 
-				ImGui::Checkbox("Show Ghosts", &State.ShowEsp_Ghosts);
-				ImGui::Checkbox("Hide During Meetings", &State.HideEsp_During_Meetings);
+		bool changed = false;
+		if (ImGui::BeginTabItem("Esp")) {
 
-				ImGui::Checkbox("Show Box", &State.ShowEsp_Box);
-				ImGui::Checkbox("Show Tracers", &State.ShowEsp_Tracers);
-				ImGui::Checkbox("Show Distance", &State.ShowEsp_Distance);
+			changed |= ImGui::Checkbox("Enable", &State.ShowEsp);
 
-				ImGui::EndTabItem();
-			}
+			changed |= ImGui::Checkbox("Show Ghosts", &State.ShowEsp_Ghosts);
+			changed |= ImGui::Checkbox("Hide During Meetings", &State.HideEsp_During_Meetings);
+
+			changed |= ImGui::Checkbox("Show Box", &State.ShowEsp_Box);
+			changed |= ImGui::Checkbox("Show Tracers", &State.ShowEsp_Tracers);
+			changed |= ImGui::Checkbox("Show Distance", &State.ShowEsp_Distance);
+
+			changed |= ImGui::Checkbox("Role-based", &State.ShowEsp_RoleBased);
+
+			ImGui::EndTabItem();
+		}
+		if (changed) {
+			State.Save();
 		}
 	}
 }

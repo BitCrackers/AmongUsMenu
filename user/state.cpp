@@ -60,6 +60,7 @@ void Settings::Load() {
         JSON_TRYGET("ShowEsp_Tracers", this->ShowEsp_Tracers);
         JSON_TRYGET("ShowEsp_Distance", this->ShowEsp_Distance);
         JSON_TRYGET("HideEsp_During_Meetings", this->HideEsp_During_Meetings);
+        JSON_TRYGET("ShowEsp_RoleBased", this->ShowEsp_RoleBased);
 
         JSON_TRYGET("MaxVision", this->MaxVision);
         JSON_TRYGET("Wallhack", this->Wallhack);
@@ -127,6 +128,7 @@ void Settings::Save() {
             {"ShowEsp_Tracers", this->ShowEsp_Tracers},
             {"ShowEsp_Distance", this->ShowEsp_Distance},
             {"HideEsp_During_Meetings", this->HideEsp_During_Meetings},
+            {"ShowEsp_RoleBased", this->ShowEsp_RoleBased},
 
             {"MaxVision", this->MaxVision},
             {"Wallhack", this->Wallhack},
