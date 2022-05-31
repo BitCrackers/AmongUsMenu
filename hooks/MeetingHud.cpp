@@ -5,16 +5,15 @@
 #include "logger.h"
 #include <chrono>
 
-static app::Type* voteSpreaderType;
+static app::Type* voteSpreaderType = nullptr;
 constexpr Settings::VotedFor HasNotVoted = 255, MissedVote = 254, SkippedVote = 253, DeadVote = 252;
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.clear();
 	State.InMeeting = true;
 
-	if (!voteSpreaderType) {
-		voteSpreaderType = app::Type_GetType(convert_to_string(translate_type_name("VoteSpreader, Assembly-CSharp")), nullptr);
-	}
+	static std::string strVoteSpreaderType = translate_type_name("VoteSpreader, Assembly-CSharp");
+	voteSpreaderType = app::Type_GetType(convert_to_string(strVoteSpreaderType), nullptr);
 
 	MeetingHud_Awake(__this, method);
 }
