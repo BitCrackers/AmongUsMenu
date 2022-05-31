@@ -8,6 +8,11 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 {
 	AirshipStatus_OnEnable(__this, method);
 
+	Replay::Reset();
+
+	State.MatchStart = std::chrono::system_clock::now();
+	State.MatchCurrent = State.MatchStart;
+
 	State.selectedDoor = SystemTypes__Enum::Hallway;
 	State.mapDoors.clear();
 	State.pinnedDoors.clear();

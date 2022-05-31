@@ -100,8 +100,8 @@ SystemTypes__Enum GetSystemTypes(Vector2 vector);
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
 std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player);
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo);
-std::vector<Camera*> GetAllCameras();
-std::vector<ClientData*> GetAllClients();
+il2cpp::Array<Camera__Array> GetAllCameras();
+il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
 bool IsAirshipSpawnLocation(Vector2 vec);
 Vector2 Rotate(Vector2 vec, float degrees);
@@ -133,3 +133,6 @@ float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
 void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::chrono::system_clock::time_point>& inTimeStamps, std::vector<ImVec2>& outPoints, std::vector<std::chrono::system_clock::time_point>& outTimeStamps, float sqDistanceThreshold, bool clearInputs);
 
 float getMapXOffsetSkeld(float x);
+
+bool Object_1_IsNotNull(app::Object_1* unity_object);
+bool Object_1_IsNull(app::Object_1* unity_object);

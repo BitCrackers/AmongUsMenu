@@ -76,9 +76,10 @@ namespace Replay
 			pair.second.simplifiedTimeStamps.clear();
 		}
 
-		for (int plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+		for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
 		{
 			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
+			State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
 		}
 
 		// Set this to true as the default value
@@ -108,44 +109,44 @@ namespace Replay
 		}
 
 		// earliestTimeIndex will be the very first event to be shown, lastTimeIndex will be the very last even to be shown
-		size_t earliestTimeIndex = 0, lastTimeIndex = 0;
+		size_t earliestTimeIndex = 0, lastTimeIndex = points.size() - 1;
 		bool collectionHasElementsToFilterMin = false, collectionHasElementsToFilterMax = false;
 		if ((isUsingMinTimeFilter == true) || (isUsingMaxTimeFilter))
 		{
 			// now we figure out the last index that matches the minTimeFilter
 			// then we'll do some quik pointer mafs to pass to the AddPolyline call
-			for (size_t index = 0; index < timeStamps.size() - 1; index++)
+			for (size_t index = 0; isUsingMinTimeFilter && index < timeStamps.size(); index++)
 			{
 				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
-				if ((timestamp > minTimeFilter) && (collectionHasElementsToFilterMin == false))
+				if (timestamp > minTimeFilter)
 				{
 					// the first element that *matches* the minTimeFilter is where we begin drawing from
 					earliestTimeIndex = index;
 					collectionHasElementsToFilterMin = true;
+					break;
 				}
-				if ((timestamp > maxTimeFilter) && (collectionHasElementsToFilterMax == false))
+			}
+			for (ptrdiff_t index = timeStamps.size() - 1; isUsingMaxTimeFilter && index >= (ptrdiff_t)earliestTimeIndex; index--)
+			{
+				const std::chrono::system_clock::time_point& timestamp = timeStamps.at(index);
+				if (timestamp < maxTimeFilter)
 				{
 					// the first element that *exceeds* the maxTimeFilter is where we stop drawing
 					lastTimeIndex = index;
 					collectionHasElementsToFilterMax = true;
+					break;
 				}
 			}
 			
-			uintptr_t startPtr = 0, endPtr = (points.size() - 1) * sizeof(ImVec2);
-			if (collectionHasElementsToFilterMin == true)
-			{
+			if (!isUsingMinTimeFilter || collectionHasElementsToFilterMin) {
 				// some events occurred before the specified time filter
 				// so we want to draw only a portion of the total collection
 				// this portion starts from the index of the last matching event and should continue to the end of the collection
-				// since we're modifying the *pointer*, we have to multiply by the size of each element in the collection.
-				startPtr = earliestTimeIndex * sizeof(ImVec2);
+				if (!isUsingMaxTimeFilter || collectionHasElementsToFilterMax) {
+					size_t numPoints = lastTimeIndex - earliestTimeIndex  + 1;
+					drawList->AddPolyline(points.data() + earliestTimeIndex, (int)numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
+				}
 			}
-			if (collectionHasElementsToFilterMax == true)
-			{
-				endPtr = lastTimeIndex * sizeof(ImVec2);
-			}
-			size_t numPoints = (endPtr - startPtr) / sizeof(ImVec2);
-			drawList->AddPolyline((ImVec2*)((uintptr_t)points.data() + startPtr), (int)numPoints, GetReplayPlayerColor(colorId), false, 1.f * State.dpiScale);
 		}
 		else
 		{
@@ -247,7 +248,7 @@ namespace Replay
 						playerPos = plrLineData.pendingPoints[lastTimeIndex];
 						if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 						{
-							STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+							//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
 						}
 						foundMatchingPlayerPos = true;
 						break;
@@ -265,7 +266,7 @@ namespace Replay
 							playerPos = plrLineData.simplifiedPoints[lastTimeIndex];
 							if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 							{
-								STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+								//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
 							}
 							foundMatchingPlayerPos = true;
 							break;
@@ -285,7 +286,7 @@ namespace Replay
 			}
 			if (foundMatchingPlayerPos == false)
 			{
-				STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Time filter was likely too strict or player hasn't moved yet.");
+				//STREAM_DEBUG("Could not find replay position for player#" << plrIdx << ". Time filter was likely too strict or player hasn't moved yet.");
 				continue;
 			}
 
@@ -315,7 +316,8 @@ namespace Replay
 			if ((plrInfo != NULL) &&
 				((plrInfo->fields.IsDead) ||
 					((plrInfo->fields.Role != NULL) &&
-						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))))
+						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))) &&
+							(!isUsingMaxTimeFilter || maxTimeFilter >= State.replayDeathTimePerPlayer[plrLineData.playerId]))
 				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
 					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
 					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
@@ -353,7 +355,7 @@ namespace Replay
 			if ((isUsingEventFilter == true) && (Replay::event_filter[(int)evtType].second == false))
 				continue;
 			if ((isUsingPlayerFilter == true) &&
-				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId > Replay::player_filter.size() - 1) ||
+				((evtPlayerSource.playerId < 0) || (evtPlayerSource.playerId >= Replay::player_filter.size()) ||
 					(Replay::player_filter[evtPlayerSource.playerId].second == false) ||
 					(Replay::player_filter[evtPlayerSource.playerId].first.has_value() == false)))
 				continue;
@@ -511,11 +513,12 @@ namespace Replay
 			minTimeFilter = State.MatchCurrent - seconds;
 		}
 
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		
+		{
+			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		}
 		ImGui::EndChild();
 
 		ImGui::Separator();

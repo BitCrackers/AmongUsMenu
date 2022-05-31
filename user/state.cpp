@@ -19,60 +19,67 @@ void Settings::Load() {
         std::ifstream inSettings(settingsPath);
         nlohmann::ordered_json j = nlohmann::ordered_json::parse(inSettings, NULL, false);
 
-        j.at("ShowMenu").get_to(this->ShowMenu);
-        j.at("KeyBinds").get_to(this->KeyBinds);
+#define JSON_TRYGET(key, value) \
+        try { \
+            j.at(key).get_to(value); \
+        } catch (nlohmann::detail::out_of_range& e) { \
+            Log.Info(e.what()); \
+        }
+
+        JSON_TRYGET("ShowMenu", this->ShowMenu);
+        JSON_TRYGET("KeyBinds", this->KeyBinds);
 #ifdef _DEBUG
-        j.at("ShowDebug").get_to(this->showDebugTab);
+        JSON_TRYGET("ShowDebug", this->showDebugTab);
 #endif
 
-        j.at("ShowGhosts").get_to(this->ShowGhosts);
-        j.at("ShowRadar").get_to(this->ShowRadar);
-        j.at("ShowRadar_DeadBodies").get_to(this->ShowRadar_DeadBodies);
-        j.at("ShowRadar_Ghosts").get_to(this->ShowRadar_Ghosts);
-        j.at("HideRadar_During_Meetings").get_to(this->HideRadar_During_Meetings);
-        j.at("ShowRadar_RightClick_Teleport").get_to(this->ShowRadar_RightClick_Teleport);
-        j.at("LockRadar").get_to(this->LockRadar);
-        j.at("RadarColor_R").get_to(this->SelectedColor.x);
-        j.at("RadarColor_G").get_to(this->SelectedColor.y);
-        j.at("RadarColor_B").get_to(this->SelectedColor.z);
-        j.at("RadarColor_A").get_to(this->SelectedColor.w);
-        j.at("RadarDrawIcons").get_to(this->RadarDrawIcons);
+        JSON_TRYGET("ShowGhosts", this->ShowGhosts);
+        JSON_TRYGET("ShowRadar", this->ShowRadar);
+        JSON_TRYGET("ShowRadar_DeadBodies", this->ShowRadar_DeadBodies);
+        JSON_TRYGET("ShowRadar_Ghosts", this->ShowRadar_Ghosts);
+        JSON_TRYGET("HideRadar_During_Meetings", this->HideRadar_During_Meetings);
+        JSON_TRYGET("ShowRadar_RightClick_Teleport", this->ShowRadar_RightClick_Teleport);
+        JSON_TRYGET("LockRadar", this->LockRadar);
+        JSON_TRYGET("RadarColor_R", this->SelectedColor.x);
+        JSON_TRYGET("RadarColor_G", this->SelectedColor.y);
+        JSON_TRYGET("RadarColor_B", this->SelectedColor.z);
+        JSON_TRYGET("RadarColor_A", this->SelectedColor.w);
+        JSON_TRYGET("RadarDrawIcons", this->RadarDrawIcons);
 
-        j.at("ShowReplay").get_to(this->ShowReplay);
-        j.at("ReplayColor_R").get_to(this->SelectedReplayMapColor.x);
-        j.at("ReplayColor_G").get_to(this->SelectedReplayMapColor.y);
-        j.at("ReplayColor_B").get_to(this->SelectedReplayMapColor.z);
-        j.at("ReplayColor_A").get_to(this->SelectedReplayMapColor.w);
-        j.at("ReplayShowOnlyLastSeconds").get_to(this->Replay_ShowOnlyLastSeconds);
-        j.at("ReplayLastSecondsValue").get_to(this->Replay_LastSecondsValue);
-        j.at("ReplayClearAfterMeeting").get_to(this->Replay_ClearAfterMeeting);
+        JSON_TRYGET("ShowReplay", this->ShowReplay);
+        JSON_TRYGET("ReplayColor_R", this->SelectedReplayMapColor.x);
+        JSON_TRYGET("ReplayColor_G", this->SelectedReplayMapColor.y);
+        JSON_TRYGET("ReplayColor_B", this->SelectedReplayMapColor.z);
+        JSON_TRYGET("ReplayColor_A", this->SelectedReplayMapColor.w);
+        JSON_TRYGET("ReplayShowOnlyLastSeconds", this->Replay_ShowOnlyLastSeconds);
+        JSON_TRYGET("ReplayLastSecondsValue", this->Replay_LastSecondsValue);
+        JSON_TRYGET("ReplayClearAfterMeeting", this->Replay_ClearAfterMeeting);
 
-        j.at("ShowEsp").get_to(this->ShowEsp);
-        j.at("ShowEsp_Ghosts").get_to(this->ShowEsp_Ghosts);
-        j.at("ShowEsp_Box").get_to(this->ShowEsp_Box);
-        j.at("ShowEsp_Tracers").get_to(this->ShowEsp_Tracers);
-        j.at("ShowEsp_Distance").get_to(this->ShowEsp_Distance);
-        j.at("HideEsp_During_Meetings").get_to(this->HideEsp_During_Meetings);
+        JSON_TRYGET("ShowEsp", this->ShowEsp);
+        JSON_TRYGET("ShowEsp_Ghosts", this->ShowEsp_Ghosts);
+        JSON_TRYGET("ShowEsp_Box", this->ShowEsp_Box);
+        JSON_TRYGET("ShowEsp_Tracers", this->ShowEsp_Tracers);
+        JSON_TRYGET("ShowEsp_Distance", this->ShowEsp_Distance);
+        JSON_TRYGET("HideEsp_During_Meetings", this->HideEsp_During_Meetings);
 
-        j.at("MaxVision").get_to(this->MaxVision);
-        j.at("Wallhack").get_to(this->Wallhack);
-        j.at("UnlockVents").get_to(this->UnlockVents);
-        j.at("RevealRoles").get_to(this->RevealRoles);
-        j.at("AbbreviatedRoleNames").get_to(this->AbbreviatedRoleNames);
-        j.at("ChatAlwaysActive").get_to(this->ChatAlwaysActive);
-        j.at("ReadGhostMessages").get_to(this->ReadGhostMessages);
-        j.at("AutoOpenDoors").get_to(this->AutoOpenDoors);
-        j.at("MoveInVent").get_to(this->MoveInVent);
+        JSON_TRYGET("MaxVision", this->MaxVision);
+        JSON_TRYGET("Wallhack", this->Wallhack);
+        JSON_TRYGET("UnlockVents", this->UnlockVents);
+        JSON_TRYGET("RevealRoles", this->RevealRoles);
+        JSON_TRYGET("AbbreviatedRoleNames", this->AbbreviatedRoleNames);
+        JSON_TRYGET("ChatAlwaysActive", this->ChatAlwaysActive);
+        JSON_TRYGET("ReadGhostMessages", this->ReadGhostMessages);
+        JSON_TRYGET("AutoOpenDoors", this->AutoOpenDoors);
+        JSON_TRYGET("MoveInVent", this->MoveInVent);
 
-        j.at("AdjustByDPI").get_to(this->AdjustByDPI);
+        JSON_TRYGET("AdjustByDPI", this->AdjustByDPI);
 
-        j.at("RevealVotes").get_to(this->RevealVotes);
-        j.at("ShowProtections").get_to(this->ShowProtections);
+        JSON_TRYGET("RevealVotes", this->RevealVotes);
+        JSON_TRYGET("ShowProtections", this->ShowProtections);
 
-        j.at("ShowConsole").get_to(this->ShowConsole);
-        j.at("ShowUnityLogs").get_to(this->ShowUnityLogs);
+        JSON_TRYGET("ShowConsole", this->ShowConsole);
+        JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
 
-        j.at("RevealAnonymousVotes").get_to(this->RevealAnonymousVotes);
+        JSON_TRYGET("RevealAnonymousVotes", this->RevealAnonymousVotes);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }

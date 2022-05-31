@@ -18,46 +18,75 @@ namespace app {
 		template<typename E>
 		class Dictionary {
 		public:
-			Dictionary(E* dict) : _Ptr(dict) {}
-			size_t size() const {
+			using iterator = decltype(&E::fields.entries->vector[0]);
+			using key_type = decltype(E::fields.entries->vector->key);
+			using value_type = decltype(E::fields.entries->vector->value);
+			constexpr Dictionary(E* dict) : _Ptr(dict) {}
+			constexpr size_t size() const {
+				if (!_Ptr) return 0;
 				auto pDict = (Dictionary_2_SystemTypes_ISystemType_*)_Ptr;
 				return ((size_t(*)(void*, const void*))(pDict->klass->vtable.get_Count.methodPtr))(pDict, pDict->klass->vtable.get_Count.method);
 			}
-			auto begin() { return _Ptr->fields.entries->vector; }
-			auto end() { return _Ptr->fields.entries->vector + size(); }
+			constexpr iterator begin() const {
+				if (!_Ptr) return nullptr;
+				return _Ptr->fields.entries->vector;
+			}
+			constexpr iterator end() const { return begin() + size(); }
+			constexpr auto operator[](key_type&& _Keyval) const {
+				for (auto& kvp : *this) {
+					if (kvp.key == _Keyval) {
+						return kvp.value;
+					}
+				}
+				return (value_type)nullptr;
+			}
+			constexpr E* get() const { return _Ptr; }
 		protected:
 			E* _Ptr;
 		};
 		template<typename E>
 		class Array {
 		public:
-			Array(E* arr) : _Ptr(arr) {}
-			size_t size() const {
+			using iterator = decltype(&E::vector[0]);
+			constexpr Array(E* arr) : _Ptr(arr) {}
+			constexpr size_t size() const {
+				if (!_Ptr) return 0;
 				if (_Ptr->bounds)
 					return _Ptr->bounds->length;
 				return _Ptr->max_length;
 			}
-			auto begin() { return _Ptr->vector; }
-			auto end() { return _Ptr->vector + size(); }
-			auto& operator[](const size_t _Pos) { return begin()[_Pos]; }
+			constexpr iterator begin() const {
+				if (!_Ptr) return nullptr;
+				return _Ptr->vector;
+			}
+			constexpr iterator end() const { return begin() + size(); }
+			constexpr auto& operator[](const size_t _Pos) const { return begin()[_Pos]; }
+			constexpr E* get() const { return _Ptr; }
 		protected:
 			E* _Ptr;
 		};
 		template<typename E>
 		class List {
 		public:
-			List(E* list) : _Ptr(list) {}
-			size_t size() const {
+			using iterator = decltype(&E::fields._items->vector[0]);
+			constexpr List(E* list) : _Ptr(list) {}
+			constexpr size_t size() const {
+				if (!_Ptr) return 0;
 				auto pList = (List_1_PlayerTask_*)_Ptr;
 				return ((size_t(*)(void*, const void*))(pList->klass->vtable.get_Count.methodPtr))(pList, pList->klass->vtable.get_Count.method);
 			}
-			auto clear() {
+			constexpr void clear() {
+				if (!_Ptr) return;
 				auto pList = (List_1_PlayerTask_*)_Ptr;
-				((void(*)(void*, const void*))(pList->klass->vtable.Clear.methodPtr))(pList, pList->klass->vtable.get_Count.method);
+				((void(*)(void*, const void*))(pList->klass->vtable.Clear.methodPtr))(pList, pList->klass->vtable.Clear.method);
 			}
-			auto begin() { return _Ptr->fields._items->vector; }
-			auto end() { return _Ptr->fields._items->vector + size(); }
-			auto& operator[](const size_t _Pos) { return begin()[_Pos]; }
+			constexpr iterator begin() const {
+				if (!_Ptr) return nullptr;
+				return _Ptr->fields._items->vector;
+			}
+			constexpr iterator end() const { return begin() + size(); }
+			constexpr auto& operator[](const size_t _Pos) const { return begin()[_Pos]; }
+			constexpr E* get() const { return _Ptr; }
 		protected:
 			E* _Ptr;
 		};

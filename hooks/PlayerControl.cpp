@@ -252,6 +252,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 	State.rawEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 	State.liveReplayEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+	State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
 
 	PlayerControl_MurderPlayer(__this, target, method);
 }

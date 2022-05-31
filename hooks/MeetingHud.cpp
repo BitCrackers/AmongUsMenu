@@ -5,16 +5,15 @@
 #include "logger.h"
 #include <chrono>
 
-static app::Type* voteSpreaderType;
+static app::Type* voteSpreaderType = nullptr;
 constexpr Settings::VotedFor HasNotVoted = 255, MissedVote = 254, SkippedVote = 253, DeadVote = 252;
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.clear();
 	State.InMeeting = true;
 
-	if (!voteSpreaderType) {
-		voteSpreaderType = app::Type_GetType(convert_to_string(translate_type_name("VoteSpreader, Assembly-CSharp")), nullptr);
-	}
+	static std::string strVoteSpreaderType = translate_type_name("VoteSpreader, Assembly-CSharp");
+	voteSpreaderType = app::Type_GetType(convert_to_string(strVoteSpreaderType), nullptr);
 
 	MeetingHud_Awake(__this, method);
 }
@@ -75,6 +74,10 @@ static void Transform_RevealAnonymousVotes(app::Transform* transform, Settings::
 void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, MethodInfo* method) {
 	// remove all votes before populating results
 	for (auto votedForArea : il2cpp::Array(__this->fields.playerStates)) {
+        if (!votedForArea) {
+			// oops: game bug
+			continue;
+		}
 		auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 		Transform_RemoveAllVotes(transform);
 	}
@@ -115,6 +118,10 @@ void RevealAnonymousVotes() {
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 	il2cpp::Array playerStates(__this->fields.playerStates);
 	for (auto playerVoteArea : playerStates) {
+		if (!playerVoteArea) {
+			// oops: game bug
+			continue;
+		}
 		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
@@ -145,7 +152,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		bool isVotingState = !isDiscussionState &&
 							((__this->fields.discussionTimer - (*Game::pGameOptionsData)->fields.DiscussionTime) < (*Game::pGameOptionsData)->fields.VotingTime); //Voting phase
 
-		if (playerVoteArea && playerData)
+		if (playerData)
 		{
 			bool didVote = (playerVoteArea->fields.VotedFor != HasNotVoted);
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
@@ -205,6 +212,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		}
 
 		for (auto votedForArea : playerStates) {
+			if (!votedForArea) {
+				// oops: game bug
+				continue;
+			}
 			auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
 			auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
 			if (!voteSpreader) continue;

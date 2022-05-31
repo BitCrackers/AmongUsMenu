@@ -257,23 +257,23 @@ ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return OnlineInLobby && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return OnlineInLobby && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsHost() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
 	return app::InnerNetClient_get_AmHost((InnerNetClient*)(*Game::pAmongUsClient), NULL);
 }
 
 bool IsInGame() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return (LocalInGame || OnlineInGame || TutorialScene) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return (LocalInGame || OnlineInGame || TutorialScene) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsInMultiplayerGame() {
-	if ((*Game::pAmongUsClient) == nullptr) return false;
-	return (LocalInGame || OnlineInGame) && (*Game::pShipStatus) && (*Game::pLocalPlayer);
+	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
@@ -294,9 +294,7 @@ PlayerControl* GetPlayerControlById(uint8_t id) {
 }
 
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
-	il2cpp::Array deadBodyArray = (*Game::pShipStatus)->fields.AllDoors;
-
-	for (auto door : deadBodyArray)
+	for (auto door : il2cpp::Array((*Game::pShipStatus)->fields.AllDoors))
 	{
 		if (door->fields.Room == room)
 		{
@@ -321,8 +319,6 @@ il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData() {
 
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies() {
 	static std::string deadBodyType = translate_type_name("DeadBody, Assembly-CSharp");
-
-	std::vector<DeadBody*> deadBodies = std::vector<DeadBody*>();
 
 	Type* deadBody_Type = app::Type_GetType(convert_to_string(deadBodyType), NULL);
 	return (DeadBody__Array*)app::Object_1_FindObjectsOfType(deadBody_Type, NULL);
@@ -486,35 +482,24 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
+	if (Object_1_IsNull((Object_1*)playerInfo->fields._object)) {
+		// TODO: Replace all "playerInfo->fields._object" with "GameData_PlayerInfo_get_Object(playerInfo)"
+		return std::nullopt;
+	}
 	return PlayerControl_GetTruePosition(playerInfo->fields._object, NULL);
 }
 
-std::vector<Camera*> GetAllCameras() {
-	auto cameras = std::vector<Camera*>();
-
-	int32_t cameraCount = app::Camera_get_allCamerasCount(NULL);
-	Camera__Array* cameraArray = (Camera__Array*)il2cpp_array_new((Il2CppClass*)app::Camera__TypeInfo, cameraCount);
-	int32_t returnedCount = app::Camera_GetAllCameras(cameraArray, NULL);
-
-	for (int32_t i = 0; i < returnedCount; i++)
-		cameras.push_back(cameraArray->vector[i]);
-
-	return cameras;
+il2cpp::Array<Camera__Array> GetAllCameras() {
+	int32_t cameraCount = app::Camera_get_allCamerasCount(nullptr);
+	il2cpp::Array cameraArray = (Camera__Array*)il2cpp_array_new((Il2CppClass*)app::Camera__TypeInfo, cameraCount);
+	int32_t returnedCount = app::Camera_GetAllCameras(cameraArray.get(), nullptr);
+	assert(returnedCount == cameraCount);
+	return cameraArray;
 }
 
-std::vector<ClientData*> GetAllClients()
+il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients()
 {
-	static ClientData* (*getItem)(List_1_InnerNet_ClientData_*, int32_t, MethodInfo*) = decltype(getItem)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "InnerNet.ClientData", "get_Item", "System.Int32"));
-	static int32_t(*getCount)(List_1_InnerNet_ClientData_*, MethodInfo*) = decltype(getCount)(find_method((Il2CppClass*)(*Game::pAmongUsClient)->fields._.allClients->klass, "System.Int32", "get_Count", ""));
-
-	std::vector<ClientData*> clients = std::vector<ClientData*>();
-	auto allClients = (*Game::pAmongUsClient)->fields._.allClients;
-
-	if (getItem != NULL && getCount != NULL)
-		for (int i = 0; i < getCount(allClients, NULL); i++)
-			clients.push_back(getItem(allClients, i, NULL));
-
-	return clients;
+	return (*Game::pAmongUsClient)->fields._.allClients;
 }
 
 Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
@@ -625,7 +610,7 @@ int GetRandomColorId()
 			if (colorAvailable)
 				availableColors.push_back((int)i);
 		}
-
+		assert(availableColors.size() > 0);
 		colorId = availableColors.at(randi(0, (int)availableColors.size() - 1));
 	}
 	else
@@ -662,22 +647,16 @@ void ResetOriginalAppearance()
 	State.originalNamePlate = nullptr;
 }
 
-GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted) {
+GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted /* = false */) {
 	if (!player) return nullptr;
-	GameData_PlayerOutfit* playerOutfit = nullptr;
-	for (auto& kvp : il2cpp::Dictionary(player->fields.Outfits)) {
-		if (kvp.key == PlayerOutfitType__Enum::Default) {
-			if(playerOutfit == nullptr)
-				playerOutfit = kvp.value;
-			if(!includeShapeshifted)
-				break;
-		}
-		if (kvp.key == PlayerOutfitType__Enum::Shapeshifted && !convert_from_string(kvp.value->fields._playerName).empty()) {
-			playerOutfit = kvp.value;
-			break;
+	const il2cpp::Dictionary dic(player->fields.Outfits);
+	if (includeShapeshifted) {
+		auto playerOutfit = dic[PlayerOutfitType__Enum::Shapeshifted];
+		if (playerOutfit && !convert_from_string(playerOutfit->fields._playerName).empty()) {
+			return playerOutfit;
 		}
 	}
-	return playerOutfit;
+	return dic[PlayerOutfitType__Enum::Default];
 }
 
 bool PlayerIsImpostor(GameData_PlayerInfo* player) {
@@ -812,4 +791,14 @@ void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::ch
 float getMapXOffsetSkeld(float x)
 {
 	return (State.mapType == Settings::MapType::Ship && State.FlipSkeld) ? x - 50.0f : x;
+}
+
+bool Object_1_IsNotNull(app::Object_1* obj)
+{
+	return app::Object_1_op_Implicit(obj, nullptr);
+}
+
+bool Object_1_IsNull(app::Object_1* obj)
+{
+	return !Object_1_IsNotNull(obj);
 }

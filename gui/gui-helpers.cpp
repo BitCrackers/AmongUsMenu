@@ -216,20 +216,22 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 	if (window->SkipItems)
 		return false;
 
-	if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PLAY).iconImage.shaderResourceView,
-		ImVec2(icons.at(ICON_TYPES::PLAY).iconImage.imageWidth * icons.at(ICON_TYPES::PLAY).scale,
-			icons.at(ICON_TYPES::PLAY).iconImage.imageHeight * icons.at(ICON_TYPES::PLAY).scale)))
-	{
-		State.Replay_IsPlaying = true;
+	if (!State.Replay_IsLive && !State.Replay_IsPlaying) {
+		const auto& playIcon = icons.at(ICON_TYPES::PLAY);
+		const auto& iconSize = ImVec2((float)playIcon.iconImage.imageWidth, (float)playIcon.iconImage.imageHeight) * playIcon.scale;
+		if (ImGui::ImageButton((ImTextureID)playIcon.iconImage.shaderResourceView, iconSize))
+		{
+			State.Replay_IsPlaying = true;
+		}
 	}
-
-	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
-
-	if (ImGui::ImageButton((void*)icons.at(ICON_TYPES::PAUSE).iconImage.shaderResourceView,
-		ImVec2(icons.at(ICON_TYPES::PAUSE).iconImage.imageWidth * icons.at(ICON_TYPES::PAUSE).scale,
-			icons.at(ICON_TYPES::PAUSE).iconImage.imageHeight * icons.at(ICON_TYPES::PAUSE).scale)))
-	{
-		State.Replay_IsPlaying = State.Replay_IsLive = false;
+	else {
+		// Live or Playing
+		const auto& pauseIcon = icons.at(ICON_TYPES::PAUSE);
+		const auto& iconSize = ImVec2((float)pauseIcon.iconImage.imageWidth, (float)pauseIcon.iconImage.imageHeight) * pauseIcon.scale;
+		if (ImGui::ImageButton((ImTextureID)pauseIcon.iconImage.shaderResourceView, iconSize))
+		{
+			State.Replay_IsPlaying = State.Replay_IsLive = false;
+		}
 	}
 
 	ImGui::SameLine(0.0f * State.dpiScale, 1.0f * State.dpiScale);
@@ -278,21 +280,22 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 	// Slider behavior
 	ImRect grab_bb;
 	const bool value_changed = SliderBehavior(frame_bb, id, ImGuiDataType_S64, p_data, p_min, p_max, nullptr, flags | ImGuiSliderFlags_NoRoundToFormat, &grab_bb);
-	if (value_changed)
+	if (value_changed) {
 		MarkItemEdited(id);
 
-	// check if new current timestamp is matching the live timestamp
-	// this logic makes sure that we can switch between live and replay mode
-	auto newMatchCurrent = std::chrono::time_point_cast<std::chrono::seconds>(State.MatchCurrent).time_since_epoch().count();
-	auto matchLiveMs = std::chrono::time_point_cast<std::chrono::seconds>(State.MatchLive).time_since_epoch().count();
-	if (newMatchCurrent == matchLiveMs)
-	{
-		State.Replay_IsLive = true;
-		State.Replay_IsPlaying = false;
-	}
-	else
-	{
-		State.Replay_IsLive = false;
+		// check if new current timestamp is matching the live timestamp
+		// this logic makes sure that we can switch between live and replay mode
+		auto newMatchCurrent = std::chrono::time_point_cast<std::chrono::seconds>(State.MatchCurrent);
+		auto matchLiveMs = std::chrono::time_point_cast<std::chrono::seconds>(State.MatchLive);
+		if (newMatchCurrent == matchLiveMs)
+		{
+			State.Replay_IsLive = true;
+			State.Replay_IsPlaying = false;
+		}
+		else
+		{
+			State.Replay_IsLive = false;
+		}
 	}
 
 	// Render grab
