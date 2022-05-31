@@ -23,7 +23,7 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 
 	if (State.Replay_ClearAfterMeeting)
 	{
-		Replay::Reset();
+		Replay::Reset(false);
 	}
 
 	MeetingHud_Close(__this, method);

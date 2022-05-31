@@ -7,7 +7,7 @@ namespace Replay
 {
 	extern std::mutex replayEventMutex;
 	void Init();
-	void Reset();
+	void Reset(bool all = true);
 	void Render();
 
 	struct WalkEvent_LineData
