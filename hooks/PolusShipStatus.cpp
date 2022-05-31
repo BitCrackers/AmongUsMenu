@@ -12,11 +12,6 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 
 	Replay::Reset();
 
-	if (Constants_ShouldFlipSkeld(NULL))
-		State.FlipSkeld = true;
-	else
-		State.FlipSkeld = false;
-
 	State.MatchStart = std::chrono::system_clock::now();
 	State.MatchCurrent = State.MatchStart;
 
