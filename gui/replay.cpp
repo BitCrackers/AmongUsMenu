@@ -60,7 +60,7 @@ namespace Replay
 		}
 	}
 
-	void Reset()
+	void Reset(bool all /* = true */)
 	{
 		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 		for (auto& e : State.liveReplayEvents)
@@ -79,7 +79,8 @@ namespace Replay
 		for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
 		{
 			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
-			State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
+			if (all)
+				State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
 		}
 
 		// Set this to true as the default value
