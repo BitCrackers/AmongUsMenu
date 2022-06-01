@@ -67,10 +67,12 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
-            ImGui::SameLine();
-            if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
-                State.Save();
-                RevealAnonymousVotes();
+            if (!IsInGame() && !IsInLobby() || (*Game::pGameOptionsData)->fields.AnonymousVotes) {
+                ImGui::SameLine();
+                if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
+                    State.Save();
+                    RevealAnonymousVotes();
+                }
             }
 
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {

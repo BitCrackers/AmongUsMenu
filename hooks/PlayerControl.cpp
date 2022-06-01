@@ -208,12 +208,14 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			espPlayerData.Position = WorldToScreen(playerPos);
 			if (outfit != NULL)
 			{
-				espPlayerData.Color = AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId));
+				espPlayerData.Color = State.ShowEsp_RoleBased == false ? AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId))
+					: AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
 				espPlayerData.Name = convert_from_string(outfit->fields._playerName);
 			}
 			else
 			{
-				espPlayerData.Color = ImVec4(0.f, 0.f, 0.f, 1.f);
+				espPlayerData.Color = State.ShowEsp_RoleBased == false ? ImVec4(0.f, 0.f, 0.f, 1.f)
+					: AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
 				espPlayerData.Name = "<Unknown>";
 			}
 			espPlayerData.OnScreen = IsWithinScreenBounds(playerPos);
