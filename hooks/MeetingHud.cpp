@@ -86,15 +86,16 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 		Transform_RemoveAllVotes(transform);
 	}
 
+	if (auto exiled = __this->fields.exiledPlayer; exiled != nullptr) {
+		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+		State.replayDeathTimePerPlayer[exiled->fields.PlayerId] = std::chrono::system_clock::now();
+	}
+
 	auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
 	if (prevAnonymousVotes && State.RevealAnonymousVotes)
 		(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
-	__try {
-		MeetingHud_PopulateResults(__this, states, method);
-	}
-	__finally {
-		(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
-	}
+	MeetingHud_PopulateResults(__this, states, method);
+	(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
 }
 
 void RevealAnonymousVotes() {
