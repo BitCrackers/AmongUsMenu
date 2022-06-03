@@ -23,7 +23,9 @@ void AUMLogger::Create()
 void AUMLogger::Write(std::string verbosity, std::string source, std::string message)
 {
 	std::stringstream ss;
-	ss << std::format("[{:%EX}]", std::chrono::zoned_time(std::chrono::current_zone(), std::chrono::system_clock::now()));
+	// FIXME: std::chrono::current_zone requires Windows 10 version 1903/19H1 or later.
+	// ss << std::format("[{:%EX}]", std::chrono::zoned_time(std::chrono::current_zone(), std::chrono::system_clock::now()));
+	ss << std::format("[{:%EX}]", std::chrono::system_clock::now());
 	ss << "[" << verbosity << " - " << source << "] " << message << std::endl;
 	std::cout << ss.str();
 
