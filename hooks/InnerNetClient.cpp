@@ -201,19 +201,30 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
     CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }
 
-void dInnerNetClient_StartEndGame(InnerNetClient* __this, MethodInfo* method) {
-    State.aumUsers.clear();
-
-    std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+static void onGameEnd() {
+    LOG_DEBUG("Reset All");
     Replay::Reset();
-
+    std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
+    State.aumUsers.clear();
     for (auto& e : State.rawEvents)
         e.reset();
     State.rawEvents.clear();
 
     State.MatchEnd = std::chrono::system_clock::now();
+}
 
-    InnerNetClient_StartEndGame(__this, method);
+void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, MethodInfo* method) {
+    onGameEnd();
+    AmongUsClient_OnGameEnd(__this, endGameResult, method);
+}
+
+void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
+    // IsInGame()
+    if (__this->fields.GameState == InnerNetClient_GameStates__Enum::Started
+        || __this->fields.GameMode == GameModes__Enum::FreePlay) {
+        onGameEnd();
+    }
+    InnerNetClient_DisconnectInternal(__this, reason, stringReason, method);
 }
 
 void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {

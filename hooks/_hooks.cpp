@@ -156,6 +156,8 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
 	HOOKFUNC(SaveManager_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
+	HOOKFUNC(AmongUsClient_OnGameEnd);
+	HOOKFUNC(InnerNetClient_DisconnectInternal);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -236,6 +238,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	UNHOOKFUNC(PlayerControl_TurnOnProtection);
+	UNHOOKFUNC(AmongUsClient_OnGameEnd);
+	UNHOOKFUNC(InnerNetClient_DisconnectInternal);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

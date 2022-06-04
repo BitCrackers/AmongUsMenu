@@ -174,7 +174,7 @@ DO_APP_FUNC(void, MessageWriter_EndMessage, (MessageWriter* __this, MethodInfo* 
 DO_APP_FUNC(void, AccountTab_Open, (AccountTab* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountTab::Open()");
 DO_APP_FUNC(void, FullAccount_CanSetCustomName, (FullAccount* __this, bool canSetName, MethodInfo* method), "Assembly-CSharp, System.Void FullAccount::CanSetCustomName(System.Boolean)");
 DO_APP_FUNC(void, FollowerCamera_Update, (FollowerCamera* __this, MethodInfo* method), "Assembly-CSharp, System.Void FollowerCamera::Update()");
-DO_APP_FUNC(MessageWriter*, InnerNetClient_StartEndGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, Hazel.MessageWriter InnerNet.InnerNetClient::StartEndGame()");
+DO_APP_FUNC(void, AmongUsClient_OnGameEnd, (AmongUsClient* __this, Object* endGameResult, MethodInfo* method), "Assembly-CSharp, System.Void AmongUsClient::OnGameEnd(EndGameResult)");
 
 DO_APP_FUNC(void, Debug_Log, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::Log(System.Object)");
 DO_APP_FUNC(void, Debug_LogError, (Object* message, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Debug::LogError(System.Object)");
@@ -201,6 +201,7 @@ DO_APP_FUNC(void, RoleManager_SelectRoles, (RoleManager* __this, MethodInfo* met
 DO_APP_FUNC(void, RoleManager_AssignRolesForTeam, (List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method), "Assembly-CSharp, System.Void RoleManager::AssignRolesForTeam(System.Collections.Generic.List<GameData.PlayerInfo>, RoleOptionsData, RoleTeamTypes, System.Int32, System.Nullable<RoleTypes>)");
 DO_APP_FUNC(void, RoleManager_AssignRolesFromList, (List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method), "Assembly-CSharp, System.Void RoleManager::AssignRolesFromList(System.Collections.Generic.List<GameData.PlayerInfo>, System.Int32, System.Collections.Generic.List<RoleTypes>, System.Int32&)");
 DO_APP_FUNC(void, InnerNetClient_EnqueueDisconnect, (InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::EnqueueDisconnect(DisconnectReasons, System.String)");
+DO_APP_FUNC(void, InnerNetClient_DisconnectInternal, (InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::DisconnectInternal(DisconnectReasons, System.String)");
 
 DO_APP_FUNC(void, PlayerPhysics_FixedUpdate, (PlayerPhysics* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::FixedUpdate()");
 
