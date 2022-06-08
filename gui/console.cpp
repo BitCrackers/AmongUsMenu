@@ -73,8 +73,8 @@ namespace ConsoleGui
 			}
 		}
 
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		size_t i = State.liveReplayEvents.size() - 1;
+		synchronized(Replay::replayEventMutex) {
+			size_t i = State.liveReplayEvents.size() - 1;
 			for (auto rit = State.liveReplayEvents.rbegin(); rit != State.liveReplayEvents.rend(); ++rit, --i) {
 				EventInterface* evt = (*rit).get();
 				if (evt == NULL)
@@ -101,6 +101,7 @@ namespace ConsoleGui
 				ImGui::SameLine();
 				evt->Output();
 			}
+		}
 		ImGui::EndChild();
 		ImGui::End();
 	}

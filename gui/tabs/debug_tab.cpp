@@ -42,8 +42,10 @@ namespace DebugTab {
 
 			if (ImGui::CollapsingHeader("Replay##debug"))
 			{
-				ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
-				ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
+				synchronized(Replay::replayEventMutex) {
+					ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
+					ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
+				}
 
 				ImGui::Text("ReplayMatchStart: %s", std::format("{:%OH:%OM:%OS}", State.MatchStart).c_str());
 				ImGui::Text("ReplayMatchCurrent: %s", std::format("{:%OH:%OM:%OS}", State.MatchCurrent).c_str());
@@ -53,6 +55,7 @@ namespace DebugTab {
 
 				if (ImGui::Button("Re-simplify polylines (check console)"))
 				{
+					SYNCHRONIZED(Replay::replayEventMutex);
 					for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
 					{
 						std::vector<ImVec2> resimplifiedPoints;

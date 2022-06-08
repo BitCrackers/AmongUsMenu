@@ -4,6 +4,23 @@
 #include "_events.h"
 #include <filesystem>
 
+#define _CONCAT4(a,b,c,d)		a##b##c##d
+#define CONCAT4(a,b,c,d)		_CONCAT4(a,b,c,d)
+
+#define _synchronized(lock, name, mtx)	if (lock name(mtx); true) // for(lock name(mtx); name; name.unlock())
+#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, CONCAT4(rdLock_, __COUNTER__, _at_, __LINE__), smtx)
+#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, CONCAT4(lock_, __COUNTER__, _at_, __LINE__), mtx)
+/*
+	it mimics the behaviour of the Java construct
+	"synchronized(this) { }"
+*/
+#define synchronized(mtx)	synchronized_write(mtx)
+/*
+	to secure a code-block, use the following syntax:
+	"{ SYNCHRONIZED(mutex); <commands> }"
+*/
+#define SYNCHRONIZED(mtx)	std::scoped_lock CONCAT4(lock_, __COUNTER__, _at_, __LINE__)(mtx)
+
 struct CorrectedColor32 {
 	uint8_t r;
 	uint8_t g;

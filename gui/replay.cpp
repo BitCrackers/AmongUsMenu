@@ -62,25 +62,26 @@ namespace Replay
 
 	void Reset(bool all /* = true */)
 	{
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		for (auto& e : State.liveReplayEvents)
-			e.reset();
-		State.liveReplayEvents.clear();
-		for (auto& pair : State.replayWalkPolylineByPlayer)
-		{
-			pair.second.playerId = 0;
-			pair.second.colorId = 0;
-			pair.second.pendingPoints.clear();
-			pair.second.pendingTimeStamps.clear();
-			pair.second.simplifiedPoints.clear();
-			pair.second.simplifiedTimeStamps.clear();
-		}
+		synchronized(Replay::replayEventMutex) {
+			for (auto& e : State.liveReplayEvents)
+				e.reset();
+			State.liveReplayEvents.clear();
+			for (auto& pair : State.replayWalkPolylineByPlayer)
+			{
+				pair.second.playerId = 0;
+				pair.second.colorId = 0;
+				pair.second.pendingPoints.clear();
+				pair.second.pendingTimeStamps.clear();
+				pair.second.simplifiedPoints.clear();
+				pair.second.simplifiedTimeStamps.clear();
+			}
 
-		for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
-		{
-			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
-			if (all)
-				State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
+			for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+			{
+				State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
+				if (all)
+					State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
+			}
 		}
 
 		// Set this to true as the default value
@@ -514,8 +515,8 @@ namespace Replay
 			minTimeFilter = State.MatchCurrent - seconds;
 		}
 
+		synchronized(Replay::replayEventMutex)
 		{
-			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
 			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
 			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);

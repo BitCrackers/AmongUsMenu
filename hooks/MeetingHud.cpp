@@ -87,8 +87,9 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 	}
 
 	if (auto exiled = __this->fields.exiledPlayer; exiled != nullptr) {
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		State.replayDeathTimePerPlayer[exiled->fields.PlayerId] = std::chrono::system_clock::now();
+		synchronized(Replay::replayEventMutex) {
+			State.replayDeathTimePerPlayer[exiled->fields.PlayerId] = std::chrono::system_clock::now();
+		}
 	}
 
 	auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
@@ -160,9 +161,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
 			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
 			{
-				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-				State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
-				State.liveReplayEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				synchronized(Replay::replayEventMutex) {
+					State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+					State.liveReplayEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+				}
 				State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
 				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
 
