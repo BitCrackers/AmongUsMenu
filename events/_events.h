@@ -6,20 +6,24 @@
 
 using namespace app;
 
-#define EVENT_TYPES_SIZE 11
+#define ALL_EVENTS \
+	ADD_EVENT (KILL, "Kill"), \
+	ADD_EVENT (VENT, "Vent"), \
+	ADD_EVENT (TASK, "Task"), \
+	ADD_EVENT (REPORT, "Report"), \
+	ADD_EVENT (MEETING, "Meeting"), \
+	ADD_EVENT (VOTE, "Vote"), \
+	ADD_EVENT (CHEAT, "Cheat"), \
+	ADD_EVENT (DISCONNECT, "Disconnect"), \
+	ADD_EVENT (SHAPESHIFT, "Shapeshift"), \
+	ADD_EVENT (PROTECTPLAYER, "Protect"), \
+	ADD_EVENT (WALK, "Walk")
 
 enum class EVENT_TYPES {
-	EVENT_KILL,
-	EVENT_VENT,
-	EVENT_TASK,
-	EVENT_REPORT,
-	EVENT_MEETING,
-	EVENT_VOTE,
-	EVENT_CHEAT,
-	EVENT_DISCONNECT,
-	EVENT_SHAPESHIFT,
-	EVENT_PROTECTPLAYER,
-	EVENT_WALK
+#define ADD_EVENT(name, desc) EVENT_ ## name
+	ALL_EVENTS,
+#undef ADD_EVENT
+	EVENT_TYPES_SIZE
 };
 
 enum class VENT_ACTIONS {

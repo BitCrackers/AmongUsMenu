@@ -7,19 +7,11 @@
 
 namespace ConsoleGui
 {
-	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> event_filter =
 	{
-		{"Kill", false},
-		{"Vent", false},
-		{"Task", false},
-		{"Report", false},
-		{"Meeting", false},
-		{"Vote", false},
-		{"Cheat", false},
-		{"Disconnect", false},
-		{"Shapeshift", false},
-		{"Protect", false}
+#define ADD_EVENT(name, desc) {desc, false}
+		ALL_EVENTS
+#undef ADD_EVENT
 	};
 
 	std::vector<std::pair<PlayerSelection, bool>> player_filter;
@@ -34,6 +26,14 @@ namespace ConsoleGui
 			// setup player_filter list based on MAX_PLAYERS definition
 			for (int i = 0; i < MAX_PLAYERS; i++) {
 				ConsoleGui::player_filter.push_back({ PlayerSelection(), false });
+			}
+			for (auto it = event_filter.begin(); it != event_filter.end(); it++) {
+				// Exclude the following events
+				switch (static_cast<EVENT_TYPES>(it - event_filter.begin())) {
+				case EVENT_TYPES::EVENT_WALK:
+					it->first = "";
+					break;
+				}
 			}
 			init = true;
 		}

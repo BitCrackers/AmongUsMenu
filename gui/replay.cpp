@@ -17,20 +17,11 @@ namespace Replay
 	// failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
 	std::mutex replayEventMutex;
 
-	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> event_filter =
 	{
-		{"Kill", false},
-		{"Vent", false},
-		{"Task", false},
-		{"Report", false},
-		{"Meeting", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"Walk", false}
+		#define ADD_EVENT(name, desc) {desc, false}
+		ALL_EVENTS
+		#undef ADD_EVENT
 	};
 
 	std::vector<std::pair<PlayerSelection, bool>> player_filter;
@@ -55,6 +46,18 @@ namespace Replay
 			// setup player_filter list based on MAX_PLAYERS definition
 			for (int i = 0; i < MAX_PLAYERS; i++) {
 				Replay::player_filter.push_back({ PlayerSelection(), false });
+			}
+			for (auto it = event_filter.begin(); it != event_filter.end(); it++) {
+				// Exclude the following events
+				switch (static_cast<EVENT_TYPES>(it - event_filter.begin())) {
+				case EVENT_TYPES::EVENT_VOTE:
+				case EVENT_TYPES::EVENT_CHEAT:
+				case EVENT_TYPES::EVENT_DISCONNECT:
+				case EVENT_TYPES::EVENT_SHAPESHIFT:
+				case EVENT_TYPES::EVENT_PROTECTPLAYER:
+					it->first = "";
+					break;
+				}
 			}
 			init = true;
 		}
