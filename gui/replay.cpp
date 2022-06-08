@@ -249,12 +249,13 @@ namespace Replay
 				for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.pendingTimeStamps.rbegin(); riter != plrLineData.pendingTimeStamps.rend(); riter++, lastTimeIndex--)
 				{
 					const std::chrono::system_clock::time_point& timestamp = *riter;
-					if (timestamp < maxTimeFilter)
+					if (timestamp <= maxTimeFilter)
 					{
 						playerPos = plrLineData.pendingPoints[lastTimeIndex];
 						if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 						{
 							//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+							break;
 						}
 						foundMatchingPlayerPos = true;
 						break;
@@ -267,12 +268,13 @@ namespace Replay
 					for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.simplifiedTimeStamps.rbegin(); riter != plrLineData.simplifiedTimeStamps.rend(); riter++, lastTimeIndex--)
 					{
 						const std::chrono::system_clock::time_point& timestamp = *riter;
-						if (timestamp < maxTimeFilter)
+						if (timestamp <= maxTimeFilter)
 						{
 							playerPos = plrLineData.simplifiedPoints[lastTimeIndex];
 							if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 							{
 								//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+								break;
 							}
 							foundMatchingPlayerPos = true;
 							break;
@@ -514,26 +516,6 @@ namespace Replay
 			}
 		}
 
-		std::chrono::system_clock::time_point minTimeFilter = State.MatchStart;
-		if (State.Replay_ShowOnlyLastSeconds)
-		{
-			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
-			minTimeFilter = State.MatchCurrent - seconds;
-		}
-
-		synchronized(Replay::replayEventMutex)
-		{
-			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		}
-		ImGui::EndChild();
-
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2(1.0f, 5.0f) * State.dpiScale);
-
-		ImGui::BeginChild("replay#control");
-		
 		std::string fmt("placeholder");
 		State.MatchLive = std::chrono::system_clock::now();
 		if (State.Replay_IsLive && !State.Replay_IsPlaying)
@@ -545,6 +527,27 @@ namespace Replay
 		{
 			fmt = std::format("{:%OH:%OM:%OS}", State.MatchCurrent - State.MatchLive);
 		}
+
+		std::chrono::system_clock::time_point minTimeFilter = State.MatchStart;
+		if (State.Replay_ShowOnlyLastSeconds)
+		{
+			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
+			minTimeFilter = State.MatchCurrent - seconds;
+		}
+
+		synchronized(Replay::replayEventMutex)
+		{
+			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, false, minTimeFilter, true, State.MatchCurrent);
+			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		}
+		ImGui::EndChild();
+
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(1.0f, 5.0f) * State.dpiScale);
+
+		ImGui::BeginChild("replay#control");
+		
 		SliderChrono("##replay_slider", &State.MatchCurrent, &State.MatchStart, &State.MatchLive, fmt, ImGuiSliderFlags_None);
 		
 		ImGui::EndChild();
