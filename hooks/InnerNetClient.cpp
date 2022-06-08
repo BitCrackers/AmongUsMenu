@@ -140,7 +140,6 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
             State.aumUsers.erase(it);
 
         synchronized(Replay::replayEventMutex) {
-        	State.rawEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
         	State.liveReplayEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
         }
     }
@@ -205,12 +204,7 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
 static void onGameEnd() {
     LOG_DEBUG("Reset All");
     Replay::Reset();
-    std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
     State.aumUsers.clear();
-    for (auto& e : State.rawEvents)
-        e.reset();
-    State.rawEvents.clear();
-
     State.MatchEnd = std::chrono::system_clock::now();
 }
 

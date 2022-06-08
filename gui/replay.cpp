@@ -13,7 +13,7 @@
 namespace Replay
 {
 	// NOTE:
-	// any code that modifies State.rawEvents or State.liveReplayEvents or any other collection should use this mutex
+	// any code that modifies State.liveReplayEvents or any other collection should use this mutex
 	// failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
 	std::mutex replayEventMutex;
 
@@ -66,17 +66,22 @@ namespace Replay
 	void Reset(bool all /* = true */)
 	{
 		synchronized(Replay::replayEventMutex) {
-			for (auto& e : State.liveReplayEvents)
-				e.reset();
 			State.liveReplayEvents.clear();
-			for (auto& pair : State.replayWalkPolylineByPlayer)
-			{
-				pair.second.playerId = 0;
-				pair.second.colorId = 0;
-				pair.second.pendingPoints.clear();
-				pair.second.pendingTimeStamps.clear();
-				pair.second.simplifiedPoints.clear();
-				pair.second.simplifiedTimeStamps.clear();
+			if (all) {
+				// free all storage
+				State.liveReplayEvents.shrink_to_fit();
+				std::map<uint8_t, Replay::WalkEvent_LineData>().swap(State.replayWalkPolylineByPlayer);
+			}
+			else {
+				for (auto& pair : State.replayWalkPolylineByPlayer)
+				{
+					pair.second.playerId = 0;
+					pair.second.colorId = 0;
+					pair.second.pendingPoints.clear();
+					pair.second.pendingTimeStamps.clear();
+					pair.second.simplifiedPoints.clear();
+					pair.second.simplifiedTimeStamps.clear();
+				}
 			}
 
 			for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)

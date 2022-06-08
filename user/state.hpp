@@ -106,13 +106,12 @@ public:
     std::chrono::system_clock::time_point MatchEnd;
     std::chrono::system_clock::time_point MatchLive;
     // NOTE:
-    // any code that modifies State.rawEvents or State.liveReplayEvents or any other collection should use the Replay.replayEventMutex
+    // any code that modifies State.liveReplayEvents or any other collection should use the Replay.replayEventMutex
     // failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
-    std::vector<std::unique_ptr<EventInterface>> rawEvents;
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::array<ImVec2, MAX_PLAYERS> lastWalkEventPosPerPlayer;
     std::array<std::chrono::system_clock::time_point, MAX_PLAYERS> replayDeathTimePerPlayer;
-    std::map<int, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
+    std::map<uint8_t, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
     bool Replay_IsPlaying = true;
     bool Replay_IsLive = true;
 

@@ -43,7 +43,11 @@ namespace DebugTab {
 			if (ImGui::CollapsingHeader("Replay##debug"))
 			{
 				synchronized(Replay::replayEventMutex) {
-					ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
+					size_t numWalkPoints = 0;
+					for (const auto& pair : State.replayWalkPolylineByPlayer) {
+						numWalkPoints += pair.second.pendingPoints.size() + pair.second.simplifiedPoints.size();
+					}
+					ImGui::Text("Num Walk Points: %d", numWalkPoints);
 					ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
 				}
 

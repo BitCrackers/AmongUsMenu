@@ -162,7 +162,6 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
 			{
 				synchronized(Replay::replayEventMutex) {
-					State.rawEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 					State.liveReplayEvents.push_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				}
 				State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
