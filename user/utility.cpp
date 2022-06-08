@@ -243,11 +243,11 @@ bool PlayerSelection::is_Disconnected()
 	return this->get_PlayerData()->fields.Disconnected;
 }
 
-ImVec4 AmongUsColorToImVec4(Color color) {
+ImVec4 AmongUsColorToImVec4(const Color& color) {
 	return ImVec4(color.r, color.g, color.b, color.a);
 }
 
-ImVec4 AmongUsColorToImVec4(CorrectedColor32 color) {
+ImVec4 AmongUsColorToImVec4(const CorrectedColor32& color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
@@ -452,10 +452,13 @@ std::filesystem::path getModulePath(HMODULE hModule) {
 }
 
 std::string getGameVersion() {
-	return convert_from_string(app::Application_get_version(NULL));
+	if (app::Application_get_version != nullptr)
+		return convert_from_string(app::Application_get_version(NULL));
+	else
+		return "unavailable";
 }
 
-SystemTypes__Enum GetSystemTypes(Vector2 vector) {
+SystemTypes__Enum GetSystemTypes(const Vector2& vector) {
 	if (*Game::pShipStatus) {
 		auto shipStatus = *Game::pShipStatus;
 		for (auto room : il2cpp::Array(shipStatus->fields._AllRooms_k__BackingField))
@@ -522,12 +525,12 @@ Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
 	return { (spawncenter.x + 1) * (float)(playerId - 5), spawncenter.y * (float)(playerId - 5) };
 }
 
-bool IsAirshipSpawnLocation(Vector2 vec)
+bool IsAirshipSpawnLocation(const Vector2& vec)
 {
 	return (State.mapType == Settings::MapType::Airship);
 }
 
-Vector2 Rotate(Vector2 vec, float degrees)
+Vector2 Rotate(const Vector2& vec, float degrees)
 {
 	float f = 0.017453292f * degrees;
 	float num = cos(f);
@@ -535,7 +538,7 @@ Vector2 Rotate(Vector2 vec, float degrees)
 	return { vec.x * num - num2 * vec.y, vec.x * num2 + num * vec.y };
 }
 
-bool Equals(Vector2 vec1, Vector2 vec2) {
+bool Equals(const Vector2& vec1, const Vector2& vec2) {
 	return vec1.x == vec2.x && vec1.y == vec2.y;
 }
 
@@ -730,13 +733,13 @@ RoleTypes__Enum GetRoleTypesEnum(RoleType role)
 	return RoleTypes__Enum::Crewmate;
 }
 
-float GetDistanceBetweenPoints_Unity(Vector2 p1, Vector2 p2)
+float GetDistanceBetweenPoints_Unity(const Vector2& p1, const Vector2& p2)
 {
 	float dx = p1.x - p2.x, dy = p1.y - p2.y;
 	return sqrtf(dx * dx + dy * dy);
 }
 
-float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2)
+float GetDistanceBetweenPoints_ImGui(const ImVec2& p1, const ImVec2& p2)
 {
 	float dx = p1.x - p2.x, dy = p1.y - p2.y;
 	return sqrtf(dx * dx + dy * dy);
@@ -773,7 +776,7 @@ void DoPolylineSimplification(std::vector<ImVec2>& inPoints, std::vector<std::ch
 		}
 	}
 	// add the last point if it's not also the first point nor has already been added as the last point
-	if ((point.x != prevPoint.x) && (point.y != prevPoint.y))
+	if ((point.x != prevPoint.x) || (point.y != prevPoint.y))
 	{
 		outPoints.push_back(point);
 		outTimeStamps.push_back(timestamp);

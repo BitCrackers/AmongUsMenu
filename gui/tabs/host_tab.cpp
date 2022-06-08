@@ -26,21 +26,21 @@ namespace HostTab {
 					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 					if (outfit == NULL) continue;
 					std::string playerName = convert_from_string(outfit->fields._playerName);
-					if (CustomListBoxInt(playerName.c_str(), &State.assignedRoles[index], ROLE_NAMES, 80 * State.dpiScale))
+					if (CustomListBoxInt(playerName.c_str(), reinterpret_cast<int*>(&State.assignedRoles[index]), ROLE_NAMES, 80 * State.dpiScale))
 					{
-						State.engineers_amount = (int)GetRoleCount((int)RoleType::Engineer);
-						State.scientists_amount = (int)GetRoleCount((int)RoleType::Scientist);
-						State.shapeshifters_amount = (int)GetRoleCount((int)RoleType::Shapeshifter);
-						State.impostors_amount = (int)GetRoleCount((int)RoleType::Impostor);
+						State.engineers_amount = (int)GetRoleCount(RoleType::Engineer);
+						State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
+						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
 						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
-							if(State.assignedRoles[index] == (int)RoleType::Shapeshifter)
-								State.assignedRoles[index] = (int)RoleType::Engineer;
-							else if(State.assignedRoles[index] == (int)RoleType::Impostor)
-								State.assignedRoles[index] = (int)RoleType::Random;
+							if(State.assignedRoles[index] == RoleType::Shapeshifter)
+								State.assignedRoles[index] = RoleType::Engineer;
+							else if(State.assignedRoles[index] == RoleType::Impostor)
+								State.assignedRoles[index] = RoleType::Random;
 						}
-						State.shapeshifters_amount = (int)GetRoleCount((int)RoleType::Shapeshifter);
-						State.impostors_amount = (int)GetRoleCount((int)RoleType::Impostor);
+						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
 
 						if (!IsInGame())
 						{
@@ -103,8 +103,8 @@ namespace HostTab {
 			}
 		}
 	}
-	const ptrdiff_t GetRoleCount(int role)
+	const ptrdiff_t GetRoleCount(RoleType role)
 	{
-		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](int i) {return i == role; });
+		return std::count_if(State.assignedRoles.cbegin(), State.assignedRoles.cend(), [role](RoleType i) {return i == role; });
 	}
 }

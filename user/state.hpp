@@ -123,8 +123,8 @@ public:
     int32_t rpcCooldown = 15;
     int32_t playerKilledId = 0;
 
-    std::vector<PlayerControl*> assignedRolesPlayer = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-    std::vector<int> assignedRoles = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    std::array<PlayerControl*, MAX_PLAYERS> assignedRolesPlayer = {};
+    std::array<RoleType, MAX_PLAYERS> assignedRoles = {};
     int mapHostChoice = -1;
     int impostors_amount = 0;
     int shapeshifters_amount = 0;

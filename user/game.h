@@ -2,7 +2,7 @@
 
 using namespace app;
 
-#define MAX_PLAYERS 15
+constexpr size_t MAX_PLAYERS = 15;
 
 namespace Game {
 	extern AmongUsClient** pAmongUsClient;

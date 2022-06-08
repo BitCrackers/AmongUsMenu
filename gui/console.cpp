@@ -14,7 +14,7 @@ namespace ConsoleGui
 #undef ADD_EVENT
 	};
 
-	std::vector<std::pair<PlayerSelection, bool>> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
 
 	bool init = false;
 	void Init() {
@@ -23,10 +23,6 @@ namespace ConsoleGui
 
 		if (!init)
 		{
-			// setup player_filter list based on MAX_PLAYERS definition
-			for (int i = 0; i < MAX_PLAYERS; i++) {
-				ConsoleGui::player_filter.push_back({ PlayerSelection(), false });
-			}
 			for (auto it = event_filter.begin(); it != event_filter.end(); it++) {
 				// Exclude the following events
 				switch (static_cast<EVENT_TYPES>(it - event_filter.begin())) {

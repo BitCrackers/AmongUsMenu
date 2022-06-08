@@ -33,10 +33,10 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 	{
 		auto role = State.assignedRoles[i];
 		auto player = State.assignedRolesPlayer[i];
-		if (!CanPlayerBeAssignedToRole(player, assignedPlayers) || role == (int)RoleType::Random)
+		if (!CanPlayerBeAssignedToRole(player, assignedPlayers) || role == RoleType::Random)
 			continue;
 
-		auto trueRole = GetRoleTypesEnum((RoleType)role);
+		auto trueRole = GetRoleTypesEnum(role);
 		roleRates.SubtractRole(trueRole);
 
 		PlayerControl_RpcSetRole(player, trueRole, NULL);

@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-ReportDeadBodyEvent::ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position, std::optional<Vector2> targetPosition)
+ReportDeadBodyEvent::ReportDeadBodyEvent(const EVENT_PLAYER& source, const std::optional<EVENT_PLAYER>& target, const Vector2& position, const std::optional<Vector2>& targetPosition)
 	: EventInterface(source, (target.has_value() ? EVENT_TYPES::EVENT_REPORT : EVENT_TYPES::EVENT_MEETING)) {
 	this->target = target;
 	this->position = position;

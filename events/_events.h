@@ -57,16 +57,7 @@ struct EVENT_PLAYER {
 		playerId = playerInfo->fields.PlayerId;
 
 		// rolling GetPlayerOutfit into this func to avoid circular dependencies
-		GameData_PlayerOutfit* outfit = nullptr;
-		for (auto& kvp : il2cpp::Dictionary(playerInfo->fields.Outfits))
-		{
-			if (kvp.key == PlayerOutfitType__Enum::Default)
-			{
-				outfit = kvp.value;
-				break;
-			}
-		}
-
+		GameData_PlayerOutfit* outfit = il2cpp::Dictionary(playerInfo->fields.Outfits)[PlayerOutfitType__Enum::Default];
 		if (outfit != nullptr)
 		{
 			colorId = outfit->fields.ColorId;
@@ -89,7 +80,7 @@ protected:
 	EVENT_PLAYER source;
 	std::chrono::system_clock::time_point timestamp;
 public:
-	EventInterface(EVENT_PLAYER source, EVENT_TYPES eventType) {
+	EventInterface(const EVENT_PLAYER& source, EVENT_TYPES eventType) {
 		this->source = source;
 		this->eventType = eventType;
 		this->timestamp = std::chrono::system_clock::now();
@@ -97,9 +88,9 @@ public:
 	virtual ~EventInterface() {}
 	virtual void Output() = 0;
 	virtual void ColoredEventOutput() = 0;
-	EVENT_TYPES getType() { return this->eventType; }
-	EVENT_PLAYER getSource() { return this->source; }
-	std::chrono::system_clock::time_point GetTimeStamp() { return this->timestamp; }
+	EVENT_TYPES getType() const { return this->eventType; }
+	const EVENT_PLAYER& getSource() const { return this->source; }
+	const std::chrono::system_clock::time_point& GetTimeStamp() const { return this->timestamp; }
 };
 
 class KillEvent : public EventInterface {
@@ -109,7 +100,7 @@ private:
 	Vector2 targetPosition;
 	SystemTypes__Enum systemType;
 public:
-	KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position, Vector2 targetPosition);
+	KillEvent(const EVENT_PLAYER& source, const EVENT_PLAYER& target, const Vector2& position, const Vector2& targetPosition);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
@@ -124,7 +115,7 @@ private:
 	SystemTypes__Enum systemType;
 	VENT_ACTIONS action;
 public:
-	VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action);
+	VentEvent(const EVENT_PLAYER& source, const Vector2& position, VENT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	Vector2 GetPosition() { return this->position; }
@@ -153,7 +144,7 @@ private:
 	Vector2 position;
 	SystemTypes__Enum systemType;
 public:
-	TaskCompletedEvent(EVENT_PLAYER source, std::optional<TaskTypes__Enum> taskType, Vector2 position);
+	TaskCompletedEvent(const EVENT_PLAYER& source, const std::optional<TaskTypes__Enum>& taskType, const Vector2& position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<TaskTypes__Enum> GetTaskType() { return this->taskType; }
@@ -169,7 +160,7 @@ private:
 	std::optional<Vector2> targetPosition;
 	SystemTypes__Enum systemType;
 public:
-	ReportDeadBodyEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target, Vector2 position, std::optional<Vector2> targetPosition);
+	ReportDeadBodyEvent(const EVENT_PLAYER& source, const std::optional<EVENT_PLAYER>& target, const Vector2& position, const std::optional<Vector2>& targetPosition);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
@@ -182,7 +173,7 @@ class CastVoteEvent : public EventInterface {
 private:
 	std::optional<EVENT_PLAYER> target;
 public:
-	CastVoteEvent(EVENT_PLAYER source, std::optional<EVENT_PLAYER> target);
+	CastVoteEvent(const EVENT_PLAYER& source, const std::optional<EVENT_PLAYER>& target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	std::optional<EVENT_PLAYER> GetTarget() { return this->target; }
@@ -192,7 +183,7 @@ class CheatDetectedEvent : public EventInterface {
 private:
 	CHEAT_ACTIONS action;
 public:
-	CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action);
+	CheatDetectedEvent(const EVENT_PLAYER& source, CHEAT_ACTIONS action);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	CHEAT_ACTIONS GetCheatAction() { return this->action; }
@@ -200,7 +191,7 @@ public:
 
 class DisconnectEvent : public EventInterface {
 public:
-	DisconnectEvent(EVENT_PLAYER source);
+	DisconnectEvent(const EVENT_PLAYER& source);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 };
@@ -209,7 +200,7 @@ class ShapeShiftEvent : public EventInterface {
 private:
 	EVENT_PLAYER target;
 public:
-	ShapeShiftEvent(EVENT_PLAYER source, EVENT_PLAYER target);
+	ShapeShiftEvent(const EVENT_PLAYER& source, const EVENT_PLAYER& target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	EVENT_PLAYER GetTarget() { return this->target; }
@@ -219,7 +210,7 @@ class ProtectPlayerEvent : public EventInterface {
 private:
 	EVENT_PLAYER target;
 public:
-	ProtectPlayerEvent(EVENT_PLAYER source, EVENT_PLAYER target);
+	ProtectPlayerEvent(const EVENT_PLAYER& source, const EVENT_PLAYER& target);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	EVENT_PLAYER GetTarget() { return this->target; }
@@ -229,7 +220,7 @@ class WalkEvent : public EventInterface {
 private:
 	Vector2 position;
 public:
-	WalkEvent(EVENT_PLAYER source, Vector2 position);
+	WalkEvent(const EVENT_PLAYER& source, const Vector2& position);
 	virtual void Output() override;
 	virtual void ColoredEventOutput() override;
 	Vector2 GetPosition() { return this->position; }

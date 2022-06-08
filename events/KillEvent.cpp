@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-KillEvent::KillEvent(EVENT_PLAYER source, EVENT_PLAYER target, Vector2 position, Vector2 targetPosition) : EventInterface(source, EVENT_TYPES::EVENT_KILL) {
+KillEvent::KillEvent(const EVENT_PLAYER& source, const EVENT_PLAYER& target, const Vector2& position, const Vector2& targetPosition) : EventInterface(source, EVENT_TYPES::EVENT_KILL) {
 	this->target = target;
 	this->targetPosition = targetPosition;
 	this->position = position;

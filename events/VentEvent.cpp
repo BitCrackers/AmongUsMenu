@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-VentEvent::VentEvent(EVENT_PLAYER source, Vector2 position, VENT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_VENT)
+VentEvent::VentEvent(const EVENT_PLAYER& source, const Vector2& position, VENT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_VENT)
 {
 	this->position = position;
 	this->systemType = GetSystemTypes(position);
