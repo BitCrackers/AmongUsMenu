@@ -261,6 +261,18 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 		State.liveReplayEvents.emplace_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 		State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
 	}
+	do {
+		if (!State.ShowProtections) break;
+		if (!target || target->fields.protectedByGuardian == false)
+			break;
+		if (__this->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId)
+			break; // AmKiller
+		if (auto localData = GetPlayerData(*Game::pLocalPlayer);
+			!localData || !localData->fields.Role
+			|| localData->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel)
+			break; // AmAngel
+		PlayerControl_ShowFailedMurder(target, nullptr);
+	} while (false);
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 

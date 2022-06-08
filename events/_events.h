@@ -44,6 +44,7 @@ struct EVENT_PLAYER {
 	std::string playerName;
 	bool isDead;
 	bool isAngel;
+	bool isProtected;
 
 	EVENT_PLAYER() {
 		playerId = 0;
@@ -51,6 +52,7 @@ struct EVENT_PLAYER {
 		playerName = "";
 		isDead = false;
 		isAngel = false;
+		isProtected = false;
 	}
 
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
@@ -71,6 +73,7 @@ struct EVENT_PLAYER {
 
 		isDead = playerInfo->fields.IsDead;
 		isAngel = (playerInfo->fields.Role) ? playerInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel : false;
+		isProtected = playerInfo->fields._object ? playerInfo->fields._object->fields.protectedByGuardian : false;
 	}
 };
 
