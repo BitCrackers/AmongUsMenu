@@ -140,7 +140,7 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
             State.aumUsers.erase(it);
 
         synchronized(Replay::replayEventMutex) {
-        	State.liveReplayEvents.push_back(std::make_unique<DisconnectEvent>(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+            State.liveReplayEvents.emplace_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
         }
     }
 
