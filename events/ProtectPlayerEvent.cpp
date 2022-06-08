@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-ProtectPlayerEvent::ProtectPlayerEvent(EVENT_PLAYER source, EVENT_PLAYER target) : EventInterface(source, EVENT_TYPES::EVENT_PROTECTPLAYER) {
+ProtectPlayerEvent::ProtectPlayerEvent(const EVENT_PLAYER& source, const EVENT_PLAYER& target) : EventInterface(source, EVENT_TYPES::EVENT_PROTECTPLAYER) {
 	this->target = target;
 }
 

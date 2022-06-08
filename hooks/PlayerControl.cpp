@@ -16,10 +16,9 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	for (auto normalPlayerTask : normalPlayerTasks)
 		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-	State.rawEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-	State.liveReplayEvents.push_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
-
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new TaskCompletedEvent(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+	}
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
@@ -154,10 +153,14 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			ImVec2 localScreenPosition = WorldToScreen(localPos);
 
 			Vector2 playerPos = PlayerControl_GetTruePosition(__this, nullptr);
-			Vector2 prevPlayerPos = {State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x, State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y};
 
-			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].x = playerPos.x;
-			State.lastWalkEventPosPerPlayer[__this->fields.PlayerId].y = playerPos.y;
+			Vector2 prevPlayerPos;
+			synchronized(Replay::replayEventMutex) {
+				auto& lastPos = State.lastWalkEventPosPerPlayer[__this->fields.PlayerId];
+				prevPlayerPos = { lastPos.x, lastPos.y };
+				lastPos.x = playerPos.x;
+				lastPos.y = playerPos.y;
+			}
 
 			// only update our counter if fixedUpdate is executed on local player
 			if (__this == *Game::pLocalPlayer)
@@ -174,32 +177,35 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			if (!State.InMeeting)
 			{
 				Profiler::BeginSample("WalkEventCreation");
-				std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 				float dist = GetDistanceBetweenPoints_Unity(playerPos, prevPlayerPos);
 				// NOTE:
 				// the localplayer moves even while standing still, by the tiniest amount.
 				// hopefully 0.01 will be big enough to filter that out but small enough to catch every real movement
 				if (dist > 0.01f)
 				{
-					// NOTE:
-					// we do not add walkevents to liveReplayEvents. linedata contains everything we need for live visualization.
-					State.rawEvents.push_back(std::make_unique<WalkEvent>(GetEventPlayerControl(__this).value(), playerPos));
-					const auto& map = maps[(size_t)State.mapType];
-					ImVec2 mapPos_pre = {map.x_offset + (playerPos.x * map.scale), map.y_offset - (playerPos.y * map.scale)};
-					if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
-					{
-						// first-time init
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints = {};
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps = {};
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedPoints = {};
-						State.replayWalkPolylineByPlayer[__this->fields.PlayerId].simplifiedTimeStamps = {};
+					synchronized(Replay::replayEventMutex) {
+						// NOTE:
+						// we do not add walkevents to liveReplayEvents. linedata contains everything we need for live visualization.
+						const auto outfit = GetPlayerOutfit(playerData);
+						const auto& map = maps[(size_t)State.mapType];
+						ImVec2 mapPos_pre = { map.x_offset + (playerPos.x * map.scale), map.y_offset - (playerPos.y * map.scale) };
+						if (State.replayWalkPolylineByPlayer.find(__this->fields.PlayerId) == State.replayWalkPolylineByPlayer.end())
+						{
+							// first-time init
+							State.replayWalkPolylineByPlayer[__this->fields.PlayerId] = {};
+							State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints.reserve(100);
+							State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps.reserve(100);
+						}
+						auto& plrLineData = State.replayWalkPolylineByPlayer[__this->fields.PlayerId];
+						plrLineData.playerId = __this->fields.PlayerId; 
+						plrLineData.colorId = outfit ? outfit->fields.ColorId : 0;
+						plrLineData.pendingPoints.push_back(mapPos_pre);
+						plrLineData.pendingTimeStamps.emplace_back(std::chrono::system_clock::now());
+						if (plrLineData.pendingPoints.size() >= 100) {
+							DoPolylineSimplification(plrLineData.pendingPoints, plrLineData.pendingTimeStamps,
+								plrLineData.simplifiedPoints, plrLineData.simplifiedTimeStamps, 50.f, true);
+						}
 					}
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].playerId = __this->fields.PlayerId;
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].colorId = State.rawEvents.back().get()->getSource().colorId;
-
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingPoints.push_back(mapPos_pre);
-					State.replayWalkPolylineByPlayer[__this->fields.PlayerId].pendingTimeStamps.push_back(State.rawEvents.back().get()->GetTimeStamp());
 				}
 				Profiler::EndSample("WalkEventCreation");
 			}
@@ -223,9 +229,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			espPlayerData.playerData = PlayerSelection(__this);
 
 			drawing_t& instance = Esp::GetDrawing();
-			std::lock_guard<std::mutex> lock(instance.m_DrawingMutex);
-			instance.LocalPosition = localScreenPosition;
-			instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
+			synchronized(instance.m_DrawingMutex) {
+				instance.LocalPosition = localScreenPosition;
+				instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
+			}
 		}
 	}
 	app::PlayerControl_FixedUpdate(__this, method);
@@ -245,47 +252,35 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* game
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
 {
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target)))
-	{
-		State.rawEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
-		State.liveReplayEvents.push_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(new CheatDetectedEvent(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+		}
 	}
-
-	State.rawEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-	State.liveReplayEvents.push_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-	State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
-
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new KillEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+		State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
+	}
+	do {
+		if (!State.ShowProtections) break;
+		if (!target || target->fields.protectedByGuardian == false)
+			break;
+		if (__this->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId)
+			break; // AmKiller
+		if (auto localData = GetPlayerData(*Game::pLocalPlayer);
+			!localData || !localData->fields.Role
+			|| localData->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel)
+			break; // AmAngel
+		PlayerControl_ShowFailedMurder(target, nullptr);
+	} while (false);
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
-/*  Use dPlayerControl_CoStartMeeting instead
-void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
-{
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-	State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	PlayerControl_CmdReportDeadBody(__this, target, method);
-}
-
-void dPlayerControl_ReportDeadBody(PlayerControl*__this, GameData_PlayerInfo* target, MethodInfo *method)
-{
-	if (!IsHost())
-	{
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	}
-	PlayerControl_ReportDeadBody(__this, target, method);
-}*/
-
 void* dPlayerControl_CoStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
-	do {
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		State.rawEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-		State.liveReplayEvents.push_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
-	} while (0);
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new ReportDeadBodyEvent(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	}
 	return PlayerControl_CoStartMeeting(__this, target, method);
 }
 
@@ -346,27 +341,23 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	{
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		State.rawEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-		State.liveReplayEvents.push_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new ShapeShiftEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	}
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	{
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		State.rawEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
-		State.liveReplayEvents.push_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new ProtectPlayerEvent(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 	}
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }
 
 void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method) {
-	{
-		std::lock_guard lock(State.protectMutex);
-		app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, method);
-		State.protectMonitor[__this->fields.PlayerId] = { colorId, app::Time_get_time(nullptr) };
+	app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, method);
+	std::pair pair { colorId, app::Time_get_time(nullptr) };
+	synchronized(State.protectMutex) {
+		State.protectMonitor[__this->fields.PlayerId] = pair;
 	}
 }

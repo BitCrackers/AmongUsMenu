@@ -141,14 +141,14 @@ namespace SelfTab {
                 continue;
             if (!State.ShowProtections)
                 app::PlayerControl_RemoveProtection(player, nullptr);
-            do {
-                std::lock_guard lock(State.protectMutex);
-                auto pair = State.protectMonitor[player->fields.PlayerId];
-                _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
-                if (_Duration > 0.f)
-                    app::PlayerControl_TurnOnProtection(player, State.ShowProtections, pair.first, nullptr);
-                _Duration = ProtectionDurationSeconds;
-            } while (0);
+            std::pair<int32_t/*ColorId*/, float/*Time*/> pair;
+            synchronized(State.protectMutex) {
+                pair = State.protectMonitor[player->fields.PlayerId];
+            }
+            _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+            if (_Duration > 0.f)
+                app::PlayerControl_TurnOnProtection(player, State.ShowProtections, pair.first, nullptr);
+            _Duration = ProtectionDurationSeconds;
         }
     }
 }

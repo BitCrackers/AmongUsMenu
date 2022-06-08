@@ -42,8 +42,14 @@ namespace DebugTab {
 
 			if (ImGui::CollapsingHeader("Replay##debug"))
 			{
-				ImGui::Text("Num Raw Events: %d", State.rawEvents.size());
-				ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
+				synchronized(Replay::replayEventMutex) {
+					size_t numWalkPoints = 0;
+					for (const auto& pair : State.replayWalkPolylineByPlayer) {
+						numWalkPoints += pair.second.pendingPoints.size() + pair.second.simplifiedPoints.size();
+					}
+					ImGui::Text("Num Walk Points: %d", numWalkPoints);
+					ImGui::Text("Num Live Events: %d", State.liveReplayEvents.size());
+				}
 
 				ImGui::Text("ReplayMatchStart: %s", std::format("{:%OH:%OM:%OS}", State.MatchStart).c_str());
 				ImGui::Text("ReplayMatchCurrent: %s", std::format("{:%OH:%OM:%OS}", State.MatchCurrent).c_str());
@@ -53,6 +59,7 @@ namespace DebugTab {
 
 				if (ImGui::Button("Re-simplify polylines (check console)"))
 				{
+					SYNCHRONIZED(Replay::replayEventMutex);
 					for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
 					{
 						std::vector<ImVec2> resimplifiedPoints;

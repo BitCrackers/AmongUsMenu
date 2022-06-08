@@ -106,7 +106,7 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	return response;
 }
 
-bool CustomListBoxPlayerSelectionMultiple(const char* label, std::vector<std::pair<PlayerSelection, bool>>* list, float width, bool resetButton, ImGuiComboFlags flags) {
+bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS>* list, float width, bool resetButton, ImGuiComboFlags flags) {
 	if (!IsInGame()) return false; // works only ingame
 
 	auto comboLabel = "##" + std::string(label);
@@ -340,7 +340,7 @@ bool HotKey(uint8_t& key)
 	return false;
 }
 
-void drawPlayerDot(PlayerControl* player, ImVec2 winPos, ImU32 color, ImU32 statusColor)
+void drawPlayerDot(PlayerControl* player, const ImVec2& winPos, ImU32 color, ImU32 statusColor)
 {
 	ImDrawList* drawList = GetWindowDrawList();
 
@@ -358,7 +358,7 @@ void drawPlayerDot(PlayerControl* player, ImVec2 winPos, ImU32 color, ImU32 stat
 	drawList->AddCircle(center, (4.5F + 0.5F) * State.dpiScale, statusColor, 0, 2.0F);
 }
 
-void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
+void drawPlayerIcon(PlayerControl* player, const ImVec2& winPos, ImU32 color)
 {
 	ImDrawList* drawList = GetWindowDrawList();
 
@@ -369,10 +369,11 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 	float yOffset = map.y_offset;
 
 	IconTexture icon = icons.at(ICON_TYPES::PLAYER);
-	float radX = xOffset + (playerPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
-	float radY = yOffset - (playerPos.y - (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
-	float radXMax = xOffset + (playerPos.x + (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;
-	float radYMax = yOffset - (playerPos.y + (icon.iconImage.imageHeight * icon.scale * 0.5f)) * map.scale;
+	float halfImageWidth = icon.iconImage.imageWidth * icon.scale * 0.5f, halfImageHeight = icon.iconImage.imageHeight * icon.scale * 0.5f;
+	float radX = xOffset + (playerPos.x - halfImageWidth) * map.scale;
+	float radY = yOffset - (playerPos.y - halfImageHeight) * map.scale;
+	float radXMax = xOffset + (playerPos.x + halfImageWidth) * map.scale;
+	float radYMax = yOffset - (playerPos.y + halfImageHeight) * map.scale;
 
 	const ImVec2& p_min = ImVec2(radX, radY) * State.dpiScale + winPos;
 	const ImVec2& p_max = ImVec2(radXMax, radYMax) * State.dpiScale + winPos;
@@ -389,7 +390,7 @@ void drawPlayerIcon(PlayerControl* player, ImVec2 winPos, ImU32 color)
 			ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 }
 
-void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
+void drawDeadPlayerDot(DeadBody* deadBody, const ImVec2& winPos, ImU32 color)
 {
 	ImDrawList* drawList = GetWindowDrawList();
 
@@ -406,7 +407,7 @@ void drawDeadPlayerDot(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
 		ImVec2(radX - 5.F, radY - 6.75F) * State.dpiScale + winPos, color, "X");
 }
 
-void drawDeadPlayerIcon(DeadBody* deadBody, ImVec2 winPos, ImU32 color)
+void drawDeadPlayerIcon(DeadBody* deadBody, const ImVec2& winPos, ImU32 color)
 {
 	ImDrawList* drawList = GetWindowDrawList();
 

@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-TaskCompletedEvent::TaskCompletedEvent(EVENT_PLAYER source, std::optional<TaskTypes__Enum> taskType, Vector2 position) : EventInterface(source, EVENT_TYPES::EVENT_TASK) {
+TaskCompletedEvent::TaskCompletedEvent(const EVENT_PLAYER& source, const std::optional<TaskTypes__Enum>& taskType, const Vector2& position) : EventInterface(source, EVENT_TYPES::EVENT_TASK) {
 	this->taskType = taskType;
 	this->position = position;
 	this->systemType = GetSystemTypes(position);

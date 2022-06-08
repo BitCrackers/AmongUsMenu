@@ -13,27 +13,18 @@
 namespace Replay
 {
 	// NOTE:
-	// any code that modifies State.rawEvents or State.liveReplayEvents or any other collection should use this mutex
+	// any code that modifies State.liveReplayEvents or any other collection should use this mutex
 	// failure to do so will invalidate any existing iterator of any thread which will lead to rare and hard to diagnose crashes
 	std::mutex replayEventMutex;
 
-	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> event_filter =
 	{
-		{"Kill", false},
-		{"Vent", false},
-		{"Task", false},
-		{"Report", false},
-		{"Meeting", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"", false},
-		{"Walk", false}
+		#define ADD_EVENT(name, desc) {desc, false}
+		ALL_EVENTS
+		#undef ADD_EVENT
 	};
 
-	std::vector<std::pair<PlayerSelection, bool>> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
 
 	ImU32 GetReplayPlayerColor(uint8_t colorId) {
 		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(colorId)));
@@ -52,9 +43,17 @@ namespace Replay
 
 		if (!init)
 		{
-			// setup player_filter list based on MAX_PLAYERS definition
-			for (int i = 0; i < MAX_PLAYERS; i++) {
-				Replay::player_filter.push_back({ PlayerSelection(), false });
+			for (auto it = event_filter.begin(); it != event_filter.end(); it++) {
+				// Exclude the following events
+				switch (static_cast<EVENT_TYPES>(it - event_filter.begin())) {
+				case EVENT_TYPES::EVENT_VOTE:
+				case EVENT_TYPES::EVENT_CHEAT:
+				case EVENT_TYPES::EVENT_DISCONNECT:
+				case EVENT_TYPES::EVENT_SHAPESHIFT:
+				case EVENT_TYPES::EVENT_PROTECTPLAYER:
+					it->first = "";
+					break;
+				}
 			}
 			init = true;
 		}
@@ -62,25 +61,31 @@ namespace Replay
 
 	void Reset(bool all /* = true */)
 	{
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		for (auto& e : State.liveReplayEvents)
-			e.reset();
-		State.liveReplayEvents.clear();
-		for (auto& pair : State.replayWalkPolylineByPlayer)
-		{
-			pair.second.playerId = 0;
-			pair.second.colorId = 0;
-			pair.second.pendingPoints.clear();
-			pair.second.pendingTimeStamps.clear();
-			pair.second.simplifiedPoints.clear();
-			pair.second.simplifiedTimeStamps.clear();
-		}
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.clear();
+			if (all) {
+				// free all storage
+				State.liveReplayEvents.shrink_to_fit();
+				std::map<uint8_t, Replay::WalkEvent_LineData>().swap(State.replayWalkPolylineByPlayer);
+			}
+			else {
+				for (auto& pair : State.replayWalkPolylineByPlayer)
+				{
+					pair.second.playerId = 0;
+					pair.second.colorId = 0;
+					pair.second.pendingPoints.clear();
+					pair.second.pendingTimeStamps.clear();
+					pair.second.simplifiedPoints.clear();
+					pair.second.simplifiedTimeStamps.clear();
+				}
+			}
 
-		for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
-		{
-			State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
-			if (all)
-				State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
+			for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+			{
+				State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
+				if (all)
+					State.replayDeathTimePerPlayer[plyIdx] = (std::chrono::system_clock::time_point::max)();// TODO: #define NOMINMAX 
+			}
 		}
 
 		// Set this to true as the default value
@@ -91,8 +96,8 @@ namespace Replay
 	}
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, 
-		std::vector<ImVec2>& points, std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
+		std::vector<ImVec2>& points, const std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
+		bool isUsingMinTimeFilter, const std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, const std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
 			&& (minTimeFilter >= maxTimeFilter))
@@ -164,7 +169,7 @@ namespace Replay
 	}
 
 	void RenderWalkPaths(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
+		bool isUsingMinTimeFilter, const std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, const std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPolyline");
 		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
@@ -179,11 +184,11 @@ namespace Replay
 			// we want to do the simplification regardless of filters so that if the filters change
 			// and we start showing the walk path for that player we don't have to simplify tens of thousands of points on that first frame
 			Replay::WalkEvent_LineData& plrLineData = playerPolylinePair.second;
-			size_t numPendingPoints = plrLineData.pendingPoints.size();
+			/*size_t numPendingPoints = plrLineData.pendingPoints.size();
 			if (numPendingPoints >= 100)
 			{
 				DoPolylineSimplification(plrLineData.pendingPoints, plrLineData.pendingTimeStamps, plrLineData.simplifiedPoints, plrLineData.simplifiedTimeStamps, 50.f, true);
-			}
+			}*/
 
 			// now the actual rendering, which should be filtered
 			// player filter
@@ -207,7 +212,7 @@ namespace Replay
 	}
 
 	void RenderPlayerIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter, 
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
+		bool isUsingMinTimeFilter, const std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, const std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayPlayerIcons");
 		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
@@ -244,12 +249,13 @@ namespace Replay
 				for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.pendingTimeStamps.rbegin(); riter != plrLineData.pendingTimeStamps.rend(); riter++, lastTimeIndex--)
 				{
 					const std::chrono::system_clock::time_point& timestamp = *riter;
-					if (timestamp < maxTimeFilter)
+					if (timestamp <= maxTimeFilter)
 					{
 						playerPos = plrLineData.pendingPoints[lastTimeIndex];
 						if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 						{
 							//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+							break;
 						}
 						foundMatchingPlayerPos = true;
 						break;
@@ -262,12 +268,13 @@ namespace Replay
 					for (std::vector<std::chrono::system_clock::time_point>::const_reverse_iterator riter = plrLineData.simplifiedTimeStamps.rbegin(); riter != plrLineData.simplifiedTimeStamps.rend(); riter++, lastTimeIndex--)
 					{
 						const std::chrono::system_clock::time_point& timestamp = *riter;
-						if (timestamp < maxTimeFilter)
+						if (timestamp <= maxTimeFilter)
 						{
 							playerPos = plrLineData.simplifiedPoints[lastTimeIndex];
 							if ((isUsingMinTimeFilter == true) && (timestamp < minTimeFilter))
 							{
 								//STREAM_DEBUG("(not critical) Found a point matching maxTimeFilter, but does not match minTimeFilter. Add check that min < max once free time available.");
+								break;
 							}
 							foundMatchingPlayerPos = true;
 							break;
@@ -300,15 +307,18 @@ namespace Replay
 			// float player_mapX = map.x_offset + (position.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale + cursorPosX;
 			// i'm not mathematically inclined, so i don't really know what i'm doing...
 			// but this is what i got for transforming from the existing to void*'s original:
+			playerPos.x = getMapXOffsetSkeld(playerPos.x);
 			float halfImageWidth = (icon.iconImage.imageWidth * icon.scale * 0.5f) * map.scale, halfImageHeight = (icon.iconImage.imageHeight * icon.scale * 0.5f) * map.scale;
 			float player_mapX = (playerPos.x - halfImageWidth);
 			float player_mapY = (playerPos.y - halfImageHeight);
 			float player_mapXMax = (playerPos.x + halfImageWidth);
 			float player_mapYMax = (playerPos.y + halfImageHeight);
 
+			const ImVec2& p_min = ImVec2(player_mapX, player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY);
+			const ImVec2& p_max = ImVec2(player_mapXMax, player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY);
+
 			drawList->AddImage((void*)icon.iconImage.shaderResourceView,
-				ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
-				ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+				p_min, p_max,
 				ImVec2(0.0f, 0.0f),
 				ImVec2(1.0f, 1.0f),
 				GetReplayPlayerColor(plrLineData.colorId));
@@ -320,8 +330,7 @@ namespace Replay
 						(plrInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel))) &&
 							(!isUsingMaxTimeFilter || maxTimeFilter >= State.replayDeathTimePerPlayer[plrLineData.playerId]))
 				drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView,
-					ImVec2(getMapXOffsetSkeld(player_mapX), player_mapY) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
-					ImVec2(getMapXOffsetSkeld(player_mapXMax), player_mapYMax) * State.dpiScale + ImVec2(cursorPosX, cursorPosY),
+					p_min, p_max,
 					ImVec2(0.0f, 0.0f),
 					ImVec2(1.0f, 1.0f));
 		}
@@ -329,7 +338,7 @@ namespace Replay
 	}
 
 	void RenderEventIcons(ImDrawList* drawList, float cursorPosX, float cursorPosY, Settings::MapType MapType, bool isUsingEventFilter, bool isUsingPlayerFilter,
-		bool isUsingMinTimeFilter, std::chrono::system_clock::time_point& minTimeFilter,  bool isUsingMaxTimeFilter, std::chrono::system_clock::time_point& maxTimeFilter)
+		bool isUsingMinTimeFilter, const std::chrono::system_clock::time_point& minTimeFilter,  bool isUsingMaxTimeFilter, const std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		Profiler::BeginSample("ReplayEventIcons");
 		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
@@ -507,26 +516,6 @@ namespace Replay
 			}
 		}
 
-		std::chrono::system_clock::time_point minTimeFilter = State.MatchStart;
-		if (State.Replay_ShowOnlyLastSeconds)
-		{
-			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
-			minTimeFilter = State.MatchCurrent - seconds;
-		}
-
-		{
-			std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
-		}
-		ImGui::EndChild();
-
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2(1.0f, 5.0f) * State.dpiScale);
-
-		ImGui::BeginChild("replay#control");
-		
 		std::string fmt("placeholder");
 		State.MatchLive = std::chrono::system_clock::now();
 		if (State.Replay_IsLive && !State.Replay_IsPlaying)
@@ -538,6 +527,27 @@ namespace Replay
 		{
 			fmt = std::format("{:%OH:%OM:%OS}", State.MatchCurrent - State.MatchLive);
 		}
+
+		std::chrono::system_clock::time_point minTimeFilter = State.MatchStart;
+		if (State.Replay_ShowOnlyLastSeconds)
+		{
+			std::chrono::seconds seconds(State.Replay_LastSecondsValue);
+			minTimeFilter = State.MatchCurrent - seconds;
+		}
+
+		synchronized(Replay::replayEventMutex)
+		{
+			RenderWalkPaths(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+			RenderPlayerIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, false, minTimeFilter, true, State.MatchCurrent);
+			RenderEventIcons(drawList, cursorPosX, cursorPosY, State.mapType, isUsingEventFilter, isUsingPlayerFilter, State.Replay_ShowOnlyLastSeconds, minTimeFilter, true, State.MatchCurrent);
+		}
+		ImGui::EndChild();
+
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(1.0f, 5.0f) * State.dpiScale);
+
+		ImGui::BeginChild("replay#control");
+		
 		SliderChrono("##replay_slider", &State.MatchCurrent, &State.MatchStart, &State.MatchLive, fmt, ImGuiSliderFlags_None);
 		
 		ImGui::EndChild();

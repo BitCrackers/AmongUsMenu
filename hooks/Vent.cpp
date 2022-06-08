@@ -27,23 +27,19 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 };
 
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
-
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
-	State.liveReplayEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
-
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new VentEvent(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
+	}
 	Vent_EnterVent(__this, pc, method);
 }
 
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
-
-	std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	State.rawEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
-	State.liveReplayEvents.push_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
-
+	synchronized(Replay::replayEventMutex) {
+		State.liveReplayEvents.emplace_back(new VentEvent(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
+	}
 	Vent_ExitVent(__this, pc, method);
 }

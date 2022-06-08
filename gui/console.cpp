@@ -7,22 +7,14 @@
 
 namespace ConsoleGui
 {
-	// TODO: improve this by building it dynamically based on the EVENT_TYPES enum
 	std::vector<std::pair<const char*, bool>> event_filter =
 	{
-		{"Kill", false},
-		{"Vent", false},
-		{"Task", false},
-		{"Report", false},
-		{"Meeting", false},
-		{"Vote", false},
-		{"Cheat", false},
-		{"Disconnect", false},
-		{"Shapeshift", false},
-		{"Protect", false}
+#define ADD_EVENT(name, desc) {desc, false}
+		ALL_EVENTS
+#undef ADD_EVENT
 	};
 
-	std::vector<std::pair<PlayerSelection, bool>> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
 
 	bool init = false;
 	void Init() {
@@ -31,9 +23,13 @@ namespace ConsoleGui
 
 		if (!init)
 		{
-			// setup player_filter list based on MAX_PLAYERS definition
-			for (int i = 0; i < MAX_PLAYERS; i++) {
-				ConsoleGui::player_filter.push_back({ PlayerSelection(), false });
+			for (auto it = event_filter.begin(); it != event_filter.end(); it++) {
+				// Exclude the following events
+				switch (static_cast<EVENT_TYPES>(it - event_filter.begin())) {
+				case EVENT_TYPES::EVENT_WALK:
+					it->first = "";
+					break;
+				}
 			}
 			init = true;
 		}
@@ -73,8 +69,8 @@ namespace ConsoleGui
 			}
 		}
 
-		std::lock_guard<std::mutex> replayLock(Replay::replayEventMutex);
-		size_t i = State.liveReplayEvents.size() - 1;
+		synchronized(Replay::replayEventMutex) {
+			size_t i = State.liveReplayEvents.size() - 1;
 			for (auto rit = State.liveReplayEvents.rbegin(); rit != State.liveReplayEvents.rend(); ++rit, --i) {
 				EventInterface* evt = (*rit).get();
 				if (evt == NULL)
@@ -101,6 +97,7 @@ namespace ConsoleGui
 				ImGui::SameLine();
 				evt->Output();
 			}
+		}
 		ImGui::EndChild();
 		ImGui::End();
 	}

@@ -2,7 +2,7 @@
 #include "_events.h"
 #include "utility.h"
 
-CheatDetectedEvent::CheatDetectedEvent(EVENT_PLAYER source, CHEAT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_CHEAT) {
+CheatDetectedEvent::CheatDetectedEvent(const EVENT_PLAYER& source, CHEAT_ACTIONS action) : EventInterface(source, EVENT_TYPES::EVENT_CHEAT) {
 	this->action = action;
 }
 

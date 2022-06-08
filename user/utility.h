@@ -3,6 +3,24 @@
 #include <imgui/imgui.h>
 #include "_events.h"
 #include <filesystem>
+#include "game.h"
+
+#define _CONCAT4(a,b,c,d)		a##b##c##d
+#define CONCAT4(a,b,c,d)		_CONCAT4(a,b,c,d)
+
+#define _synchronized(lock, name, mtx)	if (lock name(mtx); true) // for(lock name(mtx); name; name.unlock())
+#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, CONCAT4(rdLock_, __COUNTER__, _at_, __LINE__), smtx)
+#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, CONCAT4(lock_, __COUNTER__, _at_, __LINE__), mtx)
+/*
+	it mimics the behaviour of the Java construct
+	"synchronized(this) { }"
+*/
+#define synchronized(mtx)	synchronized_write(mtx)
+/*
+	to secure a code-block, use the following syntax:
+	"{ SYNCHRONIZED(mutex); <commands> }"
+*/
+#define SYNCHRONIZED(mtx)	std::scoped_lock CONCAT4(lock_, __COUNTER__, _at_, __LINE__)(mtx)
 
 struct CorrectedColor32 {
 	uint8_t r;
@@ -39,7 +57,7 @@ public:
 	int EngineerChance = 0;
 	int GuardianAngelCount = 0;
 	int GuardianAngelChance = 0;
-	int MaxCrewmates = 15;
+	int MaxCrewmates = MAX_PLAYERS;
 	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
 	void SubtractRole(RoleTypes__Enum role);
@@ -67,8 +85,8 @@ public:
 };
 
 int randi(int lo, int hi);
-ImVec4 AmongUsColorToImVec4(Color color);
-ImVec4 AmongUsColorToImVec4(CorrectedColor32 color);
+ImVec4 AmongUsColorToImVec4(const Color& color);
+ImVec4 AmongUsColorToImVec4(const CorrectedColor32& color);
 bool IsInLobby();
 bool IsHost();
 bool IsInGame();
@@ -94,7 +112,7 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType);
 CorrectedColor32 GetPlayerColor(uint8_t colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
-SystemTypes__Enum GetSystemTypes(Vector2 vector);
+SystemTypes__Enum GetSystemTypes(const Vector2& vector);
 // TO-DO:
 // some C++ wizardry to allow overloading on pointer types w/ different base type (then we can rename both to just GetEventPlayer)
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo);
@@ -103,9 +121,9 @@ std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo);
 il2cpp::Array<Camera__Array> GetAllCameras();
 il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients();
 Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
-bool IsAirshipSpawnLocation(Vector2 vec);
-Vector2 Rotate(Vector2 vec, float degrees);
-bool Equals(Vector2 vec1, Vector2 vec2);
+bool IsAirshipSpawnLocation(const Vector2& vec);
+Vector2 Rotate(const Vector2& vec, float degrees);
+bool Equals(const Vector2& vec1, const Vector2& vec2);
 std::string ToString(Object* object);
 std::string GetGitCommit();
 std::string GetGitBranch();
@@ -118,8 +136,8 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool include
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
 std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated = false);
 RoleTypes__Enum GetRoleTypesEnum(RoleType role);
-float GetDistanceBetweenPoints_Unity(Vector2 p1, Vector2 p2);
-float GetDistanceBetweenPoints_ImGui(ImVec2 p1, ImVec2 p2);
+float GetDistanceBetweenPoints_Unity(const Vector2& p1, const Vector2& p2);
+float GetDistanceBetweenPoints_ImGui(const ImVec2& p1, const ImVec2& p2);
 
 /// <summary>
 /// Simplifies a list of points by ensuring the distance between consecutive points is greater than the squared distance threshold; all other points are discarded.
