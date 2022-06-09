@@ -75,14 +75,14 @@ namespace DebugTab {
 			if (ImGui::CollapsingHeader("Colors##debug"))
 			{
 				il2cpp::Array colArr = app::Palette__TypeInfo->static_fields->PlayerColors;
-				CorrectedColor32* colArr_raw = (CorrectedColor32*)colArr.begin();
+				auto colArr_raw = colArr.begin();
 				size_t length = colArr.size();
 				for (size_t i = 0; i < length; i++)
 				{
-					CorrectedColor32 col = colArr_raw[i];
-					ImVec4 conv_col = AmongUsColorToImVec4(col);
-					const std::vector<const char*> COLORS = { "Red", "Blue", "Dark Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral" };
-					ImGui::TextColored(conv_col, "%s [%d]: (%d, %d, %d, %d)", COLORS[i], i, col.r, col.g, col.b, col.a);
+					const app::Color32& col = colArr_raw[i];
+					const ImVec4& conv_col = AmongUsColorToImVec4(col);
+					static constexpr std::array COLORS = { "Red", "Blue", "Dark Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral" };
+					ImGui::TextColored(conv_col, "%s [%d]: (%d, %d, %d, %d)", COLORS.at(i), i, col.r, col.g, col.b, col.a);
 				}
 			}
 

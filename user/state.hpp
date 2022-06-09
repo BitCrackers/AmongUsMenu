@@ -151,7 +151,7 @@ public:
     String* originalHat = nullptr;
     String* originalVisor = nullptr;
     String* originalPet = nullptr;
-    uint8_t originalColor = 0xFF;
+    int32_t originalColor = -1;
 
     bool activeImpersonation = false;
 

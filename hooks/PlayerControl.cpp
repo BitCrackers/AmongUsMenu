@@ -98,7 +98,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			}
 		}
 
-		if ((__this == *Game::pLocalPlayer) && (State.originalColor == 0xFF)) {
+		if ((__this == *Game::pLocalPlayer) && (State.originalColor == -1)) {
 			SaveOriginalAppearance();
 		}
 

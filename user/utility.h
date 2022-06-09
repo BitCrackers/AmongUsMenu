@@ -5,12 +5,11 @@
 #include <filesystem>
 #include "game.h"
 
-#define _CONCAT4(a,b,c,d)		a##b##c##d
-#define CONCAT4(a,b,c,d)		_CONCAT4(a,b,c,d)
+#define UNIQUE_NAME(prefix)	_CONCAT(prefix ## _, __COUNTER__) ## _CONCAT(at, __LINE__)
 
-#define _synchronized(lock, name, mtx)	if (lock name(mtx); true) // for(lock name(mtx); name; name.unlock())
-#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, CONCAT4(rdLock_, __COUNTER__, _at_, __LINE__), smtx)
-#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, CONCAT4(lock_, __COUNTER__, _at_, __LINE__), mtx)
+#define _synchronized(lock, name, mtx)	if (lock name(mtx); true)
+#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, UNIQUE_NAME(rdLock), smtx)
+#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, UNIQUE_NAME(lock), mtx)
 /*
 	it mimics the behaviour of the Java construct
 	"synchronized(this) { }"
@@ -20,14 +19,7 @@
 	to secure a code-block, use the following syntax:
 	"{ SYNCHRONIZED(mutex); <commands> }"
 */
-#define SYNCHRONIZED(mtx)	std::scoped_lock CONCAT4(lock_, __COUNTER__, _at_, __LINE__)(mtx)
-
-struct CorrectedColor32 {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t a;
-};
+#define SYNCHRONIZED(mtx)	std::scoped_lock UNIQUE_NAME(lock)(mtx)
 
 enum class MapType {
 	MAP_SKELD = 0,
@@ -86,7 +78,7 @@ public:
 
 int randi(int lo, int hi);
 ImVec4 AmongUsColorToImVec4(const Color& color);
-ImVec4 AmongUsColorToImVec4(const CorrectedColor32& color);
+ImVec4 AmongUsColorToImVec4(const Color32& color);
 bool IsInLobby();
 bool IsHost();
 bool IsInGame();
@@ -109,7 +101,7 @@ void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
 const char* TranslateSystemTypes(SystemTypes__Enum systemType);
-CorrectedColor32 GetPlayerColor(uint8_t colorId);
+Color32 GetPlayerColor(int32_t colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(const Vector2& vector);
