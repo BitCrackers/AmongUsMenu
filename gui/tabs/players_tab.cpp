@@ -14,6 +14,7 @@ namespace PlayersTab {
 		if (IsInGame() || IsInLobby()) {
 			if (ImGui::BeginTabItem("Players")) {
 				ImGui::BeginChild("players#list", ImVec2(200, 0) * State.dpiScale, true);
+				auto selectedPlayer = State.selectedPlayer.validate();
 				bool shouldEndListBox = ImGui::ListBoxHeader("###players#list", ImVec2(200, 150) * State.dpiScale);
 				auto localData = GetPlayerData(*Game::pLocalPlayer);
 				for (auto playerData : GetAllPlayerData()) {
@@ -25,8 +26,9 @@ namespace PlayersTab {
 					std::string playerName = convert_from_string(outfit->fields._playerName);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
-					if (ImGui::Selectable(std::string("##" + playerName).c_str(), State.selectedPlayer.equals(playerData))) {
+					if (ImGui::Selectable(std::string("##" + playerName).c_str(), selectedPlayer.equals(playerData))) {
 						State.selectedPlayer = PlayerSelection(playerData);
+						selectedPlayer = State.selectedPlayer.validate();
 					}
 					ImGui::SameLine();
 					ImGui::ColorButton(std::string("##" + playerName + "_ColorButton").c_str(), AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId)), ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip);
@@ -55,10 +57,10 @@ namespace PlayersTab {
 				if (shouldEndListBox)
 					ImGui::ListBoxFooter();
 
-				if (State.selectedPlayer.has_value() && State.selectedPlayer.get_PlayerData() != NULL) //Upon first startup no player is selected.  Also rare case where the playerdata is deleted before the next gui cycle
+				if (selectedPlayer.has_value()) //Upon first startup no player is selected.  Also rare case where the playerdata is deleted before the next gui cycle
 				{
 					ImGui::Text("Is using AUM: %s",
-						State.selectedPlayer.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), State.selectedPlayer.get_PlayerData()->fields.PlayerId)
+						selectedPlayer.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), selectedPlayer.get_PlayerData()->fields.PlayerId)
 						? "Yes" : "No");
 				}
 
@@ -99,9 +101,9 @@ namespace PlayersTab {
 						}
 					}
 				}
-				if (State.selectedPlayer.has_value())
+				if (selectedPlayer.has_value())
 				{
-					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && State.selectedPlayer.get_PlayerData()->fields.IsDead) {
+					if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && selectedPlayer.get_PlayerData()->fields.IsDead) {
 						ImGui::NewLine();
 						if (ImGui::Button("Report Body")) {
 							State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
@@ -109,7 +111,7 @@ namespace PlayersTab {
 					}
 					ImGui::NewLine();
 
-					if (IsInGame() && !State.selectedPlayer.is_Disconnected() && !State.selectedPlayer.is_LocalPlayer())
+					if (IsInGame() && !selectedPlayer.is_Disconnected() && !selectedPlayer.is_LocalPlayer())
 					{
 						if (State.playerToFollow.equals(State.selectedPlayer)) {
 							if (ImGui::Button("Stop Spectating")) {
@@ -123,7 +125,7 @@ namespace PlayersTab {
 						}
 					}
 
-					if (State.selectedPlayer.is_LocalPlayer() && State.originalName != "-") {
+					if (selectedPlayer.is_LocalPlayer() && State.originalName != "-") {
 						if (ImGui::Button("Reset Name")) {
 							if (IsInGame())
 								State.rpcQueue.push(new RpcSetName(State.originalName));
@@ -131,14 +133,14 @@ namespace PlayersTab {
 								State.lobbyRpcQueue.push(new RpcSetName(State.originalName));
 						}
 					}
-					else if(!State.selectedPlayer.is_LocalPlayer()) {
+					else if(!selectedPlayer.is_LocalPlayer()) {
 						if ((IsInMultiplayerGame() || IsInLobby()) && ImGui::Button("Steal Name")) {
 							ImpersonateName(State.selectedPlayer);
 						}
 					}
 					if ((IsInGame() || IsInLobby())) {
-						if (!State.selectedPlayer.is_LocalPlayer()) {
-							app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(State.selectedPlayer.get_PlayerData());
+						if (!selectedPlayer.is_LocalPlayer()) {
+							app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(selectedPlayer.get_PlayerData());
 							if (outfit != NULL) {
 								if (ImGui::Button("Impersonate")) {
 
@@ -173,9 +175,9 @@ namespace PlayersTab {
 						}
 					}
 
-					if (IsInGame() && PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)) && !State.selectedPlayer.get_PlayerData()->fields.IsDead
+					if (IsInGame() && PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)) && !selectedPlayer.get_PlayerData()->fields.IsDead
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f)
-						&& !State.selectedPlayer.get_PlayerControl()->fields.protectedByGuardian)
+						&& !selectedPlayer.get_PlayerControl()->fields.protectedByGuardian)
 					{
 						if (ImGui::Button("Kill Player"))
 						{
@@ -192,22 +194,22 @@ namespace PlayersTab {
 					}
 					else framesPassed--;
 
-					if (!State.selectedPlayer.is_LocalPlayer()) {
+					if (!selectedPlayer.is_LocalPlayer()) {
 						if (ImGui::Button("Teleport To")) {
 							if(IsInGame())
-								State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
+								State.rpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(selectedPlayer.get_PlayerControl())));
 							else if (IsInLobby())
-								State.lobbyRpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(State.selectedPlayer.get_PlayerControl())));
+								State.lobbyRpcQueue.push(new RpcSnapTo(GetTrueAdjustedPosition(selectedPlayer.get_PlayerControl())));
 						}
 					}
 
 					ImGui::NewLine();
 
-					if (IsInGame() && !State.selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
+					if (IsInGame() && !selectedPlayer.is_Disconnected() && IsInMultiplayerGame())
 					{
-						auto tasks = GetNormalPlayerTasks(State.selectedPlayer.get_PlayerControl());
+						auto tasks = GetNormalPlayerTasks(selectedPlayer.get_PlayerControl());
 
-						if (State.RevealRoles && PlayerIsImpostor(State.selectedPlayer.get_PlayerData()))
+						if (State.RevealRoles && PlayerIsImpostor(selectedPlayer.get_PlayerData()))
 						{
 							ImGui::TextColored(ImVec4(0.8F, 0.2F, 0.0F, 1.0F), "Fake Tasks:");
 						}
@@ -218,7 +220,7 @@ namespace PlayersTab {
 
 						bool shouldEndListBox = ImGui::ListBoxHeader("###tasks#list", ImVec2(181, 94) * State.dpiScale);
 
-						if (State.selectedPlayer.get_PlayerControl()->fields.myTasks == NULL)
+						if (selectedPlayer.get_PlayerControl()->fields.myTasks == nullptr)
 						{
 							ImGui::Text("ERROR: Could not load tasks.");
 						}

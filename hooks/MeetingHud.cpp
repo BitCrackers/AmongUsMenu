@@ -6,7 +6,6 @@
 #include <chrono>
 
 static app::Type* voteSpreaderType = nullptr;
-constexpr Settings::VotedFor HasNotVoted = 255, MissedVote = 254, SkippedVote = 253, DeadVote = 252;
 
 void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	State.voteMonitor.clear();
@@ -40,7 +39,7 @@ static void Transform_RemoveAllVotes(app::Transform* transform) {
 	votes.clear();
 }
 
-static void Transform_RevealAnonymousVotes(app::Transform* transform, Settings::VotedFor votedFor) {
+static void Transform_RevealAnonymousVotes(app::Transform* transform, Game::VotedFor votedFor) {
 	if (!transform) return;
 	auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
 	if (!voteSpreader) return;
@@ -113,7 +112,7 @@ void RevealAnonymousVotes() {
 	}
 	if (meetingHud->fields.SkippedVoting) {
 		auto transform = app::GameObject_get_transform(meetingHud->fields.SkippedVoting, nullptr);
-		Transform_RevealAnonymousVotes(transform, SkippedVote);
+		Transform_RevealAnonymousVotes(transform, Game::SkippedVote);
 	}
 }
 
@@ -156,10 +155,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 		if (playerData)
 		{
-			bool didVote = (playerVoteArea->fields.VotedFor != HasNotVoted);
+			bool didVote = (playerVoteArea->fields.VotedFor != Game::HasNotVoted);
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
 			// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
-			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
+			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != Game::MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
 			{
 				synchronized(Replay::replayEventMutex) {
 					State.liveReplayEvents.emplace_back(new CastVoteEvent(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
@@ -172,7 +171,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 					auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
 					if (prevAnonymousVotes && State.RevealAnonymousVotes)
 						(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
-					if (playerVoteArea->fields.VotedFor != SkippedVote) {
+					if (playerVoteArea->fields.VotedFor != Game::SkippedVote) {
 						for (auto votedForArea : playerStates) {
 							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
 								auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
@@ -230,7 +229,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		if (__this->fields.SkippedVoting) {
 			bool showSkipped = false;
 			for (const auto& pair : State.voteMonitor) {
-				if (pair.second == SkippedVote) {
+				if (pair.second == Game::SkippedVote) {
 					showSkipped = State.RevealVotes;
 					break;
 				}

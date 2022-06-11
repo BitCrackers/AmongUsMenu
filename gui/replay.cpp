@@ -24,7 +24,7 @@ namespace Replay
 		#undef ADD_EVENT
 	};
 
-	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, Game::MAX_PLAYERS> player_filter;
 
 	ImU32 GetReplayPlayerColor(uint8_t colorId) {
 		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(colorId)));
@@ -80,7 +80,7 @@ namespace Replay
 				}
 			}
 
-			for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+			for (size_t plyIdx = 0; plyIdx < Game::MAX_PLAYERS; plyIdx++)
 			{
 				State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
 				if (all)

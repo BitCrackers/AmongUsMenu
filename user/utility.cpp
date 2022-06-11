@@ -122,39 +122,6 @@ int GenerateRandomNumber(int min, int max)
 	return dist(rng);
 }
 
-PlayerSelection::PlayerSelection()
-{
-	this->hasValue = false;
-	this->clientId = 0;
-	this->playerId = 0;
-}
-
-PlayerSelection::PlayerSelection(PlayerControl* playerControl)
-{
-	if (playerControl != NULL) {
-		this->hasValue = true;
-		this->clientId = playerControl->fields._.OwnerId;
-		this->playerId = playerControl->fields.PlayerId;
-	} else {
-		*this = PlayerSelection();
-	}
-}
-
-PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData)
-{
-	if (playerData != NULL) {
-		*this = PlayerSelection(playerData->fields._object);
-	} else {
-		*this = PlayerSelection();
-	}
-}
-
-bool PlayerSelection::equals(PlayerControl* playerControl)
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerControl() == playerControl;
-}
-
 Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 {
 	Vector2 playerVector2 = PlayerControl_GetTruePosition(playerControl, NULL);
@@ -162,86 +129,120 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 	return playerVector2;
 }
 
-bool PlayerSelection::equals(GameData_PlayerInfo* playerData)
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerData() == playerData;
+// See GameData_PlayerInfo::get_Object(GameData_PlayerInfo * __this, MethodInfo * method)
+std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData) {
+	if (!playerData) return std::nullopt;
+	if (Object_1_IsNull((Object_1*)playerData->fields._object))
+		playerData->fields._object = GetPlayerControlById(playerData->fields.PlayerId);
+	if (!playerData->fields._object) return std::nullopt;
+	return playerData->fields._object;
 }
 
-bool PlayerSelection::equals(PlayerSelection selectedPlayer)
+#pragma region PlayerSelection
+PlayerSelection::PlayerSelection() noexcept
+{
+	this->clientId = Game::NoClientId;
+	this->playerId = Game::NoPlayerId;
+}
+
+PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
+	if (Object_1_IsNotNull((Object_1*)playerControl)) {
+		this->clientId = playerControl->fields._.OwnerId;
+		this->playerId = playerControl->fields.PlayerId;
+	}
+	else {
+		new (this)PlayerSelection();
+	}
+}
+
+PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
+	new (this)PlayerSelection(GameData_PlayerInfo_get_Object(playerData).value_or(nullptr));
+}
+
+PlayerSelection::Result PlayerSelection::validate() {
+	auto playerControl = this->get_PlayerControl();
+	if (playerControl) {
+		auto playerData = app::PlayerControl_get_Data((*playerControl), nullptr);
+		if (playerData) {
+			return { (*playerControl), playerData };
+		}
+	}
+	this->clientId = Game::NoClientId;
+	this->playerId = Game::NoPlayerId;
+	return {};
+}
+
+bool PlayerSelection::equals(const PlayerSelection& selectedPlayer) const
 {
 	if (!this->has_value() || !selectedPlayer.has_value()) return false;
-	return (this->get_PlayerId() == selectedPlayer.get_PlayerId() && this->get_PlayerId() == selectedPlayer.get_PlayerId());
+	return std::tie(clientId,  playerId) == std::tie(selectedPlayer.clientId, selectedPlayer.playerId);
 }
 
-PlayerControl* PlayerSelection::get_PlayerControl()
-{
-	if (!this->hasValue) return NULL;
+std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
+	if (!this->has_value()) 
+		return std::nullopt;
 
-	if (clientId == -2) {
+	if (clientId == Game::HostInherit) {
 		auto playerControl = GetPlayerControlById(this->playerId);
-		if (playerControl != NULL)
+		if (Object_1_IsNotNull((Object_1*)playerControl))
 			return playerControl;
+#if _DEBUG
+		if (playerControl) {
+			// oops: game bug
+			STREAM_ERROR("player " << +get_PlayerId() << " playerControl is invalid");
+		}
+#endif
 	}
 
 	for (auto client : GetAllClients()) {
 		if (client->fields.Id == this->clientId) {
-			return client->fields.Character;
+			if (auto playerControl = client->fields.Character;
+				Object_1_IsNotNull((Object_1*)playerControl)) {
+				return playerControl;
+			}
+#if _DEBUG
+			if (client->fields.Character) {
+				// oops: game bug
+				STREAM_ERROR("player " << +get_PlayerId() << " Character is invalid");
+			}
+#endif
+			return std::nullopt;
 		}
 	}
 
-	*this = PlayerSelection();
-	return NULL;
+	return std::nullopt;
 }
 
-GameData_PlayerInfo* PlayerSelection::get_PlayerData()
+std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
 {
-	if (!this->hasValue) return NULL;
-
-	auto playerControl = this->get_PlayerControl();
-	if (playerControl != NULL)
-		return playerControl->fields._cachedData;
-
-	*this = PlayerSelection();
-	return NULL;
+	if (auto data = GetPlayerData(this->get_PlayerControl().value_or(nullptr));
+		data != nullptr) {
+		return data;
+	}
+	return std::nullopt;
 }
 
-bool PlayerSelection::has_value()
-{
-	if (!this->hasValue)
-		return false;
-
-	if (this->get_PlayerControl() == NULL)
-		return false;
-
-	return true;
-}
-
-uint8_t PlayerSelection::get_PlayerId()
-{
-	if (!this->has_value()) return 0;
+Game::PlayerId PlayerSelection::get_PlayerId() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
 	return this->playerId;
 }
 
-int32_t PlayerSelection::get_ClientId()
-{
-	if (!this->has_value()) return 0;
+Game::ClientId PlayerSelection::get_ClientId() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
 	return this->clientId;
 }
 
-bool PlayerSelection::is_LocalPlayer()
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerControl() == *Game::pLocalPlayer;
+bool PlayerSelection::is_LocalPlayer() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
+	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }
-
-bool PlayerSelection::is_Disconnected()
-{
-	// This is a sanity check, I don't think this is necessary as when a player.
-	// When a player disconnects their PlayerControl is destroyed and as such has_value() should return false
-	if (!this->has_value()) return true;
-	return this->get_PlayerData()->fields.Disconnected;
-}
+#pragma endregion
 
 ImVec4 AmongUsColorToImVec4(const Color& color) {
 	return ImVec4(color.r, color.g, color.b, color.a);
@@ -282,11 +283,11 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
 	return NULL;
 }
 
-GameData_PlayerInfo* GetPlayerDataById(uint8_t id) {
+GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id) {
 	return app::GameData_GetPlayerById((*Game::pGameData), id, NULL);
 }
 
-PlayerControl* GetPlayerControlById(uint8_t id) {
+PlayerControl* GetPlayerControlById(Game::PlayerId id) {
 	for (auto player : GetAllPlayerControl()) {
 		if (player->fields.PlayerId == id) return player;
 	}
@@ -439,7 +440,7 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 
-Color32 GetPlayerColor(int32_t colorId) {
+Color32 GetPlayerColor(Game::ColorId colorId) {
 	il2cpp::Array colorArray = app::Palette__TypeInfo->static_fields->PlayerColors;
 	if (colorId < 0 || (size_t)colorId >= colorArray.size()) {
 		// oops: game bug
@@ -508,7 +509,7 @@ il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients()
 	return (*Game::pAmongUsClient)->fields._.allClients;
 }
 
-Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
+Vector2 GetSpawnLocation(Game::PlayerId playerId, int32_t numPlayer, bool initialSpawn)
 {
 	if (State.mapType == Settings::MapType::Ship || State.mapType != Settings::MapType::Pb || initialSpawn)
 	{
@@ -572,8 +573,9 @@ std::string GetGitBranch()
 	return "unavailable";
 }
 
-void ImpersonateName(PlayerSelection player)
+void ImpersonateName(PlayerSelection& _player)
 {
+	auto player = _player.validate(); if (!player.has_value()) return;
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
 	if (convert_from_string(outfit->fields._playerName).length() < 10) {
@@ -590,15 +592,15 @@ void ImpersonateName(PlayerSelection player)
 	}
 }
 
-int GetRandomColorId()
+Game::ColorId GetRandomColorId()
 {
-	int colorId = 0;
-	auto PlayerColors = il2cpp::Array(app::Palette__TypeInfo->static_fields->PlayerColors);
+	Game::ColorId colorId;
+	il2cpp::Array PlayerColors = app::Palette__TypeInfo->static_fields->PlayerColors;
 	assert(PlayerColors.size() > 0);
 	if (IsInGame() || IsInLobby())
 	{
 		auto players = GetAllPlayerControl();
-		std::vector<int> availableColors = { };
+		std::vector<Game::ColorId> availableColors = { };
 		for (size_t i = 0; i < PlayerColors.size(); i++)
 		{
 			bool colorAvailable = true;
@@ -614,7 +616,7 @@ int GetRandomColorId()
 			}
 
 			if (colorAvailable)
-				availableColors.push_back((int)i);
+				availableColors.push_back((Game::ColorId)i);
 		}
 		assert(availableColors.size() > 0);
 		colorId = availableColors.at(randi(0, (int)availableColors.size() - 1));
@@ -628,8 +630,7 @@ int GetRandomColorId()
 
 void SaveOriginalAppearance()
 {
-	PlayerSelection player = *Game::pLocalPlayer;
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
 	State.originalName = convert_from_string(outfit->fields._playerName);
@@ -648,7 +649,7 @@ void ResetOriginalAppearance()
 	State.originalSkin = nullptr;
 	State.originalHat = nullptr;
 	State.originalPet = nullptr;
-	State.originalColor = -1;
+	State.originalColor = Game::NoColorId;
 	State.originalVisor = nullptr;
 	State.originalNamePlate = nullptr;
 }

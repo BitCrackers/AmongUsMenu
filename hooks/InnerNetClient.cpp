@@ -8,6 +8,7 @@
 #include "replay.hpp"
 #include "profiler.h"
 #include <sstream>
+#include "esp.hpp"
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -127,9 +128,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
-    if ((data->fields.Character != nullptr) && (data->fields.Character->fields._cachedData != nullptr)) //Found this happens on game ending occasionally
+    if (Object_1_IsNotNull((Object_1*)data->fields.Character)) //Found this happens on game ending occasionally
     {
-        app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(data->fields.Character->fields._cachedData);
+        auto playerInfo = GetPlayerData(data->fields.Character);
+        //if (playerInfo) playerInfo->fields.Disconnected = true;
+        app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerInfo);
         if (outfit == NULL)
             Log.Debug("<Unknown> has left the game.");
         else
@@ -139,16 +142,22 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
-        synchronized(Replay::replayEventMutex) {
-            State.liveReplayEvents.emplace_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        if (auto evtPlayer = GetEventPlayer(playerInfo); evtPlayer) {
+            synchronized(Replay::replayEventMutex) {
+                State.liveReplayEvents.emplace_back(new DisconnectEvent(evtPlayer.value()));
+            }
         }
+    }
+    else {
+        STREAM_ERROR("<Client " << data->fields.Id << "> has left the game.");
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
-bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
+bool bogusTransformSnap(PlayerSelection& _player, Vector2 newPosition)
 {
+    const auto& player = _player.validate();
     if (!player.has_value())
         Log.Debug("bogusTransformSnap received invalid player!");
     if (!player.has_value()) return false; //Error getting playercontroller
@@ -206,6 +215,11 @@ static void onGameEnd() {
     Replay::Reset();
     State.aumUsers.clear();
     State.MatchEnd = std::chrono::system_clock::now();
+
+    drawing_t& instance = Esp::GetDrawing();
+    synchronized(instance.m_DrawingMutex) {
+        instance.m_Players = {};
+    }
 }
 
 void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, MethodInfo* method) {

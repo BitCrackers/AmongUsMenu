@@ -17,7 +17,7 @@ bool CustomListBoxInt(const char* label, int* value, const std::vector<const cha
 	ImGuiStyle& style = GetStyle();
 	float spacing = style.ItemInnerSpacing.x;
 	PushItemWidth(width);
-	bool response = BeginCombo(comboLabel.c_str(), list.at(*value), ImGuiComboFlags_NoArrowButton | flags);
+	bool response = BeginCombo(comboLabel.c_str(), (*value >= 0 ? list.at(*value) : nullptr), ImGuiComboFlags_NoArrowButton | flags);
 	if (response) {
 		response = false;
 		for (size_t i = 0; i < list.size(); i++) {
@@ -106,7 +106,7 @@ bool CustomListBoxIntMultiple(const char* label, std::vector<std::pair<const cha
 	return response;
 }
 
-bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS>* list, float width, bool resetButton, ImGuiComboFlags flags) {
+bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pair<PlayerSelection, bool>, Game::MAX_PLAYERS>* list, float width, bool resetButton, ImGuiComboFlags flags) {
 	if (!IsInGame()) return false; // works only ingame
 
 	auto comboLabel = "##" + std::string(label);
@@ -145,9 +145,11 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), item.second))
 			{
 				item.second ^= 1;
-				if (item.second && (!item.first.has_value() || item.first.is_Disconnected()))
+				if (item.second)
 				{
-					item.first = PlayerSelection(playerData);
+					if (const auto& result = item.first.validate();
+						!result.has_value() || result.is_Disconnected())
+						item.first = PlayerSelection(playerData);
 				}
 				response = true;
 			}

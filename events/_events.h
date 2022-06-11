@@ -3,6 +3,7 @@
 #include <chrono>
 #include <format>
 #include "il2cpp-helpers.h"
+#include "game.h"
 
 using namespace app;
 
@@ -39,16 +40,16 @@ enum class CHEAT_ACTIONS {
 const std::vector<const char*> CHEAT_ACTION_NAMES = { "Teleporting", "Killed impostor" };
 
 struct EVENT_PLAYER {
-	uint8_t playerId;
-	uint8_t colorId;
+	Game::PlayerId playerId;
+	Game::ColorId colorId;
 	std::string playerName;
 	bool isDead;
 	bool isAngel;
 	bool isProtected;
 
 	EVENT_PLAYER() {
-		playerId = 0;
-		colorId = 0;
+		playerId = Game::NoPlayerId;
+		colorId = Game::NoColorId;
 		playerName = "";
 		isDead = false;
 		isAngel = false;
@@ -67,7 +68,7 @@ struct EVENT_PLAYER {
 		}
 		else
 		{
-			colorId = 0;
+			colorId = Game::NoColorId;
 			playerName = "ERROR";
 		}
 

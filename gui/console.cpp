@@ -14,7 +14,7 @@ namespace ConsoleGui
 #undef ADD_EVENT
 	};
 
-	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, Game::MAX_PLAYERS> player_filter;
 
 	bool init = false;
 	void Init() {

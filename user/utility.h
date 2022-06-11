@@ -49,31 +49,88 @@ public:
 	int EngineerChance = 0;
 	int GuardianAngelCount = 0;
 	int GuardianAngelChance = 0;
-	int MaxCrewmates = MAX_PLAYERS;
+	int MaxCrewmates = Game::MAX_PLAYERS;
 	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
 	void SubtractRole(RoleTypes__Enum role);
 };
 
 class PlayerSelection {
-	bool hasValue;
-	int32_t clientId;
-	uint8_t playerId;
+	Game::ClientId clientId;
+	Game::PlayerId playerId;
 
+	struct [[nodiscard]] Result {
+		constexpr _Ret_notnull_ auto get_PlayerControl() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "Cannot access value of empty result");
+#endif
+			return _playerControl;
+		}
+		constexpr _Ret_notnull_ auto get_PlayerData() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "get_PlayerData() called on empty result");
+#endif
+			return _playerData;
+		}
+		constexpr bool is_LocalPlayer() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "is_LocalPlayer() called on empty result");
+#endif
+			return _playerControl->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId;
+		}
+		constexpr bool is_Disconnected() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "is_Disconnected() called on empty result");
+#endif
+			return _playerData->fields.Disconnected;
+		}
+		constexpr bool equals(_Maybenull_ const PlayerControl* playerControl) const {
+			return _playerControl == playerControl;
+		}
+		constexpr bool equals(_Maybenull_ const GameData_PlayerInfo* playerData) const {
+			return _playerData == playerData;
+		}
+		constexpr bool has_value() const {
+			return _has_value;
+		}
+	private:
+		friend class PlayerSelection;
+		PlayerControl* _playerControl;
+		GameData_PlayerInfo* _playerData;
+		bool _has_value;
+
+		constexpr Result() noexcept {
+			_playerControl = nullptr;
+			_playerData = nullptr;
+			_has_value = false;
+		}
+
+		constexpr Result(_Notnull_ PlayerControl* pc, _Notnull_ GameData_PlayerInfo* data) {
+			_playerControl = pc;
+			_playerData = data;
+			_has_value = true;
+		}
+		constexpr Result(const Result&) = delete;
+	};
 public:
-	PlayerSelection();
-	PlayerSelection(PlayerControl* playerControl);
-	PlayerSelection(GameData_PlayerInfo* playerData);
-	bool equals(PlayerControl* playerControl);
-	bool equals(GameData_PlayerInfo* playerDate);
-	bool equals(PlayerSelection selectedPlayer);
-	PlayerControl* get_PlayerControl();
-	GameData_PlayerInfo* get_PlayerData();
-	bool has_value();
-	uint8_t get_PlayerId();
-	int32_t get_ClientId();
-	bool is_LocalPlayer();
-	bool is_Disconnected();
+	PlayerSelection() noexcept;
+	explicit PlayerSelection(const  PlayerControl* playerControl);
+	explicit PlayerSelection(GameData_PlayerInfo* playerData);
+
+	PlayerSelection::Result validate();
+
+	bool equals(const PlayerSelection& selectedPlayer) const;
+	Game::PlayerId get_PlayerId() const noexcept;
+	Game::ClientId get_ClientId() const noexcept;
+	bool is_LocalPlayer() const noexcept;
+	bool has_value() const noexcept {
+		return (this->clientId != Game::NoClientId || this->playerId != Game::NoPlayerId);
+	}
+	/*[[deprecated]]*/ bool has_value() {
+		return validate().has_value();
+	}
+	/*[[deprecated]]*/ std::optional<PlayerControl*> get_PlayerControl() const;
+	/*[[deprecated]]*/ std::optional<GameData_PlayerInfo*> get_PlayerData() const;
 };
 
 int randi(int lo, int hi);
@@ -87,8 +144,9 @@ int GetMaxImposterAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
-GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
-PlayerControl* GetPlayerControlById(uint8_t id);
+GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
+PlayerControl* GetPlayerControlById(Game::PlayerId id);
+std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData);
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
@@ -101,7 +159,7 @@ void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
 const char* TranslateSystemTypes(SystemTypes__Enum systemType);
-Color32 GetPlayerColor(int32_t colorId);
+Color32 GetPlayerColor(Game::ColorId colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(const Vector2& vector);
@@ -112,15 +170,15 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player);
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo);
 il2cpp::Array<Camera__Array> GetAllCameras();
 il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients();
-Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
+Vector2 GetSpawnLocation(Game::PlayerId playerId, int numPlayer, bool initialSpawn);
 bool IsAirshipSpawnLocation(const Vector2& vec);
 Vector2 Rotate(const Vector2& vec, float degrees);
 bool Equals(const Vector2& vec1, const Vector2& vec2);
 std::string ToString(Object* object);
 std::string GetGitCommit();
 std::string GetGitBranch();
-void ImpersonateName(PlayerSelection player);
-int GetRandomColorId();
+void ImpersonateName(PlayerSelection& player);
+Game::ColorId GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
 bool PlayerIsImpostor(GameData_PlayerInfo* player);

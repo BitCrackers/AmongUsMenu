@@ -57,14 +57,14 @@ public:
 class RpcReportPlayer : public RPCInterface {
 	PlayerSelection reportedPlayer;
 public:
-	RpcReportPlayer(PlayerSelection target);
+	RpcReportPlayer(const PlayerSelection& target);
 	virtual void Process() override;
 };
 
 class RpcMurderPlayer : public RPCInterface {
 	PlayerSelection target;
 public:
-	RpcMurderPlayer(PlayerSelection target);
+	RpcMurderPlayer(const PlayerSelection& target);
 	virtual void Process() override;
 };
 
