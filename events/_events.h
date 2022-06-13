@@ -74,7 +74,12 @@ struct EVENT_PLAYER {
 
 		isDead = playerInfo->fields.IsDead;
 		isAngel = (playerInfo->fields.Role) ? playerInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel : false;
-		isProtected = playerInfo->fields._object ? playerInfo->fields._object->fields.protectedByGuardian : false;
+		
+		extern std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo * playerData);
+		if (auto object = GameData_PlayerInfo_get_Object(playerInfo); object.has_value())
+			isProtected = (*object)->fields.protectedByGuardian;
+		else
+			isProtected = false;
 	}
 };
 

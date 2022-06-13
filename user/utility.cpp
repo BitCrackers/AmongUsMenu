@@ -132,10 +132,11 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 // See GameData_PlayerInfo::get_Object(GameData_PlayerInfo * __this, MethodInfo * method)
 std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData) {
 	if (!playerData) return std::nullopt;
-	if (Object_1_IsNull((Object_1*)playerData->fields._object))
+	if (Object_1_IsNull((Object_1*)playerData->fields._object)) {
 		playerData->fields._object = GetPlayerControlById(playerData->fields.PlayerId);
-	if (!playerData->fields._object) return std::nullopt;
-	return playerData->fields._object;
+		if (!playerData->fields._object) return std::nullopt;
+	}
+	return std::make_optional(playerData->fields._object);
 }
 
 #pragma region PlayerSelection
@@ -189,7 +190,7 @@ std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
 #if _DEBUG
 		if (playerControl) {
 			// oops: game bug
-			STREAM_ERROR("player " << +get_PlayerId() << " playerControl is invalid");
+			STREAM_ERROR(ToString(playerControl) << " playerControl is invalid");
 		}
 #endif
 	}
@@ -203,7 +204,7 @@ std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
 #if _DEBUG
 			if (client->fields.Character) {
 				// oops: game bug
-				STREAM_ERROR("player " << +get_PlayerId() << " Character is invalid");
+				STREAM_ERROR(ToString(client->fields.Character) << " Character is invalid");
 			}
 #endif
 			return std::nullopt;
@@ -480,7 +481,7 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
 
 std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 {
-	GameData_PlayerInfo* playerInfo = player->fields._cachedData;
+	GameData_PlayerInfo* playerInfo = GetPlayerData(player);
 
 	if (!playerInfo) return std::nullopt;
 	return EVENT_PLAYER(playerInfo);
@@ -489,11 +490,13 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
-	if (Object_1_IsNull((Object_1*)playerInfo->fields._object)) {
-		// TODO: Replace all "playerInfo->fields._object" with "GameData_PlayerInfo_get_Object(playerInfo)"
+	auto object = GameData_PlayerInfo_get_Object(playerInfo);
+	if (!object) {
+		// Likely disconnected player.
+		LOG_ERROR(ToString(playerInfo) + " _object is null");
 		return std::nullopt;
 	}
-	return PlayerControl_GetTruePosition(playerInfo->fields._object, NULL);
+	return PlayerControl_GetTruePosition((*object), NULL);
 }
 
 il2cpp::Array<Camera__Array> GetAllCameras() {
@@ -552,6 +555,30 @@ std::string ToString(Object* object) {
 		return convert_from_string((String*)object);
 	}
 	return type;
+}
+
+std::string ToString(Game::PlayerId id) {
+	if (auto data = GetPlayerDataById(id))
+		return ToString(data);
+	return std::format("<#{}>", +id);
+}
+
+std::string ToString(__maybenull PlayerControl* player) {
+	if (player) {
+		if (auto data = GetPlayerData(player))
+			return ToString(data);
+		return std::format("<#{}>", +player->fields.PlayerId);
+	}
+	return "<Unknown>";
+}
+
+std::string ToString(__maybenull GameData_PlayerInfo* data) {
+	if (data) {
+		if (const auto outfit = GetPlayerOutfit(data))
+			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields._playerName));
+		return std::format("<#{}>", +data->fields.PlayerId);
+	}
+	return "<Unknown>";
 }
 
 #define ADD_QUOTES_HELPER(s) #s

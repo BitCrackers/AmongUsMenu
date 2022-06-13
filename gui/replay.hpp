@@ -2,6 +2,7 @@
 #include "imgui/imgui.h"
 #include <mutex>
 #include <chrono>
+#include "game.h"
 
 namespace Replay
 {
@@ -12,8 +13,8 @@ namespace Replay
 
 	struct WalkEvent_LineData
 	{
-		uint8_t playerId = 0;
-		uint8_t colorId = 0;
+		Game::PlayerId playerId = Game::NoPlayerId;
+		Game::ColorId colorId = Game::NoColorId;
 		std::vector<ImVec2> pendingPoints;
 		std::vector<std::chrono::system_clock::time_point> pendingTimeStamps;
 

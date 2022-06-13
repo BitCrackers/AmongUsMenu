@@ -128,15 +128,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
-    if (Object_1_IsNotNull((Object_1*)data->fields.Character)) //Found this happens on game ending occasionally
-    {
+    if (data->fields.Character) { // Don't use Object_1_IsNotNull().
         auto playerInfo = GetPlayerData(data->fields.Character);
-        //if (playerInfo) playerInfo->fields.Disconnected = true;
-        app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerInfo);
-        if (outfit == NULL)
-            Log.Debug("<Unknown> has left the game.");
-        else
-            Log.Debug(convert_from_string(outfit->fields._playerName) + " has left the game.");
+        if (playerInfo)
+            playerInfo->fields.Disconnected = true;
+        Log.Debug(ToString(data->fields.Character) + " has left the game.");
 
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
@@ -149,7 +145,8 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
         }
     }
     else {
-        STREAM_ERROR("<Client " << data->fields.Id << "> has left the game.");
+        //Found this happens on game ending occasionally
+        //Log.Info(std::format("Client {} has left the game.", data->fields.Id));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);

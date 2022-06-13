@@ -198,7 +198,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 						}
 						auto& plrLineData = State.replayWalkPolylineByPlayer[__this->fields.PlayerId];
 						plrLineData.playerId = __this->fields.PlayerId; 
-						plrLineData.colorId = outfit ? outfit->fields.ColorId : 0;
+						plrLineData.colorId = outfit ? outfit->fields.ColorId : Game::NoColorId;
 						plrLineData.pendingPoints.push_back(mapPos_pre);
 						plrLineData.pendingTimeStamps.emplace_back(std::chrono::system_clock::now());
 						if (plrLineData.pendingPoints.size() >= 100) {

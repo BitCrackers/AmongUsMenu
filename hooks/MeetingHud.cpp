@@ -164,7 +164,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 					State.liveReplayEvents.emplace_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
 				}
 				State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
-				STREAM_DEBUG("Id " << +playerData->fields.PlayerId << " voted for " << +playerVoteArea->fields.VotedFor);
+				STREAM_DEBUG(ToString(playerData) << " voted for " << ToString(playerVoteArea->fields.VotedFor));
 
 				// avoid duplicate votes
 				if (__this->fields.state < app::MeetingHud_VoteStates__Enum::Results) {

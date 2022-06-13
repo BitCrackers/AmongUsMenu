@@ -111,7 +111,7 @@ public:
     std::vector<std::unique_ptr<EventInterface>> liveReplayEvents;
     std::array<ImVec2, Game::MAX_PLAYERS> lastWalkEventPosPerPlayer;
     std::array<std::chrono::system_clock::time_point, Game::MAX_PLAYERS> replayDeathTimePerPlayer;
-    std::map<uint8_t, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
+    std::map<Game::PlayerId, Replay::WalkEvent_LineData> replayWalkPolylineByPlayer;
     bool Replay_IsPlaying = true;
     bool Replay_IsLive = true;
 
