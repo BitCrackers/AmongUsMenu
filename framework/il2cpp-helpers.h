@@ -80,6 +80,11 @@ namespace app {
 				auto pList = (List_1_PlayerTask_*)_Ptr;
 				((void(*)(void*, const void*))(pList->klass->vtable.Clear.methodPtr))(pList, pList->klass->vtable.Clear.method);
 			}
+			constexpr void erase(size_t _Pos) {
+				if (!_Ptr || _Pos >= size()) return;
+				auto pList = (List_1_PlayerTask_*)_Ptr;
+				((void(*)(void*, size_t, const void*))(pList->klass->vtable.RemoveAt.methodPtr))(pList, _Pos, pList->klass->vtable.RemoveAt.method);
+			}
 			constexpr iterator begin() const {
 				if (!_Ptr) return nullptr;
 				return _Ptr->fields._items->vector;

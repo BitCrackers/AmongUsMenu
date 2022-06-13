@@ -28,15 +28,27 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 	MeetingHud_Close(__this, method);
 }
 
-static void Transform_RemoveAllVotes(app::Transform* transform) {
+static void Transform_RemoveVotes(app::Transform* transform, size_t count) {
 	auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
 	if (!voteSpreader) return;
-	auto votes = il2cpp::List(voteSpreader->fields.Votes);
-	if (votes.size() == 0) return;
-	for (auto spriteRenderer : votes) {
-		app::Object_DestroyImmediate((app::Object_1*)spriteRenderer, nullptr);
+	il2cpp::List votes(voteSpreader->fields.Votes);
+	const auto length = votes.size();
+	if (length == 0) return;
+	if (count >= length) {
+		for (auto spriteRenderer : votes) {
+			app::Object_DestroyImmediate((app::Object_1*)spriteRenderer, nullptr);
+		}
+		votes.clear();
+		return;
 	}
-	votes.clear();
+	for (size_t pos = length - 1; pos >= length - count; pos--) {
+		app::Object_DestroyImmediate((app::Object_1*)votes[pos], nullptr);
+		votes.erase(pos);
+	}
+}
+
+static void Transform_RemoveAllVotes(app::Transform* transform) {
+	Transform_RemoveVotes(transform, SIZE_MAX);
 }
 
 static void Transform_RevealAnonymousVotes(app::Transform* transform, Game::VotedFor votedFor) {
@@ -49,7 +61,7 @@ static void Transform_RevealAnonymousVotes(app::Transform* transform, Game::Vote
 		for (auto& pair : State.voteMonitor) {
 			if (pair.second == votedFor) {
 				if (idx >= votes.size()) {
-					STREAM_ERROR("votedFor " << +votedFor << ", index " << idx << ", expected less than " << votes.size());
+					STREAM_ERROR("votedFor " << ToString(votedFor) << ", index " << idx << ", expected less than " << votes.size());
 					break;
 				}
 				auto outfit = GetPlayerOutfit(GetPlayerDataById(pair.first));
@@ -197,7 +209,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				for (auto votedForArea : playerStates) {
 					if (votedForArea->fields.TargetPlayerId == dcPlayer) {
 						auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-						Transform_RemoveAllVotes(transform);
+						Transform_RemoveVotes(transform, 1); // remove a vote
 						break;
 					}
 				}
