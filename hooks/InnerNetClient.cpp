@@ -130,8 +130,6 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
     if (data->fields.Character) { // Don't use Object_1_IsNotNull().
         auto playerInfo = GetPlayerData(data->fields.Character);
-        if (playerInfo)
-            playerInfo->fields.Disconnected = true;
         Log.Debug(ToString(data->fields.Character) + " has left the game.");
 
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
