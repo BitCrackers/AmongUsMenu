@@ -20,7 +20,7 @@ void AUMLogger::Create()
 	this->filePath = logPath;
 }
 
-void AUMLogger::Write(std::string verbosity, std::string source, std::string message)
+void AUMLogger::Write(std::string_view verbosity, std::string_view source, std::string_view message)
 {
 	std::stringstream ss;
 	// FIXME: std::chrono::current_zone requires Windows 10 version 1903/19H1 or later.
@@ -34,32 +34,32 @@ void AUMLogger::Write(std::string verbosity, std::string source, std::string mes
 	file.close();
 }
 
-void AUMLogger::Debug(std::string source, std::string message)
+void AUMLogger::Debug(std::string_view source, std::string_view message)
 {
 	Write("DEBUG", source, message);
 }
 
-void AUMLogger::Error(std::string source, std::string message)
+void AUMLogger::Error(std::string_view source, std::string_view message)
 {
 	Write("ERROR", source, message);
 }
 
-void AUMLogger::Info(std::string source, std::string message)
+void AUMLogger::Info(std::string_view source, std::string_view message)
 {
 	Write("INFO", source, message);
 }
 
-void AUMLogger::Debug(std::string message)
+void AUMLogger::Debug(std::string_view message)
 {
 	Debug("AUM", message);
 }
 
-void AUMLogger::Error(std::string message)
+void AUMLogger::Error(std::string_view message)
 {
 	Error("AUM", message);
 }
 
-void AUMLogger::Info(std::string message)
+void AUMLogger::Info(std::string_view message)
 {
 	Info("AUM", message);
 }
