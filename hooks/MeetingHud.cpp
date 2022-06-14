@@ -129,6 +129,7 @@ void RevealAnonymousVotes() {
 }
 
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
+	const bool isBeforeResultsState = __this->fields.state < app::MeetingHud_VoteStates__Enum::Results;
 	il2cpp::Array playerStates(__this->fields.playerStates);
 	for (auto playerVoteArea : playerStates) {
 		if (!playerVoteArea) {
@@ -160,17 +161,15 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			app::TextMeshPro_SetFaceColor(playerNameTMP, roleColor, NULL);
 			app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
 		}
-		//This is to not show the "Force skip all" that a host does at the end of a meeting
-		bool isDiscussionState = (__this->fields.discussionTimer < (*Game::pGameOptionsData)->fields.DiscussionTime);
-		bool isVotingState = !isDiscussionState &&
-							((__this->fields.discussionTimer - (*Game::pGameOptionsData)->fields.DiscussionTime) < (*Game::pGameOptionsData)->fields.VotingTime); //Voting phase
 
 		if (playerData)
 		{
 			bool didVote = (playerVoteArea->fields.VotedFor != Game::HasNotVoted);
 			// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
 			// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
-			if (isVotingState && didVote && playerVoteArea->fields.VotedFor != Game::MissedVote && State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
+			if (didVote && playerVoteArea->fields.VotedFor != Game::MissedVote
+				&& playerVoteArea->fields.VotedFor != Game::DeadVote
+				&& State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
 			{
 				synchronized(Replay::replayEventMutex) {
 					State.liveReplayEvents.emplace_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
@@ -179,7 +178,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				STREAM_DEBUG(ToString(playerData) << " voted for " << ToString(playerVoteArea->fields.VotedFor));
 
 				// avoid duplicate votes
-				if (__this->fields.state < app::MeetingHud_VoteStates__Enum::Results) {
+				if (isBeforeResultsState) {
 					auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
 					if (prevAnonymousVotes && State.RevealAnonymousVotes)
 						(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
@@ -217,13 +216,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		}
 	}
 
-	do {
-		bool isVotingState = __this->fields.state == app::MeetingHud_VoteStates__Enum::NotVoted
-			|| __this->fields.state == app::MeetingHud_VoteStates__Enum::Voted;
-		if (!isVotingState) {
-			break;
-		}
-
+	if (isBeforeResultsState) {
 		for (auto votedForArea : playerStates) {
 			if (!votedForArea) {
 				// oops: game bug
@@ -248,6 +241,6 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 			}
 			app::GameObject_SetActive(__this->fields.SkippedVoting, showSkipped, nullptr);
 		}
-	} while (false);
-	MeetingHud_Update(__this, method);
+	}
+	app::MeetingHud_Update(__this, method);
 }
