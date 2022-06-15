@@ -6,10 +6,10 @@ struct KLASS {
 	std::string namespaze;
 	std::string klass_name;
 
-	size_t contains_type(std::string type_input) {
+	size_t contains_type(std::string_view type_input) const {
 		size_t position;
 
-		if ((position = type_input.find(klass_name, 0)) != std::string::npos)
+		if ((position = type_input.find(klass_name, 0)) != std::string_view::npos)
 			return klass_name.length();
 
 		return 0;

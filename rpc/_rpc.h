@@ -79,7 +79,7 @@ public:
 class RpcSetName : public RPCInterface {
 	std::string name;
 public:
-	RpcSetName(std::string name);
+	RpcSetName(std::string_view name);
 	virtual void Process() override;
 };
 

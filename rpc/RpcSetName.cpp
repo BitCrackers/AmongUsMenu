@@ -2,7 +2,7 @@
 #include "_rpc.h"
 #include "game.h"
 
-RpcSetName::RpcSetName(std::string name)
+RpcSetName::RpcSetName(std::string_view name)
 {
 	this->name = name;
 }

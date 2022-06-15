@@ -13,6 +13,10 @@
       <Item Name="length">fields.m_stringLength</Item>
     </Expand>
   </Type>
+  <Type Name="Il2CppString">
+    <DisplayString>{chars,su}</DisplayString>
+    <StringView>chars,su</StringView>
+  </Type>
   <Type Name="app::RoleBehaviour">
     <DisplayString>{fields.Role}</DisplayString>
     <Expand>

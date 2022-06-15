@@ -210,7 +210,7 @@ bool SteppedSliderFloat(const char* label, float* v, float v_min, float v_max, f
 	return valueChanged;
 }
 
-bool SliderChrono(const char* label, void* p_data, const void* p_min, const void* p_max, std::string format, ImGuiSliderFlags flags)
+bool SliderChrono(const char* label, void* p_data, const void* p_min, const void* p_max, std::string_view format, ImGuiSliderFlags flags)
 {
 	flags |= ImGuiSliderFlags_NoInput; // disable manual inputs by default
 
@@ -305,7 +305,7 @@ bool SliderChrono(const char* label, void* p_data, const void* p_min, const void
 		window->DrawList->AddRectFilled(grab_bb.Min, grab_bb.Max, GetColorU32(g.ActiveId == id ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), style.GrabRounding);
 
 	// Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
-	RenderTextClipped(frame_bb.Min, frame_bb.Max, &format[0], &format[format.size()], NULL, ImVec2(0.5f, 0.5f));
+	RenderTextClipped(frame_bb.Min, frame_bb.Max, format.data(), format.data() + format.length(), NULL, ImVec2(0.5f, 0.5f));
 
 	if (label_size.x > 0.0f)
 		RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
