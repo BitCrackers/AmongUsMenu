@@ -16,35 +16,23 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount) {
+RoleRates::RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount) {
 	this->ImposterCount = gameOptionsDataFields._.numImpostors;
 	auto maxImpostors = GetMaxImposterAmount(playerAmount);
 	if(this->ImposterCount > maxImpostors)
 		this->ImposterCount = maxImpostors;
 
-		for (auto& kvp : il2cpp::Dictionary(gameOptionsDataFields.RoleOptions->fields.roleRates))
-		{
-			if (kvp.key == RoleTypes__Enum::Engineer)
-			{
-				this->EngineerChance = kvp.value.Chance;
-				this->EngineerCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::Scientist)
-			{
-				this->ScientistChance = kvp.value.Chance;
-				this->ScientistCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::Shapeshifter)
-			{
-				this->ShapeshifterChance = kvp.value.Chance;
-				this->ShapeshifterCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::GuardianAngel)
-			{
-				this->GuardianAngelChance = kvp.value.Chance;
-				this->GuardianAngelCount = kvp.value.MaxCount;
-			}
-		}
+	il2cpp::Dictionary roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
+#define GET_ROLE_RATE(type) \
+	if (auto value = roleRates[RoleTypes__Enum::##type]) { \
+		this->type##Chance = value->Chance; \
+		this->type##Count = value->MaxCount; \
+	}
+	GET_ROLE_RATE(Engineer);
+	GET_ROLE_RATE(Scientist);
+	GET_ROLE_RATE(Shapeshifter);
+	GET_ROLE_RATE(GuardianAngel);
+#undef GET_ROLE_RATE
 }
 
 int RoleRates::GetRoleCount(RoleTypes__Enum role) {

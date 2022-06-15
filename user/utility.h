@@ -50,7 +50,7 @@ public:
 	int GuardianAngelCount = 0;
 	int GuardianAngelChance = 0;
 	int MaxCrewmates = Game::MAX_PLAYERS;
-	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
+	RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
 	void SubtractRole(RoleTypes__Enum role);
 };
