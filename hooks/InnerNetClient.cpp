@@ -223,8 +223,9 @@ void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, Meth
 }
 
 void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
-    // IsInGame()
+    // IsInGame() || IsInLobby()
     if (__this->fields.GameState == InnerNetClient_GameStates__Enum::Started
+        || __this->fields.GameState == InnerNetClient_GameStates__Enum::Joined
         || __this->fields.GameMode == GameModes__Enum::FreePlay) {
         onGameEnd();
     }
