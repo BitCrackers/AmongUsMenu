@@ -8,6 +8,7 @@
 #include "replay.hpp"
 #include "profiler.h"
 #include <sstream>
+#include "esp.hpp"
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -127,28 +128,31 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
-    if ((data->fields.Character != nullptr) && (data->fields.Character->fields._cachedData != nullptr)) //Found this happens on game ending occasionally
-    {
-        app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(data->fields.Character->fields._cachedData);
-        if (outfit == NULL)
-            Log.Debug("<Unknown> has left the game.");
-        else
-            Log.Debug(convert_from_string(outfit->fields._playerName) + " has left the game.");
+    if (data->fields.Character) { // Don't use Object_1_IsNotNull().
+        auto playerInfo = GetPlayerData(data->fields.Character);
+        Log.Debug(ToString(data->fields.Character) + " has left the game.");
 
         auto it = std::find(State.aumUsers.begin(), State.aumUsers.end(), data->fields.Character->fields.PlayerId);
         if (it != State.aumUsers.end())
             State.aumUsers.erase(it);
 
-        synchronized(Replay::replayEventMutex) {
-            State.liveReplayEvents.emplace_back(new DisconnectEvent(GetEventPlayer(data->fields.Character->fields._cachedData).value()));
+        if (auto evtPlayer = GetEventPlayer(playerInfo); evtPlayer) {
+            synchronized(Replay::replayEventMutex) {
+        	    State.liveReplayEvents.emplace_back(std::make_unique<DisconnectEvent>(evtPlayer.value()));
+            }
         }
+    }
+    else {
+        //Found this happens on game ending occasionally
+        //Log.Info(std::format("Client {} has left the game.", data->fields.Id));
     }
 
     AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
-bool bogusTransformSnap(PlayerSelection player, Vector2 newPosition)
+bool bogusTransformSnap(PlayerSelection& _player, Vector2 newPosition)
 {
+    const auto& player = _player.validate();
     if (!player.has_value())
         Log.Debug("bogusTransformSnap received invalid player!");
     if (!player.has_value()) return false; //Error getting playercontroller
@@ -206,6 +210,11 @@ static void onGameEnd() {
     Replay::Reset();
     State.aumUsers.clear();
     State.MatchEnd = std::chrono::system_clock::now();
+
+    drawing_t& instance = Esp::GetDrawing();
+    synchronized(instance.m_DrawingMutex) {
+        instance.m_Players = {};
+    }
 }
 
 void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, MethodInfo* method) {
@@ -214,8 +223,9 @@ void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, Meth
 }
 
 void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
-    // IsInGame()
+    // IsInGame() || IsInLobby()
     if (__this->fields.GameState == InnerNetClient_GameStates__Enum::Started
+        || __this->fields.GameState == InnerNetClient_GameStates__Enum::Joined
         || __this->fields.GameMode == GameModes__Enum::FreePlay) {
         onGameEnd();
     }

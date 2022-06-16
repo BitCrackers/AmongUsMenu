@@ -1,9 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="app::GameData_PlayerInfo">
-    <DisplayString>{{PlayerName={fields.PlayerName,na}}}</DisplayString>
+    <DisplayString>{{ PlayerId={(int)fields.PlayerId} Role={fields.Role,na} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
   </Type>
   <Type Name="app::String">
     <DisplayString>{&amp;(fields.m_firstChar),su}</DisplayString>
+    <StringView>&amp;(fields.m_firstChar),su</StringView>
+    <Expand>
+      <Item Name="length">fields.m_stringLength</Item>
+    </Expand>
+  </Type>
+  <Type Name="Il2CppString">
+    <DisplayString>{chars,su}</DisplayString>
+    <StringView>chars,su</StringView>
+  </Type>
+  <Type Name="app::RoleBehaviour">
+    <DisplayString>{fields.Role}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::GameOptionsData">
+    <AlternativeType Name="app::RoleOptionsData"/>
+    <AlternativeType Name="app::ClientData"/>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::PlainDoor">
+    <DisplayString>{{ Id={fields.Id} Room={fields.Room} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::PlayerTask">
+    <DisplayString>{{ Type={fields.TaskType} At={fields.StartAt} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::NormalPlayerTask">
+    <AlternativeType Name="app::SabotageTask"/>
+    <DisplayString>{{ Type={fields._.TaskType} At={fields._.StartAt} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::Color32">
+    <DisplayString>{{ r={int(r)} g={int(g)} b={int(b)} }}</DisplayString>
+  </Type>
+  <Type Name="app::PlayerControl">
+    <DisplayString Condition="fields._cachedData == 0">{{ PlayerId={(int)fields.PlayerId} Data=null }}</DisplayString>
+    <DisplayString>{fields._cachedData, na}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::GameData_PlayerOutfit">
+    <DisplayString>{{ playerName={fields._playerName,na} }}</DisplayString>
+    <StringView>fields._playerName</StringView>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_">
+    <AlternativeType Name="app::Dictionary_2_RoleTypes_RoleOptionsData_RoleRate_"/>
+    <AlternativeType Name="app::Dictionary_2_SystemTypes_ISystemType_"/>
+    <DisplayString>{{ size = {fields.count - fields.freeCount} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">fields.count - fields.freeCount</Item>
+      <CustomListItems>
+        <Variable Name="i" InitialValue="0"/>
+        <Variable Name="count" InitialValue="fields.count - fields.freeCount"/>
+        <Loop Condition="i  &lt; count">
+          <Item Name="{fields.entries->vector[i].key,na}">fields.entries->vector[i].value</Item>
+          <Exec>i++</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name="app::il2cpp::Dictionary&lt;*&gt;">
+    <DisplayString>{{ size={_Ptr->fields.count - _Ptr->fields.freeCount} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">_Ptr->fields.count - _Ptr->fields.freeCount</Item>
+      <CustomListItems>
+        <Variable Name="i" InitialValue="0"/>
+        <Variable Name="count" InitialValue="_Ptr->fields.count - _Ptr->fields.freeCount"/>
+        <Loop Condition="i  &lt; count">
+          <Item Name="{_Ptr->fields.entries->vector[i].key,na}">_Ptr->fields.entries->vector[i].value</Item>
+          <Exec>i++</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name="app::Object_1__Array">
+    <AlternativeType Name="app::PlayerVoteArea__Array"/>
+    <AlternativeType Name="app::PlainShipRoom__Array"/>
+    <AlternativeType Name="app::PlainDoor__Array"/>
+    <AlternativeType Name="app::PlayerTask__Array"/>
+    <AlternativeType Name="app::PlayerControl__Array"/>
+    <AlternativeType Name="app::ClientData__Array"/>
+    <AlternativeType Name="app::DeadBody__Array"/>
+    <AlternativeType Name="app::PetData__Array"/>
+    <AlternativeType Name="app::HatData__Array"/>
+    <AlternativeType Name="app::SkinData__Array"/>
+    <AlternativeType Name="app::GameData_PlayerInfo__Array"/>
+    <AlternativeType Name="app::RoleTypes__Enum__Array"/>
+    <AlternativeType Name="app::Camera__Array"/>
+    <AlternativeType Name="app::Color32__Array"/>
+    <AlternativeType Name="app::Byte__Array"/>
+    <AlternativeType Name="app::Int32__Array"/>
+    <DisplayString>{{ size={max_length} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">max_length</Item>
+      <ArrayItems>
+        <Size>max_length</Size>
+        <ValuePointer>vector</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="app::il2cpp::Array&lt;*&gt;">
+    <DisplayString>{{ size={_Ptr->max_length} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">_Ptr->max_length</Item>
+      <ArrayItems>
+        <Size>_Ptr->max_length</Size>
+        <ValuePointer>_Ptr->vector</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="app::List_1_PlayerControl_">
+    <AlternativeType Name="app::List_1_GameData_PlayerInfo_"/>
+    <AlternativeType Name="app::List_1_PlayerTask_"/>
+    <AlternativeType Name="app::List_1_InnerNet_ClientData_"/>
+    <AlternativeType Name="app::List_1_HatData_"/>
+    <AlternativeType Name="app::List_1_PetData_"/>
+    <AlternativeType Name="app::List_1_SkinData_"/>
+    <AlternativeType Name="app::List_1_RoleTypes_"/>
+    <AlternativeType Name="app::List_1_RoleEffectAnimation_"/>
+    <AlternativeType Name="app::List_1_UnityEngine_SpriteRenderer_"/>
+    <DisplayString>{{ size={fields._size} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">fields._size</Item>
+      <Item Name="[capacity]">fields._items->max_length</Item>
+      <ArrayItems>
+        <Size>fields._size</Size>
+        <ValuePointer>fields._items->vector</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="app::il2cpp::List&lt;*&gt;">
+    <DisplayString>{{ size={_Ptr->fields._size} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">_Ptr->fields._size</Item>
+      <Item Name="[capacity]">_Ptr->fields._items->max_length</Item>
+      <ArrayItems>
+        <Size>_Ptr->fields._size</Size>
+        <ValuePointer>_Ptr->fields._items->vector</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="app::PlayerVoteArea">
+    <DisplayString>{{ TargetId={(int)fields.TargetPlayerId} VotedFor={(int)fields.VotedFor} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::VoteSpreader">
+    <DisplayString>{{ Votes={fields.Votes,na} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="app::MeetingHud">
+    <DisplayString>{{ State={fields.state} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>fields</ExpandedItem>
+    </Expand>
   </Type>
 </AutoVisualizer>

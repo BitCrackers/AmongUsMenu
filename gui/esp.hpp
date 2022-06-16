@@ -67,7 +67,7 @@ typedef struct Drawing
 {
 	std::mutex m_DrawingMutex;
 
-	std::array<PlayerData, MAX_PLAYERS> m_Players;
+	std::array<PlayerData, Game::MAX_PLAYERS> m_Players;
 
 	ImVec2 LocalPosition{ 0.0f, 0.0f };
 } drawing_t;

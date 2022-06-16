@@ -3,9 +3,9 @@
 void new_console();
 std::string convert_from_string(Il2CppString* input);
 std::string convert_from_string(app::String* input);
-app::String* convert_to_string(std::string input);
+app::String* convert_to_string(std::string_view input);
 std::string translate_type_name(std::string input);
-Il2CppMethodPointer find_method(Il2CppClass* klass, std::string returnType, std::string methodName, std::string paramTypes);
+Il2CppMethodPointer find_method(Il2CppClass* klass, std::string_view returnType, std::string_view methodName, std::string_view paramTypes);
 Il2CppMethodPointer get_method(std::string methodSignature);
 Il2CppClass* get_class(std::string classSignature);
 std::string get_method_description(const MethodInfo* methodInfo);
@@ -21,6 +21,7 @@ namespace app {
 			using iterator = decltype(&E::fields.entries->vector[0]);
 			using key_type = decltype(E::fields.entries->vector->key);
 			using value_type = decltype(E::fields.entries->vector->value);
+			using pointer = std::conditional_t<std::is_pointer_v<value_type>, value_type, value_type*>;
 			constexpr Dictionary(E* dict) : _Ptr(dict) {}
 			constexpr size_t size() const {
 				if (!_Ptr) return 0;
@@ -32,13 +33,18 @@ namespace app {
 				return _Ptr->fields.entries->vector;
 			}
 			constexpr iterator end() const { return begin() + size(); }
-			constexpr auto operator[](key_type&& _Keyval) const {
-				for (auto& kvp : *this) {
-					if (kvp.key == _Keyval) {
-						return kvp.value;
-					}
-				}
-				return (value_type)nullptr;
+			constexpr pointer operator[](const key_type& _Keyval) const {
+				static_assert(std::is_arithmetic_v<key_type> || std::is_scoped_enum_v<key_type>);
+				if (!_Ptr) return nullptr;
+				const auto FindEntryMethod = ((System_Collections_Generic_Dictionary_TKey__TValue__RGCTXs*)(_Ptr->klass->rgctx_data))
+					->_17_System_Collections_Generic_Dictionary_TKey__TValue__FindEntry;
+				auto num = ((int32_t(*)(void*, key_type, const void*))(FindEntryMethod->methodPointer))(_Ptr, _Keyval, FindEntryMethod);
+				if (num < 0)
+					return nullptr;
+				if constexpr (std::is_pointer_v<value_type>)
+					return _Ptr->fields.entries->vector[num].value;
+				else
+					return &_Ptr->fields.entries->vector[num].value;
 			}
 			constexpr E* get() const { return _Ptr; }
 		protected:
@@ -79,6 +85,11 @@ namespace app {
 				if (!_Ptr) return;
 				auto pList = (List_1_PlayerTask_*)_Ptr;
 				((void(*)(void*, const void*))(pList->klass->vtable.Clear.methodPtr))(pList, pList->klass->vtable.Clear.method);
+			}
+			constexpr void erase(size_t _Pos) {
+				if (!_Ptr || _Pos >= size()) return;
+				auto pList = (List_1_PlayerTask_*)_Ptr;
+				((void(*)(void*, size_t, const void*))(pList->klass->vtable.RemoveAt.methodPtr))(pList, _Pos, pList->klass->vtable.RemoveAt.method);
 			}
 			constexpr iterator begin() const {
 				if (!_Ptr) return nullptr;

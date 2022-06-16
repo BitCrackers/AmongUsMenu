@@ -16,35 +16,23 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount) {
+RoleRates::RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount) {
 	this->ImposterCount = gameOptionsDataFields._.numImpostors;
 	auto maxImpostors = GetMaxImposterAmount(playerAmount);
 	if(this->ImposterCount > maxImpostors)
 		this->ImposterCount = maxImpostors;
 
-		for (auto& kvp : il2cpp::Dictionary(gameOptionsDataFields.RoleOptions->fields.roleRates))
-		{
-			if (kvp.key == RoleTypes__Enum::Engineer)
-			{
-				this->EngineerChance = kvp.value.Chance;
-				this->EngineerCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::Scientist)
-			{
-				this->ScientistChance = kvp.value.Chance;
-				this->ScientistCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::Shapeshifter)
-			{
-				this->ShapeshifterChance = kvp.value.Chance;
-				this->ShapeshifterCount = kvp.value.MaxCount;
-			}
-			else if (kvp.key == RoleTypes__Enum::GuardianAngel)
-			{
-				this->GuardianAngelChance = kvp.value.Chance;
-				this->GuardianAngelCount = kvp.value.MaxCount;
-			}
-		}
+	il2cpp::Dictionary roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
+#define GET_ROLE_RATE(type) \
+	if (auto value = roleRates[RoleTypes__Enum::##type]) { \
+		this->type##Chance = value->Chance; \
+		this->type##Count = value->MaxCount; \
+	}
+	GET_ROLE_RATE(Engineer);
+	GET_ROLE_RATE(Scientist);
+	GET_ROLE_RATE(Shapeshifter);
+	GET_ROLE_RATE(GuardianAngel);
+#undef GET_ROLE_RATE
 }
 
 int RoleRates::GetRoleCount(RoleTypes__Enum role) {
@@ -122,39 +110,6 @@ int GenerateRandomNumber(int min, int max)
 	return dist(rng);
 }
 
-PlayerSelection::PlayerSelection()
-{
-	this->hasValue = false;
-	this->clientId = 0;
-	this->playerId = 0;
-}
-
-PlayerSelection::PlayerSelection(PlayerControl* playerControl)
-{
-	if (playerControl != NULL) {
-		this->hasValue = true;
-		this->clientId = playerControl->fields._.OwnerId;
-		this->playerId = playerControl->fields.PlayerId;
-	} else {
-		*this = PlayerSelection();
-	}
-}
-
-PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData)
-{
-	if (playerData != NULL) {
-		*this = PlayerSelection(playerData->fields._object);
-	} else {
-		*this = PlayerSelection();
-	}
-}
-
-bool PlayerSelection::equals(PlayerControl* playerControl)
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerControl() == playerControl;
-}
-
 Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 {
 	Vector2 playerVector2 = PlayerControl_GetTruePosition(playerControl, NULL);
@@ -162,92 +117,128 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 	return playerVector2;
 }
 
-bool PlayerSelection::equals(GameData_PlayerInfo* playerData)
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerData() == playerData;
+// See GameData_PlayerInfo::get_Object(GameData_PlayerInfo * __this, MethodInfo * method)
+std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData) {
+	if (!playerData) return std::nullopt;
+	if (Object_1_IsNull((Object_1*)playerData->fields._object)) {
+		playerData->fields._object = GetPlayerControlById(playerData->fields.PlayerId);
+		if (!playerData->fields._object) return std::nullopt;
+	}
+	return std::make_optional(playerData->fields._object);
 }
 
-bool PlayerSelection::equals(PlayerSelection selectedPlayer)
+#pragma region PlayerSelection
+PlayerSelection::PlayerSelection() noexcept
+{
+	this->clientId = Game::NoClientId;
+	this->playerId = Game::NoPlayerId;
+}
+
+PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
+	if (Object_1_IsNotNull((Object_1*)playerControl)) {
+		this->clientId = playerControl->fields._.OwnerId;
+		this->playerId = playerControl->fields.PlayerId;
+	}
+	else {
+		new (this)PlayerSelection();
+	}
+}
+
+PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
+	new (this)PlayerSelection(GameData_PlayerInfo_get_Object(playerData).value_or(nullptr));
+}
+
+PlayerSelection::Result PlayerSelection::validate() {
+	auto playerControl = this->get_PlayerControl();
+	if (playerControl) {
+		auto playerData = app::PlayerControl_get_Data((*playerControl), nullptr);
+		if (playerData) {
+			return { (*playerControl), playerData };
+		}
+	}
+	this->clientId = Game::NoClientId;
+	this->playerId = Game::NoPlayerId;
+	return {};
+}
+
+bool PlayerSelection::equals(const PlayerSelection& selectedPlayer) const
 {
 	if (!this->has_value() || !selectedPlayer.has_value()) return false;
-	return (this->get_PlayerId() == selectedPlayer.get_PlayerId() && this->get_PlayerId() == selectedPlayer.get_PlayerId());
+	return std::tie(clientId,  playerId) == std::tie(selectedPlayer.clientId, selectedPlayer.playerId);
 }
 
-PlayerControl* PlayerSelection::get_PlayerControl()
-{
-	if (!this->hasValue) return NULL;
+std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
+	if (!this->has_value()) 
+		return std::nullopt;
 
-	if (clientId == -2) {
+	if (clientId == Game::HostInherit) {
 		auto playerControl = GetPlayerControlById(this->playerId);
-		if (playerControl != NULL)
+		if (Object_1_IsNotNull((Object_1*)playerControl))
 			return playerControl;
+#if _DEBUG
+		if (playerControl) {
+			// oops: game bug
+			STREAM_ERROR(ToString(playerControl) << " playerControl is invalid");
+		}
+#endif
 	}
 
 	for (auto client : GetAllClients()) {
 		if (client->fields.Id == this->clientId) {
-			return client->fields.Character;
+			if (auto playerControl = client->fields.Character;
+				Object_1_IsNotNull((Object_1*)playerControl)) {
+				return playerControl;
+			}
+#if _DEBUG
+			if (client->fields.Character) {
+				// oops: game bug
+				STREAM_ERROR(ToString(client->fields.Character) << " Character is invalid");
+			}
+#endif
+			return std::nullopt;
 		}
 	}
 
-	*this = PlayerSelection();
-	return NULL;
+	return std::nullopt;
 }
 
-GameData_PlayerInfo* PlayerSelection::get_PlayerData()
+std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
 {
-	if (!this->hasValue) return NULL;
-
-	auto playerControl = this->get_PlayerControl();
-	if (playerControl != NULL)
-		return playerControl->fields._cachedData;
-
-	*this = PlayerSelection();
-	return NULL;
+	if (auto data = GetPlayerData(this->get_PlayerControl().value_or(nullptr));
+		data != nullptr) {
+		return data;
+	}
+	return std::nullopt;
 }
 
-bool PlayerSelection::has_value()
-{
-	if (!this->hasValue)
-		return false;
-
-	if (this->get_PlayerControl() == NULL)
-		return false;
-
-	return true;
-}
-
-uint8_t PlayerSelection::get_PlayerId()
-{
-	if (!this->has_value()) return 0;
+Game::PlayerId PlayerSelection::get_PlayerId() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
 	return this->playerId;
 }
 
-int32_t PlayerSelection::get_ClientId()
-{
-	if (!this->has_value()) return 0;
+Game::ClientId PlayerSelection::get_ClientId() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
 	return this->clientId;
 }
 
-bool PlayerSelection::is_LocalPlayer()
-{
-	if (!this->has_value()) return false;
-	return this->get_PlayerControl() == *Game::pLocalPlayer;
+bool PlayerSelection::is_LocalPlayer() const noexcept {
+#if _DEBUG
+	assert(this->has_value());
+#endif
+	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }
-
-bool PlayerSelection::is_Disconnected()
-{
-	// This is a sanity check, I don't think this is necessary as when a player.
-	// When a player disconnects their PlayerControl is destroyed and as such has_value() should return false
-	if (!this->has_value()) return true;
-	return this->get_PlayerData()->fields.Disconnected;
-}
+#pragma endregion
 
 ImVec4 AmongUsColorToImVec4(const Color& color) {
 	return ImVec4(color.r, color.g, color.b, color.a);
 }
 
-ImVec4 AmongUsColorToImVec4(const CorrectedColor32& color) {
+ImVec4 AmongUsColorToImVec4(const Color32& color) {
+	static_assert(offsetof(Color32, a) + sizeof(Color32::a) == sizeof(Color32::rgba), "Color32 must be defined as union");
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
@@ -281,11 +272,11 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
 	return NULL;
 }
 
-GameData_PlayerInfo* GetPlayerDataById(uint8_t id) {
+GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id) {
 	return app::GameData_GetPlayerById((*Game::pGameData), id, NULL);
 }
 
-PlayerControl* GetPlayerControlById(uint8_t id) {
+PlayerControl* GetPlayerControlById(Game::PlayerId id) {
 	for (auto player : GetAllPlayerControl()) {
 		if (player->fields.PlayerId == id) return player;
 	}
@@ -419,29 +410,31 @@ void CompleteTask(NormalPlayerTask* playerTask) {
 	}
 }
 
-#pragma warning(suppress:26812)
 const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
-	static const char* const TASK_TRANSLATIONS[] = { "Submit Scan", "Prime Shields", "Fuel Engines", "Chart Course", "Start Reactor", "Swipe Card", "Clear Asteroids", "Upload Data",
+	static constexpr std::array TASK_TRANSLATIONS = { "Submit Scan", "Prime Shields", "Fuel Engines", "Chart Course", "Start Reactor", "Swipe Card", "Clear Asteroids", "Upload Data",
 		"Inspect Sample", "Empty Chute", "Empty Garbage", "Align Engine Output", "Fix Wiring", "Calibrate Distributor", "Divert Power", "Unlock Manifolds", "Reset Reactor",
 		"Fix Lights", "Clean O2 Filter", "Fix Communications", "Restore Oxygen", "Stabilize Steering", "Assemble Artifact", "Sort Samples", "Measure Weather", "Enter ID Code",
 		"Buy Beverage", "Process Data", "Run Diagnostics", "Water Plants", "Monitor Oxygen", "Store Artifacts", "Fill Canisters", "Activate Weather Nodes", "Insert Keys",
 		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi",
 		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
 		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning"};
-	return TASK_TRANSLATIONS[(uint8_t)taskType];
+	return TASK_TRANSLATIONS.at(static_cast<size_t>(taskType));
 }
 
-#pragma warning(suppress:26812)
 const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
-	static const char* const SYSTEM_TRANSLATIONS[] = { "Hallway", "Storage", "Cafeteria", "Reactor", "Upper Engine", "Navigation", "Admin", "Electrical", "Oxygen", "Shields",
+	static constexpr std::array SYSTEM_TRANSLATIONS = { "Hallway", "Storage", "Cafeteria", "Reactor", "Upper Engine", "Navigation", "Admin", "Electrical", "Oxygen", "Shields",
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck",
 		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical" };
-	return SYSTEM_TRANSLATIONS[(uint8_t)systemType];
+	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 
-CorrectedColor32 GetPlayerColor(uint8_t colorId) {
-	CorrectedColor32* colorArray = (CorrectedColor32*)app::Palette__TypeInfo->static_fields->PlayerColors->vector;
+Color32 GetPlayerColor(Game::ColorId colorId) {
+	il2cpp::Array colorArray = app::Palette__TypeInfo->static_fields->PlayerColors;
+	if (colorId < 0 || (size_t)colorId >= colorArray.size()) {
+		// oops: game bug
+		return app::Palette__TypeInfo->static_fields->VisorColor;
+	}
 	return colorArray[colorId];
 }
 
@@ -476,7 +469,7 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
 
 std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 {
-	GameData_PlayerInfo* playerInfo = player->fields._cachedData;
+	GameData_PlayerInfo* playerInfo = GetPlayerData(player);
 
 	if (!playerInfo) return std::nullopt;
 	return EVENT_PLAYER(playerInfo);
@@ -485,11 +478,13 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
-	if (Object_1_IsNull((Object_1*)playerInfo->fields._object)) {
-		// TODO: Replace all "playerInfo->fields._object" with "GameData_PlayerInfo_get_Object(playerInfo)"
+	auto object = GameData_PlayerInfo_get_Object(playerInfo);
+	if (!object) {
+		// Likely disconnected player.
+		LOG_ERROR(ToString(playerInfo) + " _object is null");
 		return std::nullopt;
 	}
-	return PlayerControl_GetTruePosition(playerInfo->fields._object, NULL);
+	return PlayerControl_GetTruePosition((*object), NULL);
 }
 
 il2cpp::Array<Camera__Array> GetAllCameras() {
@@ -505,7 +500,7 @@ il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients()
 	return (*Game::pAmongUsClient)->fields._.allClients;
 }
 
-Vector2 GetSpawnLocation(int32_t playerId, int32_t numPlayer, bool initialSpawn)
+Vector2 GetSpawnLocation(Game::PlayerId playerId, int32_t numPlayer, bool initialSpawn)
 {
 	if (State.mapType == Settings::MapType::Ship || State.mapType != Settings::MapType::Pb || initialSpawn)
 	{
@@ -550,6 +545,30 @@ std::string ToString(Object* object) {
 	return type;
 }
 
+std::string ToString(Game::PlayerId id) {
+	if (auto data = GetPlayerDataById(id))
+		return ToString(data);
+	return std::format("<#{}>", +id);
+}
+
+std::string ToString(__maybenull PlayerControl* player) {
+	if (player) {
+		if (auto data = GetPlayerData(player))
+			return ToString(data);
+		return std::format("<#{}>", +player->fields.PlayerId);
+	}
+	return "<Unknown>";
+}
+
+std::string ToString(__maybenull GameData_PlayerInfo* data) {
+	if (data) {
+		if (const auto outfit = GetPlayerOutfit(data))
+			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields._playerName));
+		return std::format("<#{}>", +data->fields.PlayerId);
+	}
+	return "<Unknown>";
+}
+
 #define ADD_QUOTES_HELPER(s) #s
 #define ADD_QUOTES(s) ADD_QUOTES_HELPER(s)
 
@@ -569,8 +588,9 @@ std::string GetGitBranch()
 	return "unavailable";
 }
 
-void ImpersonateName(PlayerSelection player)
+void ImpersonateName(PlayerSelection& _player)
 {
+	auto player = _player.validate(); if (!player.has_value()) return;
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
 	if (convert_from_string(outfit->fields._playerName).length() < 10) {
@@ -587,15 +607,15 @@ void ImpersonateName(PlayerSelection player)
 	}
 }
 
-int GetRandomColorId()
+Game::ColorId GetRandomColorId()
 {
-	int colorId = 0;
-	auto PlayerColors = il2cpp::Array(app::Palette__TypeInfo->static_fields->PlayerColors);
+	Game::ColorId colorId;
+	il2cpp::Array PlayerColors = app::Palette__TypeInfo->static_fields->PlayerColors;
 	assert(PlayerColors.size() > 0);
 	if (IsInGame() || IsInLobby())
 	{
 		auto players = GetAllPlayerControl();
-		std::vector<int> availableColors = { };
+		std::vector<Game::ColorId> availableColors = { };
 		for (size_t i = 0; i < PlayerColors.size(); i++)
 		{
 			bool colorAvailable = true;
@@ -611,7 +631,7 @@ int GetRandomColorId()
 			}
 
 			if (colorAvailable)
-				availableColors.push_back((int)i);
+				availableColors.push_back((Game::ColorId)i);
 		}
 		assert(availableColors.size() > 0);
 		colorId = availableColors.at(randi(0, (int)availableColors.size() - 1));
@@ -625,8 +645,7 @@ int GetRandomColorId()
 
 void SaveOriginalAppearance()
 {
-	PlayerSelection player = *Game::pLocalPlayer;
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
 	State.originalName = convert_from_string(outfit->fields._playerName);
@@ -645,7 +664,7 @@ void ResetOriginalAppearance()
 	State.originalSkin = nullptr;
 	State.originalHat = nullptr;
 	State.originalPet = nullptr;
-	State.originalColor = 0xFF;
+	State.originalColor = Game::NoColorId;
 	State.originalVisor = nullptr;
 	State.originalNamePlate = nullptr;
 }

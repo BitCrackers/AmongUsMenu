@@ -1,7 +1,5 @@
 using namespace app;
 
-DO_APP_FUNC(String*, Marshal_PtrToStringAnsi, (void* ptr, MethodInfo* method), "mscorlib, System.String System.Runtime.InteropServices.Marshal::PtrToStringAnsi(System.IntPtr)");
-DO_APP_FUNC(String*, Marshal_PtrToStringUni, (void* ptr, MethodInfo* method), "mscorlib, System.String System.Runtime.InteropServices.Marshal::PtrToStringUni(System.IntPtr)");
 DO_APP_FUNC(Type*, Type_GetType, (String* typeName, MethodInfo* method), "mscorlib, System.Type System.Type::GetType(System.String)");
 
 DO_APP_FUNC(GameObject*, Component_get_gameObject, (Component_1* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.GameObject UnityEngine.Component::get_gameObject()");

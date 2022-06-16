@@ -6,6 +6,16 @@
 #include "gui-helpers.hpp"
 
 namespace HostTab {
+	static void SetRoleAmount(RoleTypes__Enum type, int amount) {
+		il2cpp::Dictionary roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
+		if (auto value = roleRates[type]) {
+			if (amount > 0)
+				value->Chance = 100;
+			if (amount > value->MaxCount)
+				value->MaxCount = amount;
+		}
+	}
+
 	void Render() {
 		if (IsHost() && IsInLobby()) {
 			if (ImGui::BeginTabItem("Host")) {
@@ -38,37 +48,14 @@ namespace HostTab {
 								State.assignedRoles[index] = RoleType::Engineer;
 							else if(State.assignedRoles[index] == RoleType::Impostor)
 								State.assignedRoles[index] = RoleType::Random;
+							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+							State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
 						}
-						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
-						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
 
-						if (!IsInGame())
-						{
-								for (auto& kvp : il2cpp::Dictionary((*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates))
-								{
-									if (kvp.key == RoleTypes__Enum::Engineer)
-									{
-										if(State.engineers_amount > 0)
-											kvp.value.Chance = 100;
-										if(State.engineers_amount > kvp.value.MaxCount)
-											kvp.value.MaxCount = State.engineers_amount;
-									}
-									else if (kvp.key == RoleTypes__Enum::Scientist)
-									{
-										if(State.scientists_amount > 0)
-											kvp.value.Chance = 100;
-										if(State.scientists_amount > kvp.value.MaxCount)
-											kvp.value.MaxCount = State.scientists_amount;
-									}
-									else if (kvp.key == RoleTypes__Enum::Shapeshifter)
-									{
-										if(State.shapeshifters_amount > 0)
-											kvp.value.Chance = 100;
-										if(State.shapeshifters_amount > kvp.value.MaxCount)
-											kvp.value.MaxCount = State.shapeshifters_amount;
-									}
-								}
-
+						if (!IsInGame()) {
+							SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
+							SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
+							SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
 							if((*Game::pGameOptionsData)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
 								(*Game::pGameOptionsData)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;
 						}

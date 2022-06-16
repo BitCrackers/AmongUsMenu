@@ -7,14 +7,14 @@
 class AUMLogger {
 public:
 	void Create();
-	void Write(std::string verbosity, std::string source, std::string message);
+	void Write(std::string_view verbosity, std::string_view source, std::string_view message);
 
-	void Debug(std::string source, std::string message);
-	void Error(std::string source, std::string message);
-	void Info(std::string source, std::string message);
-	void Debug(std::string message);
-	void Error(std::string message);
-	void Info(std::string message);
+	void Debug(std::string_view source, std::string_view message);
+	void Error(std::string_view source, std::string_view message);
+	void Info(std::string_view source, std::string_view message);
+	void Debug(std::string_view message);
+	void Error(std::string_view message);
+	void Info(std::string_view message);
 private:
 	std::filesystem::path filePath;
 	std::string currentVerbosity;

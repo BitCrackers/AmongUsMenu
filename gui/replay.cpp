@@ -24,9 +24,9 @@ namespace Replay
 		#undef ADD_EVENT
 	};
 
-	std::array<std::pair<PlayerSelection, bool>, MAX_PLAYERS> player_filter;
+	std::array<std::pair<PlayerSelection, bool>, Game::MAX_PLAYERS> player_filter;
 
-	ImU32 GetReplayPlayerColor(uint8_t colorId) {
+	ImU32 GetReplayPlayerColor(Game::ColorId colorId) {
 		return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetPlayerColor(colorId)));
 	}
 
@@ -66,13 +66,13 @@ namespace Replay
 			if (all) {
 				// free all storage
 				State.liveReplayEvents.shrink_to_fit();
-				std::map<uint8_t, Replay::WalkEvent_LineData>().swap(State.replayWalkPolylineByPlayer);
+				std::map<Game::PlayerId, Replay::WalkEvent_LineData>().swap(State.replayWalkPolylineByPlayer);
 			}
 			else {
 				for (auto& pair : State.replayWalkPolylineByPlayer)
 				{
-					pair.second.playerId = 0;
-					pair.second.colorId = 0;
+					pair.second.playerId = Game::NoPlayerId;
+					pair.second.colorId = Game::NoColorId;
 					pair.second.pendingPoints.clear();
 					pair.second.pendingTimeStamps.clear();
 					pair.second.simplifiedPoints.clear();
@@ -80,7 +80,7 @@ namespace Replay
 				}
 			}
 
-			for (size_t plyIdx = 0; plyIdx < MAX_PLAYERS; plyIdx++)
+			for (size_t plyIdx = 0; plyIdx < Game::MAX_PLAYERS; plyIdx++)
 			{
 				State.lastWalkEventPosPerPlayer[plyIdx] = ImVec2(0.f, 0.f);
 				if (all)
@@ -96,7 +96,7 @@ namespace Replay
 	}
 
 	void RenderPolyline(ImDrawList* drawList, float cursorPosX, float cursorPosY, 
-		std::vector<ImVec2>& points, const std::vector<std::chrono::system_clock::time_point>& timeStamps, uint8_t colorId, 
+		std::vector<ImVec2>& points, const std::vector<std::chrono::system_clock::time_point>& timeStamps, Game::ColorId colorId, 
 		bool isUsingMinTimeFilter, const std::chrono::system_clock::time_point& minTimeFilter, bool isUsingMaxTimeFilter, const std::chrono::system_clock::time_point& maxTimeFilter)
 	{
 		if ((isUsingMinTimeFilter == true) && (isUsingMaxTimeFilter == true)
@@ -227,8 +227,8 @@ namespace Replay
 
 		for (auto& playerPolylinePair : State.replayWalkPolylineByPlayer)
 		{
-			const int& plrIdx = playerPolylinePair.first;
-			const Replay::WalkEvent_LineData& plrLineData = playerPolylinePair.second;
+			const auto& plrIdx = playerPolylinePair.first;
+			const auto& plrLineData = playerPolylinePair.second;
 
 			// player filter
 			if ((isUsingPlayerFilter == true) &&

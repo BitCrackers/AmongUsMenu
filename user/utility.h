@@ -5,12 +5,11 @@
 #include <filesystem>
 #include "game.h"
 
-#define _CONCAT4(a,b,c,d)		a##b##c##d
-#define CONCAT4(a,b,c,d)		_CONCAT4(a,b,c,d)
+#define UNIQUE_NAME(prefix)	_CONCAT(prefix ## _, __COUNTER__) ## _CONCAT(at, __LINE__)
 
-#define _synchronized(lock, name, mtx)	if (lock name(mtx); true) // for(lock name(mtx); name; name.unlock())
-#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, CONCAT4(rdLock_, __COUNTER__, _at_, __LINE__), smtx)
-#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, CONCAT4(lock_, __COUNTER__, _at_, __LINE__), mtx)
+#define _synchronized(lock, name, mtx)	if (lock name(mtx); true)
+#define synchronized_read(smtx)	_synchronized(std::shared_lock<decltype(smtx)>, UNIQUE_NAME(rdLock), smtx)
+#define synchronized_write(mtx)	_synchronized(std::unique_lock<decltype(mtx)>, UNIQUE_NAME(lock), mtx)
 /*
 	it mimics the behaviour of the Java construct
 	"synchronized(this) { }"
@@ -20,14 +19,7 @@
 	to secure a code-block, use the following syntax:
 	"{ SYNCHRONIZED(mutex); <commands> }"
 */
-#define SYNCHRONIZED(mtx)	std::scoped_lock CONCAT4(lock_, __COUNTER__, _at_, __LINE__)(mtx)
-
-struct CorrectedColor32 {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t a;
-};
+#define SYNCHRONIZED(mtx)	std::scoped_lock UNIQUE_NAME(lock)(mtx)
 
 enum class MapType {
 	MAP_SKELD = 0,
@@ -57,36 +49,93 @@ public:
 	int EngineerChance = 0;
 	int GuardianAngelCount = 0;
 	int GuardianAngelChance = 0;
-	int MaxCrewmates = MAX_PLAYERS;
-	RoleRates(GameOptionsData__Fields gameOptionsDataFields, int playerAmount);
+	int MaxCrewmates = Game::MAX_PLAYERS;
+	RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
 	void SubtractRole(RoleTypes__Enum role);
 };
 
 class PlayerSelection {
-	bool hasValue;
-	int32_t clientId;
-	uint8_t playerId;
+	Game::ClientId clientId;
+	Game::PlayerId playerId;
 
+	struct [[nodiscard]] Result {
+		constexpr _Ret_notnull_ auto get_PlayerControl() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "Cannot access value of empty result");
+#endif
+			return _playerControl;
+		}
+		constexpr _Ret_notnull_ auto get_PlayerData() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "get_PlayerData() called on empty result");
+#endif
+			return _playerData;
+		}
+		constexpr bool is_LocalPlayer() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "is_LocalPlayer() called on empty result");
+#endif
+			return _playerControl->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId;
+		}
+		constexpr bool is_Disconnected() const {
+#if _CONTAINER_DEBUG_LEVEL > 0
+			assert(has_value() && "is_Disconnected() called on empty result");
+#endif
+			return _playerData->fields.Disconnected;
+		}
+		constexpr bool equals(_Maybenull_ const PlayerControl* playerControl) const {
+			return _playerControl == playerControl;
+		}
+		constexpr bool equals(_Maybenull_ const GameData_PlayerInfo* playerData) const {
+			return _playerData == playerData;
+		}
+		constexpr bool has_value() const {
+			return _has_value;
+		}
+	private:
+		friend class PlayerSelection;
+		PlayerControl* _playerControl;
+		GameData_PlayerInfo* _playerData;
+		bool _has_value;
+
+		constexpr Result() noexcept {
+			_playerControl = nullptr;
+			_playerData = nullptr;
+			_has_value = false;
+		}
+
+		constexpr Result(_Notnull_ PlayerControl* pc, _Notnull_ GameData_PlayerInfo* data) {
+			_playerControl = pc;
+			_playerData = data;
+			_has_value = true;
+		}
+		constexpr Result(const Result&) = delete;
+	};
 public:
-	PlayerSelection();
-	PlayerSelection(PlayerControl* playerControl);
-	PlayerSelection(GameData_PlayerInfo* playerData);
-	bool equals(PlayerControl* playerControl);
-	bool equals(GameData_PlayerInfo* playerDate);
-	bool equals(PlayerSelection selectedPlayer);
-	PlayerControl* get_PlayerControl();
-	GameData_PlayerInfo* get_PlayerData();
-	bool has_value();
-	uint8_t get_PlayerId();
-	int32_t get_ClientId();
-	bool is_LocalPlayer();
-	bool is_Disconnected();
+	PlayerSelection() noexcept;
+	explicit PlayerSelection(const  PlayerControl* playerControl);
+	explicit PlayerSelection(GameData_PlayerInfo* playerData);
+
+	PlayerSelection::Result validate();
+
+	bool equals(const PlayerSelection& selectedPlayer) const;
+	Game::PlayerId get_PlayerId() const noexcept;
+	Game::ClientId get_ClientId() const noexcept;
+	bool is_LocalPlayer() const noexcept;
+	bool has_value() const noexcept {
+		return (this->clientId != Game::NoClientId || this->playerId != Game::NoPlayerId);
+	}
+	/*[[deprecated]]*/ bool has_value() {
+		return validate().has_value();
+	}
+	/*[[deprecated]]*/ std::optional<PlayerControl*> get_PlayerControl() const;
+	/*[[deprecated]]*/ std::optional<GameData_PlayerInfo*> get_PlayerData() const;
 };
 
 int randi(int lo, int hi);
 ImVec4 AmongUsColorToImVec4(const Color& color);
-ImVec4 AmongUsColorToImVec4(const CorrectedColor32& color);
+ImVec4 AmongUsColorToImVec4(const Color32& color);
 bool IsInLobby();
 bool IsHost();
 bool IsInGame();
@@ -95,8 +144,9 @@ int GetMaxImposterAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
-GameData_PlayerInfo* GetPlayerDataById(uint8_t id);
-PlayerControl* GetPlayerControlById(uint8_t id);
+GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
+PlayerControl* GetPlayerControlById(Game::PlayerId id);
+std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData);
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
@@ -109,7 +159,7 @@ void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
 const char* TranslateSystemTypes(SystemTypes__Enum systemType);
-CorrectedColor32 GetPlayerColor(uint8_t colorId);
+Color32 GetPlayerColor(Game::ColorId colorId);
 std::filesystem::path getModulePath(HMODULE hModule);
 std::string getGameVersion();
 SystemTypes__Enum GetSystemTypes(const Vector2& vector);
@@ -120,15 +170,18 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player);
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo);
 il2cpp::Array<Camera__Array> GetAllCameras();
 il2cpp::List<List_1_InnerNet_ClientData_> GetAllClients();
-Vector2 GetSpawnLocation(int playerId, int numPlayer, bool initialSpawn);
+Vector2 GetSpawnLocation(Game::PlayerId playerId, int numPlayer, bool initialSpawn);
 bool IsAirshipSpawnLocation(const Vector2& vec);
 Vector2 Rotate(const Vector2& vec, float degrees);
 bool Equals(const Vector2& vec1, const Vector2& vec2);
 std::string ToString(Object* object);
+std::string ToString(Game::PlayerId id);
+std::string ToString(__maybenull PlayerControl* player);
+std::string ToString(__maybenull GameData_PlayerInfo* data);
 std::string GetGitCommit();
 std::string GetGitBranch();
-void ImpersonateName(PlayerSelection player);
-int GetRandomColorId();
+void ImpersonateName(PlayerSelection& player);
+Game::ColorId GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
 bool PlayerIsImpostor(GameData_PlayerInfo* player);

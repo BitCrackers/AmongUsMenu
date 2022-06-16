@@ -13,26 +13,24 @@ void new_console() {
 	SetConsoleOutputCP(CP_UTF8);
 }
 
-std::string utf16_to_utf8(std::u16string u16_string) {
+std::string utf16_to_utf8(std::u16string_view u16_string) {
 	std::wstring wide_string(u16_string.begin(), u16_string.end());
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
 	return convert.to_bytes(wide_string);
 }
 
 std::string convert_from_string(Il2CppString* input) {
-	if (input == nullptr) return "";
-	std::u16string u16(reinterpret_cast<const char16_t*>(input->chars));
-	return utf16_to_utf8(u16);
+	// Il2CppString are the same thing as app::String.
+	return convert_from_string((app::String*)input);
 }
 
 std::string convert_from_string(app::String* input) {
 	if (input == nullptr) return "";
-	std::u16string u16(reinterpret_cast<const char16_t*>(&input->fields.m_firstChar));
-	return utf16_to_utf8(u16);
+	return utf16_to_utf8({ reinterpret_cast<const char16_t*>(&input->fields.m_firstChar), static_cast<size_t>(input->fields.m_stringLength) });
 }
 
-app::String* convert_to_string(std::string input) {
-	return app::Marshal_PtrToStringAnsi((void*)input.c_str(), NULL);
+app::String* convert_to_string(std::string_view input) {
+	return (app::String*)il2cpp_string_new_len(input.data(), input.length());
 }
 
 KLASS translate_klass(KLASS klass_input) {
@@ -46,8 +44,8 @@ KLASS translate_klass(KLASS klass_input) {
 	return klass_input;
 }
 
-std::string translate_method_name(std::string input) {
-	for (std::pair<std::string, std::string> pair : METHOD_TRANSLATIONS) {
+std::string_view translate_method_name(std::string_view input) {
+	for (const std::pair<std::string, std::string>& pair : METHOD_TRANSLATIONS) {
 		if (input.compare(pair.first) == 0) return pair.second;
 		if (input.compare(pair.second) == 0) return pair.first;
 	}
@@ -55,15 +53,15 @@ std::string translate_method_name(std::string input) {
 }
 
 std::string translate_type_name(std::string input) {
-	std::optional<KLASS_PAIR> match = std::nullopt;
+	const KLASS_PAIR* match = nullptr;
 	int8_t conversion = 0;
 	size_t match_length = 0;
 
-	for (KLASS_PAIR klass_pair : KLASS_TRANSLATIONS) {
+	for (const KLASS_PAIR& klass_pair : KLASS_TRANSLATIONS) {
 		if (conversion != 1) {
 			auto deobfuscated_length = klass_pair.deobfuscated_klass.contains_type(input);
 			if (deobfuscated_length > match_length) {
-				match = klass_pair;
+				match = &klass_pair;
 				conversion = -1;
 				match_length = deobfuscated_length;
 			}
@@ -72,15 +70,15 @@ std::string translate_type_name(std::string input) {
 		if (conversion != -1) {
 			auto obfuscated_length = klass_pair.obfuscated_klass.contains_type(input);
 			if (obfuscated_length > match_length) {
-				match = klass_pair;
+				match = &klass_pair;
 				conversion = 1;
 				match_length = obfuscated_length;
 			}
 		}
 	}
 
-	if (match.has_value()) {
-		KLASS_PAIR klass_pair = match.value();
+	if (match) {
+		const KLASS_PAIR& klass_pair = *match;
 		if (conversion == -1) {
 			size_t position = input.find(klass_pair.deobfuscated_klass.klass_name, 0);
 			input.replace(position, klass_pair.deobfuscated_klass.klass_name.length(), klass_pair.obfuscated_klass.klass_name);
@@ -112,7 +110,7 @@ std::string get_method_params(const MethodInfo* methodInfo) {
 	return params;
 }
 
-bool method_compare(const MethodInfo* methodInfo, std::string returnType, std::string methodName, std::string paramTypes) {
+bool method_compare(const MethodInfo* methodInfo, std::string_view returnType, std::string_view methodName, std::string_view paramTypes) {
 	if (methodName.compare(methodInfo->name) != 0) return false;
 	if (returnType.compare(get_type_name(methodInfo->return_type)) != 0) return false;
 	if (paramTypes.compare(get_method_params(methodInfo)) != 0) return false;
@@ -120,7 +118,7 @@ bool method_compare(const MethodInfo* methodInfo, std::string returnType, std::s
 	return true;
 }
 
-Il2CppMethodPointer find_method(Il2CppClass* klass, std::string returnType, std::string methodName, std::string paramTypes) {
+Il2CppMethodPointer find_method(Il2CppClass* klass, std::string_view returnType, std::string_view methodName, std::string_view paramTypes) {
 	methodName = translate_method_name(methodName);
 
 	void* iterator = NULL;

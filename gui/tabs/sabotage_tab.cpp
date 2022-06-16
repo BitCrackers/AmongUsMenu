@@ -49,15 +49,7 @@ namespace SabotageTab {
                 ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
                 if (ImGui::Checkbox("Disable Lights", &State.DisableLights)) {
-                    SwitchSystem* switchSystem = nullptr;
-                    for (auto& kvp : il2cpp::Dictionary((*Game::pShipStatus)->fields.Systems)) {
-                        if (kvp.key == SystemTypes__Enum::Electrical) {
-                            switchSystem = (SwitchSystem*)kvp.value;
-                            break;
-                        }
-                    }
-
-                    if (switchSystem != nullptr) {
+                    if (auto switchSystem = (SwitchSystem*)il2cpp::Dictionary((*Game::pShipStatus)->fields.Systems)[SystemTypes__Enum::Electrical]) {
                         auto actualSwitches = switchSystem->fields.ActualSwitches;
                         auto expectedSwitches = switchSystem->fields.ExpectedSwitches;
 

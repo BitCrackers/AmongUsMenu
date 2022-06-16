@@ -7189,6 +7189,56 @@ namespace app
         VirtualInvokeData OnDeserialization_1;
     };
 
+    struct System_Collections_Generic_Dictionary_TKey__TValue__RGCTXs {
+        MethodInfo* _0_System_Collections_Generic_Dictionary_TKey__TValue___ctor;
+        MethodInfo* _1_System_Collections_Generic_Dictionary_TKey__TValue__Initialize;
+        MethodInfo* _2_System_Collections_Generic_EqualityComparer_TKey__get_Default;
+        Il2CppClass* _3_System_Collections_Generic_EqualityComparer_TKey_;
+        MethodInfo* _4_System_Collections_Generic_Dictionary_TKey__TValue___ctor;
+        Il2CppClass* _5_System_Collections_Generic_ICollection_KeyValuePair_TKey__TValue__;
+        Il2CppType* _6_System_Collections_Generic_Dictionary_TKey__TValue_;
+        Il2CppClass* _7_System_Collections_Generic_Dictionary_TKey__TValue_;
+        MethodInfo* _8_System_Collections_Generic_Dictionary_TKey__TValue__Add;
+        Il2CppClass* _9_System_Collections_Generic_IEnumerable_KeyValuePair_TKey__TValue__;
+        Il2CppClass* _10_System_Collections_Generic_IEnumerator_KeyValuePair_TKey__TValue__;
+        MethodInfo* _11_System_Collections_Generic_KeyValuePair_TKey__TValue__get_Key;
+        MethodInfo* _12_System_Collections_Generic_KeyValuePair_TKey__TValue__get_Value;
+        Il2CppClass* _13_System_Collections_Generic_Dictionary_KeyCollection_TKey__TValue_;
+        MethodInfo* _14_System_Collections_Generic_Dictionary_KeyCollection_TKey__TValue___ctor;
+        Il2CppClass* _15_System_Collections_Generic_Dictionary_ValueCollection_TKey__TValue_;
+        MethodInfo* _16_System_Collections_Generic_Dictionary_ValueCollection_TKey__TValue___ctor;
+        MethodInfo* _17_System_Collections_Generic_Dictionary_TKey__TValue__FindEntry;
+        MethodInfo* _18_System_Collections_Generic_Dictionary_TKey__TValue__TryInsert;
+        MethodInfo* _19_System_Collections_Generic_EqualityComparer_TValue__get_Default;
+        Il2CppClass* _20_System_Collections_Generic_EqualityComparer_TValue_;
+        MethodInfo* _21_System_Collections_Generic_EqualityComparer_TValue__Equals;
+        MethodInfo* _22_System_Collections_Generic_Dictionary_TKey__TValue__Remove;
+        Il2CppClass* _23_TValue;
+        MethodInfo* _24_System_Collections_Generic_Dictionary_TKey__TValue__get_Count;
+        Il2CppClass* _25_System_Collections_Generic_KeyValuePair_TKey__TValue_;
+        MethodInfo* _26_System_Collections_Generic_KeyValuePair_TKey__TValue___ctor;
+        Il2CppClass* _27_System_Collections_Generic_Dictionary_Enumerator_TKey__TValue_;
+        MethodInfo* _28_System_Collections_Generic_Dictionary_Enumerator_TKey__TValue___ctor;
+        Il2CppType* _29_System_Collections_Generic_IEqualityComparer_TKey_;
+        Il2CppClass* _30_System_Collections_Generic_KeyValuePair_TKey__TValue___;
+        MethodInfo* _31_System_Collections_Generic_Dictionary_TKey__TValue__CopyTo;
+        Il2CppType* _32_System_Collections_Generic_KeyValuePair_TKey__TValue___;
+        Il2CppClass* _33_TKey;
+        Il2CppClass* _34_System_Collections_Generic_IEqualityComparer_TKey_;
+        Il2CppClass* _35_System_Collections_Generic_Dictionary_Entry_TKey__TValue___;
+        MethodInfo* _36_System_Collections_Generic_Dictionary_TKey__TValue__Resize;
+        MethodInfo* _37_System_Collections_Generic_Dictionary_TKey__TValue__Resize;
+        Il2CppClass* _38_System_Collections_Generic_KeyValuePair_TKey__TValue___;
+        MethodInfo* _39_System_Collections_Generic_Dictionary_TKey__TValue__get_Keys;
+        MethodInfo* _40_System_Collections_Generic_Dictionary_TKey__TValue__get_Values;
+        MethodInfo* _41_System_Collections_Generic_Dictionary_TKey__TValue__IsCompatibleKey;
+        Il2CppClass* _42_System_Collections_Generic_Dictionary_TKey__TValue_;
+        MethodInfo* _43_System_Collections_Generic_Dictionary_TKey__TValue__set_Item;
+        Il2CppType* _44_TValue;
+        Il2CppType* _45_TKey;
+        MethodInfo* _46_System_Collections_Generic_Dictionary_TKey__TValue__ContainsKey;
+    };
+
     struct Dictionary_2_SystemTypes_ISystemType___StaticFields
     {
     };

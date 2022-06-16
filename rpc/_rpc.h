@@ -57,14 +57,14 @@ public:
 class RpcReportPlayer : public RPCInterface {
 	PlayerSelection reportedPlayer;
 public:
-	RpcReportPlayer(PlayerSelection target);
+	RpcReportPlayer(const PlayerSelection& target);
 	virtual void Process() override;
 };
 
 class RpcMurderPlayer : public RPCInterface {
 	PlayerSelection target;
 public:
-	RpcMurderPlayer(PlayerSelection target);
+	RpcMurderPlayer(const PlayerSelection& target);
 	virtual void Process() override;
 };
 
@@ -79,7 +79,7 @@ public:
 class RpcSetName : public RPCInterface {
 	std::string name;
 public:
-	RpcSetName(std::string name);
+	RpcSetName(std::string_view name);
 	virtual void Process() override;
 };
 
