@@ -481,7 +481,8 @@ std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 	auto object = GameData_PlayerInfo_get_Object(playerInfo);
 	if (!object) {
 		// Likely disconnected player.
-		LOG_ERROR(ToString(playerInfo) + " _object is null");
+		if (playerInfo->fields.Disconnected != true)
+			LOG_ERROR(ToString(playerInfo) + " _object is null");
 		return std::nullopt;
 	}
 	return PlayerControl_GetTruePosition((*object), NULL);
@@ -563,7 +564,7 @@ std::string ToString(__maybenull PlayerControl* player) {
 std::string ToString(__maybenull GameData_PlayerInfo* data) {
 	if (data) {
 		if (const auto outfit = GetPlayerOutfit(data))
-			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields._playerName));
+			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields.postCensorName));
 		return std::format("<#{}>", +data->fields.PlayerId);
 	}
 	return "<Unknown>";
@@ -593,17 +594,17 @@ void ImpersonateName(PlayerSelection& _player)
 	auto player = _player.validate(); if (!player.has_value()) return;
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
-	if (convert_from_string(outfit->fields._playerName).length() < 10) {
+	if (convert_from_string(outfit->fields.postCensorName).length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields.postCensorName) + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields.postCensorName) + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
+			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields.postCensorName)));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields.postCensorName)));
 	}
 }
 
@@ -648,7 +649,7 @@ void SaveOriginalAppearance()
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(outfit->fields._playerName);
+	State.originalName = convert_from_string(outfit->fields.postCensorName);
 	State.originalSkin = outfit->fields.SkinId;
 	State.originalHat = outfit->fields.HatId;
 	State.originalPet = outfit->fields.PetId;
@@ -674,7 +675,7 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool include
 	const il2cpp::Dictionary dic(player->fields.Outfits);
 	if (includeShapeshifted) {
 		auto playerOutfit = dic[PlayerOutfitType__Enum::Shapeshifted];
-		if (playerOutfit && !convert_from_string(playerOutfit->fields._playerName).empty()) {
+		if (playerOutfit && !convert_from_string(playerOutfit->fields.postCensorName).empty()) {
 			return playerOutfit;
 		}
 	}

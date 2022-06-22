@@ -64,7 +64,7 @@ struct EVENT_PLAYER {
 		if (outfit != nullptr)
 		{
 			colorId = outfit->fields.ColorId;
-			playerName = convert_from_string(outfit->fields._playerName);
+			playerName = convert_from_string(outfit->fields.postCensorName);
 		}
 		else
 		{

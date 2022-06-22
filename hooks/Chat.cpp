@@ -38,11 +38,7 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 		for (auto playerData : GetAllPlayerData()) {
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) continue;
-			if (playerName == outfit->fields._playerName) {
-				auto localData = GetPlayerData(*Game::pLocalPlayer);
-				if (!localData)
-					continue;
-
+			if (playerName == outfit->fields.postCensorName) {
 				if (State.RevealRoles)
 					color = GetRoleColor(playerData->fields.Role);
 				else

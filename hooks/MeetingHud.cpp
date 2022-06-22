@@ -69,13 +69,13 @@ static void Transform_RevealAnonymousVotes(app::Transform* transform, Game::Vote
 					continue;
 				auto ColorId = outfit->fields.ColorId;
 				auto spriteRenderer = votes[idx++];
-				app::PlayerControl_SetPlayerMaterialColors_1(ColorId, (app::Renderer*)spriteRenderer, nullptr);
+				app::PlayerMaterial_SetColors(ColorId, (app::Renderer*)spriteRenderer, nullptr);
 			}
 		}
 	}
 	else {
 		for (auto spriteRenderer : votes) {
-			app::PlayerControl_SetPlayerMaterialColors_2(
+			app::PlayerMaterial_SetColors_1(
 				app::Palette__TypeInfo->static_fields->DisabledGrey,
 				(app::Renderer*)spriteRenderer, nullptr);
 		}
@@ -144,7 +144,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		if (playerData && localData && outfit) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
 			Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-			std::string playerName = convert_from_string(outfit->fields._playerName);
+			std::string playerName = convert_from_string(outfit->fields.postCensorName);
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
