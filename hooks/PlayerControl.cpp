@@ -272,6 +272,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 			|| localData->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel)
 			break; // AmAngel
 		PlayerControl_ShowFailedMurder(target, nullptr);
+		target->fields.protectedByGuardian = true;
 	} while (false);
 	PlayerControl_MurderPlayer(__this, target, method);
 }
