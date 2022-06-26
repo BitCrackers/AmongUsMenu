@@ -4593,9 +4593,9 @@ namespace app
         struct MeetingHud* _Parent_k__BackingField;
         uint8_t TargetPlayerId;
         struct GameObject* Buttons;
-        struct UiElement* ConfirmButton;
-        struct UiElement* CancelButton;
-        struct UiElement* PlayerButton;
+        void* ConfirmButton;
+        void* CancelButton;
+        void* PlayerButton;
         struct SpriteRenderer* Background;
         struct SpriteRenderer* MaskArea;
         struct SpriteRenderer* Flag;
@@ -4613,7 +4613,7 @@ namespace app
         uint8_t VotedFor;
         bool voteComplete;
         bool resultsShowing;
-        struct PoolablePlayer* PlayerIcon;
+        void* PlayerIcon;
     };
 
     struct PlayerVoteArea {
@@ -4878,42 +4878,42 @@ namespace app
         float MaxLightRadius;
         float MinLightRadius;
         float MapScale;
-        struct MapBehaviour* MapPrefab;
-        struct ExileController* ExileCutscenePrefab;
-        struct MeetingCalledAnimation* EmergencyOverlay;
-        struct MeetingCalledAnimation* ReportOverlay;
-        struct Sprite* MeetingBackground;
+        void* MapPrefab;
+        void* ExileCutscenePrefab;
+        void* EmergencyOverlay;
+        void* ReportOverlay;
+        void* MeetingBackground;
         struct Vector2 InitialSpawnCenter;
         struct Vector2 MeetingSpawnCenter;
         struct Vector2 MeetingSpawnCenter2;
         float SpawnRadius;
-        struct NormalPlayerTask__Array* CommonTasks;
-        struct NormalPlayerTask__Array* LongTasks;
-        struct NormalPlayerTask__Array* NormalTasks;
+        void* CommonTasks;
+        void* LongTasks;
+        void* NormalTasks;
         struct PlayerTask__Array* SpecialTasks;
-        struct Transform__Array* DummyLocations;
-        struct SurvCamera__Array* AllCameras;
+        void* DummyLocations;
+        void* AllCameras;
         struct PlainDoor__Array* AllDoors;
-        struct Console_1__Array* AllConsoles;
+        void* AllConsoles;
         struct Dictionary_2_SystemTypes_ISystemType_* Systems;
-        struct StringNames__Enum__Array* SystemNames;
-        struct IStepWatcher__Array* _AllStepWatchers_k__BackingField;
+        void* SystemNames;
+        void* _AllStepWatchers_k__BackingField;
         struct PlainShipRoom__Array* _AllRooms_k__BackingField;
-        struct Dictionary_2_SystemTypes_PlainShipRoom_* _FastRooms_k__BackingField;
-        struct Vent__Array* _AllVents_k__BackingField;
-        struct AudioClip* SabotageSound;
-        struct AnimationClip__Array* WeaponFires;
-        struct SpriteAnim* WeaponsImage;
-        struct AudioClip__Array* VentMoveSounds;
-        struct AudioClip* VentEnterSound;
-        struct AnimationClip* HatchActive;
-        struct SpriteAnim* Hatch;
-        struct ParticleSystem* HatchParticles;
-        struct AnimationClip* ShieldsActive;
-        struct SpriteAnim__Array* ShieldsImages;
+        void* _FastRooms_k__BackingField;
+        void* _AllVents_k__BackingField;
+        void* SabotageSound;
+        void* WeaponFires;
+        void* WeaponsImage;
+        void* VentMoveSounds;
+        void* VentEnterSound;
+        void* HatchActive;
+        void* Hatch;
+        void* HatchParticles;
+        void* ShieldsActive;
+        void* ShieldsImages;
         struct SpriteRenderer* ShieldBorder;
-        struct Sprite* ShieldBorderOn;
-        struct MedScannerBehaviour* MedScanner;
+        void* ShieldBorderOn;
+        void* MedScanner;
         int32_t WeaponFireIdx;
         float Timer;
         float EmergencyCooldown;
@@ -4924,7 +4924,7 @@ namespace app
 #endif
         bool _ShouldCheckForGameEnd_k__BackingField;
         float _HideCountdown_k__BackingField;
-        struct CosmeticsCache* _CosmeticsCache_k__BackingField;
+        void* _CosmeticsCache_k__BackingField;
         int32_t numScans;
     };
 
@@ -7644,8 +7644,7 @@ namespace app
         struct RoleBehaviour__Fields fields;
     };
 
-    struct RoleBehaviour__VTable
-    {
+    struct RoleBehaviour__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -7661,6 +7660,9 @@ namespace app
         VirtualInvokeData SetUsableTarget;
         VirtualInvokeData SetPlayerTarget;
         VirtualInvokeData SetCooldown;
+        VirtualInvokeData IsValidTarget;
+        VirtualInvokeData __unknown;
+        VirtualInvokeData GetAbilityDistance;
     };
 
     struct RoleBehaviour__StaticFields {
@@ -7692,7 +7694,7 @@ namespace app
         uint32_t PlayerLevel;
         bool Disconnected;
         struct RoleBehaviour* Role;
-        struct List_1_GameData_TaskInfo_* Tasks;
+        void* Tasks;
         bool IsDead;
         struct PlayerControl* _object;
     };
@@ -8610,15 +8612,15 @@ struct RoleEffectAnimation__Array {
     struct PlayerPhysics__Fields {
         struct InnerNetObject__Fields _;
         uint8_t lastClimbLadderSid;
-        struct List_1_PlayerPhysics_AnimationGroup_* AnimationGroups;
-        struct PlayerPhysics_AnimationGroup* CurrentAnimationGroup;
+        void* AnimationGroups;
+        void* CurrentAnimationGroup;
         float Speed;
         float GhostSpeed;
-        struct Rigidbody2D* body;
+        void* body;
         struct PlayerControl* myPlayer;
-        struct SpriteAnim* GlowAnimator;
-        struct AudioClip* ImpostorDiscoveredSound;
-        struct SpecialInputHandler* inputHandler;
+        void* GlowAnimator;
+        void* ImpostorDiscoveredSound;
+        void* inputHandler;
     };
 
     struct PlayerPhysics {
@@ -8690,19 +8692,19 @@ struct RoleEffectAnimation__Array {
 #pragma region CosmeticsLayer
     struct CosmeticsLayer__Fields {
         struct MonoBehaviour__Fields _;
-        struct HatParent* hat;
-        struct VisorLayer* visor;
+        void* hat;
+        void* visor;
         struct SkinLayer* skin;
         struct TextMeshPro* nameText;
-        struct List_1_PlayerBodySprite_* bodySprites;
+        void* bodySprites;
         struct Transform* petParent;
         struct TextMeshPro* colorBlindText;
         bool alwaysDrawNormalPlayer;
         bool uiPet;
         float zIndexSpacing;
         bool showColorBlindText;
-        struct PlayerBodySprite* currentBodySprite;
-        struct PlayerBodySprite* normalBodySprite;
+        void* currentBodySprite;
+        void* normalBodySprite;
         struct PetBehaviour* currentPet;
         struct PlayerMaterial_Properties bodyMatProperties;
         bool initialized;
@@ -8757,31 +8759,31 @@ struct RoleEffectAnimation__Array {
         struct GameData_PlayerInfo* _cachedData;
         bool protectedByGuardian;
         float flashlightAngle;
-        struct AudioSource* FootSteps;
-        struct AudioClip* KillSfx;
-        struct KillAnimation__Array* KillAnimations;
+        void* FootSteps;
+        void* KillSfx;
+        void* KillAnimations;
         float killTimer;
         int32_t RemainingEmergencies;
-        struct LightSource* LightPrefab;
-        struct LightSource* myLight;
+        void* LightPrefab;
+        void* myLight;
         struct Collider2D* Collider;
         struct PlayerPhysics* MyPhysics;
         struct CustomNetworkTransform* NetTransform;
-        struct SpriteAnim* myAnim;
-        struct SpriteAnim* horseAnim;
-        struct Collider2D__Array* hitBuffer;
+        void* myAnim;
+        void* horseAnim;
+        void* hitBuffer;
         struct List_1_PlayerTask_* myTasks;
         struct Vector3 defaultPlayerScale;
-        struct SpriteAnim__Array* ScannerAnims;
+        void* ScannerAnims;
         struct SpriteRenderer__Array* ScannersImages;
         struct List_1_RoleEffectAnimation_* currentRoleAnimations;
-        struct IUsable* closest;
+        void* closest;
         bool isNew;
         bool isDummy;
         bool notRealPlayer;
-        struct Dictionary_2_UnityEngine_Collider2D_IUsable_* cache;
-        struct List_1_IUsable_* itemsInRange;
-        struct List_1_IUsable_* newItemsInRange;
+        void* cache;
+        void* itemsInRange;
+        void* newItemsInRange;
         uint8_t scannerCount;
         bool roleAssigned;
     };
@@ -8938,44 +8940,44 @@ struct RoleEffectAnimation__Array {
         struct FollowerCamera* PlayerCam;
         struct Camera* UICamera;
         struct MeetingHud* MeetingPrefab;
-        struct KillButton* KillButton;
-        struct AdminButton* AdminButton;
-        struct SabotageButton* SabotageButton;
-        struct VentButton* ImpostorVentButton;
-        struct UseButton* UseButton;
-        struct AbilityButton* AbilityButton;
-        struct ReportButton* ReportButton;
+        void* KillButton;
+        void* AdminButton;
+        void* SabotageButton;
+        void* ImpostorVentButton;
+        void* UseButton;
+        void* AbilityButton;
+        void* ReportButton;
         struct TextMeshPro* GameSettings;
         struct GameObject* TaskStuff;
         struct ChatController* Chat;
-        struct DialogueBox* Dialogue;
+        void* Dialogue;
         struct TextMeshPro* TaskText;
         struct Transform* TaskCompleteOverlay;
         float taskDirtyTimer;
-        struct MeshRenderer* ShadowQuad;
+        void* ShadowQuad;
         struct SpriteRenderer* FullScreen;
-        struct Coroutine* _ReactorFlash_k__BackingField;
-        struct Coroutine* _OxyFlash_k__BackingField;
+        void* _ReactorFlash_k__BackingField;
+        void* _OxyFlash_k__BackingField;
         struct SpriteRenderer* MapButton;
-        struct KillOverlay* KillOverlay;
-        struct IVirtualJoystick* joystick;
-        struct MonoBehaviour__Array* Joysticks;
-        struct DiscussBehaviour* discussEmblem;
-        struct ShhhBehaviour* shhhEmblem;
-        struct IntroCutscene* IntroPrefab;
-        struct OptionsMenuBehaviour* GameMenu;
-        struct NotificationPopper* Notifier;
-        struct RoomTracker* roomTracker;
-        struct AudioClip* TaskCompleteSound;
-        struct AudioClip* TaskUpdateSound;
+        void* KillOverlay;
+        void* joystick;
+        void* Joysticks;
+        void* discussEmblem;
+        void* shhhEmblem;
+        void* IntroPrefab;
+        void* GameMenu;
+        void* Notifier;
+        void* roomTracker;
+        void* TaskCompleteSound;
+        void* TaskUpdateSound;
         struct Transform* consoleUIRoot;
-        struct GameObject__Array* consoleUIObjects;
+        void* consoleUIObjects;
         struct GameObject* menuNavigationPrompts;
         struct GameObject* GameLoadAnimation;
         float consoleUIHorizontalShift;
         struct GameObject* playerListPrompt;
-        struct StringBuilder* tasksString;
-        struct DualshockLightManager_LightOverlayHandle* lightFlashHandle;
+        void* tasksString;
+        void* lightFlashHandle;
         bool _IsIntroDisplayed_k__BackingField;
     };
 
@@ -9388,17 +9390,17 @@ struct RoleEffectAnimation__Array {
 #pragma region MainMenuManager
     struct MainMenuManager__Fields {
         struct MonoBehaviour__Fields _;
-        struct AdDataCollectScreen* AdsPolicy;
-        struct AnnouncementPopUp* Announcement;
-        struct GooglePlayAssetHandler* googlePlayAssetHandler;
+        void* AdsPolicy;
+        void* Announcement;
+        void* googlePlayAssetHandler;
         struct HatManager* HatManagerRef;
-        struct CosmicubeManager* CosmicubeManagerRef;
-        struct PlayerCustomizationMenu* playerCustomizationPrefab;
-        struct UiElement* DefaultButtonSelected;
-        struct List_1_UiElement_* ControllerSelectable;
-        struct List_1_PassiveButton_* disableOnStartup;
+        void* CosmicubeManagerRef;
+        void* playerCustomizationPrefab;
+        void* DefaultButtonSelected;
+        void* ControllerSelectable;
+        void* disableOnStartup;
         struct GameObject* NewStoreItemsIcon;
-        struct CosmicubeManager* cosmicubeManager;
+        void* cosmicubeManager;
     };
 
     struct MainMenuManager {
@@ -9723,7 +9725,7 @@ struct RoleEffectAnimation__Array {
         struct String* MainMenuScene;
         struct GameData* GameDataPrefab;
         struct PlayerControl* PlayerPrefab;
-        struct List_1_UnityEngine_AddressableAssets_AssetReference_* ShipPrefabs;
+        void* ShipPrefabs;
         int32_t TutorialMapId;
         float SpawnRadius;
 #if defined(_CPLUSPLUS_)
@@ -9731,8 +9733,8 @@ struct RoleEffectAnimation__Array {
 #else
         int32_t discoverState;
 #endif
-        struct List_1_IDisconnectHandler_* DisconnectHandlers;
-        struct List_1_IGameListHandler_* GameListHandlers;
+        void* DisconnectHandlers;
+        void* GameListHandlers;
 #if defined(_CPLUSPLUS_)
         CrossplayPrivilegeErrorType__Enum CrossplayPrivilegeError;
 #else
@@ -12148,12 +12150,12 @@ struct RoleEffectAnimation__Array {
         bool enableMouseMovement;
         bool enableFriendsListInvites;
         bool deleteDeviceIDFailed;
-        struct Action* OnColorBlindChanged;
-        struct Action* OnStreamerModeChanged;
+        void* OnColorBlindChanged;
+        void* OnStreamerModeChanged;
         struct Announcement lastAnnounce;
-        struct String__Array* quickChatFavorites;
-        struct SecureDataFile* purchaseFile;
-        struct HashSet_1_System_String_* purchases;
+        void* quickChatFavorites;
+        void* purchaseFile;
+        void* purchases;
         struct String* dobInfo;
         struct String* storeBundlesViewDate;
         struct String* storeHatsViewDate;
