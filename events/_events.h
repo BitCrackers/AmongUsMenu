@@ -59,12 +59,11 @@ struct EVENT_PLAYER {
 	EVENT_PLAYER(GameData_PlayerInfo* playerInfo) {
 		playerId = playerInfo->fields.PlayerId;
 
-		// rolling GetPlayerOutfit into this func to avoid circular dependencies
-		GameData_PlayerOutfit* outfit = il2cpp::Dictionary(playerInfo->fields.Outfits)[PlayerOutfitType__Enum::Default];
+		GameData_PlayerOutfit* outfit = app::GameData_PlayerInfo_get_DefaultOutfit(playerInfo, nullptr);
 		if (outfit != nullptr)
 		{
 			colorId = outfit->fields.ColorId;
-			playerName = convert_from_string(outfit->fields.postCensorName);
+			playerName = convert_from_string(app::GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 		}
 		else
 		{
@@ -75,9 +74,8 @@ struct EVENT_PLAYER {
 		isDead = playerInfo->fields.IsDead;
 		isAngel = (playerInfo->fields.Role) ? playerInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel : false;
 		
-		extern std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo * playerData);
-		if (auto object = GameData_PlayerInfo_get_Object(playerInfo); object.has_value())
-			isProtected = (*object)->fields.protectedByGuardian;
+		if (auto object = GameData_PlayerInfo_get_Object(playerInfo, nullptr))
+			isProtected = object->fields.protectedByGuardian;
 		else
 			isProtected = false;
 	}

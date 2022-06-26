@@ -52,7 +52,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
-			playerName = convert_from_string(outfit->fields.postCensorName);
+			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 		if (State.RevealRoles)
 		{
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
@@ -217,7 +217,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			{
 				espPlayerData.Color = State.ShowEsp_RoleBased == false ? AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId))
 					: AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
-				espPlayerData.Name = convert_from_string(outfit->fields.postCensorName);
+				espPlayerData.Name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 			}
 			else
 			{

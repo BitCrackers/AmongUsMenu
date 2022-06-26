@@ -146,7 +146,6 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
 PlayerControl* GetPlayerControlById(Game::PlayerId id);
-std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData);
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();

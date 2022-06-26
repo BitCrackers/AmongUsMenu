@@ -206,3 +206,8 @@ DO_APP_FUNC(void, PlayerControl_RemoveProtection, (PlayerControl* __this, Method
 
 DO_APP_FUNC(bool, Object_1_op_Implicit, (Object_1* exists, MethodInfo* method), "UnityEngine.CoreModule, System.Boolean UnityEngine.Object::op_Implicit(UnityEngine.Object)");
 DO_APP_FUNC(void, PlayerControl_ShowFailedMurder, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ShowFailedMurder()");
+
+DO_APP_FUNC(PlayerControl*, GameData_PlayerInfo_get_Object, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, PlayerControl GameData+PlayerInfo::get_Object()");
+DO_APP_FUNC(GameData_PlayerOutfit*, GameData_PlayerInfo_get_DefaultOutfit, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, GameData.PlayerOutfit GameData+PlayerInfo::get_DefaultOutfit()");
+DO_APP_FUNC(String*, GameData_PlayerOutfit_get_PlayerName, (GameData_PlayerOutfit* __this, MethodInfo* method), "Assembly-CSharp, System.String GameData+PlayerOutfit::get_PlayerName()");
+DO_APP_FUNC(String*, GameData_PlayerInfo_get_PlayerName, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, System.String GameData+PlayerInfo::get_PlayerName()");

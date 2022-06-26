@@ -23,7 +23,7 @@ namespace PlayersTab {
 
 					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 					if (outfit == NULL) continue;
-					std::string playerName = convert_from_string(outfit->fields.postCensorName);
+					std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 					if (ImGui::Selectable(std::string("##" + playerName).c_str(), selectedPlayer.equals(playerData))) {

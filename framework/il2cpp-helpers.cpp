@@ -6,6 +6,23 @@
 #include <chrono>
 #include "logger.h"
 
+static std::vector<std::string> Tokenize(std::string_view str, std::string_view delimiters) {
+	std::vector<std::string> tokens;
+	// Skip delimiters at beginning.
+	auto lastPos = str.find_first_not_of(delimiters, 0);
+	// Find first "non-delimiter".
+	auto pos = str.find_first_of(delimiters, lastPos);
+	while (pos != std::string::npos || lastPos != std::string::npos) {
+		// Found a token, add it to the vector.
+		tokens.emplace_back(std::string{ str.substr(lastPos, pos - lastPos) });
+		// Skip delimiters.  Note the "not_of"
+		lastPos = str.find_first_not_of(delimiters, pos);
+		// Find next "non-delimiter"
+		pos = str.find_first_of(delimiters, lastPos);
+	}
+	return tokens;
+}
+
 void new_console() {
 	AllocConsole();
 	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
@@ -142,8 +159,8 @@ Il2CppMethodPointer get_method(std::string methodSignature) {
 	methodSignature.erase(methodSignature.rfind("::"));
 
 	std::string namespaze = "";
-	if (methodSignature.rfind(".") != std::string::npos) {
-		namespaze = methodSignature.substr(0, methodSignature.rfind("."));
+	if (auto pos = methodSignature.rfind("."); pos != std::string::npos) {
+		namespaze = methodSignature.substr(0, pos);
 		methodSignature.erase(0, namespaze.length() + 1);
 	}
 
@@ -161,8 +178,21 @@ Il2CppMethodPointer get_method(std::string methodSignature) {
 	const Il2CppAssembly* assembly = il2cpp_domain_assembly_open(domain, assemblyName.c_str());
 	if (assembly == NULL) return NULL;
 
-	Il2CppClass* klass = il2cpp_class_from_name(assembly->image, namespaze.c_str(), className.c_str());
+	const auto& vecClassNames = Tokenize(className, "+");
+
+	Il2CppClass* klass = il2cpp_class_from_name(assembly->image, namespaze.c_str(), vecClassNames[0].c_str());
 	if (klass == NULL) return NULL;
+
+	for (size_t i = 1; i < vecClassNames.size(); i++) {
+		void* iter = nullptr;
+		Il2CppClass* nested;
+		while (nested = il2cpp_class_get_nested_types(klass, &iter)) {
+			if (vecClassNames[i].compare(nested->name) == 0)
+				break;
+		}
+		if (!nested) return nullptr;
+		klass = nested;
+	}
 
 	return find_method(klass, returnType, methodName, paramTypes);
 }
@@ -187,7 +217,21 @@ Il2CppClass* get_class(std::string classSignature) {
 	const Il2CppAssembly* assembly = il2cpp_domain_assembly_open(domain, assemblyName.c_str());
 	if (assembly == NULL) return NULL;
 
-	Il2CppClass* klass = il2cpp_class_from_name(assembly->image, namespaze.c_str(), className.c_str());
+	const auto& vecClassNames = Tokenize(className, "+");
+
+	Il2CppClass* klass = il2cpp_class_from_name(assembly->image, namespaze.c_str(), vecClassNames[0].c_str());
+	if (!klass) return nullptr;
+
+	for (size_t i = 1; i < vecClassNames.size(); i++) {
+		void* iter = nullptr;
+		Il2CppClass* nested;
+		while (nested = il2cpp_class_get_nested_types(klass, &iter)) {
+			if (vecClassNames[i].compare(nested->name) == 0)
+				break;
+		}
+		if (!nested) return nullptr;
+		klass = nested;
+	}
 	return klass;
 }
 

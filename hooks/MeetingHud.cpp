@@ -144,7 +144,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		if (playerData && localData && outfit) {
 			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
 			Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
-			std::string playerName = convert_from_string(outfit->fields.postCensorName);
+			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);

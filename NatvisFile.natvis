@@ -181,4 +181,7 @@
       <ExpandedItem>fields</ExpandedItem>
     </Expand>
   </Type>
+  <Type Name="Il2CppClass">
+    <DisplayString>{{ Assembly={image->name,na} Namespaze={namespaze,na} Name={name,na} }}</DisplayString>
+  </Type>
 </AutoVisualizer>
