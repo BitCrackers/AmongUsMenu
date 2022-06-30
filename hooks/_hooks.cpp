@@ -10,8 +10,8 @@
 using namespace Game;
 
 bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
-	if (DetourAttach(ppPointer, pDetour) != 0) {
-		std::cout << "Failed to hook " << functionName << std::endl;
+	if (const auto error = DetourAttach(ppPointer, pDetour); error != NO_ERROR) {
+		std::cout << "Failed to hook " << functionName << ", error " << error << std::endl;
 		return false;
 	}
 	//std::cout << "Hooked " << functionName << std::endl;
@@ -21,8 +21,8 @@ bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 #define HOOKFUNC(n) if (!HookFunction(&(PVOID&)n, d ## n, #n)) return;
 
 bool UnhookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
-	if (DetourDetach(ppPointer, pDetour) != 0) {
-		std::cout << "Failed to unhook " << functionName << std::endl;
+	if (const auto error = DetourDetach(ppPointer, pDetour); error != NO_ERROR) {
+		std::cout << "Failed to unhook " << functionName << ", error " << error << std::endl;
 		return false;
 	}
 	//std::cout << "Unhooked " << functionName << std::endl;
@@ -122,7 +122,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_CompleteTask);
 	//HOOKFUNC(PlayerControl_CmdReportDeadBody);
 	//HOOKFUNC(PlayerControl_ReportDeadBody);
-	HOOKFUNC(PlayerControl_CoStartMeeting);
+	HOOKFUNC(PlayerControl_StartMeeting);
 	HOOKFUNC(RoleManager_SelectRoles);
 	HOOKFUNC(RoleManager_AssignRolesForTeam);
 	HOOKFUNC(RoleManager_AssignRolesFromList);
@@ -146,10 +146,7 @@ void DetourInitilization() {
 	HOOKFUNC(Debug_LogWarning);
 	HOOKFUNC(VersionShower_Start);
 	HOOKFUNC(EOSManager_LoginFromAccountTab);
-	HOOKFUNC(EOSManager_LoginForKWS);
 	HOOKFUNC(EOSManager_InitializePlatformInterface);
-	HOOKFUNC(EOSManager_BeginLoginFlow);
-	HOOKFUNC(EOSManager_ReallyBeginFlow);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
@@ -207,7 +204,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	//UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
 	//UNHOOKFUNC(PlayerControl_ReportDeadBody);
-	UNHOOKFUNC(PlayerControl_CoStartMeeting);
+	UNHOOKFUNC(PlayerControl_StartMeeting);
 	UNHOOKFUNC(RoleManager_SelectRoles);
 	UNHOOKFUNC(RoleManager_AssignRolesForTeam);
 	UNHOOKFUNC(RoleManager_AssignRolesFromList);
@@ -230,10 +227,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(Debug_LogWarning);
 	UNHOOKFUNC(VersionShower_Start);
 	UNHOOKFUNC(EOSManager_LoginFromAccountTab);
-	UNHOOKFUNC(EOSManager_LoginForKWS);
 	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
-	UNHOOKFUNC(EOSManager_BeginLoginFlow);
-	UNHOOKFUNC(EOSManager_ReallyBeginFlow);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(InnerNetClient_EnqueueDisconnect);

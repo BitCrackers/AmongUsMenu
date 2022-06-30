@@ -212,3 +212,6 @@ RoleOptionsData__Fields
 RoleEffectAnimation_EffectType__Enum
 RoleEffectAnimation__Fields
 PlayerControl__Fields
+PlayerMaterial_Properties
+CosmeticsLayer__Fields
+SaveManager__StaticFields

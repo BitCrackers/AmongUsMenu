@@ -117,16 +117,6 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 	return playerVector2;
 }
 
-// See GameData_PlayerInfo::get_Object(GameData_PlayerInfo * __this, MethodInfo * method)
-std::optional<PlayerControl*> GameData_PlayerInfo_get_Object(GameData_PlayerInfo* playerData) {
-	if (!playerData) return std::nullopt;
-	if (Object_1_IsNull((Object_1*)playerData->fields._object)) {
-		playerData->fields._object = GetPlayerControlById(playerData->fields.PlayerId);
-		if (!playerData->fields._object) return std::nullopt;
-	}
-	return std::make_optional(playerData->fields._object);
-}
-
 #pragma region PlayerSelection
 PlayerSelection::PlayerSelection() noexcept
 {
@@ -145,7 +135,7 @@ PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
 }
 
 PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
-	new (this)PlayerSelection(GameData_PlayerInfo_get_Object(playerData).value_or(nullptr));
+	new (this)PlayerSelection(app::GameData_PlayerInfo_get_Object(playerData, nullptr));
 }
 
 PlayerSelection::Result PlayerSelection::validate() {
@@ -425,7 +415,8 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 	static constexpr std::array SYSTEM_TRANSLATIONS = { "Hallway", "Storage", "Cafeteria", "Reactor", "Upper Engine", "Navigation", "Admin", "Electrical", "Oxygen", "Shields",
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck",
-		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical" };
+		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical",
+		"Decontamination" };
 	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 
@@ -478,13 +469,14 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
-	auto object = GameData_PlayerInfo_get_Object(playerInfo);
+	auto object = GameData_PlayerInfo_get_Object(playerInfo, nullptr);
 	if (!object) {
 		// Likely disconnected player.
-		LOG_ERROR(ToString(playerInfo) + " _object is null");
+		if (playerInfo->fields.Disconnected != true)
+			LOG_ERROR(ToString(playerInfo) + " _object is null");
 		return std::nullopt;
 	}
-	return PlayerControl_GetTruePosition((*object), NULL);
+	return PlayerControl_GetTruePosition(object, NULL);
 }
 
 il2cpp::Array<Camera__Array> GetAllCameras() {
@@ -563,7 +555,7 @@ std::string ToString(__maybenull PlayerControl* player) {
 std::string ToString(__maybenull GameData_PlayerInfo* data) {
 	if (data) {
 		if (const auto outfit = GetPlayerOutfit(data))
-			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields._playerName));
+			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr)));
 		return std::format("<#{}>", +data->fields.PlayerId);
 	}
 	return "<Unknown>";
@@ -593,17 +585,18 @@ void ImpersonateName(PlayerSelection& _player)
 	auto player = _player.validate(); if (!player.has_value()) return;
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
-	if (convert_from_string(outfit->fields._playerName).length() < 10) {
+	const auto& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+	if (playerName.length() < 10) {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
+			State.rpcQueue.push(new RpcSetName(playerName + " "));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName) + " "));
+			State.lobbyRpcQueue.push(new RpcSetName(playerName + " "));
 	}
 	else {
 		if (IsInGame())
-			State.rpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
+			State.rpcQueue.push(new RpcSetName(playerName));
 		else if (IsInLobby())
-			State.lobbyRpcQueue.push(new RpcSetName(convert_from_string(outfit->fields._playerName)));
+			State.lobbyRpcQueue.push(new RpcSetName(playerName));
 	}
 }
 
@@ -648,7 +641,7 @@ void SaveOriginalAppearance()
 	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(outfit->fields._playerName);
+	State.originalName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 	State.originalSkin = outfit->fields.SkinId;
 	State.originalHat = outfit->fields.HatId;
 	State.originalPet = outfit->fields.PetId;
@@ -674,7 +667,7 @@ GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool include
 	const il2cpp::Dictionary dic(player->fields.Outfits);
 	if (includeShapeshifted) {
 		auto playerOutfit = dic[PlayerOutfitType__Enum::Shapeshifted];
-		if (playerOutfit && !convert_from_string(playerOutfit->fields._playerName).empty()) {
+		if (playerOutfit && !convert_from_string(GameData_PlayerOutfit_get_PlayerName(playerOutfit, nullptr)).empty()) {
 			return playerOutfit;
 		}
 	}

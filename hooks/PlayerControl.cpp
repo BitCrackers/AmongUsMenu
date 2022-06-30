@@ -41,7 +41,8 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	if (IsInGame()) {
 		auto playerData = GetPlayerData(__this);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
-		auto nameTextTMP = __this->fields.nameText;
+		assert(Object_1_IsNotNull((Object_1*)__this->fields.cosmetics));
+		auto nameTextTMP = __this->fields.cosmetics->fields.nameText;
 
 		if (!playerData || !localData)
 			return;
@@ -51,7 +52,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
-			playerName = convert_from_string(outfit->fields._playerName);
+			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 		if (State.RevealRoles)
 		{
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
@@ -216,7 +217,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			{
 				espPlayerData.Color = State.ShowEsp_RoleBased == false ? AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId))
 					: AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
-				espPlayerData.Name = convert_from_string(outfit->fields._playerName);
+				espPlayerData.Name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 			}
 			else
 			{
@@ -276,12 +277,12 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	PlayerControl_MurderPlayer(__this, target, method);
 }
 
-void* dPlayerControl_CoStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
+void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
 	synchronized(Replay::replayEventMutex) {
 		State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 	}
-	return PlayerControl_CoStartMeeting(__this, target, method);
+	app::PlayerControl_StartMeeting(__this, target, method);
 }
 
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
@@ -327,12 +328,13 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 	if (IsInGame() && !value && State.ShowGhosts) { //If we're already rendering it, lets skip checking if we should
 		for (auto player : GetAllPlayerControl()) {
 			auto playerInfo = GetPlayerData(player);
-			if (!playerInfo) break; //This happens sometimes during loading
+			if (!playerInfo || !player->fields.cosmetics) break; //This happens sometimes during loading
 			if (playerInfo->fields.IsDead)
 			{
-				auto nameObject = Component_get_gameObject((Component_1*)player->fields.nameText, NULL);
+				auto nameObject = Component_get_gameObject((Component_1*)player->fields.cosmetics->fields.nameText, NULL);
 				if (nameObject == __this) {
 					value = true;
+					break;
 				}
 			}
 		}

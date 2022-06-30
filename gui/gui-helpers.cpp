@@ -139,7 +139,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) return false;
 			auto& item = list->at(playerData->fields.PlayerId);
-			std::string playerName = convert_from_string(outfit->fields._playerName);
+			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 			PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0) * State.dpiScale);
 			PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0) * State.dpiScale);
 			if (Selectable(std::string("##" + playerName + "_ConsoleName").c_str(), item.second))
