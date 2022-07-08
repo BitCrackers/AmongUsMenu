@@ -4368,8 +4368,7 @@ namespace app
         bool DontDestroy;
     };
 
-    struct EOSManager__Fields
-    {
+    struct EOSManager__Fields {
         struct DestroyableSingleton_1_EOSManager___Fields _;
         struct String* loginCredentialId;
         struct String* productName;
@@ -4392,20 +4391,22 @@ namespace app
         void* userId;
         void* deviceIDuserID;
         bool announcementsVisible;
-        bool hasShownSigninScreen;
         bool attemptAuthAgain;
         uint32_t numLinkedAccounts;
         void* linkedExternalAccounts;
-        void* redeemDLCChoice;
         void* editAccountUsername;
+        void* askToMergeAccount;
+        struct String* freeChatKey;
+        struct String* customNameKey;
+        struct String* friendsListKey;
         int32_t ageOfConsent;
         struct String* kwsUserId;
+        bool isKWSMinor;
         void* continuanceToken;
         struct String* exchangeToken;
         struct String* platformAuthToken;
         bool authExpiredCallbackTriggered;
         bool silentLoginFailed;
-        bool hasTriedStartupDeviceID;
         void* validateOldDLC;
         bool isRedeemingDLC;
         void* s_eosPlatformInterface;
@@ -12313,5 +12314,136 @@ struct RoleEffectAnimation__Array {
 
 #pragma endregion
 
+#pragma region AccountManager
+#if defined(_CPLUSPLUS_)
+    enum class KWSPermissionStatus__Enum : int32_t {
+        Granted = 0x00000000,
+        Rejected = 0x00000001,
+        Pending = 0x00000002,
+    };
+
+#else
+    enum KWSPermissionStatus__Enum {
+        KWSPermissionStatus__Enum_Granted = 0x00000000,
+        KWSPermissionStatus__Enum_Rejected = 0x00000001,
+        KWSPermissionStatus__Enum_Pending = 0x00000002,
+    };
+
+#endif
+
+#if defined(_CPLUSPLUS_)
+    enum class EOSManager_AccountLoginStatus__Enum : int32_t {
+        Offline = 0x00000000,
+        LoggedIn = 0x00000001,
+        WaitingForParent = 0x00000002,
+    };
+
+#else
+    enum EOSManager_AccountLoginStatus__Enum {
+        EOSManager_AccountLoginStatus__Enum_Offline = 0x00000000,
+        EOSManager_AccountLoginStatus__Enum_LoggedIn = 0x00000001,
+        EOSManager_AccountLoginStatus__Enum_WaitingForParent = 0x00000002,
+    };
+
+#endif
+
+    struct DestroyableSingleton_1_AccountManager___Fields {
+        struct MonoBehaviour__Fields _;
+        bool DontDestroy;
+    };
+
+    struct AccountManager__Fields {
+        struct DestroyableSingleton_1_AccountManager___Fields _;
+        struct AccountTab* accountTab;
+        void* enterGuardianEmailWindow;
+        void* updateGuardianEmailWindow;
+        void* guardianEmailConfirmWindow;
+        void* genericInfoDisplayBox;
+        void* enterDateOfBirthScreen;
+        struct GameObject* waitingText;
+        struct GameObject* postLoadWaiting;
+        struct GameObject* privacyPolicyBg;
+        void* signInScreen;
+        void* PrivacyPolicy;
+        void* chatModeMenuScreen;
+#if defined(_CPLUSPLUS_)
+        KWSPermissionStatus__Enum freeChatAllowed;
+#else
+        int32_t freeChatAllowed;
+#endif
+#if defined(_CPLUSPLUS_)
+        KWSPermissionStatus__Enum customDisplayName;
+#else
+        int32_t customDisplayName;
+#endif
+#if defined(_CPLUSPLUS_)
+        KWSPermissionStatus__Enum friendsListAllowed;
+#else
+        int32_t friendsListAllowed;
+#endif
+        void* OnLoggedInStatusChange;
+#if defined(_CPLUSPLUS_)
+        EOSManager_AccountLoginStatus__Enum prevLoggedInStatus;
+#else
+        int32_t prevLoggedInStatus;
+#endif
+    };
+
+    struct AccountManager {
+        void* klass;
+        MonitorData* monitor;
+        struct AccountManager__Fields fields;
+    };
+#pragma endregion
+
+#pragma region PlayerStorageManager
+    struct DestroyableSingleton_1_PlayerStorageManager___Fields {
+        struct MonoBehaviour__Fields _;
+        bool DontDestroy;
+    };
+
+    struct PlayerStorageManager_CloudPlayerPrefs {
+        struct String* ActivePodType;
+        struct String* receiptRedemptionAccounts;
+        uint32_t PlatformsLimitedItemsValidated;
+        uint32_t IsAdult;
+    };
+
+#if defined(_CPLUSPLUS_)
+    enum class UpdateState__Enum : int32_t {
+        Connecting = 0x00000000,
+        Failed = 0x00000001,
+        Success = 0x00000002,
+        PartialSuccess = 0x00000003,
+    };
+
+#else
+    enum UpdateState__Enum {
+        UpdateState__Enum_Connecting = 0x00000000,
+        UpdateState__Enum_Failed = 0x00000001,
+        UpdateState__Enum_Success = 0x00000002,
+        UpdateState__Enum_PartialSuccess = 0x00000003,
+    };
+
+#endif
+
+    struct PlayerStorageManager__Fields {
+        struct DestroyableSingleton_1_PlayerStorageManager___Fields _;
+        struct PlayerStorageManager_CloudPlayerPrefs _PlayerPrefs_k__BackingField;
+#if defined(_CPLUSPLUS_)
+        UpdateState__Enum _PlayerStorageLoadState_k__BackingField;
+#else
+        int32_t _PlayerStorageLoadState_k__BackingField;
+#endif
+        void* playerStorage;
+        void* saveRoutine;
+    };
+
+    struct PlayerStorageManager {
+        void* klass;
+        MonitorData* monitor;
+        struct PlayerStorageManager__Fields fields;
+    };
+#pragma endregion
 
 }

@@ -155,6 +155,9 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_TurnOnProtection);
 	HOOKFUNC(AmongUsClient_OnGameEnd);
 	HOOKFUNC(InnerNetClient_DisconnectInternal);
+	HOOKFUNC(AccountManager_UpdateKidAccountDisplay);
+	HOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
+	HOOKFUNC(EOSManager_UpdatePermissionKeys);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -234,6 +237,9 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_TurnOnProtection);
 	UNHOOKFUNC(AmongUsClient_OnGameEnd);
 	UNHOOKFUNC(InnerNetClient_DisconnectInternal);
+	UNHOOKFUNC(AccountManager_UpdateKidAccountDisplay);
+	UNHOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
+	UNHOOKFUNC(EOSManager_UpdatePermissionKeys);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

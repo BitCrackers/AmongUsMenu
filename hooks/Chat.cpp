@@ -51,7 +51,7 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 
 void dChatController_Update(ChatController* __this, MethodInfo* method)
 {
-	SaveManager__TypeInfo->static_fields->chatModeType = 1;
+	//SaveManager__TypeInfo->static_fields->chatModeType = (int32_t)QuickChatModes__Enum::FreeChatOrQuickChat;
 	SaveManager__TypeInfo->static_fields->isGuest = false;
 	ChatController_Update(__this, method);
 }
