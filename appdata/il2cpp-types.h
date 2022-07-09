@@ -3631,7 +3631,6 @@ namespace app
         int32_t wordCount;
         int32_t fontStyle;
         int32_t italicAngle;
-        float fontScale;
         float fontScaleMultiplier;
         float currentFontSize;
         float baselineOffset;
@@ -3690,11 +3689,99 @@ namespace app
         int32_t materialIndex;
     };
 
+    struct TMP_Text_TextBackingContainer {
+        void* m_Array;
+        int32_t m_Count;
+    };
+
+#if defined(_CPLUSPLUS_)
+    enum class TextAlignmentOptions__Enum : int32_t {
+        TopLeft = 0x00000101,
+        Top = 0x00000102,
+        TopRight = 0x00000104,
+        TopJustified = 0x00000108,
+        TopFlush = 0x00000110,
+        TopGeoAligned = 0x00000120,
+        Left = 0x00000201,
+        Center = 0x00000202,
+        Right = 0x00000204,
+        Justified = 0x00000208,
+        Flush = 0x00000210,
+        CenterGeoAligned = 0x00000220,
+        BottomLeft = 0x00000401,
+        Bottom = 0x00000402,
+        BottomRight = 0x00000404,
+        BottomJustified = 0x00000408,
+        BottomFlush = 0x00000410,
+        BottomGeoAligned = 0x00000420,
+        BaselineLeft = 0x00000801,
+        Baseline = 0x00000802,
+        BaselineRight = 0x00000804,
+        BaselineJustified = 0x00000808,
+        BaselineFlush = 0x00000810,
+        BaselineGeoAligned = 0x00000820,
+        MidlineLeft = 0x00001001,
+        Midline = 0x00001002,
+        MidlineRight = 0x00001004,
+        MidlineJustified = 0x00001008,
+        MidlineFlush = 0x00001010,
+        MidlineGeoAligned = 0x00001020,
+        CaplineLeft = 0x00002001,
+        Capline = 0x00002002,
+        CaplineRight = 0x00002004,
+        CaplineJustified = 0x00002008,
+        CaplineFlush = 0x00002010,
+        CaplineGeoAligned = 0x00002020,
+        Converted = 0x0000ffff,
+    };
+
+#else
+    enum TextAlignmentOptions__Enum {
+        TextAlignmentOptions__Enum_TopLeft = 0x00000101,
+        TextAlignmentOptions__Enum_Top = 0x00000102,
+        TextAlignmentOptions__Enum_TopRight = 0x00000104,
+        TextAlignmentOptions__Enum_TopJustified = 0x00000108,
+        TextAlignmentOptions__Enum_TopFlush = 0x00000110,
+        TextAlignmentOptions__Enum_TopGeoAligned = 0x00000120,
+        TextAlignmentOptions__Enum_Left = 0x00000201,
+        TextAlignmentOptions__Enum_Center = 0x00000202,
+        TextAlignmentOptions__Enum_Right = 0x00000204,
+        TextAlignmentOptions__Enum_Justified = 0x00000208,
+        TextAlignmentOptions__Enum_Flush = 0x00000210,
+        TextAlignmentOptions__Enum_CenterGeoAligned = 0x00000220,
+        TextAlignmentOptions__Enum_BottomLeft = 0x00000401,
+        TextAlignmentOptions__Enum_Bottom = 0x00000402,
+        TextAlignmentOptions__Enum_BottomRight = 0x00000404,
+        TextAlignmentOptions__Enum_BottomJustified = 0x00000408,
+        TextAlignmentOptions__Enum_BottomFlush = 0x00000410,
+        TextAlignmentOptions__Enum_BottomGeoAligned = 0x00000420,
+        TextAlignmentOptions__Enum_BaselineLeft = 0x00000801,
+        TextAlignmentOptions__Enum_Baseline = 0x00000802,
+        TextAlignmentOptions__Enum_BaselineRight = 0x00000804,
+        TextAlignmentOptions__Enum_BaselineJustified = 0x00000808,
+        TextAlignmentOptions__Enum_BaselineFlush = 0x00000810,
+        TextAlignmentOptions__Enum_BaselineGeoAligned = 0x00000820,
+        TextAlignmentOptions__Enum_MidlineLeft = 0x00001001,
+        TextAlignmentOptions__Enum_Midline = 0x00001002,
+        TextAlignmentOptions__Enum_MidlineRight = 0x00001004,
+        TextAlignmentOptions__Enum_MidlineJustified = 0x00001008,
+        TextAlignmentOptions__Enum_MidlineFlush = 0x00001010,
+        TextAlignmentOptions__Enum_MidlineGeoAligned = 0x00001020,
+        TextAlignmentOptions__Enum_CaplineLeft = 0x00002001,
+        TextAlignmentOptions__Enum_Capline = 0x00002002,
+        TextAlignmentOptions__Enum_CaplineRight = 0x00002004,
+        TextAlignmentOptions__Enum_CaplineJustified = 0x00002008,
+        TextAlignmentOptions__Enum_CaplineFlush = 0x00002010,
+        TextAlignmentOptions__Enum_CaplineGeoAligned = 0x00002020,
+        TextAlignmentOptions__Enum_Converted = 0x0000ffff,
+    };
+
+#endif
 #pragma region TMP_Text
-    struct TMP_Text__Fields
-    {
+    struct TMP_Text__Fields {
         struct MaskableGraphic__Fields _;
         struct String* m_text;
+        bool m_IsTextBackingStringDirty;
         void* m_TextPreprocessor;
         bool m_isRightToLeft;
         void* m_fontAsset;
@@ -3702,9 +3789,6 @@ namespace app
         bool m_isSDFShader;
         void* m_sharedMaterial;
         void* m_currentMaterial;
-        void* m_materialReferences;
-        void* m_materialReferenceIndexLookup;
-        struct TMP_TextProcessingStack_1_MaterialReference_ m_materialReferenceStack;
         int32_t m_currentMaterialIndex;
         void* m_fontSharedMaterials;
         void* m_fontMaterial;
@@ -3750,7 +3834,11 @@ namespace app
         bool m_isUsingBold;
         int32_t m_HorizontalAlignment;
         int32_t m_VerticalAlignment;
+#if defined(_CPLUSPLUS_)
+        TextAlignmentOptions__Enum m_textAlignment;
+#else
         int32_t m_textAlignment;
+#endif
         int32_t m_lineJustification;
         struct TMP_TextProcessingStack_1_HorizontalAlignmentOptions_ m_lineJustificationStack;
         void* m_textContainerLocalCorners;
@@ -3773,8 +3861,8 @@ namespace app
         float m_wordWrappingRatios;
         int32_t m_overflowMode;
         int32_t m_firstOverflowCharacterIndex;
-        void* m_linkedTextComponent;
-        void* parentLinkedComponent;
+        struct TMP_Text* m_linkedTextComponent;
+        struct TMP_Text* parentLinkedComponent;
         bool m_isTextTruncated;
         bool m_enableKerning;
         float m_GlyphHorizontalAdvanceAdjustment;
@@ -3839,13 +3927,8 @@ namespace app
         bool m_isLayoutDirty;
         bool m_isAwake;
         bool m_isWaitingOnResourceLoad;
-        bool m_isInputParsingRequired;
         int32_t m_inputSource;
-        float m_fontScale;
         float m_fontScaleMultiplier;
-        void* m_htmlTag;
-        void* m_xmlAttribute;
-        void* m_attributeParameterValues;
         float tag_LineIndent;
         float tag_Indent;
         struct TMP_TextProcessingStack_1_System_Single_ m_indentStack;
@@ -3853,18 +3936,10 @@ namespace app
         bool m_isParsingText;
         struct Matrix4x4 m_FXMatrix;
         bool m_isFXMatrixSet;
-        void* m_InternalParsingBuffer;
-        int32_t m_InternalParsingBufferSize;
+        void* m_TextProcessingArray;
+        int32_t m_InternalTextProcessingArraySize;
         void* m_internalCharacterInfo;
-        void* m_input_CharArray;
-        int32_t m_charArray_Length;
         int32_t m_totalCharacterCount;
-        struct WordWrapState m_SavedWordWrapState;
-        struct WordWrapState m_SavedLineState;
-        struct WordWrapState m_SavedEllipsisState;
-        struct WordWrapState m_SavedLastValidState;
-        struct WordWrapState m_SavedSoftLineBreakState;
-        struct TMP_TextProcessingStack_1_WordWrapState_ m_EllipsisInsertionCandidateStack;
         int32_t m_characterCount;
         int32_t m_firstCharacterOfLine;
         int32_t m_firstVisibleCharacterOfLine;
@@ -3913,6 +3988,7 @@ namespace app
         int32_t m_spriteIndex;
         int32_t m_spriteAnimationID;
         bool m_ignoreActiveState;
+		struct TMP_Text_TextBackingContainer m_TextBackingArray;
         void* k_Power;
     };
 
@@ -3923,8 +3999,7 @@ namespace app
         struct TMP_Text__Fields fields;
     };
 
-    struct TMP_Text__VTable
-    {
+    struct TMP_Text__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -4040,7 +4115,6 @@ namespace app
         VirtualInvokeData InternalCrossFadeColor;
         VirtualInvokeData InternalCrossFadeAlpha;
         VirtualInvokeData SetArraySizes;
-        VirtualInvokeData GenerateTextMesh;
         VirtualInvokeData CalculatePreferredValues;
         VirtualInvokeData GetCompoundBounds;
         VirtualInvokeData GetCanvasSpaceClippingRect;
@@ -4063,15 +4137,7 @@ namespace app
 
     struct TMP_Text__StaticFields
     {
-        struct Color32 s_colorWhite;
-        void* OnFontAssetRequest;
-        void* OnSpriteAssetRequest;
-        struct Vector2 k_LargePositiveVector2;
-        struct Vector2 k_LargeNegativeVector2;
-        float k_LargePositiveFloat;
-        float k_LargeNegativeFloat;
-        int32_t k_LargePositiveInt;
-        int32_t k_LargeNegativeInt;
+        
     };
 
     struct TMP_Text__Class
@@ -4101,6 +4167,7 @@ namespace app
         struct Matrix4x4 m_EnvMapMatrix;
         void* m_RectTransformCorners;
         bool m_isRegisteredForEvents;
+        int32_t _SortingLayer;
         int32_t _SortingLayerID;
         int32_t _SortingOrder;
         void* OnPreRenderText;
@@ -4114,8 +4181,7 @@ namespace app
         struct TextMeshPro__Fields fields;
     };
 
-    struct TextMeshPro__VTable
-    {
+    struct TextMeshPro__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -4231,7 +4297,6 @@ namespace app
         VirtualInvokeData InternalCrossFadeColor;
         VirtualInvokeData InternalCrossFadeAlpha;
         VirtualInvokeData SetArraySizes;
-        VirtualInvokeData GenerateTextMesh;
         VirtualInvokeData CalculatePreferredValues;
         VirtualInvokeData GetCompoundBounds;
         VirtualInvokeData GetCanvasSpaceClippingRect;
@@ -4259,6 +4324,7 @@ namespace app
         VirtualInvokeData get_preferredHeight_1;
         VirtualInvokeData get_flexibleHeight_1;
         VirtualInvokeData get_layoutPriority_1;
+        VirtualInvokeData GenerateTextMesh;
     };
 
     struct TextMeshPro__StaticFields
@@ -4400,7 +4466,7 @@ namespace app
         struct String* customNameKey;
         struct String* friendsListKey;
         struct String* accountLinkKey;
-        struct Logger_2* logger;
+        void* logger;
         int32_t ageOfConsent;
         struct String* kwsUserId;
         bool isKWSMinor;
@@ -8825,7 +8891,7 @@ struct RoleEffectAnimation__Array {
         bool alwaysDrawNormalPlayer;
         void* bodySprites;
         struct TextMeshPro* colorBlindText;
-        struct HatParent* hat;
+        void* hat;
         struct TextMeshPro* nameText;
         struct Transform* petParent;
         bool showColorBlindText;
