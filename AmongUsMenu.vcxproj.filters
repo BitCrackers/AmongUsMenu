@@ -465,7 +465,6 @@
     <ClInclude Include="user\achievements.hpp">
       <Filter>user</Filter>
     </ClInclude>
-    <ClInclude Include="gitparams.h" />
     <ClInclude Include="gui\replay.hpp">
       <Filter>gui</Filter>
     </ClInclude>

@@ -64,8 +64,11 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 }
 
 void dVersionShower_Start(VersionShower* __this, MethodInfo* method) {
-	VersionShower_Start(__this, method);
-	std::string versionText = convert_from_string(__this->fields.text->fields._.m_text);
-	versionText = versionText + "\n AmongUsMenu - " + GetGitBranch();
-	__this->fields.text->fields._.m_text = convert_to_string(versionText);
+	app::VersionShower_Start(__this, method);
+	const auto& versionText = std::format("{}\n<size=70%>AmongUsMenu - {} - {}</size>",
+		convert_from_string(app::TMP_Text_get_text((app::TMP_Text*)__this->fields.text, nullptr)),
+		GetGitCommit().substr(0, 7), GetGitBranch()
+	);
+	app::TMP_Text_set_alignment((app::TMP_Text*)__this->fields.text, app::TextAlignmentOptions__Enum::TopLeft, nullptr);
+	app::TMP_Text_set_text((app::TMP_Text*)__this->fields.text, convert_to_string(versionText), nullptr);
 }

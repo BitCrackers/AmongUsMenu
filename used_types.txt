@@ -138,7 +138,6 @@ DeadBody__Array
 PetData__Array
 DestroyableSingleton_1_HatManager___Fields
 HatManager
-HatManager_c
 ScriptableObject
 LimitedTime
 LimitedTimeStartEnd

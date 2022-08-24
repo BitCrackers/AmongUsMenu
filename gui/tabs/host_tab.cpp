@@ -67,6 +67,8 @@ namespace HostTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
 
+				// AU v2022.8.24 has been able to change maps in lobby.
+				State.mapHostChoice = (*Game::pGameOptionsData)->fields.MapId;
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
