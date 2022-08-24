@@ -4399,6 +4399,8 @@ namespace app
         struct String* freeChatKey;
         struct String* customNameKey;
         struct String* friendsListKey;
+        struct String* accountLinkKey;
+        struct Logger_2* logger;
         int32_t ageOfConsent;
         struct String* kwsUserId;
         bool isKWSMinor;
@@ -4926,6 +4928,7 @@ namespace app
         bool _ShouldCheckForGameEnd_k__BackingField;
         float _HideCountdown_k__BackingField;
         void* _CosmeticsCache_k__BackingField;
+        void* logger;
         int32_t numScans;
     };
 
@@ -5473,6 +5476,7 @@ namespace app
         ErrorTooManyGames = 0x000002d5,
         ErrorDuplicateConnection = 0x000002d6,
         ErrorTooManyRequests = 0x000002d7,
+        ErrorSanction = 0x000002d8,
         VentDirection = 0x000003e8,
         VentMove = 0x000003e9,
         MenuNavigate = 0x000003ea,
@@ -5521,7 +5525,34 @@ namespace app
         StatsScientistChargesGained = 0x00000604,
         StatsGuardianAngelCrewmatesProtected = 0x00000605,
         StatsShapeshifterShiftedKills = 0x00000606,
+        SanctionDuration = 0x000006a4,
+        SanctionPermanent = 0x000006a5,
+        SanctionConduct = 0x000006a6,
+        SanctionImpersonationCeleb = 0x000006a7,
+        SanctionSpamming = 0x000006a8,
+        SanctionInappropriateNameUnsportsmanlike = 0x000006a9,
+        SanctionUnsportsmanlikeConduct = 0x000006aa,
+        SanctionImpersonationDevelopers = 0x000006ab,
+        SanctionInappropriateChatPersonalInfo = 0x000006ac,
+        SanctionInappropriateNameDerogatory = 0x000006ad,
+        SanctionInappropriateNameNsfw = 0x000006ae,
+        SanctionBullying = 0x000006af,
+        SanctionCheatingHacking = 0x000006b0,
+        SanctionInappropriateChatDating = 0x000006b1,
+        SanctionWeaponizingRules = 0x000006b2,
+        SanctionRepeatOffender3 = 0x000006b3,
+        SanctionSexualMisconduct = 0x000006b4,
+        SanctionDoxing = 0x000006b5,
+        SanctionIllegalActivity = 0x000006b6,
+        SanctionHarassment = 0x000006b7,
+        SanctionSelfHarmPromotion = 0x000006b8,
+        SanctionRepeatOffender10 = 0x000006b9,
+        SanctionUnknown = 0x000006ba,
         ScreenShakeOption = 0x0000076c,
+        FeaturedItems = 0x0000076d,
+        FeaturedBundles = 0x0000076e,
+        FeaturedCubes = 0x0000076f,
+        BugReportPopUpAttachScreenshotDesc = 0x00000770,
         QCLocationLaptop = 0x000007d0,
         QCLocationSkeld = 0x000007d1,
         QCLocationMira = 0x000007d2,
@@ -5846,6 +5877,10 @@ namespace app
         ErrorCrossPlat = 0x00000911,
         SettingsStreamerMode = 0x00000912,
         RoomCodeInfo = 0x00000913,
+        AbbreviatedDay = 0x00000914,
+        AbbreviatedHour = 0x00000915,
+        AbbreviatedMinute = 0x00000916,
+        AbbreviatedSecond = 0x00000917,
         MaxVentUses = 0x00000a8c,
         MaxTimeInVent = 0x00000a8d,
         MinCrewmatesForVitals = 0x00000a8e,
@@ -5911,6 +5946,10 @@ namespace app
         ParentPortalButton = 0x00000b1e,
         FriendsListEmailSent = 0x00000b1f,
         AndroidAssetBundleWarning = 0x00000b20,
+        FreeChatLinkWarning = 0x00000b21,
+        FriendListUnavailable = 0x00000b22,
+        SignInIssueTitle = 0x00000b23,
+        SignInIssueText = 0x00000b24,
         QCAccIsRole = 0x00000bb8,
         QCAccIsRoleNeg = 0x00000bb9,
         QCAccShapeshited = 0x00000bba,
@@ -5945,7 +5984,30 @@ namespace app
         ErrorCommunications = 0x00000bd7,
         ManageAccountTitle = 0x00000bd8,
         ManageAccountText = 0x00000bd9,
+        Email = 0x00000bda,
+        BugReportPopUpSubmittedText = 0x00000bdb,
+        BugReportPopUpCategoryLabel = 0x00000bdc,
+        BugReportPopUpDescriptionLabel = 0x00000bdd,
+        BugReportPopUpTitle = 0x00000bde,
+        BugReportCategoryServerIssues = 0x00000bdf,
+        BugReportCategoryGameplayIssue = 0x00000be0,
+        BugReportCategoryAccountManagement = 0x00000be1,
+        BugReportCategoryBilling = 0x00000be2,
+        BugReportCategoryGeneral = 0x00000be3,
+        BugReportIssueButton = 0x00000be4,
+        BugReportPopUpSubmissionFailedText = 0x00000be5,
+        BugReportPopUpAttachScreenshotLabel = 0x00000be6,
         SettingsColorblind = 0x00000c80,
+        SettingsHelp = 0x00000c81,
+        SecLogEntryColorblind = 0x00000c82,
+        DeleteAccount = 0x00000c83,
+        DoNotDeleteAccount = 0x00000c84,
+        AccountDeleteHelp = 0x00000c85,
+        AccountUnDeleteHelp = 0x00000c86,
+        ConfirmDelete = 0x00000c87,
+        ConfirmDeleteAccounts = 0x00000c88,
+        ConfirmDeleteAccountsEmpty = 0x00000c89,
+        AccountRequestDelete = 0x00000c8a,
     };
 
 #else
@@ -6446,6 +6508,7 @@ namespace app
         StringNames__Enum_ErrorTooManyGames = 0x000002d5,
         StringNames__Enum_ErrorDuplicateConnection = 0x000002d6,
         StringNames__Enum_ErrorTooManyRequests = 0x000002d7,
+        StringNames__Enum_ErrorSanction = 0x000002d8,
         StringNames__Enum_VentDirection = 0x000003e8,
         StringNames__Enum_VentMove = 0x000003e9,
         StringNames__Enum_MenuNavigate = 0x000003ea,
@@ -6494,7 +6557,34 @@ namespace app
         StringNames__Enum_StatsScientistChargesGained = 0x00000604,
         StringNames__Enum_StatsGuardianAngelCrewmatesProtected = 0x00000605,
         StringNames__Enum_StatsShapeshifterShiftedKills = 0x00000606,
+        StringNames__Enum_SanctionDuration = 0x000006a4,
+        StringNames__Enum_SanctionPermanent = 0x000006a5,
+        StringNames__Enum_SanctionConduct = 0x000006a6,
+        StringNames__Enum_SanctionImpersonationCeleb = 0x000006a7,
+        StringNames__Enum_SanctionSpamming = 0x000006a8,
+        StringNames__Enum_SanctionInappropriateNameUnsportsmanlike = 0x000006a9,
+        StringNames__Enum_SanctionUnsportsmanlikeConduct = 0x000006aa,
+        StringNames__Enum_SanctionImpersonationDevelopers = 0x000006ab,
+        StringNames__Enum_SanctionInappropriateChatPersonalInfo = 0x000006ac,
+        StringNames__Enum_SanctionInappropriateNameDerogatory = 0x000006ad,
+        StringNames__Enum_SanctionInappropriateNameNsfw = 0x000006ae,
+        StringNames__Enum_SanctionBullying = 0x000006af,
+        StringNames__Enum_SanctionCheatingHacking = 0x000006b0,
+        StringNames__Enum_SanctionInappropriateChatDating = 0x000006b1,
+        StringNames__Enum_SanctionWeaponizingRules = 0x000006b2,
+        StringNames__Enum_SanctionRepeatOffender3 = 0x000006b3,
+        StringNames__Enum_SanctionSexualMisconduct = 0x000006b4,
+        StringNames__Enum_SanctionDoxing = 0x000006b5,
+        StringNames__Enum_SanctionIllegalActivity = 0x000006b6,
+        StringNames__Enum_SanctionHarassment = 0x000006b7,
+        StringNames__Enum_SanctionSelfHarmPromotion = 0x000006b8,
+        StringNames__Enum_SanctionRepeatOffender10 = 0x000006b9,
+        StringNames__Enum_SanctionUnknown = 0x000006ba,
         StringNames__Enum_ScreenShakeOption = 0x0000076c,
+        StringNames__Enum_FeaturedItems = 0x0000076d,
+        StringNames__Enum_FeaturedBundles = 0x0000076e,
+        StringNames__Enum_FeaturedCubes = 0x0000076f,
+        StringNames__Enum_BugReportPopUpAttachScreenshotDesc = 0x00000770,
         StringNames__Enum_QCLocationLaptop = 0x000007d0,
         StringNames__Enum_QCLocationSkeld = 0x000007d1,
         StringNames__Enum_QCLocationMira = 0x000007d2,
@@ -6819,6 +6909,10 @@ namespace app
         StringNames__Enum_ErrorCrossPlat = 0x00000911,
         StringNames__Enum_SettingsStreamerMode = 0x00000912,
         StringNames__Enum_RoomCodeInfo = 0x00000913,
+        StringNames__Enum_AbbreviatedDay = 0x00000914,
+        StringNames__Enum_AbbreviatedHour = 0x00000915,
+        StringNames__Enum_AbbreviatedMinute = 0x00000916,
+        StringNames__Enum_AbbreviatedSecond = 0x00000917,
         StringNames__Enum_MaxVentUses = 0x00000a8c,
         StringNames__Enum_MaxTimeInVent = 0x00000a8d,
         StringNames__Enum_MinCrewmatesForVitals = 0x00000a8e,
@@ -6884,6 +6978,10 @@ namespace app
         StringNames__Enum_ParentPortalButton = 0x00000b1e,
         StringNames__Enum_FriendsListEmailSent = 0x00000b1f,
         StringNames__Enum_AndroidAssetBundleWarning = 0x00000b20,
+        StringNames__Enum_FreeChatLinkWarning = 0x00000b21,
+        StringNames__Enum_FriendListUnavailable = 0x00000b22,
+        StringNames__Enum_SignInIssueTitle = 0x00000b23,
+        StringNames__Enum_SignInIssueText = 0x00000b24,
         StringNames__Enum_QCAccIsRole = 0x00000bb8,
         StringNames__Enum_QCAccIsRoleNeg = 0x00000bb9,
         StringNames__Enum_QCAccShapeshited = 0x00000bba,
@@ -6918,7 +7016,30 @@ namespace app
         StringNames__Enum_ErrorCommunications = 0x00000bd7,
         StringNames__Enum_ManageAccountTitle = 0x00000bd8,
         StringNames__Enum_ManageAccountText = 0x00000bd9,
+        StringNames__Enum_Email = 0x00000bda,
+        StringNames__Enum_BugReportPopUpSubmittedText = 0x00000bdb,
+        StringNames__Enum_BugReportPopUpCategoryLabel = 0x00000bdc,
+        StringNames__Enum_BugReportPopUpDescriptionLabel = 0x00000bdd,
+        StringNames__Enum_BugReportPopUpTitle = 0x00000bde,
+        StringNames__Enum_BugReportCategoryServerIssues = 0x00000bdf,
+        StringNames__Enum_BugReportCategoryGameplayIssue = 0x00000be0,
+        StringNames__Enum_BugReportCategoryAccountManagement = 0x00000be1,
+        StringNames__Enum_BugReportCategoryBilling = 0x00000be2,
+        StringNames__Enum_BugReportCategoryGeneral = 0x00000be3,
+        StringNames__Enum_BugReportIssueButton = 0x00000be4,
+        StringNames__Enum_BugReportPopUpSubmissionFailedText = 0x00000be5,
+        StringNames__Enum_BugReportPopUpAttachScreenshotLabel = 0x00000be6,
         StringNames__Enum_SettingsColorblind = 0x00000c80,
+        StringNames__Enum_SettingsHelp = 0x00000c81,
+        StringNames__Enum_SecLogEntryColorblind = 0x00000c82,
+        StringNames__Enum_DeleteAccount = 0x00000c83,
+        StringNames__Enum_DoNotDeleteAccount = 0x00000c84,
+        StringNames__Enum_AccountDeleteHelp = 0x00000c85,
+        StringNames__Enum_AccountUnDeleteHelp = 0x00000c86,
+        StringNames__Enum_ConfirmDelete = 0x00000c87,
+        StringNames__Enum_ConfirmDeleteAccounts = 0x00000c88,
+        StringNames__Enum_ConfirmDeleteAccountsEmpty = 0x00000c89,
+        StringNames__Enum_AccountRequestDelete = 0x00000c8a,
     };
 
 #endif
@@ -7203,6 +7324,7 @@ namespace app
         VirtualInvokeData get_Count_1;
         VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
         VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData ContainsKey_1;
         VirtualInvokeData TryGetValue_1;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
@@ -7504,6 +7626,7 @@ namespace app
         VirtualInvokeData get_Count_1;
         VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
         VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData ContainsKey_1;
         VirtualInvokeData TryGetValue_1;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
@@ -7839,6 +7962,7 @@ namespace app
         void* OpenSound;
         void* CloseSound;
         void* inputHandler;
+        void* logger;
     };
 
     struct Minigame
@@ -8530,6 +8654,7 @@ struct RoleEffectAnimation__Array {
         void* AspectPosition;
         float TimeSinceLastMessage;
         void* MessageSound;
+        void* WarningSound;
         bool animating;
         void* notificationRoutine;
         void* BanButton;
@@ -8541,6 +8666,7 @@ struct RoleEffectAnimation__Array {
         void* DefaultButtonSelected;
         void* ControllerSelectable;
         void* specialInputHandler;
+        void* logger;
     };
 
     struct ChatController
@@ -8619,6 +8745,7 @@ struct RoleEffectAnimation__Array {
         float GhostSpeed;
         void* body;
         struct PlayerControl* myPlayer;
+        void* logger;
         void* GlowAnimator;
         void* ImpostorDiscoveredSound;
         void* inputHandler;
@@ -8667,6 +8794,7 @@ struct RoleEffectAnimation__Array {
         SimpleUI = 0x00000001,
         ComplexUI = 0x00000002,
         Exile = 0x00000003,
+        ScrollingUI = 0x00000004,
     };
 
 #else
@@ -8675,6 +8803,7 @@ struct RoleEffectAnimation__Array {
         PlayerMaterial_MaskType__Enum_SimpleUI = 0x00000001,
         PlayerMaterial_MaskType__Enum_ComplexUI = 0x00000002,
         PlayerMaterial_MaskType__Enum_Exile = 0x00000003,
+        PlayerMaterial_MaskType__Enum_ScrollingUI = 0x00000004,
     };
 
 #endif
@@ -8693,22 +8822,22 @@ struct RoleEffectAnimation__Array {
 #pragma region CosmeticsLayer
     struct CosmeticsLayer__Fields {
         struct MonoBehaviour__Fields _;
-        void* hat;
-        void* visor;
-        struct SkinLayer* skin;
-        struct TextMeshPro* nameText;
-        void* bodySprites;
-        struct Transform* petParent;
-        struct TextMeshPro* colorBlindText;
         bool alwaysDrawNormalPlayer;
-        bool uiPet;
-        float zIndexSpacing;
+        void* bodySprites;
+        struct TextMeshPro* colorBlindText;
+        struct HatParent* hat;
+        struct TextMeshPro* nameText;
+        struct Transform* petParent;
         bool showColorBlindText;
-        void* currentBodySprite;
-        void* normalBodySprite;
-        struct PetBehaviour* currentPet;
+        struct SkinLayer* skin;
+        bool uiPet;
+        void* visor;
+        float zIndexSpacing;
         struct PlayerMaterial_Properties bodyMatProperties;
+        void* currentBodySprite;
+        struct PetBehaviour* currentPet;
         bool initialized;
+        void* normalBodySprite;
     };
 
     struct CosmeticsLayer__VTable {
@@ -8772,16 +8901,17 @@ struct RoleEffectAnimation__Array {
         struct CustomNetworkTransform* NetTransform;
         void* myAnim;
         void* horseAnim;
-        void* hitBuffer;
         struct List_1_PlayerTask_* myTasks;
         struct Vector3 defaultPlayerScale;
         void* ScannerAnims;
         struct SpriteRenderer__Array* ScannersImages;
         struct List_1_RoleEffectAnimation_* currentRoleAnimations;
-        void* closest;
-        bool isNew;
         bool isDummy;
         bool notRealPlayer;
+        void* hitBuffer;
+        void* closest;
+        bool isNew;
+        void* logger;
         void* cache;
         void* itemsInRange;
         void* newItemsInRange;
@@ -9289,6 +9419,7 @@ struct RoleEffectAnimation__Array {
         bool amDead;
         float resultsStartedAt;
         int32_t lastSecond;
+        void* logger;
         void* DefaultButtonSelected;
         void* ProceedButtonUi;
         void* ControllerSelectable;
@@ -9625,6 +9756,7 @@ struct RoleEffectAnimation__Array {
 #endif
         struct String* LastCustomDisconnect;
         uint8_t LastServerChatMode;
+        void* LastMatchmakerError;
         void* PreSpawnDispatcher;
         void* Dispatcher;
         bool _IsGamePublic_k__BackingField;
@@ -9742,6 +9874,7 @@ struct RoleEffectAnimation__Array {
         int32_t CrossplayPrivilegeError;
 #endif
         int32_t MAX_CLIENT_WAIT_TIME;
+        void* logger;
     };
 
     struct AmongUsClient {
@@ -10380,7 +10513,11 @@ struct RoleEffectAnimation__Array {
         int32_t starCost;
         bool paidOnMobile;
         struct LimitedTimeStartEnd limitedTime;
+        void* Variations;
         int32_t displayOrder;
+        bool NotInStore;
+        bool Free;
+        struct String* DateCreated;
     };
     struct CosmeticData
     {
@@ -10427,8 +10564,6 @@ struct RoleEffectAnimation__Array {
         bool InFront;
         bool NoBounce;
         bool BlocksVisors;
-        bool NotInStore;
-        bool Free;
         struct String* StoreName;
         struct SkinData* RelatedSkin;
         void* hatViewData;
@@ -10587,6 +10722,9 @@ struct RoleEffectAnimation__Array {
         void* AllVisors;
         void* AllNamePlates;
         void* AllBundles;
+        void* allFeaturedItems;
+        void* allFeaturedBundles;
+        void* allFeaturedCubes;
     };
 
     struct HatManager
@@ -10621,61 +10759,10 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
-#pragma region HatManager_c
-
-    struct HatManager_c
-    {
-        struct HatManager_c__Class* klass;
-        void* monitor;
-    };
-
-    struct HatManager_c__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct HatManager_c__StaticFields
-    {
-        struct HatManager_c* __9;
-        /* these are all a bunch of func ptrs. worth checking out in cpp scaffolding to see their actual types. */
-        void* __9__26_1;
-        void* __9__27_0;
-        void* __9__27_1;
-        void* __9__28_1;
-        void* __9__29_0;
-        void* __9__29_1;
-        void* __9__30_0;
-        void* __9__30_1;
-        void* __9__31_1;
-        void* __9__32_0;
-        void* __9__32_1;
-        void* __9__33_1;
-        void* __9__34_0;
-        void* __9__34_1;
-        void* __9__35_1;
-    };
-
-    struct HatManager_c__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatManager_c__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatManager_c__VTable vtable;
-    };
-
-#pragma endregion
-
 #pragma region NamePlateData
     struct NamePlateData__Fields {
         struct CosmeticData__Fields _;
         void* ViewDataRef;
-        bool Free;
-        bool NotInStore;
         void* viewData;
     };
 
@@ -10690,8 +10777,6 @@ struct RoleEffectAnimation__Array {
     struct VisorData__Fields {
         struct CosmeticData__Fields _;
         void* ViewDataRef;
-        bool Free;
-        bool NotInStore;
         void* viewData;
     };
 
@@ -10727,8 +10812,6 @@ struct RoleEffectAnimation__Array {
 
     struct PetData__Fields {
         struct CosmeticData__Fields _;
-        bool Free;
-        bool NotInStore;
 #if defined(_CPLUSPLUS_)
         StringNames__Enum StoreName;
 #else
@@ -10770,8 +10853,6 @@ struct RoleEffectAnimation__Array {
     {
         struct CosmeticData__Fields _;
         void* ViewDataRef;
-        bool NotInStore;
-        bool Free;
         struct String* StoreName;
         void* viewData;
     };
@@ -11397,6 +11478,7 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData get_Count_1;
         VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
         VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData ContainsKey_1;
         VirtualInvokeData TryGetValue_1;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
         VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
@@ -11863,6 +11945,7 @@ struct RoleEffectAnimation__Array {
     {
         struct StatsManager_Stats* stats;
         bool loadedStats;
+        void* logger;
     };
 
     struct StatsManager
@@ -12097,67 +12180,29 @@ struct RoleEffectAnimation__Array {
     };
 
     struct SaveManager__StaticFields {
+        int32_t lastSchemaVersion;
         bool loaded;
         bool loadedStats;
         bool loadedAnnounce;
         bool loadedQCFavorites;
         bool loadedStoreTabViewDates;
         bool loadedCachedPurchases;
+        void* OnColorBlindChanged;
+        void* OnStreamerModeChanged;
         struct String* lastPlayerName;
-        uint8_t sfxVolume;
-        uint8_t musicVolume;
-        bool showMinPlayerWarning;
-        bool showOnlineHelp;
-        uint8_t showAdsScreen;
-        int32_t privacyPolicyVersion;
-        int32_t birthDateDay;
-        int32_t birthDateMonth;
-        int32_t birthDateYear;
-        struct String* birthDateSetDate;
-        struct String* epicAccountId;
-        bool vsync;
-        bool screenshake;
-        bool censorChat;
-        bool streamerMode;
-        int32_t chatModeType;
-        bool isGuest;
-        bool hasLoggedIn;
-        struct String* guardianEmail;
-        int32_t accountLoginStatus;
-        bool askRedeemDLC;
-        bool warnedAboutGuestModeProgression;
-        bool colorblindMode;
-#if defined(_CPLUSPLUS_)
-        ControlTypes__Enum touchConfig;
-#else
-        int32_t touchConfig;
-#endif
-        float joyStickSize;
         uint32_t colorConfig;
         struct String* lastPet;
         struct String* lastHat;
         struct String* lastSkin;
         struct String* lastVisor;
         struct String* lastNamePlate;
-        struct String* lastCosmicube;
-        uint32_t lastLanguage;
-        struct GameOptionsData* hostOptionsData;
-        struct GameOptionsData* searchOptionsData;
-        int32_t lastSchemaVersion;
-        uint32_t playerLevel;
-        uint32_t playerXp;
-        uint32_t playerXpRequiredForNextLevel;
-        bool crossplayAllPlatforms;
-        bool enableMouseMovement;
-        bool enableFriendsListInvites;
-        bool deleteDeviceIDFailed;
-        void* OnColorBlindChanged;
-        void* OnStreamerModeChanged;
-        struct Announcement lastAnnounce;
-        void* quickChatFavorites;
-        void* purchaseFile;
+        bool showOnlineHelp;
+        bool warnedAboutGuestModeProgression;
+        int32_t privacyPolicyVersion;
+        bool askRedeemDLC;
+        bool showMinPlayerWarning;
         void* purchases;
-        struct String* dobInfo;
+        struct String* lastCosmicube;
         struct String* storeBundlesViewDate;
         struct String* storeHatsViewDate;
         struct String* storeOutfitsViewDate;
@@ -12165,6 +12210,44 @@ struct RoleEffectAnimation__Array {
         struct String* storePetsViewDate;
         struct String* storeNameplatesViewDate;
         struct String* storeCosmicubeViewDate;
+        int32_t accountLoginStatus;
+        bool hasLoggedIn;
+        bool isGuest;
+        struct String* guardianEmail;
+        struct String* epicAccountId;
+        bool deleteDeviceIDFailed;
+        struct String* dobInfo;
+        struct String* birthDateSetDate;
+        int32_t birthDateDay;
+        int32_t birthDateMonth;
+        int32_t birthDateYear;
+        uint32_t playerLevel;
+        uint32_t playerXp;
+        uint32_t playerXpRequiredForNextLevel;
+        struct Announcement lastAnnounce;
+        void* quickChatFavorites;
+        int32_t chatModeType;
+        struct GameOptionsData* hostOptionsData;
+        struct GameOptionsData* searchOptionsData;
+        uint8_t showAdsScreen;
+        bool screenshake;
+        bool censorChat;
+        bool enableFriendsListInvites;
+        bool crossplayAllPlatforms;
+        bool streamerMode;
+        bool colorblindMode;
+        uint8_t sfxVolume;
+        uint8_t musicVolume;
+        bool vsync;
+        uint32_t lastLanguage;
+#if defined(_CPLUSPLUS_)
+        ControlTypes__Enum touchConfig;
+#else
+        int32_t touchConfig;
+#endif
+        bool enableMouseMovement;
+        float joyStickSize;
+        void* purchaseFile;
     };
 
     struct SaveManager__Class {
@@ -12336,6 +12419,7 @@ struct RoleEffectAnimation__Array {
         Offline = 0x00000000,
         LoggedIn = 0x00000001,
         WaitingForParent = 0x00000002,
+        TempAccount = 0x00000003,
     };
 
 #else
@@ -12343,6 +12427,7 @@ struct RoleEffectAnimation__Array {
         EOSManager_AccountLoginStatus__Enum_Offline = 0x00000000,
         EOSManager_AccountLoginStatus__Enum_LoggedIn = 0x00000001,
         EOSManager_AccountLoginStatus__Enum_WaitingForParent = 0x00000002,
+        EOSManager_AccountLoginStatus__Enum_TempAccount = 0x00000003,
     };
 
 #endif
@@ -12381,12 +12466,19 @@ struct RoleEffectAnimation__Array {
 #else
         int32_t friendsListAllowed;
 #endif
+#if defined(_CPLUSPLUS_)
+        KWSPermissionStatus__Enum accountLinkingAllowed;
+#else
+        int32_t accountLinkingAllowed;
+#endif
         void* OnLoggedInStatusChange;
 #if defined(_CPLUSPLUS_)
         EOSManager_AccountLoginStatus__Enum prevLoggedInStatus;
 #else
         int32_t prevLoggedInStatus;
 #endif
+        struct TextMeshPro* accountDeletionText;
+        bool isAccountWaitingForDeletion;
     };
 
     struct AccountManager {
