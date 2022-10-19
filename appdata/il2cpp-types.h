@@ -4370,8 +4370,8 @@ namespace app
         struct TextMeshPro* friendCodeTitle;
         void* playerImage; // struct PoolablePlayer, not actual img
         struct SpriteRenderer* FriendCodeHiddenIcon;
-        struct GameObject* guestMode;
         struct GameObject* offlineMode;
+        struct GameObject* guestMode;
         struct FullAccount* loggedInMode;
         struct GameObject* waitingForGuardian;
         struct TextMeshPro* guardianEmailText;
@@ -5619,6 +5619,7 @@ namespace app
         FeaturedBundles = 0x0000076e,
         FeaturedCubes = 0x0000076f,
         BugReportPopUpAttachScreenshotDesc = 0x00000770,
+        UserIdTokenError = 0x00000771,
         QCLocationLaptop = 0x000007d0,
         QCLocationSkeld = 0x000007d1,
         QCLocationMira = 0x000007d2,
@@ -6651,6 +6652,7 @@ namespace app
         StringNames__Enum_FeaturedBundles = 0x0000076e,
         StringNames__Enum_FeaturedCubes = 0x0000076f,
         StringNames__Enum_BugReportPopUpAttachScreenshotDesc = 0x00000770,
+        StringNames__Enum_UserIdTokenError = 0x00000771,
         StringNames__Enum_QCLocationLaptop = 0x000007d0,
         StringNames__Enum_QCLocationSkeld = 0x000007d1,
         StringNames__Enum_QCLocationMira = 0x000007d2,
@@ -8904,6 +8906,7 @@ struct RoleEffectAnimation__Array {
         struct PetBehaviour* currentPet;
         bool initialized;
         void* normalBodySprite;
+        bool lockVisible;
     };
 
     struct CosmeticsLayer__VTable {
@@ -8943,6 +8946,7 @@ struct RoleEffectAnimation__Array {
         float MaxReportDistance;
         bool moveable;
         struct CosmeticsLayer* cosmetics;
+        bool ForceKillTimerContinue;
 #if defined(_CPLUSPLUS_)
         PlayerOutfitType__Enum _CurrentOutfitType_k__BackingField;
 #else
@@ -9674,6 +9678,7 @@ struct RoleEffectAnimation__Array {
         PlatformParentalControlsBlock = 0x000000d3,
         PlatformUserBlock = 0x000000d4,
         PlatformFailedToGetUserBlock = 0x000000d5,
+        Unknown = 0x000000ff,
     };
 
 #else
@@ -9719,6 +9724,7 @@ struct RoleEffectAnimation__Array {
         DisconnectReasons__Enum_PlatformParentalControlsBlock = 0x000000d3,
         DisconnectReasons__Enum_PlatformUserBlock = 0x000000d4,
         DisconnectReasons__Enum_PlatformFailedToGetUserBlock = 0x000000d5,
+        DisconnectReasons__Enum_Unknown = 0x000000ff,
     };
 
 #endif
@@ -10579,11 +10585,9 @@ struct RoleEffectAnimation__Array {
         int32_t starCost;
         bool paidOnMobile;
         struct LimitedTimeStartEnd limitedTime;
-        void* Variations;
         int32_t displayOrder;
         bool NotInStore;
         bool Free;
-        struct String* DateCreated;
     };
     struct CosmeticData
     {
@@ -10781,13 +10785,14 @@ struct RoleEffectAnimation__Array {
         void* PlayerMaterial;
         void* MaskedPlayerMaterial;
         void* MaskedMaterial;
-        void* AllStarBundles;
-        struct List_1_PetData_* AllPets;
-        struct List_1_HatData_* AllHats;
-        struct List_1_SkinData_* AllSkins;
-        void* AllVisors;
-        void* AllNamePlates;
-        void* AllBundles;
+        void* Groups;
+        struct PetData__Array* allPets;
+        struct HatData__Array* allHats;
+        struct SkinData__Array* allSkins;
+        void* allVisors;
+        void* allNamePlates;
+        void* allStarBundles;
+        void* allBundles;
         void* allFeaturedItems;
         void* allFeaturedBundles;
         void* allFeaturedCubes;
