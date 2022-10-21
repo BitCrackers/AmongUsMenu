@@ -4428,63 +4428,11 @@ namespace app
 #pragma endregion
 
 #pragma region EOSManager
-    struct DestroyableSingleton_1_EOSManager___Fields
-    {
-        struct MonoBehaviour__Fields _;
-        bool DontDestroy;
-    };
-
-    struct EOSManager__Fields {
-        struct DestroyableSingleton_1_EOSManager___Fields _;
-        struct String* loginCredentialId;
-        struct String* productName;
-        struct String* productVersion;
-        struct String* productId;
-        struct String* sandboxId;
-        struct String* deploymentId;
-        struct String* clientId;
-        struct String* clientSecret;
-        struct String* friendCode;
-        bool hasRunLoginFlow;
-        float platformTickTimer;
-        bool platformInitialized;
-        bool loginFlowFinished;
-        bool stopTimeOutCheck;
-        struct GameObject* TimeOutPopup;
-        float TimeOutTime;
-        bool FinishedAssets;
-        void* platformInterface;
-        void* userId;
-        void* deviceIDuserID;
-        bool announcementsVisible;
-        bool attemptAuthAgain;
-        uint32_t numLinkedAccounts;
-        void* linkedExternalAccounts;
-        void* editAccountUsername;
-        void* askToMergeAccount;
-        struct String* freeChatKey;
-        struct String* customNameKey;
-        struct String* friendsListKey;
-        struct String* accountLinkKey;
-        void* logger;
-        int32_t ageOfConsent;
-        struct String* kwsUserId;
-        bool isKWSMinor;
-        void* continuanceToken;
-        struct String* exchangeToken;
-        struct String* platformAuthToken;
-        bool authExpiredCallbackTriggered;
-        bool silentLoginFailed;
-        void* validateOldDLC;
-        bool isRedeemingDLC;
-        void* s_eosPlatformInterface;
-    };
-
     struct EOSManager
     {
         struct EOSManager__Class* klass;
         void* monitor;
-        struct EOSManager__Fields fields;
+        //struct EOSManager__Fields fields;
     };
 
     struct EOSManager__VTable

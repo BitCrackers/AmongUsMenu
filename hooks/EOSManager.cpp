@@ -2,11 +2,11 @@
 #include "_hooks.h"
 #include "logger.h"	
 
-void fakeSuccessfulLogin(EOSManager* eosManager)
+/*void fakeSuccessfulLogin(EOSManager* eosManager)
 {
 	eosManager->fields.loginFlowFinished = true;
 	EOSManager_HasFinishedLoginFlow(eosManager, NULL);
-}
+}*/
 
 void dEOSManager_LoginFromAccountTab(EOSManager* __this, MethodInfo* method)
 {
@@ -31,6 +31,13 @@ bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method)
 }
 
 void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, MethodInfo* method) {
-	__this->fields.isKWSMinor = false;
+	// Compatible with Steam and Epic
+	Il2CppClass* klass = get_class("Assembly-CSharp, EOSManager");
+	LOG_ASSERT(klass);
+	FieldInfo* field = il2cpp_class_get_field_from_name(klass, "isKWSMinor");
+	LOG_ASSERT(field);
+	bool value = false;
+	il2cpp_field_set_value((Il2CppObject*)__this, field, &value);
+
 	app::EOSManager_UpdatePermissionKeys(__this, callback, method);
 }

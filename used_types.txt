@@ -54,7 +54,6 @@ TMP_Text
 TextMeshPro
 PlayerOutfitType__Enum
 AccountTab
-DestroyableSingleton_1_EOSManager___Fields
 EOSManager
 FullAccount
 SpawnFlags__Enum
@@ -222,4 +221,3 @@ DestroyableSingleton_1_PlayerStorageManager___Fields
 PlayerStorageManager_CloudPlayerPrefs
 PlayerStorageManager__Fields
 UpdateState__Enum
-EOSManager__Fields
