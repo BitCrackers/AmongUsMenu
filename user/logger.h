@@ -39,4 +39,10 @@ private:
 		LOG_ERROR(ss.str()); \
 	} while (0)
 
+#define LOG_ASSERT(EXPR) \
+	if (!(EXPR)) { \
+		STREAM_ERROR("(" << #EXPR << ") Assert failed."); \
+		exit(1); \
+	}
+
 extern AUMLogger Log;
