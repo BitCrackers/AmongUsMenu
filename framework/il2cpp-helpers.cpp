@@ -282,8 +282,14 @@ ScopedThreadAttacher::ScopedThreadAttacher() : m_AttachedThread(nullptr) {
 }
 
 ScopedThreadAttacher::~ScopedThreadAttacher() {
-	if (m_AttachedThread)
+	detach();
+}
+
+void ScopedThreadAttacher::detach() {
+	if (m_AttachedThread) {
 		il2cpp_thread_detach(m_AttachedThread);
+		m_AttachedThread = nullptr;
+	}
 }
 
 bool cctor_finished(Il2CppClass* klass)

@@ -12472,5 +12472,6 @@ struct RoleEffectAnimation__Array {
 
     typedef Il2CppObject PlayerData;
     typedef Il2CppObject PlayerCustomizationData;
+    typedef Il2CppObject PlayerPurchasesData;
 
 }

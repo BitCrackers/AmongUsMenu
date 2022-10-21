@@ -123,6 +123,7 @@ void Run(LPVOID lpParam) {
 	Game::scanGameFunctions();
 	DetourInitilization();
 #if _DEBUG
+	managedThreadAttached.detach();
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
 	if (dwWaitResult != WAIT_OBJECT_0) {
 		STREAM_ERROR("Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError());

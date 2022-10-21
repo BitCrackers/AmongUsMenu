@@ -151,7 +151,10 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
-	HOOKFUNC(SaveManager_GetPurchase);
+	if (SaveManager_GetPurchase != nullptr)
+		HOOKFUNC(SaveManager_GetPurchase);
+	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
+		HOOKFUNC(PlayerPurchasesData_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
 	HOOKFUNC(AmongUsClient_OnGameEnd);
 	HOOKFUNC(InnerNetClient_DisconnectInternal);
@@ -170,7 +173,11 @@ void DetourUninitialization()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	UNHOOKFUNC(SaveManager_GetPurchase);
+
+	if (SaveManager_GetPurchase != nullptr)
+		UNHOOKFUNC(SaveManager_GetPurchase);
+	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
+		UNHOOKFUNC(PlayerPurchasesData_GetPurchase);
 	UNHOOKFUNC(PlayerPhysics_FixedUpdate);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
