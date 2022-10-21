@@ -110,8 +110,8 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
 
     if (nameChangeCycleDelay <= 0 && !State.activeImpersonation) {
-        if ((convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName) != State.userName) && !State.userName.empty()) {
-            SaveManager__TypeInfo->static_fields->lastPlayerName = convert_to_string(State.userName);
+        if ((GetPlayerName() != State.userName) && !State.userName.empty()) {
+            SetPlayerName(State.userName);
             LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
             if (IsInGame())
                 State.rpcQueue.push(new RpcSetName(State.userName));

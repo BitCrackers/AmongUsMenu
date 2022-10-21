@@ -50,7 +50,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 	return value;
 }
 
-struct PlayerData
+struct EspPlayerData
 {
 	ImVec2 Position = { 0.0f, 0.0f };
 	ImVec4 Color{ 0.0f, 0.0f, 0.0f, 0.0f };
@@ -67,7 +67,7 @@ typedef struct Drawing
 {
 	std::mutex m_DrawingMutex;
 
-	std::array<PlayerData, Game::MAX_PLAYERS> m_Players;
+	std::array<EspPlayerData, Game::MAX_PLAYERS> m_Players;
 
 	ImVec2 LocalPosition{ 0.0f, 0.0f };
 } drawing_t;

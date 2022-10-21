@@ -83,6 +83,7 @@ void Run(LPVOID lpParam) {
 	}
 	hModule = (HMODULE)lpParam;
 	init_il2cpp();
+	ScopedThreadAttacher managedThreadAttached;
 	{
 		std::ostringstream ss;
 		ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
@@ -117,12 +118,12 @@ void Run(LPVOID lpParam) {
 	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
 	GAME_STATIC_POINTER(Game::pLobbyBehaviour, app::LobbyBehaviour, Instance);
 	//GAME_STATIC_POINTER(Game::pRoleManager, app::DestroyableSingleton_1_RoleManager_, _instance);
-	assert(cctor_finished(app::SaveManager__TypeInfo->_0.klass));
-	State.userName = convert_from_string(app::SaveManager__TypeInfo->static_fields->lastPlayerName);
+	State.userName = GetPlayerName();
 
 	Game::scanGameFunctions();
 	DetourInitilization();
 #if _DEBUG
+	managedThreadAttached.detach();
 	DWORD dwWaitResult = WaitForSingleObject(hUnloadEvent, INFINITE);
 	if (dwWaitResult != WAIT_OBJECT_0) {
 		STREAM_ERROR("Failed to watch unload signal! dwWaitResult = " << dwWaitResult << " Error " << GetLastError());

@@ -103,3 +103,13 @@ namespace app {
 		};
 	}
 }
+
+class ScopedThreadAttacher {
+public:
+	ScopedThreadAttacher();
+	~ScopedThreadAttacher();
+
+	void detach();
+private:
+	Il2CppThread* m_AttachedThread;
+};

@@ -212,7 +212,6 @@ RoleEffectAnimation__Fields
 PlayerControl__Fields
 PlayerMaterial_Properties
 CosmeticsLayer__Fields
-SaveManager__StaticFields
 DestroyableSingleton_1_AccountManager___Fields
 AccountManager__Fields
 KWSPermissionStatus__Enum

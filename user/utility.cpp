@@ -817,3 +817,33 @@ bool Object_1_IsNull(app::Object_1* obj)
 {
 	return !Object_1_IsNotNull(obj);
 }
+
+std::string GetPlayerName() {
+	if (app::PlayerCustomizationData_get_Name != nullptr) {
+		// v2022.10.25s
+		auto player = app::DataManager_get_Player(nullptr);
+		static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
+		LOG_ASSERT(field != nullptr);
+		auto customization = il2cpp_field_get_value_object(field, player);
+		LOG_ASSERT(customization != nullptr);
+		return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
+	}
+	else {
+		return convert_from_string(app::SaveManager_get_PlayerName(nullptr));
+	}
+}
+
+void SetPlayerName(std::string_view name) {
+	if (app::PlayerCustomizationData_set_Name != nullptr) {
+		// v2022.10.25s
+		auto player = app::DataManager_get_Player(nullptr);
+		static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
+		LOG_ASSERT(field != nullptr);
+		auto customization = il2cpp_field_get_value_object(field, player);
+		LOG_ASSERT(customization != nullptr);
+		app::PlayerCustomizationData_set_Name(customization, convert_to_string(name), nullptr);
+	}
+	else {
+		app::SaveManager_set_PlayerName(convert_to_string(name), nullptr);
+	}
+}

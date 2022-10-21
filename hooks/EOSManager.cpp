@@ -26,8 +26,6 @@ void dEOSManager_InitializePlatformInterface(EOSManager* __this, MethodInfo* met
 bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method)
 {
 	return app::EOSManager_IsFreechatAllowed(__this, method);
-	//SaveManager__TypeInfo->static_fields->chatModeType = (uint32_t)QuickChatModes__Enum::FreeChatOrQuickChat;
-	//return true;
 }
 
 void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, MethodInfo* method) {
