@@ -276,20 +276,15 @@ void output_assembly_methods(const Il2CppAssembly* assembly) {
 	}
 }
 
-class ScopedThreadAttacher
-{
-public:
-	ScopedThreadAttacher() : m_AttachedThread(nullptr) {
+ScopedThreadAttacher::ScopedThreadAttacher() : m_AttachedThread(nullptr) {
+	if (il2cpp_thread_current() == nullptr)
 		m_AttachedThread = il2cpp_thread_attach(il2cpp_domain_get());
-	}
-	~ScopedThreadAttacher() {
-		if (m_AttachedThread)
-			il2cpp_thread_detach(m_AttachedThread);
-	}
+}
 
-private:
-	Il2CppThread* m_AttachedThread;
-};
+ScopedThreadAttacher::~ScopedThreadAttacher() {
+	if (m_AttachedThread)
+		il2cpp_thread_detach(m_AttachedThread);
+}
 
 bool cctor_finished(Il2CppClass* klass)
 {

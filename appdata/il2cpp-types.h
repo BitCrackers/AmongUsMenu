@@ -12187,95 +12187,8 @@ struct RoleEffectAnimation__Array {
     };
 
     struct SaveManager {
-        struct SaveManager__Class* klass;
+        Il2CppClass* klass;
         MonitorData* monitor;
-    };
-
-    struct SaveManager__VTable {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct SaveManager__StaticFields {
-        int32_t lastSchemaVersion;
-        bool loaded;
-        bool loadedStats;
-        bool loadedAnnounce;
-        bool loadedQCFavorites;
-        bool loadedStoreTabViewDates;
-        bool loadedCachedPurchases;
-        void* OnColorBlindChanged;
-        void* OnStreamerModeChanged;
-        struct String* lastPlayerName;
-        uint32_t colorConfig;
-        struct String* lastPet;
-        struct String* lastHat;
-        struct String* lastSkin;
-        struct String* lastVisor;
-        struct String* lastNamePlate;
-        bool showOnlineHelp;
-        bool warnedAboutGuestModeProgression;
-        int32_t privacyPolicyVersion;
-        bool askRedeemDLC;
-        bool showMinPlayerWarning;
-        void* purchases;
-        struct String* lastCosmicube;
-        struct String* storeBundlesViewDate;
-        struct String* storeHatsViewDate;
-        struct String* storeOutfitsViewDate;
-        struct String* storeVisorsViewDate;
-        struct String* storePetsViewDate;
-        struct String* storeNameplatesViewDate;
-        struct String* storeCosmicubeViewDate;
-        int32_t accountLoginStatus;
-        bool hasLoggedIn;
-        bool isGuest;
-        struct String* guardianEmail;
-        struct String* epicAccountId;
-        bool deleteDeviceIDFailed;
-        struct String* dobInfo;
-        struct String* birthDateSetDate;
-        int32_t birthDateDay;
-        int32_t birthDateMonth;
-        int32_t birthDateYear;
-        uint32_t playerLevel;
-        uint32_t playerXp;
-        uint32_t playerXpRequiredForNextLevel;
-        struct Announcement lastAnnounce;
-        void* quickChatFavorites;
-        int32_t chatModeType;
-        struct GameOptionsData* hostOptionsData;
-        struct GameOptionsData* searchOptionsData;
-        uint8_t showAdsScreen;
-        bool screenshake;
-        bool censorChat;
-        bool enableFriendsListInvites;
-        bool crossplayAllPlatforms;
-        bool streamerMode;
-        bool colorblindMode;
-        uint8_t sfxVolume;
-        uint8_t musicVolume;
-        bool vsync;
-        uint32_t lastLanguage;
-#if defined(_CPLUSPLUS_)
-        ControlTypes__Enum touchConfig;
-#else
-        int32_t touchConfig;
-#endif
-        bool enableMouseMovement;
-        float joyStickSize;
-        void* purchaseFile;
-    };
-
-    struct SaveManager__Class {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct SaveManager__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct SaveManager__VTable vtable;
     };
 #pragma endregion
 
@@ -12556,5 +12469,8 @@ struct RoleEffectAnimation__Array {
         struct PlayerStorageManager__Fields fields;
     };
 #pragma endregion
+
+    typedef Il2CppObject PlayerData;
+    typedef Il2CppObject PlayerCustomizationData;
 
 }

@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <assert.h>
 
 class AUMLogger {
 public:
@@ -42,6 +43,7 @@ private:
 #define LOG_ASSERT(EXPR) \
 	if (!(EXPR)) { \
 		STREAM_ERROR("(" << #EXPR << ") Assert failed."); \
+		assert(EXPR); \
 		exit(1); \
 	}
 

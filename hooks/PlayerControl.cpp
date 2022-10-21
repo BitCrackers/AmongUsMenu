@@ -211,7 +211,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				Profiler::EndSample("WalkEventCreation");
 			}
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
-			PlayerData espPlayerData;
+			EspPlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
 			if (outfit != NULL)
 			{

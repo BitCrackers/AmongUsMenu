@@ -28,7 +28,7 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 
 	State.mapType = Settings::MapType::Airship;
 
-	State.userName = convert_from_string(SaveManager__TypeInfo->static_fields->lastPlayerName);
+	State.userName = GetPlayerName();
 	ResetOriginalAppearance();
 }
 

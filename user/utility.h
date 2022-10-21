@@ -206,3 +206,6 @@ float getMapXOffsetSkeld(float x);
 
 bool Object_1_IsNotNull(app::Object_1* unity_object);
 bool Object_1_IsNull(app::Object_1* unity_object);
+
+std::string GetPlayerName();
+void SetPlayerName(std::string_view name);
