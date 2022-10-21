@@ -202,8 +202,11 @@ DO_APP_FUNC(void, InnerNetClient_DisconnectInternal, (InnerNetClient* __this, Di
 
 DO_APP_FUNC(void, PlayerPhysics_FixedUpdate, (PlayerPhysics* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::FixedUpdate()");
 
+// deprecated
 DO_APP_FUNC(String*, SaveManager_get_PlayerName, (MethodInfo* method), "Assembly-CSharp, System.String SaveManager::get_PlayerName()");
+// deprecated
 DO_APP_FUNC(void, SaveManager_set_PlayerName, (String* value, MethodInfo* method), "Assembly-CSharp, System.Void SaveManager::set_PlayerName(System.String)");
+// deprecated
 DO_APP_FUNC(bool, SaveManager_GetPurchase, (String* itemKey, String* bundleKey, MethodInfo* method), "Assembly-CSharp, System.Boolean SaveManager::GetPurchase(System.String, System.String)");
 
 DO_APP_FUNC(void, PlayerControl_TurnOnProtection, (PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::TurnOnProtection(System.Boolean, System.Int32)");
