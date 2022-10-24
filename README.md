@@ -4,6 +4,10 @@
    AmongUsMenu is a Cheat Menu for the popular Game Among Us.
 </p>
 
+## 中文支持 :)
+如果你想使用中文版AUM可以前往链接https://github.com/CryptEvc/AmongUsMenuChinese
+与原版同步更新 减少您阅读障碍的烦恼 
+
 ## Disclaimer
 This project is for Educational Use only. We do not condone this software being used to gain an advantage against other people. I made this project for my university project to show how cheating software works and how it is possible to block these manipulations in the future.
 
