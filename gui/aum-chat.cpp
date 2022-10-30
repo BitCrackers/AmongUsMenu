@@ -10,16 +10,15 @@ namespace ChatGui
 	char inputBuffer[250]{ "" };
 
 	void SendChatMessage(std::string message) {
-		if (message.length() > 0)
-		{
-			auto gPlayerInfo = GetPlayerDataById((*Game::pLocalPlayer)->fields.PlayerId);
-			auto outfit = GetPlayerOutfit(gPlayerInfo);
-			auto name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
-			State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
-			if (IsInGame()) State.rpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
-			else if (IsInLobby()) State.lobbyRpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
-			State.newChatMessage = true;
-		}
+		if (message.length() == 0) return;
+
+		auto gPlayerInfo = GetPlayerDataById((*Game::pLocalPlayer)->fields.PlayerId);
+		auto outfit = GetPlayerOutfit(gPlayerInfo);
+		auto name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
+		if (IsInGame()) State.rpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
+		else if (IsInLobby()) State.lobbyRpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
+		State.newChatMessage = true;
 
 		for (int i = 0; i < sizeof(inputBuffer); i++) {
 			inputBuffer[i] = (char)0;
@@ -50,7 +49,7 @@ namespace ChatGui
 			ImGui::SameLine();
 			cMsg->PrintMessage();
 		}
-		if (State.newChatMessage == true) {
+		if (State.newChatMessage) {
 			State.newChatMessage = false;
 			ImGui::SetScrollY(ImGui::GetScrollMaxY() + 50);
 		}
