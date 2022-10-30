@@ -21,11 +21,8 @@ void HandleRpc(uint8_t callId, MessageReader* reader) {
 		std::string playerName = convert_from_string(MessageReader_ReadString(reader, NULL));
 		std::string message = convert_from_string(MessageReader_ReadString(reader, NULL));
 		uint32_t colorId = MessageReader_ReadInt32(reader, NULL);
-		std::istringstream in{ convert_from_string(MessageReader_ReadString(reader, NULL)).c_str() };
-		std::chrono::system_clock::time_point tp;
-		in >> parse("{:%0H:%0M:%0S}", tp);
 		if (message.size() == 0) break;
-		State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(playerName, message, colorId, tp));
+		State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(playerName, message, colorId, std::chrono::system_clock::now()));
 		State.newChatMessage = true;
 	}
 	break;

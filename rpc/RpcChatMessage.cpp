@@ -16,7 +16,6 @@ void RpcChatMessage::Process() {
 	MessageWriter_WriteString(rpcMessage, convert_to_string(this->SenderName), NULL);
 	MessageWriter_WriteString(rpcMessage, convert_to_string(this->Message), NULL);
 	MessageWriter_WriteInt32(rpcMessage, this->ColorId, NULL);
-	MessageWriter_WriteString(rpcMessage, convert_to_string(std::format("{:%0H:%0M:%0S}", std::chrono::system_clock::now())), NULL);
 	MessageWriter_EndMessage(rpcMessage, NULL);
 }
 
@@ -27,7 +26,7 @@ void RpcChatMessage::PrintUser() {
 	ImGui::SameLine();
 	ImGui::TextWrapped("]");
 	ImGui::SameLine();
-	ImGui::TextWrapped("(%s)", std::format("{:%0H:%0M:%0S}", this->Timestamp).c_str());
+	ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_TextDisabled], "(%s)", std::format("{:%OH:%OM:%OS}", this->Timestamp).c_str());
 }
 
 void RpcChatMessage::PrintMessage() {

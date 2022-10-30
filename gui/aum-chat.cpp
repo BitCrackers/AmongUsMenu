@@ -74,6 +74,4 @@ namespace ChatGui
 		ImGui::EndChild();
 		ImGui::End();
 	}
-
-	
 }
