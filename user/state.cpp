@@ -81,6 +81,8 @@ void Settings::Load() {
         JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
 
         JSON_TRYGET("RevealAnonymousVotes", this->RevealAnonymousVotes);
+
+        JSON_TRYGET("ShowChat", this->ShowChat);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
@@ -146,7 +148,9 @@ void Settings::Save() {
             {"ShowProtections", this->ShowProtections},
 
             {"ShowConsole", this->ShowConsole},
-            {"ShowUnityLogs", this->ShowUnityLogs}
+            {"ShowUnityLogs", this->ShowUnityLogs},
+
+            {"ShowChat", this->ShowChat}
         };
 
         std::ofstream outSettings(settingsPath);

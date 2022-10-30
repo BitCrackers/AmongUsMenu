@@ -167,6 +167,10 @@ public:
 
     std::string userName = "";
 
+    bool ShowChat = false;
+    bool newChatMessage = false;
+    std::vector<std::unique_ptr<RpcChatMessage>> chatMessages;
+
     enum class MapType : uint8_t
     {
         Ship = 0,

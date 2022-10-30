@@ -16,6 +16,7 @@ namespace KeyBinds {
         uint8_t Toggle_Freecam;
         uint8_t Close_Current_Room_Door;
         uint8_t Toggle_Replay;
+        uint8_t Toggle_Chat;
     };
 
     void WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

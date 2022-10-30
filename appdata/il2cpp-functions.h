@@ -162,6 +162,7 @@ DO_APP_FUNC(Byte__Array*, MessageReader_ReadBytesAndSize, (MessageReader* __this
 DO_APP_FUNC(Byte__Array*, MessageReader_ReadBytes, (MessageReader* __this, int32_t length, MethodInfo* method), "Hazel, System.Byte[] Hazel.MessageReader::ReadBytes(System.Int32)");
 DO_APP_FUNC(void, MessageWriter_WriteBoolean, (MessageWriter* __this, bool value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Boolean)");
 DO_APP_FUNC(void, MessageWriter_WriteByte, (MessageWriter* __this, uint8_t value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Byte)");
+DO_APP_FUNC(void, MessageWriter_WriteUShort, (MessageWriter* __this, uint16_t value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.UInt16)");
 DO_APP_FUNC(void, MessageWriter_WriteInt32, (MessageWriter* __this, int32_t value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Int32)");
 DO_APP_FUNC(void, MessageWriter_WriteSingle, (MessageWriter* __this, float value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.Single)");
 DO_APP_FUNC(void, MessageWriter_WriteString, (MessageWriter* __this, String* value, MethodInfo* method), "Hazel, System.Void Hazel.MessageWriter::Write(System.String)");
