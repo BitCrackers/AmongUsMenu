@@ -131,3 +131,15 @@ public:
 	RpcSetRole(PlayerControl* player, RoleTypes__Enum role);
 	virtual void Process() override;
 };
+
+class RpcChatMessage : public RPCInterface {
+	std::string SenderName;
+	std::string Message;
+	uint32_t ColorId;
+	std::chrono::system_clock::time_point Timestamp;
+public:
+	RpcChatMessage(std::string sendername, std::string message, uint32_t colorId, std::chrono::system_clock::time_point timestamp);
+	virtual void Process() override;
+	virtual void PrintUser();
+	virtual void PrintMessage();
+};

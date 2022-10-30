@@ -76,6 +76,19 @@ namespace GameTab {
 
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
+			if (ImGui::Checkbox("AUM Chat", &State.ShowChat)) {
+				State.Save();
+			}
+
+			ImGui::SameLine();
+
+			ImGui::SameLine();
+			if (HotKey(State.KeyBinds.Toggle_Chat)) {
+				State.Save();
+			}
+
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
+
 			if ((State.mapType == Settings::MapType::Airship) && IsHost() && IsInGame() && ImGui::Button("Switch Moving Platform Side"))
 			{
 				State.rpcQueue.push(new RpcUsePlatform());

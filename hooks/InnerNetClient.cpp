@@ -209,6 +209,7 @@ static void onGameEnd() {
     LOG_DEBUG("Reset All");
     Replay::Reset();
     State.aumUsers.clear();
+    State.chatMessages.clear();
     State.MatchEnd = std::chrono::system_clock::now();
 
     drawing_t& instance = Esp::GetDrawing();
