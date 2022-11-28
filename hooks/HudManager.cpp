@@ -27,7 +27,7 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 	__this->fields.PlayerCam->fields.Locked = State.FreeCam;
 
 	if (__this->fields.Chat) {
-		*(bool*)(((intptr_t)__this->fields.Chat->fields.TextArea) + 0x43) = State.ChatPaste;
+		__this->fields.Chat->fields.TextArea->fields.AllowPaste = State.ChatPaste;
 	}
 
 
