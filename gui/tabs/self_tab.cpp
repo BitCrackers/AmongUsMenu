@@ -47,6 +47,10 @@ namespace SelfTab {
             if (ImGui::Checkbox("Always show Chat Button", &State.ChatAlwaysActive)) {
                 State.Save();
             }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Allow Paste in Chat", &State.ChatPaste)) {
+                State.Save();
+            }
             if (ImGui::Checkbox("Read Messages by Ghosts", &State.ReadGhostMessages)) {
                 State.Save();
             }

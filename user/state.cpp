@@ -65,6 +65,7 @@ void Settings::Load() {
         JSON_TRYGET("MaxVision", this->MaxVision);
         JSON_TRYGET("Wallhack", this->Wallhack);
         JSON_TRYGET("UnlockVents", this->UnlockVents);
+        JSON_TRYGET("ChatPaste", this->ChatPaste);
         JSON_TRYGET("RevealRoles", this->RevealRoles);
         JSON_TRYGET("AbbreviatedRoleNames", this->AbbreviatedRoleNames);
         JSON_TRYGET("ChatAlwaysActive", this->ChatAlwaysActive);
@@ -135,6 +136,7 @@ void Settings::Save() {
             {"MaxVision", this->MaxVision},
             {"Wallhack", this->Wallhack},
             {"UnlockVents", this->UnlockVents},
+            {"ChatPaste", this->ChatPaste},
             {"RevealRoles", this->RevealRoles},
             {"AbbreviatedRoleNames", this->AbbreviatedRoleNames},
             {"ChatAlwaysActive", this->ChatAlwaysActive},

@@ -3411,6 +3411,40 @@ namespace app
         struct MonoBehaviour__Fields _;
     };
 
+    struct TextBoxTMP__Fields {
+        void* m_CachePtr;
+        bool allowAllCharacters;
+        struct System_String_o* text;
+        struct System_String_o* compoText;
+        int32_t characterLimit;
+        struct TMPro_TextMeshPro_o* outputText;
+        struct UnityEngine_SpriteRenderer_o* Background;
+        struct UnityEngine_MeshRenderer_o* Pipe;
+        float pipeBlinkTimer;
+        bool ClearOnFocus;
+        bool ForceUppercase;
+        struct UnityEngine_UI_Button_ButtonClickedEvent_o* OnEnter;
+        struct UnityEngine_UI_Button_ButtonClickedEvent_o* OnChange;
+        struct UnityEngine_UI_Button_ButtonClickedEvent_o* OnFocusLost;
+        struct UnityEngine_TouchScreenKeyboard_o* keyboard;
+        bool AllowSymbols;
+        bool AllowEmail;
+        bool IpMode;
+        bool AllowPaste;
+        bool Hidden;
+        struct UnityEngine_Collider2D_array* colliders;
+        bool hasFocus;
+        struct System_Text_StringBuilder_o* tempTxt;
+        struct UnityEngine_SpriteRenderer_o* sendButtonGlyph;
+        struct UnityEngine_SpriteRenderer_o* quickChatGlyph;
+    };
+
+    struct TextBoxTMP {
+        void* klass;
+        void* monitor;
+        struct TextBoxTMP__Fields fields;
+    };
+
     struct Graphic__Fields
     {
         struct UIBehaviour__Fields _;
@@ -8656,7 +8690,7 @@ struct RoleEffectAnimation__Array {
         void* chatBubPool;
         struct Transform* TypingArea;
         struct SpriteRenderer* TextBubble;
-        void* TextArea;
+        struct TextBoxTMP* TextArea;
         struct TextMeshPro* CharCount;
         int32_t MaxChat;
         void* scroller;
