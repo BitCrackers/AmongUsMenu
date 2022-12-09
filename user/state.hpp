@@ -91,6 +91,7 @@ public:
     bool ChatAlwaysActive = false;
     bool ChatActiveOriginalState = false;
     bool ReadGhostMessages = false;
+    bool Teleport = false;
 
     SystemTypes__Enum selectedDoor = SystemTypes__Enum::Hallway;
     std::vector<SystemTypes__Enum> mapDoors;

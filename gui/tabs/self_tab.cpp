@@ -67,7 +67,10 @@ namespace SelfTab {
             {
                 State.Save();
             }
-
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Right-click Teleport", &State.Teleport)) {
+                State.Save();
+            }
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }

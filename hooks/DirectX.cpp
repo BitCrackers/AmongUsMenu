@@ -361,6 +361,18 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         ImGuiRenderer::Submit([]() { Replay::Render(); });
     }
 
+    // TODO: teleport test
+    if (State.Teleport && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+        ImVec2 mouse = ImGui::GetMousePos();
+
+        Vector2 target = {
+            (mouse.x - DirectX::GetWindowSize().x / 2) + DirectX::GetWindowSize().x / 2,
+            ((mouse.y - DirectX::GetWindowSize().y / 2) - DirectX::GetWindowSize().y / 2) * -1.0f
+        };
+
+        State.rpcQueue.push(new RpcSnapTo(ScreenToWorld(target)));
+    }
+
     // Render in a separate thread
 	std::async(std::launch::async, ImGuiRenderer::ExecuteQueue).wait();
 
