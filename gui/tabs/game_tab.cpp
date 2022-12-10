@@ -101,7 +101,7 @@ namespace GameTab {
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
 				GameOptions options;
-				if (true)
+				if (options.GetGameMode() == GameModes__Enum::Normal)
 				{
 					auto allPlayers = GetAllPlayerControl();
 					RoleRates roleRates = RoleRates(options, (int)allPlayers.size());
@@ -139,6 +139,9 @@ namespace GameTab {
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
+				}
+				else if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
+					// TODO: HideNSeek
 				}
 			}
 #endif

@@ -239,17 +239,11 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	app::PlayerControl_FixedUpdate(__this, method);
 }
 
-/*void dPlayerControl_RpcSyncSettings(PlayerControl* __this, GameOptionsData* gameOptions, MethodInfo* method)
-{
-	State.PrevPlayerSpeed = gameOptions->fields.PlayerSpeedMod;
-	State.PlayerSpeed = gameOptions->fields.PlayerSpeedMod;
-	State.PrevKillDistance = gameOptions->fields.KillDistance;
-	State.KillDistance = gameOptions->fields.KillDistance;
-	State.PrevTaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
-	State.TaskBarUpdates = (int)gameOptions->fields.TaskBarMode;
+void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsByteArray, MethodInfo* method) {
+	SaveGameOptions();
 
-	PlayerControl_RpcSyncSettings(__this, gameOptions, method);
-}*/
+	PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
+}
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
 {

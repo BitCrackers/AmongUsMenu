@@ -238,6 +238,7 @@ ImVec4 AmongUsColorToImVec4(const Color32& color) {
 
 bool IsInLobby() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return OnlineInLobby && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
@@ -248,11 +249,13 @@ bool IsHost() {
 
 bool IsInGame() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return (LocalInGame || OnlineInGame || TutorialScene) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsInMultiplayerGame() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
@@ -838,12 +841,17 @@ void SetPlayerName(std::string_view name) {
 //TODO: Workaround
 #define GET_VIRTUAL_INVOKE(obj, method) \
 	((VirtualInvokeData*)(&obj->klass->vtable))[ \
-		obj->klass->interfaceOffsets[0].offset \
+		(obj->klass->interfaceOffsets ? obj->klass->interfaceOffsets[0].offset : 0) \
 		+ offsetof(decltype(obj->klass->vtable), method) \
 		/ sizeof(VirtualInvokeData)]
 
-GameOptions::GameOptions() {
-	_options = app::GameOptionsManager_get_CurrentGameOptions(app::GameOptionsManager_get_Instance(nullptr), nullptr);
+GameOptions::GameOptions() : _options(nullptr) {
+	auto mgr = app::GameManager_get_Instance(nullptr);
+	LOG_ASSERT(mgr != nullptr);
+	auto logic = app::GameManager_get_LogicOptions(mgr, nullptr);
+	LOG_ASSERT(logic != nullptr);
+	auto& func = GET_VIRTUAL_INVOKE(logic, __unknown_4);
+	_options = ((app::IGameOptions*(*)(void*, const void*))(func.methodPtr))(logic, func.method);
 	LOG_ASSERT(_options != nullptr);
 }
 
@@ -981,4 +989,16 @@ int32_t RoleOptions::GetNumPerGame(app::RoleTypes__Enum role) const {
 int32_t RoleOptions::GetChancePerGame(app::RoleTypes__Enum role) const {
 	auto& func = GET_VIRTUAL_INVOKE(_options, GetChancePerGame);
 	return ((int32_t(*)(void*, app::RoleTypes__Enum, const void*))(func.methodPtr))(_options, role, func.method);
+}
+
+void SaveGameOptions() {
+	SaveGameOptions(GameOptions());
+}
+
+void SaveGameOptions(const class GameOptions& gameOptions) {
+	State.PlayerSpeed = State.PrevPlayerSpeed = gameOptions.GetPlayerSpeedMod();
+	State.KillDistance = State.PrevKillDistance = gameOptions.GetInt(app::Int32OptionNames__Enum::KillDistance);
+	State.TaskBarUpdates = State.PrevTaskBarUpdates = gameOptions.GetInt(app::Int32OptionNames__Enum::TaskBarMode);
+	State.mapHostChoice = gameOptions.GetMapId();
+	State.impostors_amount = gameOptions.GetNumImpostors();
 }

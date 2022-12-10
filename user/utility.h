@@ -210,6 +210,9 @@ bool Object_1_IsNull(app::Object_1* unity_object);
 std::string GetPlayerName();
 void SetPlayerName(std::string_view name);
 
+void SaveGameOptions();
+void SaveGameOptions(const class GameOptions& gameOptions);
+
 class RoleOptions {
 public:
 	RoleOptions(app::IRoleOptionsCollection* options)
@@ -228,6 +231,11 @@ private:
 class GameOptions {
 public:
 	GameOptions();
+	GameOptions(app::IGameOptions* options) : _options(options){};
+
+	constexpr bool HasOptions() const {
+		return _options != nullptr;
+	}
 
 	GameOptions& SetByte(app::ByteOptionNames__Enum option, uint8_t value);
 	GameOptions& SetFloat(app::FloatOptionNames__Enum option, float value);

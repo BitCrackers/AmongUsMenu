@@ -11302,6 +11302,64 @@ namespace app
     };
 #pragma endregion
 
+#pragma region LogicOptions
+    struct LogicOptions {
+        struct LogicOptions__Class* klass;
+        MonitorData* monitor;
+        //struct LogicOptions__Fields fields;
+    };
+
+    struct LogicOptions__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData __unknown;
+        VirtualInvokeData __unknown_1;
+        VirtualInvokeData __unknown_2;
+        VirtualInvokeData __unknown_3;
+        VirtualInvokeData OnPlayerDisconnect;
+        VirtualInvokeData HandleRPC;
+        VirtualInvokeData Serialize;
+        VirtualInvokeData Deserialize;
+        VirtualInvokeData __unknown_4;
+        VirtualInvokeData GetAdjustedNumImpostors;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData __unknown_5;
+        VirtualInvokeData GetGhostsDoTasks;
+        VirtualInvokeData GetEngineerCooldown;
+        VirtualInvokeData GetEngineerInVentTime;
+        VirtualInvokeData GetGuardianAngelCooldown;
+        VirtualInvokeData GetShapeshifterDuration;
+        VirtualInvokeData GetShapeshifterCooldown;
+        VirtualInvokeData GetShapeshifterLeaveSkin;
+        VirtualInvokeData GetScientistCooldown;
+        VirtualInvokeData GetScientistBatteryCharge;
+        VirtualInvokeData GetKillCooldown;
+        VirtualInvokeData GetKillDistance;
+        VirtualInvokeData GetPlayerSpeedMod;
+        VirtualInvokeData GetConfirmImpostor;
+        VirtualInvokeData GetEmergencyCooldown;
+        VirtualInvokeData GetNumEmergencyMeetings;
+        VirtualInvokeData GetVisualTasks;
+        VirtualInvokeData GetAnonymousVotes;
+        VirtualInvokeData GetTaskBarMode;
+        VirtualInvokeData GetShowCrewmateNames;
+    };
+
+    struct LogicOptions__StaticFields {
+    };
+
+    struct LogicOptions__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct LogicOptions__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct LogicOptions__VTable vtable;
+    };
+#pragma endregion
+
 #pragma region IGameOptions
 
 #if defined(_CPLUSPLUS_)
@@ -12516,4 +12574,6 @@ namespace app
     typedef Il2CppObject PlayerPurchasesData;
 
     typedef Il2CppObject GameOptionsManager;
+    typedef Il2CppObject GameManager;
+    typedef Il2CppObject GameOptionsFactory;
 }

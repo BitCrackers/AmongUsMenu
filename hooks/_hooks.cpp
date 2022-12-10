@@ -90,6 +90,7 @@ void DetourInitilization() {
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(PlayerControl_FixedUpdate);
+	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(PlayerControl_Shapeshift);
 	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
@@ -152,6 +153,7 @@ void DetourInitilization() {
 	HOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	HOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	HOOKFUNC(EOSManager_UpdatePermissionKeys);
+	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -170,6 +172,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
+	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(PlayerControl_Shapeshift);
 	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
@@ -229,6 +232,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	UNHOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	UNHOOKFUNC(EOSManager_UpdatePermissionKeys);
+	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
