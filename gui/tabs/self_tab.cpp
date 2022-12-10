@@ -1,4 +1,4 @@
-﻿#include "pch-il2cpp.h"
+#include "pch-il2cpp.h"
 #include "self_tab.h"
 #include "game.h"
 #include "gui-helpers.hpp"
@@ -71,7 +71,9 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
-            if (!IsInGame() && !IsInLobby() || GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes)) {
+            if (!IsInGame() && !IsInLobby() 
+                || GameOptions().GetGameMode() != GameModes__Enum::Normal
+                || GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes)) {
                 ImGui::SameLine();
                 if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
                     State.Save();
