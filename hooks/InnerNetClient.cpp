@@ -162,7 +162,7 @@ bool bogusTransformSnap(PlayerSelection& _player, Vector2 newPosition)
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
     auto distanceToTarget = (int32_t)Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
-    auto killDistance = std::clamp((*Game::pGameOptionsData)->fields._.killDistance, 0, 2);
+    auto killDistance = std::clamp(GameOptions().GetInt(app::Int32OptionNames__Enum::KillDistance), 0, 2);
     auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), true);
     auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), false);
     if (Equals(initialSpawnLocation, newPosition)) return false;
@@ -227,7 +227,7 @@ void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReason
     // IsInGame() || IsInLobby()
     if (__this->fields.GameState == InnerNetClient_GameStates__Enum::Started
         || __this->fields.GameState == InnerNetClient_GameStates__Enum::Joined
-        || __this->fields.GameMode == GameModes__Enum::FreePlay) {
+        || __this->fields.NetworkMode == NetworkModes__Enum::FreePlay) {
         onGameEnd();
     }
     InnerNetClient_DisconnectInternal(__this, reason, stringReason, method);

@@ -5,7 +5,6 @@
 namespace Game {
 	AmongUsClient** pAmongUsClient = nullptr;
 	GameData** pGameData = nullptr;
-	GameOptionsData** pGameOptionsData = nullptr;
 	List_1_PlayerControl_** pAllPlayerControls = nullptr;
 	PlayerControl** pLocalPlayer = nullptr;
 	ShipStatus** pShipStatus = nullptr;

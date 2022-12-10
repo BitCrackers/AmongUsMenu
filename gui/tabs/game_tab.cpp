@@ -13,21 +13,21 @@ namespace GameTab {
 			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				if (!IsInGame()) State.PlayerSpeed = State.PrevPlayerSpeed;
 				else {
-					(*Game::pGameOptionsData)->fields._.playerSpeedMod = State.PlayerSpeed;
+					GameOptions().SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeed);
 					State.PrevPlayerSpeed = State.PlayerSpeed;
 				}
 			}
 			if (CustomListBoxInt("Kill Distance", &State.KillDistance, KILL_DISTANCE, 225 * State.dpiScale)) {
 				if (!IsInGame()) State.KillDistance = State.PrevKillDistance;
 				else {
-					(*Game::pGameOptionsData)->fields._.killDistance = State.KillDistance;
+					GameOptions().SetInt(app::Int32OptionNames__Enum::KillDistance, State.KillDistance);
 					State.PrevKillDistance = State.KillDistance;
 				}
 			}
 			if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
 				if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
 				else {
-					(*Game::pGameOptionsData)->fields.TaskBarMode = (TaskBarMode__Enum)State.TaskBarUpdates;
+					GameOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
 					State.PrevTaskBarUpdates = State.TaskBarUpdates;
 				}
 			}
@@ -94,46 +94,47 @@ namespace GameTab {
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
 #ifdef _DEBUG
-			if ((IsInGame() || IsInLobby()) && Game::pGameOptionsData != NULL)
+			if (IsInGame() || IsInLobby())
 			{
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
-				app::GameOptionsData* options = *Game::pGameOptionsData;
-				if (options != NULL)
+				GameOptions options;
+				if (true)
 				{
 					auto allPlayers = GetAllPlayerControl();
-					RoleRates roleRates = RoleRates(options->fields, (int)allPlayers.size());
+					RoleRates roleRates = RoleRates(options, (int)allPlayers.size());
 					// this should be all the major ones. if people want more they're simple enough to add.
-					ImGui::Text("Visual Tasks: %s", (options->fields.VisualTasks == true ? "on" : "off"));
-					ImGui::Text("Taskbar Update Mode: %s", (options->fields.TaskBarMode == app::TaskBarMode__Enum::Normal ? "Normal" : "MeetingOnly"));
-					ImGui::Text("Confirm Impostor: %s", (options->fields.ConfirmImpostor == true ? "on" : "off"));
-					ImGui::Text("Kill CD: %.2f", options->fields._.killCooldown);
+					ImGui::Text("Visual Tasks: %s", (options.GetBool(app::BoolOptionNames__Enum::VisualTasks) ? "on" : "off"));
+					ImGui::Text("Taskbar Update Mode: %s", (options.GetInt(app::Int32OptionNames__Enum::TaskBarMode)
+															== (int)app::TaskBarMode__Enum::Normal ? "Normal" : "MeetingOnly"));
+					ImGui::Text("Confirm Impostor: %s", (options.GetBool(app::BoolOptionNames__Enum::ConfirmImpostor) ? "on" : "off"));
+					ImGui::Text("Kill CD: %.2f", options.GetKillCooldown());
 
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Engineers: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::Engineer));
-					ImGui::Text("Engineer CD: %.2f", options->fields.RoleOptions->fields.EngineerCooldown);
-					ImGui::Text("Engineer Duration: %.2f", options->fields.RoleOptions->fields.EngineerInVentMaxTime);
+					ImGui::Text("Engineer CD: %.2f", options.GetFloat(app::FloatOptionNames__Enum::EngineerCooldown, 1.0F));
+					ImGui::Text("Engineer Duration: %.2f", options.GetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime, 1.0F) );
 
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Angels: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::GuardianAngel));
-					ImGui::Text("Angel CD: %.2f", options->fields.RoleOptions->fields.GuardianAngelCooldown);
-					ImGui::Text("Angel Duration: %.2f", options->fields.RoleOptions->fields.ProtectionDurationSeconds);
+					ImGui::Text("Angel CD: %.2f", options.GetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, 1.0F));
+					ImGui::Text("Angel Duration: %.2f", options.GetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, 1.0F));
 
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Shapeshifters: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::Shapeshifter));
-					ImGui::Text("Shapeshifter CD: %.2f", options->fields.RoleOptions->fields.ShapeshifterCooldown);
-					ImGui::Text("Shapeshifter Duration: %.2f", options->fields.RoleOptions->fields.ShapeshifterDuration);
+					ImGui::Text("Shapeshifter CD: %.2f", options.GetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, 1.0F));
+					ImGui::Text("Shapeshifter Duration: %.2f", options.GetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration, 1.0F));
 
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();

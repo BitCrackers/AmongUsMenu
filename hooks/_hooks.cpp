@@ -90,7 +90,6 @@ void DetourInitilization() {
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(PlayerControl_FixedUpdate);
-	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(PlayerControl_Shapeshift);
 	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
@@ -110,22 +109,17 @@ void DetourInitilization() {
 	HOOKFUNC(ChatBubble_SetName);
 	HOOKFUNC(ChatController_AddChat);
 	HOOKFUNC(ChatController_SetVisible);
-	HOOKFUNC(HudManager_ShowMap);
 	HOOKFUNC(HudManager_Update);
 	HOOKFUNC(Camera_ScreenToWorldPoint);
 	HOOKFUNC(KeyboardJoystick_Update);
 	HOOKFUNC(ScreenJoystick_FixedUpdate);
 	HOOKFUNC(PlainDoor_SetDoorway);
-	HOOKFUNC(GameOptionsData_Deserialize);
-	HOOKFUNC(GameOptionsData_Deserialize_1);
 	HOOKFUNC(PlayerControl_MurderPlayer);
 	HOOKFUNC(PlayerControl_CompleteTask);
-	//HOOKFUNC(PlayerControl_CmdReportDeadBody);
-	//HOOKFUNC(PlayerControl_ReportDeadBody);
 	HOOKFUNC(PlayerControl_StartMeeting);
 	HOOKFUNC(RoleManager_SelectRoles);
-	HOOKFUNC(RoleManager_AssignRolesForTeam);
-	HOOKFUNC(RoleManager_AssignRolesFromList);
+	//HOOKFUNC(RoleManager_AssignRolesForTeam);
+	//HOOKFUNC(RoleManager_AssignRolesFromList);
 	HOOKFUNC(PlayerControl_HandleRpc);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
@@ -136,7 +130,7 @@ void DetourInitilization() {
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
-	HOOKFUNC(NoShadowBehaviour_LateUpdate);
+	//HOOKFUNC(NoShadowBehaviour_LateUpdate);
 	HOOKFUNC(FollowerCamera_Update);
 	HOOKFUNC(DoorBreakerGame_Start);
 	HOOKFUNC(DoorCardSwipeGame_Begin);
@@ -151,10 +145,7 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
-	if (SaveManager_GetPurchase != nullptr)
-		HOOKFUNC(SaveManager_GetPurchase);
-	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
-		HOOKFUNC(PlayerPurchasesData_GetPurchase);
+	HOOKFUNC(PlayerPurchasesData_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
 	HOOKFUNC(AmongUsClient_OnGameEnd);
 	HOOKFUNC(InnerNetClient_DisconnectInternal);
@@ -174,15 +165,11 @@ void DetourUninitialization()
 	DetourUpdateThread(GetCurrentThread());
 
 
-	if (SaveManager_GetPurchase != nullptr)
-		UNHOOKFUNC(SaveManager_GetPurchase);
-	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
-		UNHOOKFUNC(PlayerPurchasesData_GetPurchase);
+	UNHOOKFUNC(PlayerPurchasesData_GetPurchase);
 	UNHOOKFUNC(PlayerPhysics_FixedUpdate);
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
-	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(PlayerControl_Shapeshift);
 	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
@@ -202,22 +189,17 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatBubble_SetName);
 	UNHOOKFUNC(ChatController_AddChat);
 	UNHOOKFUNC(ChatController_SetVisible);
-	UNHOOKFUNC(HudManager_ShowMap);
 	UNHOOKFUNC(HudManager_Update);
 	UNHOOKFUNC(ScreenJoystick_FixedUpdate);
 	UNHOOKFUNC(KeyboardJoystick_Update);
 	UNHOOKFUNC(Camera_ScreenToWorldPoint);
 	UNHOOKFUNC(PlainDoor_SetDoorway);
-	UNHOOKFUNC(GameOptionsData_Deserialize);
-	UNHOOKFUNC(GameOptionsData_Deserialize_1);
 	UNHOOKFUNC(PlayerControl_MurderPlayer);
 	UNHOOKFUNC(PlayerControl_CompleteTask);
-	//UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
-	//UNHOOKFUNC(PlayerControl_ReportDeadBody);
 	UNHOOKFUNC(PlayerControl_StartMeeting);
 	UNHOOKFUNC(RoleManager_SelectRoles);
-	UNHOOKFUNC(RoleManager_AssignRolesForTeam);
-	UNHOOKFUNC(RoleManager_AssignRolesFromList);
+	//UNHOOKFUNC(RoleManager_AssignRolesForTeam);
+	//UNHOOKFUNC(RoleManager_AssignRolesFromList);
 	UNHOOKFUNC(PlayerControl_HandleRpc);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
@@ -227,7 +209,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
-	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
+	//UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
 	UNHOOKFUNC(FollowerCamera_Update);
 	UNHOOKFUNC(DoorBreakerGame_Start);
 	UNHOOKFUNC(DoorCardSwipeGame_Begin);
