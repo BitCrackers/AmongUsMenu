@@ -7605,14 +7605,14 @@ namespace app
 #pragma endregion
 
 #pragma region AirshipStatus
-    struct AirshipStatus__Fields
-    {
+    struct AirshipStatus__Fields {
         struct ShipStatus__Fields _;
         void* Ladders;
         void* SpawnInGame;
         struct MovingPlatformBehaviour* GapPlatform;
         void* ShowerParticles;
         void* LightAffectors;
+        struct GameObject* outOfOrderPlat;
     };
 
     struct AirshipStatus
@@ -7984,6 +7984,8 @@ namespace app
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+        VirtualInvokeData __unknown;
+        VirtualInvokeData get_IsAffectedByComms;
         VirtualInvokeData CanUse;
         VirtualInvokeData DidWin;
         VirtualInvokeData Deinitialize;
@@ -7996,8 +7998,10 @@ namespace app
         VirtualInvokeData SetPlayerTarget;
         VirtualInvokeData SetCooldown;
         VirtualInvokeData IsValidTarget;
-        VirtualInvokeData __unknown;
+        VirtualInvokeData FindClosestTarget;
         VirtualInvokeData GetAbilityDistance;
+        VirtualInvokeData AdjustTasks;
+        VirtualInvokeData AppendTaskHint;
     };
 
     struct RoleBehaviour__StaticFields {
@@ -8706,10 +8710,9 @@ namespace app
 #pragma endregion
 
 #pragma region FollowerCamera
-    struct FollowerCamera__Fields
-    {
+    struct FollowerCamera__Fields {
         struct MonoBehaviour__Fields _;
-        void* Target;
+        struct MonoBehaviour* Target;
         struct Vector2 Offset;
         bool Locked;
         float shakeAmount;
@@ -9495,13 +9498,13 @@ namespace app
         struct KeyboardJoystick__Fields fields;
     };
 
-    struct KeyboardJoystick__VTable
-    {
+    struct KeyboardJoystick__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
-        VirtualInvokeData get_Delta;
+        VirtualInvokeData get_DeltaL;
+        VirtualInvokeData get_DeltaR;
         VirtualInvokeData ToggleVisuals;
     };
 
@@ -9611,6 +9614,9 @@ namespace app
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+    };
+
+    struct VoteSpreader__StaticFields {
     };
 
     struct VoteSpreader__Class {
@@ -10626,14 +10632,13 @@ namespace app
 #pragma endregion
 
 #pragma region DeadBody
-    struct DeadBody__Fields
-    {
+    struct DeadBody__Fields {
         struct MonoBehaviour__Fields _;
         bool Reported;
         uint8_t ParentId;
-        void* myCollider;
-        void* bloodSplatter;
-        void* bodyRenderer;
+        struct Collider2D* myCollider;
+        struct SpriteRenderer* bloodSplatter;
+        struct SpriteRenderer* bodyRenderer;
     };
 
     struct DeadBody
@@ -10803,8 +10808,7 @@ namespace app
         MonitorData* monitor;
         struct CosmeticData__Fields fields;
     };
-    struct CosmeticData__VTable
-    {
+    struct CosmeticData__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -10817,6 +10821,7 @@ namespace app
         VirtualInvokeData PreviewOnPlayer;
         VirtualInvokeData GetItemCategory;
         VirtualInvokeData SetProdId;
+        VirtualInvokeData CoLoadIcon;
     };
 
     struct CosmeticData__StaticFields
@@ -11867,8 +11872,7 @@ namespace app
         struct MonoBehaviour__Fields _;
     };
 
-    struct PlainDoor__Fields
-    {
+    struct PlainDoor__Fields {
         struct SomeKindaDoor__Fields _;
 #if defined(_CPLUSPLUS_)
         SystemTypes__Enum Room;
@@ -11878,6 +11882,7 @@ namespace app
         int32_t Id;
         bool Open;
         void* myCollider;
+        struct Collider2D* shadowCollider;
         void* animator;
         void* OpenDoorAnim;
         void* CloseDoorAnim;
@@ -11963,8 +11968,7 @@ namespace app
 #pragma endregion
 
 #pragma region Vent
-    struct Vent__Fields
-    {
+    struct Vent__Fields {
         struct MonoBehaviour__Fields _;
         int32_t Id;
         struct Vent* Left;
@@ -11977,7 +11981,7 @@ namespace app
         struct Vector3 Offset;
         float spreadAmount;
         float spreadShift;
-        void* myRend;
+        struct SpriteRenderer* myRend;
     };
 
     struct Vent
@@ -12022,6 +12026,8 @@ namespace app
     struct __declspec(align(4)) StatsManager_Stats__Fields {
         float banPoints;
         int64_t lastGameStarted;
+        float FastestCrewmateWin_HideAndSeek;
+        float FastestImpostorWin_HideAndSeek;
         void* gameplayStats;
         void* winReasons;
         void* loseReasons;
@@ -12353,6 +12359,8 @@ namespace app
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+        VirtualInvokeData get_IsDead;
+        VirtualInvokeData get_IsAffectedByComms;
         VirtualInvokeData CanUse;
         VirtualInvokeData DidWin;
         VirtualInvokeData Deinitialize;
@@ -12367,6 +12375,8 @@ namespace app
         VirtualInvokeData IsValidTarget;
         VirtualInvokeData FindClosestTarget;
         VirtualInvokeData GetAbilityDistance;
+        VirtualInvokeData AdjustTasks;
+        VirtualInvokeData AppendTaskHint;
     };
 
     struct EngineerRole__StaticFields
