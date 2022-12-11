@@ -1,4 +1,4 @@
-﻿#include "pch-il2cpp.h"
+#include "pch-il2cpp.h"
 #include "self_tab.h"
 #include "game.h"
 #include "gui-helpers.hpp"
@@ -71,7 +71,9 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
-            if (!IsInGame() && !IsInLobby() || (*Game::pGameOptionsData)->fields.AnonymousVotes) {
+            if (!IsInGame() && !IsInLobby() 
+                || GameOptions().GetGameMode() != GameModes__Enum::Normal
+                || GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes)) {
                 ImGui::SameLine();
                 if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
                     State.Save();
@@ -125,11 +127,11 @@ namespace SelfTab {
         auto self = GetPlayerData(*Game::pLocalPlayer);
         if (self->fields.IsDead)
             return;
+        GameOptions options;
         if (PlayerIsImpostor(self)
-            && (*Game::pGameOptionsData)->fields.RoleOptions->fields.ImpostorsCanSeeProtect)
+            && options.GetBool(app::BoolOptionNames__Enum::ImpostorsCanSeeProtect))
             return;
-        float& _Duration = (*Game::pGameOptionsData)->fields.RoleOptions->fields.ProtectionDurationSeconds;
-        const float ProtectionDurationSeconds = _Duration;
+        const float ProtectionDurationSeconds = options.GetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, 1.0F);
         for (auto player : GetAllPlayerControl()) {
             if (!player->fields.protectedByGuardian)
                 continue;
@@ -149,10 +151,11 @@ namespace SelfTab {
             synchronized(State.protectMutex) {
                 pair = State.protectMonitor[player->fields.PlayerId];
             }
-            _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+            float _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+            options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, _Duration);
             if (_Duration > 0.f)
                 app::PlayerControl_TurnOnProtection(player, State.ShowProtections, pair.first, nullptr);
-            _Duration = ProtectionDurationSeconds;
+            options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
         }
     }
 }

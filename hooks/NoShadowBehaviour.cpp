@@ -4,11 +4,11 @@
 #include "logger.h"
 
 void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method) {
-	if ((State.Wallhack || State.FreeCam || State.EnableZoom) && !State.OcclusionCulling) {
+	/*22.12.08e if ((State.Wallhack || State.FreeCam || State.EnableZoom) && !State.OcclusionCulling) {
 		NoShadowBehaviour_SetMaskFunction(__this, 8, NULL);
 	}
 	else {
 		NoShadowBehaviour_LateUpdate(__this, method);
-	}
+	}*/
 	return;
 }

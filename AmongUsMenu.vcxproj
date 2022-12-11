@@ -63,7 +63,7 @@
     <ClCompile Include="hooks\DirectX.cpp" />
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\EOSManager.cpp" />
-    <ClCompile Include="hooks\GameOptionsData.cpp" />
+    <ClCompile Include="hooks\GameOptionsManager.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />
     <ClCompile Include="hooks\LobbyBehaviour.cpp" />

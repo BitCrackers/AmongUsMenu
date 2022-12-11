@@ -16,18 +16,17 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount) {
-	this->ImposterCount = gameOptionsDataFields._.numImpostors;
+RoleRates::RoleRates(const class GameOptions& gameOptions, int playerAmount) {
+	this->ImposterCount = gameOptions.GetNumImpostors();
 	auto maxImpostors = GetMaxImposterAmount(playerAmount);
 	if(this->ImposterCount > maxImpostors)
 		this->ImposterCount = maxImpostors;
 
-	il2cpp::Dictionary roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
+	const auto& roleOptions = gameOptions.GetRoleOptions();
 #define GET_ROLE_RATE(type) \
-	if (auto value = roleRates[RoleTypes__Enum::##type]) { \
-		this->type##Chance = value->Chance; \
-		this->type##Count = value->MaxCount; \
-	}
+	this->type##Chance = roleOptions.GetChancePerGame(RoleTypes__Enum::##type); \
+	this->type##Count = roleOptions.GetNumPerGame(RoleTypes__Enum::##type);
+
 	GET_ROLE_RATE(Engineer);
 	GET_ROLE_RATE(Scientist);
 	GET_ROLE_RATE(Shapeshifter);
@@ -232,13 +231,14 @@ ImVec4 AmongUsColorToImVec4(const Color32& color) {
 	return ImVec4(color.r / 255.0F, color.g / 255.0F, color.b / 255.0F, color.a / 255.0F);
 }
 
-#define LocalInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
-#define OnlineInGame (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
-#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.GameMode == GameModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Joined))
+#define LocalInGame (((*Game::pAmongUsClient)->fields._.NetworkMode == NetworkModes__Enum::LocalGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
+#define OnlineInGame (((*Game::pAmongUsClient)->fields._.NetworkMode == NetworkModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Started))
+#define OnlineInLobby (((*Game::pAmongUsClient)->fields._.NetworkMode == NetworkModes__Enum::OnlineGame) && ((*Game::pAmongUsClient)->fields._.GameState == InnerNetClient_GameStates__Enum::Joined))
 #define TutorialScene (State.CurrentScene.compare("Tutorial") == 0)
 
 bool IsInLobby() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return OnlineInLobby && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
@@ -249,11 +249,13 @@ bool IsHost() {
 
 bool IsInGame() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return (LocalInGame || OnlineInGame || TutorialScene) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
 bool IsInMultiplayerGame() {
 	if (Object_1_IsNull((Object_1*)*Game::pAmongUsClient)) return false;
+	if (!app::GameManager_get_Instance(nullptr)) return false;
 	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
@@ -819,31 +821,184 @@ bool Object_1_IsNull(app::Object_1* obj)
 }
 
 std::string GetPlayerName() {
-	if (app::PlayerCustomizationData_get_Name != nullptr) {
-		// v2022.10.25s
-		auto player = app::DataManager_get_Player(nullptr);
-		static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
-		LOG_ASSERT(field != nullptr);
-		auto customization = il2cpp_field_get_value_object(field, player);
-		LOG_ASSERT(customization != nullptr);
-		return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
-	}
-	else {
-		return convert_from_string(app::SaveManager_get_PlayerName(nullptr));
-	}
+	auto player = app::DataManager_get_Player(nullptr);
+	static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
+	LOG_ASSERT(field != nullptr);
+	auto customization = il2cpp_field_get_value_object(field, player);
+	LOG_ASSERT(customization != nullptr);
+	return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
 }
 
 void SetPlayerName(std::string_view name) {
-	if (app::PlayerCustomizationData_set_Name != nullptr) {
-		// v2022.10.25s
-		auto player = app::DataManager_get_Player(nullptr);
-		static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
-		LOG_ASSERT(field != nullptr);
-		auto customization = il2cpp_field_get_value_object(field, player);
-		LOG_ASSERT(customization != nullptr);
-		app::PlayerCustomizationData_set_Name(customization, convert_to_string(name), nullptr);
-	}
-	else {
-		app::SaveManager_set_PlayerName(convert_to_string(name), nullptr);
-	}
+	auto player = app::DataManager_get_Player(nullptr);
+	static FieldInfo* field = il2cpp_class_get_field_from_name(player->Il2CppClass.klass, "customization");
+	LOG_ASSERT(field != nullptr);
+	auto customization = il2cpp_field_get_value_object(field, player);
+	LOG_ASSERT(customization != nullptr);
+	app::PlayerCustomizationData_set_Name(customization, convert_to_string(name), nullptr);
+}
+
+//TODO: Workaround
+#define GET_VIRTUAL_INVOKE(obj, method) \
+	((VirtualInvokeData*)(&obj->klass->vtable))[ \
+		(obj->klass->interfaceOffsets ? obj->klass->interfaceOffsets[0].offset : 0) \
+		+ offsetof(decltype(obj->klass->vtable), method) \
+		/ sizeof(VirtualInvokeData)]
+
+GameOptions::GameOptions() : _options(nullptr) {
+	auto mgr = app::GameManager_get_Instance(nullptr);
+	LOG_ASSERT(mgr != nullptr);
+	auto logic = app::GameManager_get_LogicOptions(mgr, nullptr);
+	LOG_ASSERT(logic != nullptr);
+	auto& func = GET_VIRTUAL_INVOKE(logic, __unknown_4);
+	_options = ((app::IGameOptions*(*)(void*, const void*))(func.methodPtr))(logic, func.method);
+	LOG_ASSERT(_options != nullptr);
+}
+
+GameOptions& GameOptions::SetByte(app::ByteOptionNames__Enum option, uint8_t value) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetByte);
+	((void(*)(void*, app::ByteOptionNames__Enum, uint8_t, const void*))(func.methodPtr))
+		(_options, option, value, func.method);
+	return *this;
+}
+
+GameOptions& GameOptions::SetFloat(app::FloatOptionNames__Enum option, float value) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetFloat);
+	((void(*)(void*, app::FloatOptionNames__Enum, float, const void*))(func.methodPtr))
+		(_options, option, value, func.method);
+	return *this;
+}
+
+GameOptions& GameOptions::SetBool(app::BoolOptionNames__Enum option, bool value) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetBool);
+	((void(*)(void*, app::BoolOptionNames__Enum, bool, const void*))(func.methodPtr))
+		(_options, option, value, func.method);
+	return *this;
+}
+
+GameOptions& GameOptions::SetInt(app::Int32OptionNames__Enum option, int32_t value) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetInt);
+	((void(*)(void*, app::Int32OptionNames__Enum, int32_t, const void*))(func.methodPtr))
+		(_options, option, value, func.method);
+	return *this;
+}
+
+GameOptions& GameOptions::SetUInt(app::UInt32OptionNames__Enum option, uint32_t value) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetUInt);
+	((void(*)(void*, app::UInt32OptionNames__Enum, uint32_t, const void*))(func.methodPtr))
+		(_options, option, value, func.method);
+	return *this;
+}
+
+uint8_t GameOptions::GetByte(app::ByteOptionNames__Enum option, uint8_t defaultValue) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetByte);
+	uint8_t value;
+	bool succ = ((bool(*)(void*, app::ByteOptionNames__Enum, uint8_t*, const void*))(func.methodPtr))
+		(_options, option, &value, func.method);
+	if (!succ)
+		value = defaultValue;
+	return value;
+}
+
+float GameOptions::GetFloat(app::FloatOptionNames__Enum option, float defaultValue) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetFloat);
+	float value;
+	bool succ = ((bool(*)(void*, app::FloatOptionNames__Enum, float*, const void*))(func.methodPtr))
+		(_options, option, &value, func.method);
+	if (!succ)
+		value = defaultValue;
+	return value;
+}
+
+bool GameOptions::GetBool(app::BoolOptionNames__Enum option, bool defaultValue) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetBool);
+	bool value;
+	bool succ = ((bool(*)(void*, app::BoolOptionNames__Enum, bool*, const void*))(func.methodPtr))
+		(_options, option, &value, func.method);
+	if (!succ)
+		value = defaultValue;
+	return value;
+}
+
+int32_t GameOptions::GetInt(app::Int32OptionNames__Enum option, int32_t defaultValue) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetInt);
+	int32_t value;
+	bool succ = ((bool(*)(void*, app::Int32OptionNames__Enum, int32_t*, const void*))(func.methodPtr))
+		(_options, option, &value, func.method);
+	if (!succ)
+		value = defaultValue;
+	return value;
+}
+
+app::GameModes__Enum GameOptions::GetGameMode() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_GameMode);
+	return ((app::GameModes__Enum(*)(void*, const void*))(func.methodPtr))(_options, func.method);
+}
+
+int32_t GameOptions::GetMaxPlayers() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_MaxPlayers);
+	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
+}
+
+uint8_t GameOptions::GetMapId() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_MapId);
+	return ((uint8_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
+}
+
+int32_t GameOptions::GetNumImpostors() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_NumImpostors);
+	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
+}
+
+int32_t GameOptions::GetTotalTaskCount() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_TotalTaskCount);
+	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
+}
+
+RoleOptions GameOptions::GetRoleOptions() const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, get_RoleOptions);
+	return RoleOptions(((app::IRoleOptionsCollection*(*)(void*, const void*))(func.methodPtr))(_options, func.method));
+}
+
+float GameOptions::GetPlayerSpeedMod() const {
+	return GetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, 1.0F);
+}
+
+float GameOptions::GetKillCooldown() const {
+	return GetFloat(app::FloatOptionNames__Enum::KillCooldown, 1.0F);
+}
+
+RoleOptions& RoleOptions::SetRoleRate(app::RoleTypes__Enum role, int32_t maxCount, int32_t chance) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetRoleRate);
+	((void(*)(void*, app::RoleTypes__Enum, int32_t, int32_t, const void*))(func.methodPtr))
+		(_options, role, maxCount, chance, func.method);
+	return *this;
+}
+
+RoleOptions& RoleOptions::SetRoleRecommended(app::RoleTypes__Enum role) {
+	auto& func = GET_VIRTUAL_INVOKE(_options, SetRoleRecommended);
+	((void(*)(void*, app::RoleTypes__Enum, const void*))(func.methodPtr))(_options, role, func.method);
+	return *this;
+}
+
+int32_t RoleOptions::GetNumPerGame(app::RoleTypes__Enum role) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, GetNumPerGame);
+	return ((int32_t(*)(void*, app::RoleTypes__Enum, const void*))(func.methodPtr))(_options, role, func.method);
+}
+
+int32_t RoleOptions::GetChancePerGame(app::RoleTypes__Enum role) const {
+	auto& func = GET_VIRTUAL_INVOKE(_options, GetChancePerGame);
+	return ((int32_t(*)(void*, app::RoleTypes__Enum, const void*))(func.methodPtr))(_options, role, func.method);
+}
+
+void SaveGameOptions() {
+	SaveGameOptions(GameOptions());
+}
+
+void SaveGameOptions(const class GameOptions& gameOptions) {
+	State.PlayerSpeed = State.PrevPlayerSpeed = gameOptions.GetPlayerSpeedMod();
+	State.KillDistance = State.PrevKillDistance = gameOptions.GetInt(app::Int32OptionNames__Enum::KillDistance);
+	State.TaskBarUpdates = State.PrevTaskBarUpdates = gameOptions.GetInt(app::Int32OptionNames__Enum::TaskBarMode);
+	State.mapHostChoice = gameOptions.GetMapId();
+	State.impostors_amount = gameOptions.GetNumImpostors();
 }
