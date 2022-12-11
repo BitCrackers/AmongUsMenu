@@ -9,7 +9,7 @@
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	std::vector<uint8_t> assignedPlayers;
 	auto allPlayers = GetAllPlayerControl();
-	auto roleRates = RoleRates((*Game::pGameOptionsData)->fields, (int)allPlayers.size());
+	auto roleRates = RoleRates((*Game::pGameOptionsManager)->fields, (int)allPlayers.size());
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
 	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
@@ -19,8 +19,8 @@ void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
 }
 
-void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
-	return RoleManager_AssignRolesForTeam(players, opts, team, teamMax, defaultRole, method);
+void dLogicRoleSelectionNormal_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, IGameOptions* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
+	return LogicRoleSelectionNormal_AssignRolesForTeam(players, opts, team, teamMax, defaultRole, method);
 }
 
 void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method) {

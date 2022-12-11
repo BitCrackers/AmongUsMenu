@@ -162,7 +162,7 @@ bool bogusTransformSnap(PlayerSelection& _player, Vector2 newPosition)
         return false; //For some reason the playercontroller is not marked dead at this point, so we check what layer the player is on
     auto currentPosition = PlayerControl_GetTruePosition(player.get_PlayerControl(), NULL);
     auto distanceToTarget = (int32_t)Vector2_Distance(currentPosition, newPosition, NULL); //rounding off as the smallest kill distance is zero
-    auto killDistance = std::clamp((*Game::pGameOptionsData)->fields._.killDistance, 0, 2);
+    auto killDistance = std::clamp((*Game::pGameOptionsManager)->fields._.killDistance, 0, 2);
     auto initialSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), true);
     auto meetingSpawnLocation = GetSpawnLocation(player.get_PlayerControl()->fields.PlayerId, (int)il2cpp::List((*Game::pGameData)->fields.AllPlayers).size(), false);
     if (Equals(initialSpawnLocation, newPosition)) return false;

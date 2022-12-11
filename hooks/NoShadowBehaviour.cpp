@@ -3,12 +3,11 @@
 #include "state.hpp"
 #include "logger.h"
 
-void dNoShadowBehaviour_LateUpdate(NoShadowBehaviour* __this, MethodInfo* method) {
+void dNoShadowBehaviour_SetMaskFunction(NoShadowBehaviour* __this, int32_t func, MethodInfo* method) {
 	if ((State.Wallhack || State.FreeCam || State.EnableZoom) && !State.OcclusionCulling) {
 		NoShadowBehaviour_SetMaskFunction(__this, 8, NULL);
+		return;
 	}
-	else {
-		NoShadowBehaviour_LateUpdate(__this, method);
-	}
-	return;
+	NoShadowBehaviour_SetMaskFunction(__this, func, NULL);
 }
+	

@@ -13,21 +13,21 @@ namespace GameTab {
 			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				if (!IsInGame()) State.PlayerSpeed = State.PrevPlayerSpeed;
 				else {
-					(*Game::pGameOptionsData)->fields._.playerSpeedMod = State.PlayerSpeed;
+					((NormalGameOptionsV07*)(*Game::pGameOptionsManager)->fields.currentGameOptions)->fields.PlayerSpeedMod = State.PlayerSpeed;
 					State.PrevPlayerSpeed = State.PlayerSpeed;
 				}
 			}
 			if (CustomListBoxInt("Kill Distance", &State.KillDistance, KILL_DISTANCE, 225 * State.dpiScale)) {
 				if (!IsInGame()) State.KillDistance = State.PrevKillDistance;
 				else {
-					(*Game::pGameOptionsData)->fields._.killDistance = State.KillDistance;
+					((NormalGameOptionsV07*)(*Game::pGameOptionsManager)->fields.currentGameOptions)->fields.KillDistance = State.KillDistance;
 					State.PrevKillDistance = State.KillDistance;
 				}
 			}
 			if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
 				if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
 				else {
-					(*Game::pGameOptionsData)->fields.TaskBarMode = (TaskBarMode__Enum)State.TaskBarUpdates;
+					((NormalGameOptionsV07*)(*Game::pGameOptionsManager)->fields.currentGameOptions)->fields.TaskBarMode = (TaskBarMode__Enum_1)State.TaskBarUpdates;
 					State.PrevTaskBarUpdates = State.TaskBarUpdates;
 				}
 			}
@@ -94,20 +94,20 @@ namespace GameTab {
 				State.rpcQueue.push(new RpcUsePlatform());
 			}
 #ifdef _DEBUG
-			if ((IsInGame() || IsInLobby()) && Game::pGameOptionsData != NULL)
+			if ((IsInGame() || IsInLobby()) && Game::pGameOptionsManager != NULL)
 			{
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 
-				app::GameOptionsData* options = *Game::pGameOptionsData;
+				app::NormalGameOptionsV07* options = ((NormalGameOptionsV07*)(*Game::pGameOptionsManager)->fields.currentGameOptions);
 				if (options != NULL)
 				{
 					auto allPlayers = GetAllPlayerControl();
 					RoleRates roleRates = RoleRates(options->fields, (int)allPlayers.size());
 					// this should be all the major ones. if people want more they're simple enough to add.
 					ImGui::Text("Visual Tasks: %s", (options->fields.VisualTasks == true ? "on" : "off"));
-					ImGui::Text("Taskbar Update Mode: %s", (options->fields.TaskBarMode == app::TaskBarMode__Enum::Normal ? "Normal" : "MeetingOnly"));
+					ImGui::Text("Taskbar Update Mode: %s", (options->fields.TaskBarMode == app::TaskBarMode__Enum_1::Normal ? "Normal" : "MeetingOnly"));
 					ImGui::Text("Confirm Impostor: %s", (options->fields.ConfirmImpostor == true ? "on" : "off"));
 					ImGui::Text("Kill CD: %.2f", options->fields._.killCooldown);
 
@@ -116,8 +116,8 @@ namespace GameTab {
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 
 					ImGui::Text("Max Engineers: %d", roleRates.GetRoleCount(app::RoleTypes__Enum::Engineer));
-					ImGui::Text("Engineer CD: %.2f", options->fields.RoleOptions->fields.EngineerCooldown);
-					ImGui::Text("Engineer Duration: %.2f", options->fields.RoleOptions->fields.EngineerInVentMaxTime);
+					ImGui::Text("Engineer CD: %.2f", options->fields.r->fields.EngineerCooldown);
+					ImGui::Text("Engineer Duration: %.2f", options->fields.roleOptions->fields.EngineerInVentMaxTime);
 
 					ImGui::Dummy(ImVec2(3, 3) * State.dpiScale);
 					ImGui::Separator();

@@ -22,7 +22,7 @@ namespace Game {
 
 	extern AmongUsClient** pAmongUsClient;
 	extern GameData** pGameData;
-	extern GameOptionsData** pGameOptionsData;
+	extern GameOptionsManager** pGameOptionsManager;
 	extern List_1_PlayerControl_** pAllPlayerControls;
 	extern PlayerControl** pLocalPlayer;
 	extern ShipStatus** pShipStatus;

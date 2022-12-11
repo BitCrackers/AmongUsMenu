@@ -103,18 +103,18 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 		}
 	}
 
-	auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+	auto prevAnonymousVotes = (*Game::pGameOptionsManager)->fields.AnonymousVotes;
 	if (prevAnonymousVotes && State.RevealAnonymousVotes)
-		(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+		(*Game::pGameOptionsManager)->fields.AnonymousVotes = false;
 	MeetingHud_PopulateResults(__this, states, method);
-	(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
+	(*Game::pGameOptionsManager)->fields.AnonymousVotes = prevAnonymousVotes;
 }
 
 void RevealAnonymousVotes() {
 	if (!State.InMeeting
 		|| !app::MeetingHud__TypeInfo
 		|| !app::MeetingHud__TypeInfo->static_fields->Instance
-		|| !(*Game::pGameOptionsData)->fields.AnonymousVotes)
+		|| !(*Game::pGameOptionsManager)->fields.AnonymousVotes)
 		return;
 	auto meetingHud = app::MeetingHud__TypeInfo->static_fields->Instance;
 	for (auto votedForArea : il2cpp::Array(meetingHud->fields.playerStates)) {
@@ -179,9 +179,9 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 				// avoid duplicate votes
 				if (isBeforeResultsState) {
-					auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+					auto prevAnonymousVotes = (*Game::pGameOptionsManager)->fields.AnonymousVotes;
 					if (prevAnonymousVotes && State.RevealAnonymousVotes)
-						(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+						(*Game::pGameOptionsManager)->fields.AnonymousVotes = false;
 					if (playerVoteArea->fields.VotedFor != Game::SkippedVote) {
 						for (auto votedForArea : playerStates) {
 							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
@@ -195,7 +195,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 						auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
 						MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
 					}
-					(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
+					(*Game::pGameOptionsManager)->fields.AnonymousVotes = prevAnonymousVotes;
 				}
 			}
 			else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())

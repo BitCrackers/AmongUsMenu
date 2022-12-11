@@ -16,13 +16,13 @@ int randi(int lo, int hi) {
 	return lo + i;
 }
 
-RoleRates::RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount) {
-	this->ImposterCount = gameOptionsDataFields._.numImpostors;
+RoleRates::RoleRates(const NormalGameOptionsV07__Fields& gameOptionsDataFields, int playerAmount) {
+	this->ImposterCount = gameOptionsDataFields._NumImpostors_k__BackingField;
 	auto maxImpostors = GetMaxImposterAmount(playerAmount);
 	if(this->ImposterCount > maxImpostors)
 		this->ImposterCount = maxImpostors;
 
-	il2cpp::Dictionary roleRates = gameOptionsDataFields.RoleOptions->fields.roleRates;
+	il2cpp::Dictionary roleRates = gameOptionsDataFields.roleOptions->fields.roles;
 #define GET_ROLE_RATE(type) \
 	if (auto value = roleRates[RoleTypes__Enum::##type]) { \
 		this->type##Chance = value->Chance; \
@@ -829,7 +829,7 @@ std::string GetPlayerName() {
 		return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
 	}
 	else {
-		return convert_from_string(app::SaveManager_get_PlayerName(nullptr));
+		return convert_from_string(app::LegacySaveManager_get_PlayerName(nullptr));
 	}
 }
 
@@ -844,6 +844,6 @@ void SetPlayerName(std::string_view name) {
 		app::PlayerCustomizationData_set_Name(customization, convert_to_string(name), nullptr);
 	}
 	else {
-		app::SaveManager_set_PlayerName(convert_to_string(name), nullptr);
+		app::LegacySaveManager_set_PlayerName(convert_to_string(name), nullptr);
 	}
 }

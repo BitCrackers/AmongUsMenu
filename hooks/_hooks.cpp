@@ -110,14 +110,12 @@ void DetourInitilization() {
 	HOOKFUNC(ChatBubble_SetName);
 	HOOKFUNC(ChatController_AddChat);
 	HOOKFUNC(ChatController_SetVisible);
-	HOOKFUNC(HudManager_ShowMap);
 	HOOKFUNC(HudManager_Update);
 	HOOKFUNC(Camera_ScreenToWorldPoint);
 	HOOKFUNC(KeyboardJoystick_Update);
 	HOOKFUNC(ScreenJoystick_FixedUpdate);
 	HOOKFUNC(PlainDoor_SetDoorway);
 	HOOKFUNC(GameOptionsData_Deserialize);
-	HOOKFUNC(GameOptionsData_Deserialize_1);
 	HOOKFUNC(PlayerControl_MurderPlayer);
 	HOOKFUNC(PlayerControl_CompleteTask);
 	//HOOKFUNC(PlayerControl_CmdReportDeadBody);
@@ -136,7 +134,7 @@ void DetourInitilization() {
 	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
-	HOOKFUNC(NoShadowBehaviour_LateUpdate);
+	HOOKFUNC(NoShadowBehaviour_SetMaskFunction);
 	HOOKFUNC(FollowerCamera_Update);
 	HOOKFUNC(DoorBreakerGame_Start);
 	HOOKFUNC(DoorCardSwipeGame_Begin);
@@ -151,8 +149,8 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
-	if (SaveManager_GetPurchase != nullptr)
-		HOOKFUNC(SaveManager_GetPurchase);
+	if (LegacySaveManager_GetPurchase != nullptr)
+		HOOKFUNC(LegacySaveManager_GetPurchase);
 	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
 		HOOKFUNC(PlayerPurchasesData_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
@@ -174,8 +172,8 @@ void DetourUninitialization()
 	DetourUpdateThread(GetCurrentThread());
 
 
-	if (SaveManager_GetPurchase != nullptr)
-		UNHOOKFUNC(SaveManager_GetPurchase);
+	if (LegacySaveManager_GetPurchase != nullptr)
+		UNHOOKFUNC(LegacySaveManager_GetPurchase);
 	if (PlayerPurchasesData_GetPurchase != nullptr) // v2022.10.25s
 		UNHOOKFUNC(PlayerPurchasesData_GetPurchase);
 	UNHOOKFUNC(PlayerPhysics_FixedUpdate);
@@ -202,14 +200,12 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatBubble_SetName);
 	UNHOOKFUNC(ChatController_AddChat);
 	UNHOOKFUNC(ChatController_SetVisible);
-	UNHOOKFUNC(HudManager_ShowMap);
 	UNHOOKFUNC(HudManager_Update);
 	UNHOOKFUNC(ScreenJoystick_FixedUpdate);
 	UNHOOKFUNC(KeyboardJoystick_Update);
 	UNHOOKFUNC(Camera_ScreenToWorldPoint);
 	UNHOOKFUNC(PlainDoor_SetDoorway);
 	UNHOOKFUNC(GameOptionsData_Deserialize);
-	UNHOOKFUNC(GameOptionsData_Deserialize_1);
 	UNHOOKFUNC(PlayerControl_MurderPlayer);
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	//UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
@@ -227,7 +223,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
-	UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
+	UNHOOKFUNC(NoShadowBehaviour_SetMaskFunction);
 	UNHOOKFUNC(FollowerCamera_Update);
 	UNHOOKFUNC(DoorBreakerGame_Start);
 	UNHOOKFUNC(DoorCardSwipeGame_Begin);

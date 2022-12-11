@@ -7,7 +7,7 @@
 
 namespace HostTab {
 	static void SetRoleAmount(RoleTypes__Enum type, int amount) {
-		il2cpp::Dictionary roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
+		il2cpp::Dictionary roleRates = (*Game::pGameOptionsManager)->fields.RoleOptions->fields.roleRates;
 		if (auto value = roleRates[type]) {
 			if (amount > 0)
 				value->Chance = 100;
@@ -56,8 +56,8 @@ namespace HostTab {
 							SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
 							SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
 							SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
-							if((*Game::pGameOptionsData)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
-								(*Game::pGameOptionsData)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;
+							if((*Game::pGameOptionsManager)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
+								(*Game::pGameOptionsManager)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;
 						}
 					}
 				}
@@ -68,16 +68,16 @@ namespace HostTab {
 				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
 
 				// AU v2022.8.24 has been able to change maps in lobby.
-				State.mapHostChoice = (*Game::pGameOptionsData)->fields.MapId;
+				State.mapHostChoice = (*Game::pGameOptionsManager)->fields.MapId;
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {
-							(*Game::pGameOptionsData)->fields.MapId = 0;
+							(*Game::pGameOptionsManager)->fields.MapId = 0;
 							State.FlipSkeld = true;
 						}
 						else {
-							(*Game::pGameOptionsData)->fields.MapId = State.mapHostChoice;
+							(*Game::pGameOptionsManager)->fields.MapId = State.mapHostChoice;
 							State.FlipSkeld = false;
 						}
 					}

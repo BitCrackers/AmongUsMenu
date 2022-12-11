@@ -71,7 +71,7 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
-            if (!IsInGame() && !IsInLobby() || (*Game::pGameOptionsData)->fields.AnonymousVotes) {
+            if (!IsInGame() && !IsInLobby() || (*Game::pGameOptionsManager)->fields.AnonymousVotes) {
                 ImGui::SameLine();
                 if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
                     State.Save();
@@ -126,9 +126,9 @@ namespace SelfTab {
         if (self->fields.IsDead)
             return;
         if (PlayerIsImpostor(self)
-            && (*Game::pGameOptionsData)->fields.RoleOptions->fields.ImpostorsCanSeeProtect)
+            && (*Game::pGameOptionsManager)->fields.RoleOptions->fields.ImpostorsCanSeeProtect)
             return;
-        float& _Duration = (*Game::pGameOptionsData)->fields.RoleOptions->fields.ProtectionDurationSeconds;
+        float& _Duration = (*Game::pGameOptionsManager)->fields.RoleOptions->fields.ProtectionDurationSeconds;
         const float ProtectionDurationSeconds = _Duration;
         for (auto player : GetAllPlayerControl()) {
             if (!player->fields.protectedByGuardian)

@@ -7704,26 +7704,28 @@ namespace app
 
 #pragma region RoleTypes__Enum
 #if defined(_CPLUSPLUS_)
-    enum class RoleTypes__Enum : uint16_t
-    {
+    enum class RoleTypes__Enum : uint16_t {
         Crewmate = 0x0000,
         Impostor = 0x0001,
         Scientist = 0x0002,
         Engineer = 0x0003,
         GuardianAngel = 0x0004,
         Shapeshifter = 0x0005,
+        CrewmateGhost = 0x0006,
+        ImpostorGhost = 0x0007,
     };
 
 #else
-    enum RoleTypes__Enum
-    {
+    enum RoleTypes__Enum {
         RoleTypes__Enum_Crewmate = 0x0000,
         RoleTypes__Enum_Impostor = 0x0001,
         RoleTypes__Enum_Scientist = 0x0002,
         RoleTypes__Enum_Engineer = 0x0003,
         RoleTypes__Enum_GuardianAngel = 0x0004,
         RoleTypes__Enum_Shapeshifter = 0x0005,
-    };
+        RoleTypes__Enum_CrewmateGhost = 0x0006,
+        RoleTypes__Enum_ImpostorGhost = 0x0007,
+};
 
 #endif
 #pragma endregion
@@ -8992,10 +8994,262 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData Deserialize;
     };
 
+    struct __declspec(align(4)) NormalGameOptionsV07__Fields {
+        int32_t _MaxPlayers_k__BackingField;
+#if defined(_CPLUSPLUS_)
+        GameKeywords__Enum _Keywords_k__BackingField;
+#else
+        uint32_t _Keywords_k__BackingField;
+#endif
+        uint8_t _MapId_k__BackingField;
+        bool _IsDefaults_k__BackingField;
+        float PlayerSpeedMod;
+        float CrewLightMod;
+        float ImpostorLightMod;
+        float KillCooldown;
+        int32_t NumCommonTasks;
+        int32_t NumLongTasks;
+        int32_t NumShortTasks;
+        int32_t NumEmergencyMeetings;
+        int32_t EmergencyCooldown;
+        int32_t _NumImpostors_k__BackingField;
+        bool GhostsDoTasks;
+        int32_t KillDistance;
+        int32_t DiscussionTime;
+        int32_t VotingTime;
+        bool ConfirmImpostor;
+        bool VisualTasks;
+        bool AnonymousVotes;
+#if defined(_CPLUSPLUS_)
+        TaskBarMode__Enum_1 TaskBarMode;
+#else
+        int32_t TaskBarMode;
+#endif
+        struct ILogger_1* logger;
+        struct RoleOptionsCollectionV07* roleOptions;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___StaticFields {
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___VTable vtable;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Item;
+        VirtualInvokeData set_Item;
+        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Keys;
+        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Values;
+        VirtualInvokeData ContainsKey;
+        VirtualInvokeData Add;
+        VirtualInvokeData Remove;
+        VirtualInvokeData TryGetValue;
+        VirtualInvokeData get_Count;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___get_IsReadOnly;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Add;
+        VirtualInvokeData Clear;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Contains;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___CopyTo;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Remove;
+        VirtualInvokeData System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_TKey_TValue___GetEnumerator;
+        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
+        VirtualInvokeData System_Collections_IDictionary_get_Item;
+        VirtualInvokeData System_Collections_IDictionary_set_Item;
+        VirtualInvokeData System_Collections_IDictionary_get_Keys;
+        VirtualInvokeData System_Collections_IDictionary_get_Values;
+        VirtualInvokeData System_Collections_IDictionary_Contains;
+        VirtualInvokeData System_Collections_IDictionary_Add;
+        VirtualInvokeData Clear_1;
+        VirtualInvokeData System_Collections_IDictionary_get_IsReadOnly;
+        VirtualInvokeData System_Collections_IDictionary_get_IsFixedSize;
+        VirtualInvokeData System_Collections_IDictionary_GetEnumerator;
+        VirtualInvokeData System_Collections_IDictionary_Remove;
+        VirtualInvokeData System_Collections_ICollection_CopyTo;
+        VirtualInvokeData get_Count_1;
+        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
+        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData ContainsKey_1;
+        VirtualInvokeData TryGetValue_1;
+        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
+        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
+        VirtualInvokeData get_Count_2;
+        VirtualInvokeData GetObjectData;
+        VirtualInvokeData OnDeserialization;
+        VirtualInvokeData GetObjectData_1;
+        VirtualInvokeData OnDeserialization_1;
+    };
+
+
+    struct __declspec(align(4)) Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___Fields {
+        struct Int32__Array* buckets;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___Array* entries;
+        int32_t count;
+        int32_t version;
+        int32_t freeList;
+        int32_t freeCount;
+        struct IEqualityComparer_1_AmongUs_GameOptions_RoleTypes_* comparer;
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07_* keys;
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07_* values;
+        struct Object* _syncRoot;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07_ {
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___Class* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07___Fields fields;
+    };
+
+    struct __declspec(align(4)) RoleOptionsCollectionV07__Fields {
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleDataV07_* roles;
+    };
+
+    struct RoleOptionsCollectionV07 {
+        struct RoleOptionsCollectionV07__Class* klass;
+        MonitorData* monitor;
+        struct RoleOptionsCollectionV07__Fields fields;
+    };
+
+    struct RoleOptionsCollectionV07__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData GetNumPerGame;
+        VirtualInvokeData GetChancePerGame;
+        VirtualInvokeData SetRoleRate;
+        VirtualInvokeData SetRoleRecommended;
+    };
+
+    struct RoleOptionsCollectionV07__StaticFields {
+    };
+
+    struct RoleOptionsCollectionV07__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct RoleOptionsCollectionV07__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct RoleOptionsCollectionV07__VTable vtable;
+    };
+
+    struct NormalGameOptionsV07__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Version;
+        VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_MaxPlayers;
+        VirtualInvokeData get_Keywords;
+        VirtualInvokeData get_MapId;
+        VirtualInvokeData get_NumImpostors;
+        VirtualInvokeData get_TotalTaskCount;
+        VirtualInvokeData get_IsDefaults;
+        VirtualInvokeData get_RoleOptions;
+        VirtualInvokeData AreInvalid;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData SetByte;
+        VirtualInvokeData SetFloat;
+        VirtualInvokeData SetBool;
+        VirtualInvokeData SetInt;
+        VirtualInvokeData SetUInt;
+        VirtualInvokeData GetByte;
+        VirtualInvokeData GetFloat;
+        VirtualInvokeData GetBool;
+        VirtualInvokeData GetInt;
+        VirtualInvokeData GetIntArray;
+        VirtualInvokeData GetFloatArray;
+        VirtualInvokeData TryGetByte;
+        VirtualInvokeData TryGetFloat;
+        VirtualInvokeData TryGetBool;
+        VirtualInvokeData TryGetInt;
+        VirtualInvokeData TryGetIntArray;
+        VirtualInvokeData TryGetFloatArray;
+    };
+
+    struct NormalGameOptionsV07__StaticFields {
+        struct Int32__Array* RecommendedKillCooldown;
+        struct Int32__Array* RecommendedImpostors;
+        struct Int32__Array* MaxImpostors;
+        struct Single__Array* KillDistances;
+        struct String__Array* KillDistanceStrings;
+        struct Int32__Array* MinPlayers;
+    };
+
+    struct NormalGameOptionsV07__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct NormalGameOptionsV07__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct NormalGameOptionsV07__VTable vtable;
+    };
+
+    struct NormalGameOptionsV07 {
+        struct NormalGameOptionsV07__Class* klass;
+        MonitorData* monitor;
+        struct NormalGameOptionsV07__Fields fields;
+    };
+
+    struct __declspec(align(4)) GameOptionsManager__Fields {
+        struct Dictionary_2_System_Int32_AmongUs_GameOptions_IGameOptionsMigrator_* optionsMigrators;
+        struct GameOptionsFactory* gameOptionsFactory;
+        struct ILogger_1* logger;
+#if defined(_CPLUSPLUS_)
+        GameModes__Enum currentGameMode;
+#else
+        uint8_t currentGameMode;
+#endif
+        struct IGameOptions* currentGameOptions;
+        struct NormalGameOptionsV07* currentNormalGameOptions;
+        void*  currentHideNSeekGameOptions;
+        struct IGameOptions* currentHostOptions;
+        struct NormalGameOptionsV07* normalGameHostOptions;
+        void*  hideNSeekGameHostOptions;
+        struct IGameOptions* currentSearchOptions;
+        struct NormalGameOptionsV07* normalGameSearchOptions;
+        void*  hideNSeekGameSearchOptions;
+    };
+
+    struct GameOptionsManager {
+        struct GameOptionsManager__Class* klass;
+        MonitorData* monitor;
+        struct GameOptionsManager__Fields fields;
+    };
+
+    struct GameOptionsManager__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct GameOptionsManager__StaticFields {
+        struct GameOptionsManager* _Instance_k__BackingField;
+    };
+
+    struct GameOptionsManager__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct GameOptionsManager__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct GameOptionsManager__VTable vtable;
+    };
+
     struct PlayerControl__StaticFields
     {
         struct PlayerControl* LocalPlayer;
-        struct GameOptionsData* GameOptions;
         struct List_1_PlayerControl_* AllPlayerControls;
     };
 
@@ -11086,160 +11340,6 @@ struct RoleEffectAnimation__Array {
 
 #pragma endregion
 
-#pragma region GameOptionsData
-
-#if defined(_CPLUSPLUS_)
-    enum class GameKeywords__Enum : uint32_t
-    {
-        All = 0x00000000,
-        English = 0x00000100,
-        SpanishLA = 0x00000002,
-        Brazilian = 0x00000800,
-        Portuguese = 0x00000010,
-        Korean = 0x00000004,
-        Russian = 0x00000008,
-        Dutch = 0x00001000,
-        Filipino = 0x00000040,
-        French = 0x00002000,
-        German = 0x00004000,
-        Italian = 0x00008000,
-        Japanese = 0x00000200,
-        SpanishEU = 0x00000400,
-        Arabic = 0x00000020,
-        Polish = 0x00000080,
-        SChinese = 0x00010000,
-        TChinese = 0x00020000,
-        Irish = 0x00040000,
-        Other = 0x00000001,
-    };
-
-#else
-    enum GameKeywords__Enum
-    {
-        GameKeywords__Enum_All = 0x00000000,
-        GameKeywords__Enum_English = 0x00000100,
-        GameKeywords__Enum_SpanishLA = 0x00000002,
-        GameKeywords__Enum_Brazilian = 0x00000800,
-        GameKeywords__Enum_Portuguese = 0x00000010,
-        GameKeywords__Enum_Korean = 0x00000004,
-        GameKeywords__Enum_Russian = 0x00000008,
-        GameKeywords__Enum_Dutch = 0x00001000,
-        GameKeywords__Enum_Filipino = 0x00000040,
-        GameKeywords__Enum_French = 0x00002000,
-        GameKeywords__Enum_German = 0x00004000,
-        GameKeywords__Enum_Italian = 0x00008000,
-        GameKeywords__Enum_Japanese = 0x00000200,
-        GameKeywords__Enum_SpanishEU = 0x00000400,
-        GameKeywords__Enum_Arabic = 0x00000020,
-        GameKeywords__Enum_Polish = 0x00000080,
-        GameKeywords__Enum_SChinese = 0x00010000,
-        GameKeywords__Enum_TChinese = 0x00020000,
-        GameKeywords__Enum_Irish = 0x00040000,
-        GameKeywords__Enum_Other = 0x00000001,
-    };
-
-#endif
-
-#if defined(_CPLUSPLUS_)
-    enum class TaskBarMode__Enum : int32_t
-    {
-        Normal = 0x00000000,
-        MeetingOnly = 0x00000001,
-        Invisible = 0x00000002,
-    };
-
-#else
-    enum TaskBarMode__Enum
-    {
-        TaskBarMode__Enum_Normal = 0x00000000,
-        TaskBarMode__Enum_MeetingOnly = 0x00000001,
-        TaskBarMode__Enum_Invisible = 0x00000002,
-    };
-
-#endif
-
-#if defined(_CPLUSPLUS_)
-    enum class GameType__Enum : int32_t {
-        Normal = 0x00000000,
-    };
-
-#else
-    enum GameType__Enum {
-        GameType__Enum_Normal = 0x00000000,
-    };
-
-#endif
-
-    struct GameOptionsData__Fields
-    {
-        struct GameOptionsDataParent__Fields _;
-        int32_t MaxPlayers;
-#if defined(_CPLUSPLUS_)
-        GameKeywords__Enum Keywords;
-#else
-        uint32_t Keywords;
-#endif
-        uint8_t MapId;
-        int32_t NumEmergencyMeetings;
-        int32_t EmergencyCooldown;
-        bool ghostsDoTasks;
-        int32_t DiscussionTime;
-        int32_t VotingTime;
-        float CrewLightMod;
-        float ImpostorLightMod;
-        bool ConfirmImpostor;
-        bool VisualTasks;
-        bool AnonymousVotes;
-#if defined(_CPLUSPLUS_)
-        TaskBarMode__Enum TaskBarMode;
-#else
-        int32_t TaskBarMode;
-#endif
-        struct RoleOptionsData* RoleOptions;
-#if defined(_CPLUSPLUS_)
-        GameType__Enum gameType;
-#else
-        int32_t gameType;
-#endif
-        void* settings;
-    };
-
-    struct GameOptionsData
-    {
-        struct GameOptionsData__Class* klass;
-        void* monitor;
-        struct GameOptionsData__Fields fields;
-    };
-
-    struct GameOptionsData__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct GameOptionsData__StaticFields
-    {
-        void* KillDistances;
-        void* KillDistanceStrings;
-        void* RecommendedKillCooldown;
-        void* RecommendedImpostors;
-        void* MaxImpostors;
-        void* MinPlayers;
-    };
-
-    struct GameOptionsData__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct GameOptionsData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct GameOptionsData__VTable vtable;
-    };
-#pragma endregion
-
 #pragma region List_1_GameData_PlayerInfo_
     struct __declspec(align(4)) List_1_GameData_PlayerInfo___Fields
     {
@@ -12135,6 +12235,596 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
+#if defined(_CPLUSPLUS_)
+    enum class TaskBarMode__Enum_1 : int32_t {
+        Normal = 0x00000000,
+        MeetingOnly = 0x00000001,
+        Invisible = 0x00000002,
+    };
+
+#else
+    enum TaskBarMode__Enum_1 {
+        TaskBarMode__Enum_1_Normal = 0x00000000,
+        TaskBarMode__Enum_1_MeetingOnly = 0x00000001,
+        TaskBarMode__Enum_1_Invisible = 0x00000002,
+    };
+
+#endif
+    struct TaskBarMode__Enum_1__Boxed {
+        struct TaskBarMode__Enum_1__Class* klass;
+        MonitorData* monitor;
+#if defined(_CPLUSPLUS_)
+        TaskBarMode__Enum_1 value;
+#else
+        int32_t value;
+#endif
+    };
+
+    struct RoleRate {
+        int32_t MaxCount;
+        int32_t Chance;
+    };
+
+    struct RoleRate__Boxed {
+        struct RoleRate__Class* klass;
+        MonitorData* monitor;
+        struct RoleRate fields;
+    };
+#if defined(_CPLUSPLUS_)
+    enum class GameKeywords__Enum : uint32_t {
+        All = 0x00000000,
+        English = 0x00000100,
+        SpanishLA = 0x00000002,
+        Brazilian = 0x00000800,
+        Portuguese = 0x00000010,
+        Korean = 0x00000004,
+        Russian = 0x00000008,
+        Dutch = 0x00001000,
+        Filipino = 0x00000040,
+        French = 0x00002000,
+        German = 0x00004000,
+        Italian = 0x00008000,
+        Japanese = 0x00000200,
+        SpanishEU = 0x00000400,
+        Arabic = 0x00000020,
+        Polish = 0x00000080,
+        SChinese = 0x00010000,
+        TChinese = 0x00020000,
+        Irish = 0x00040000,
+        Other = 0x00000001,
+    };
+
+#else
+    enum GameKeywords__Enum {
+        GameKeywords__Enum_All = 0x00000000,
+        GameKeywords__Enum_English = 0x00000100,
+        GameKeywords__Enum_SpanishLA = 0x00000002,
+        GameKeywords__Enum_Brazilian = 0x00000800,
+        GameKeywords__Enum_Portuguese = 0x00000010,
+        GameKeywords__Enum_Korean = 0x00000004,
+        GameKeywords__Enum_Russian = 0x00000008,
+        GameKeywords__Enum_Dutch = 0x00001000,
+        GameKeywords__Enum_Filipino = 0x00000040,
+        GameKeywords__Enum_French = 0x00002000,
+        GameKeywords__Enum_German = 0x00004000,
+        GameKeywords__Enum_Italian = 0x00008000,
+        GameKeywords__Enum_Japanese = 0x00000200,
+        GameKeywords__Enum_SpanishEU = 0x00000400,
+        GameKeywords__Enum_Arabic = 0x00000020,
+        GameKeywords__Enum_Polish = 0x00000080,
+        GameKeywords__Enum_SChinese = 0x00010000,
+        GameKeywords__Enum_TChinese = 0x00020000,
+        GameKeywords__Enum_Irish = 0x00040000,
+        GameKeywords__Enum_Other = 0x00000001,
+    };
+
+#endif
+    struct __declspec(align(4)) GameOptionsData__Fields {
+        uint8_t _Version_k__BackingField;
+        int32_t _MaxPlayers_k__BackingField;
+#if defined(_CPLUSPLUS_)
+        GameKeywords__Enum _Keywords_k__BackingField;
+#else
+        uint32_t _Keywords_k__BackingField;
+#endif
+        uint8_t _MapId_k__BackingField;
+        float PlayerSpeedMod;
+        float CrewLightMod;
+        float ImpostorLightMod;
+        float KillCooldown;
+        int32_t NumCommonTasks;
+        int32_t NumLongTasks;
+        int32_t NumShortTasks;
+        int32_t NumEmergencyMeetings;
+        int32_t EmergencyCooldown;
+        int32_t _NumImpostors_k__BackingField;
+        bool GhostsDoTasks;
+        int32_t KillDistance;
+        int32_t DiscussionTime;
+        int32_t VotingTime;
+        bool ConfirmImpostor;
+        bool VisualTasks;
+        bool AnonymousVotes;
+#if defined(_CPLUSPLUS_)
+        TaskBarMode__Enum_1 TaskBarMode;
+#else
+        int32_t TaskBarMode;
+#endif
+        bool _IsDefaults_k__BackingField;
+        struct ILogger_1* logger;
+        struct RoleOptionsData* roleOptions;
+    };
+
+    struct GameOptionsData {
+        struct GameOptionsData__Class* klass;
+        MonitorData* monitor;
+        struct GameOptionsData__Fields fields;
+    };
+
+    struct __declspec(align(4)) Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields {
+        struct Int32__Array* buckets;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array* entries;
+        int32_t count;
+        int32_t version;
+        int32_t freeList;
+        int32_t freeCount;
+        struct IEqualityComparer_1_AmongUs_GameOptions_RoleTypes_* comparer;
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_* keys;
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_* values;
+        struct Object* _syncRoot;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields fields;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+        int32_t hashCode;
+        int32_t next;
+#if defined(_CPLUSPLUS_)
+        RoleTypes__Enum key;
+#else
+        uint16_t key;
+#endif
+        struct RoleRate value;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Boxed {
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ fields;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array {
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ vector[32];
+    };
+
+    struct __declspec(align(4)) Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields {
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_* dictionary;
+    };
+
+    struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields fields;
+    };
+
+    struct __declspec(align(4)) Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields {
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_* dictionary;
+    };
+
+    struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Fields fields;
+    };
+
+    struct RoleRate__Array {
+        struct RoleRate__Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct RoleRate vector[32];
+    };
+
+    struct IEnumerator_1_AmongUs_GameOptions_RoleRate_ {
+        struct IEnumerator_1_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct ICollection_1_AmongUs_GameOptions_RoleRate_ {
+        struct ICollection_1_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+#if defined(_CPLUSPLUS_)
+        RoleTypes__Enum key;
+#else
+        uint16_t key;
+#endif
+        struct RoleRate value;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Boxed {
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ fields;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array {
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ vector[32];
+    };
+
+    struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate_ {
+        struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct IEnumerable_1_AmongUs_GameOptions_RoleRate_ {
+        struct IEnumerable_1_AmongUs_GameOptions_RoleRate___Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__VTable {
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__StaticFields {
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_TKey_TValue_Entry_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__VTable vtable;
+    };
+
+    struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Count;
+        VirtualInvokeData System_Collections_Generic_ICollection_TKey__get_IsReadOnly;
+        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Add;
+        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Clear;
+        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Contains;
+        VirtualInvokeData CopyTo;
+        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Remove;
+        VirtualInvokeData System_Collections_Generic_IEnumerable_TKey__GetEnumerator;
+        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
+        VirtualInvokeData System_Collections_ICollection_CopyTo;
+        VirtualInvokeData get_Count_1;
+        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
+        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData get_Count_2;
+    };
+
+    struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_TKey_TValue_KeyCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct RoleRate__Array__VTable {
+    };
+
+    struct RoleRate__Array__StaticFields {
+    };
+
+    struct RoleRate__Array__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct RoleRate__Array__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct RoleRate__Array__VTable vtable;
+    };
+
+    struct IEnumerator_1_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData get_Current;
+    };
+
+    struct IEnumerator_1_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct IEnumerator_1_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct IEnumerator_1_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct IEnumerator_1_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Count;
+        VirtualInvokeData System_Collections_Generic_ICollection_TValue__get_IsReadOnly;
+        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Add;
+        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Clear;
+        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Contains;
+        VirtualInvokeData CopyTo;
+        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Remove;
+        VirtualInvokeData System_Collections_Generic_IEnumerable_TValue__GetEnumerator;
+        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
+        VirtualInvokeData System_Collections_ICollection_CopyTo;
+        VirtualInvokeData get_Count_1;
+        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
+        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData get_Count_2;
+    };
+
+    struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_TKey_TValue_ValueCollection_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct ICollection_1_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData get_Count;
+        VirtualInvokeData get_IsReadOnly;
+        VirtualInvokeData Add;
+        VirtualInvokeData Clear;
+        VirtualInvokeData Contains;
+        VirtualInvokeData CopyTo;
+        VirtualInvokeData Remove;
+    };
+
+    struct ICollection_1_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct ICollection_1_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ICollection_1_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ICollection_1_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct RoleRate___VTable {
+    };
+
+    struct RoleRate___StaticFields {
+    };
+
+    struct RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct RoleRate___VTable vtable;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__VTable {
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__StaticFields {
+    };
+
+    struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Array__VTable vtable;
+    };
+
+    struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData get_Current;
+    };
+
+    struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct IEnumerator_1_KeyValuePair_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct IEnumerable_1_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData GetEnumerator;
+    };
+
+    struct IEnumerable_1_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct IEnumerable_1_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct IEnumerable_1_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct IEnumerable_1_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Item;
+        VirtualInvokeData set_Item;
+        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Keys;
+        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Values;
+        VirtualInvokeData ContainsKey;
+        VirtualInvokeData Add;
+        VirtualInvokeData Remove;
+        VirtualInvokeData TryGetValue;
+        VirtualInvokeData get_Count;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___get_IsReadOnly;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Add;
+        VirtualInvokeData Clear;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Contains;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___CopyTo;
+        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Remove;
+        VirtualInvokeData System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_TKey_TValue___GetEnumerator;
+        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
+        VirtualInvokeData System_Collections_IDictionary_get_Item;
+        VirtualInvokeData System_Collections_IDictionary_set_Item;
+        VirtualInvokeData System_Collections_IDictionary_get_Keys;
+        VirtualInvokeData System_Collections_IDictionary_get_Values;
+        VirtualInvokeData System_Collections_IDictionary_Contains;
+        VirtualInvokeData System_Collections_IDictionary_Add;
+        VirtualInvokeData Clear_1;
+        VirtualInvokeData System_Collections_IDictionary_get_IsReadOnly;
+        VirtualInvokeData System_Collections_IDictionary_get_IsFixedSize;
+        VirtualInvokeData System_Collections_IDictionary_GetEnumerator;
+        VirtualInvokeData System_Collections_IDictionary_Remove;
+        VirtualInvokeData System_Collections_ICollection_CopyTo;
+        VirtualInvokeData get_Count_1;
+        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
+        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
+        VirtualInvokeData ContainsKey_1;
+        VirtualInvokeData TryGetValue_1;
+        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
+        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
+        VirtualInvokeData get_Count_2;
+        VirtualInvokeData GetObjectData;
+        VirtualInvokeData OnDeserialization;
+        VirtualInvokeData GetObjectData_1;
+        VirtualInvokeData OnDeserialization_1;
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields {
+    };
+
+    struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Dictionary_2_AmongUs_GameOptions_RoleTypes_AmongUs_GameOptions_RoleRate___VTable vtable;
+    };
+
+
+    struct GameOptionsData__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_Version;
+        VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_MaxPlayers;
+        VirtualInvokeData get_Keywords;
+        VirtualInvokeData get_MapId;
+        VirtualInvokeData get_NumImpostors;
+        VirtualInvokeData get_TotalTaskCount;
+        VirtualInvokeData get_IsDefaults;
+        VirtualInvokeData get_RoleOptions;
+        VirtualInvokeData AreInvalid;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData SetByte;
+        VirtualInvokeData SetFloat;
+        VirtualInvokeData SetBool;
+        VirtualInvokeData SetInt;
+        VirtualInvokeData SetUInt;
+        VirtualInvokeData GetByte;
+        VirtualInvokeData GetFloat;
+        VirtualInvokeData GetBool;
+        VirtualInvokeData GetInt;
+        VirtualInvokeData GetIntArray;
+        VirtualInvokeData GetFloatArray;
+        VirtualInvokeData TryGetByte;
+        VirtualInvokeData TryGetFloat;
+        VirtualInvokeData TryGetBool;
+        VirtualInvokeData TryGetInt;
+        VirtualInvokeData TryGetIntArray;
+        VirtualInvokeData TryGetFloatArray;
+    };
+
+    struct GameOptionsData__StaticFields {
+        struct Int32__Array* RecommendedKillCooldown;
+        struct Int32__Array* RecommendedImpostors;
+        struct Int32__Array* MaxImpostors;
+        struct Single__Array* KillDistances;
+        struct String__Array* KillDistanceStrings;
+        struct Int32__Array* MinPlayers;
+    };
+
+    struct GameOptionsData__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct GameOptionsData__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct GameOptionsData__VTable vtable;
+    };
+
+
 #pragma region Palette
     struct Palette {
         struct Palette__Class* klass;
@@ -12192,7 +12882,55 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
-#pragma region SaveManager
+    struct IGameOptions {
+        struct IGameOptions__Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct IGameOptions__VTable {
+        VirtualInvokeData get_Version;
+        VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_MaxPlayers;
+        VirtualInvokeData get_Keywords;
+        VirtualInvokeData get_MapId;
+        VirtualInvokeData get_NumImpostors;
+        VirtualInvokeData get_TotalTaskCount;
+        VirtualInvokeData get_IsDefaults;
+        VirtualInvokeData get_RoleOptions;
+        VirtualInvokeData AreInvalid;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData SetByte;
+        VirtualInvokeData SetFloat;
+        VirtualInvokeData SetBool;
+        VirtualInvokeData SetInt;
+        VirtualInvokeData SetUInt;
+        VirtualInvokeData GetByte;
+        VirtualInvokeData GetFloat;
+        VirtualInvokeData GetBool;
+        VirtualInvokeData GetInt;
+        VirtualInvokeData GetIntArray;
+        VirtualInvokeData GetFloatArray;
+        VirtualInvokeData TryGetByte;
+        VirtualInvokeData TryGetFloat;
+        VirtualInvokeData TryGetBool;
+        VirtualInvokeData TryGetInt;
+        VirtualInvokeData TryGetIntArray;
+        VirtualInvokeData TryGetFloatArray;
+    };
+
+    struct IGameOptions__StaticFields {
+    };
+
+    struct IGameOptions__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct IGameOptions__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct IGameOptions__VTable vtable;
+    };
+
+#pragma region LegacySaveManager
 
 #if defined(_CPLUSPLUS_)
     enum class ControlTypes__Enum : int32_t
@@ -12220,7 +12958,7 @@ struct RoleEffectAnimation__Array {
         struct String* Text;
     };
 
-    struct SaveManager {
+    struct LegacySaveManager {
         Il2CppClass* klass;
         MonitorData* monitor;
     };

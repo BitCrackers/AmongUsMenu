@@ -112,7 +112,7 @@ void Run(LPVOID lpParam) {
 #endif
 	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
 	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
-	GAME_STATIC_POINTER(Game::pGameOptionsData, app::PlayerControl, GameOptions);
+	GAME_STATIC_POINTER(Game::pGameOptionsManager, app::GameOptionsManager, _Instance_k__BackingField);
 	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
 	GAME_STATIC_POINTER(Game::pLocalPlayer, app::PlayerControl, LocalPlayer);
 	GAME_STATIC_POINTER(Game::pShipStatus, app::ShipStatus, Instance);
