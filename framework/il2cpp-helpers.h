@@ -75,6 +75,7 @@ namespace app {
 		class List {
 		public:
 			using iterator = decltype(&E::fields._items->vector[0]);
+			using value_type = std::remove_cvref_t<decltype(E::fields._items->vector[0])>;
 			constexpr List(E* list) : _Ptr(list) {}
 			constexpr size_t size() const {
 				if (!_Ptr) return 0;
@@ -90,6 +91,16 @@ namespace app {
 				if (!_Ptr || _Pos >= size()) return;
 				auto pList = (List_1_PlayerTask_*)_Ptr;
 				((void(*)(void*, size_t, const void*))(pList->klass->vtable.RemoveAt.methodPtr))(pList, _Pos, pList->klass->vtable.RemoveAt.method);
+			}
+			constexpr void add(value_type item) {
+				if (!_Ptr) return;
+				auto pList = (List_1_PlayerTask_*)_Ptr;
+				((void(*)(void*, value_type, const void*))(pList->klass->vtable.Add.methodPtr))(pList, item, pList->klass->vtable.Add.method);
+			}
+			constexpr bool contains(value_type item) const {
+				if (!_Ptr) return false;
+				auto pList = (List_1_PlayerTask_*)_Ptr;
+				return ((bool(*)(void*, value_type, const void*))(pList->klass->vtable.Contains.methodPtr))(pList, item, pList->klass->vtable.Contains.method);
 			}
 			constexpr iterator begin() const {
 				if (!_Ptr) return nullptr;

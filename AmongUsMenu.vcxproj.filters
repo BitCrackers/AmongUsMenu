@@ -67,7 +67,7 @@
     <ClCompile Include="hooks\Doors.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-    <ClCompile Include="hooks\LogicOptions.cpp">
+    <ClCompile Include="hooks\GameOptionsManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="hooks\HudManager.cpp">
@@ -300,6 +300,9 @@
     </ClCompile>
     <ClCompile Include="gui\aum-chat.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="user\achievements.cpp">
+      <Filter>user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

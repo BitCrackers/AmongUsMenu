@@ -80,6 +80,7 @@
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
+    <ClCompile Include="user\achievements.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
