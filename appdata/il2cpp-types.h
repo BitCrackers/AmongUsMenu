@@ -12579,6 +12579,92 @@ namespace app
     };
 #pragma endregion
 
+#pragma region AchievementManager
+    struct GameModes__Enum__Array {
+        void* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        GameModes__Enum vector[32];
+    };
+
+    struct __declspec(align(4)) List_1_AmongUs_GameOptions_GameModes___Fields {
+        struct GameModes__Enum__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
+
+    struct List_1_AmongUs_GameOptions_GameModes_ {
+        void* klass;
+        MonitorData* monitor;
+        struct List_1_AmongUs_GameOptions_GameModes___Fields fields;
+    };
+
+    struct __declspec(align(4)) Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes___Fields {
+        struct Int32__Array* buckets;
+        struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes___Array* entries;
+        int32_t count;
+        int32_t version;
+        int32_t freeList;
+        int32_t freeCount;
+        void* comparer;
+        void* keys;
+        void* values;
+        struct Object* _syncRoot;
+    };
+
+    struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_ {
+        void* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes___Fields fields;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes_ {
+        int32_t hashCode;
+        int32_t next;
+        struct String* key;
+        struct List_1_AmongUs_GameOptions_GameModes_* value;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes___Array {
+        void* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes_ vector[32];
+    };
+
+    struct AchievementManager_1 {
+        struct AchievementManager_1__Class* klass;
+        MonitorData* monitor;
+        //struct AchievementManager_1__Fields fields;
+    };
+
+    struct AchievementManager_1__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData Awake;
+        VirtualInvokeData OnDestroy;
+    };
+
+    struct AchievementManager_1__StaticFields {
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_* AchievementGameModeKey;
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_* StatsGameModeKey;
+    };
+
+    struct AchievementManager_1__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct AchievementManager_1__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct AchievementManager_1__VTable vtable;
+    };
+#pragma endregion
+
     typedef Il2CppObject PlayerData;
     typedef Il2CppObject PlayerCustomizationData;
     typedef Il2CppObject PlayerPurchasesData;

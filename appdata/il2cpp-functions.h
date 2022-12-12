@@ -213,6 +213,8 @@ DO_APP_FUNC(String*, GameData_PlayerInfo_get_PlayerName, (GameData_PlayerInfo* _
 DO_APP_FUNC(void, AccountManager_UpdateKidAccountDisplay, (AccountManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountManager::UpdateKidAccountDisplay()");
 DO_APP_FUNC(void, PlayerStorageManager_OnReadPlayerPrefsComplete, (PlayerStorageManager* __this, void* data, MethodInfo* method), "Assembly-CSharp, System.Void PlayerStorageManager::OnReadPlayerPrefsComplete(Epic.OnlineServices.PlayerDataStorage.ReadFileCallbackInfo)");
 
+DO_APP_FUNC(void, AchievementManager_1_UnlockAchievement, (AchievementManager_1* __this, String* key, MethodInfo* method), "Assembly-CSharp, System.Void AchievementManager::UnlockAchievement(System.String)");
+
 // 2022.10.25s
 DO_APP_FUNC(PlayerData*, DataManager_get_Player, (MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Player.PlayerData AmongUs.Data.DataManager::get_Player()");
 DO_APP_FUNC(String*, PlayerCustomizationData_get_Name, (PlayerCustomizationData* __this, MethodInfo* method), "Assembly-CSharp, System.String AmongUs.Data.Player.PlayerCustomizationData::get_Name()");
