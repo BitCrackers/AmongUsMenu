@@ -50,7 +50,7 @@ public:
 	int GuardianAngelCount = 0;
 	int GuardianAngelChance = 0;
 	int MaxCrewmates = Game::MAX_PLAYERS;
-	RoleRates(const GameOptionsData__Fields& gameOptionsDataFields, int playerAmount);
+	RoleRates(const class GameOptions& gameOptions, int playerAmount);
 	int GetRoleCount(RoleTypes__Enum role);
 	void SubtractRole(RoleTypes__Enum role);
 };
@@ -209,3 +209,54 @@ bool Object_1_IsNull(app::Object_1* unity_object);
 
 std::string GetPlayerName();
 void SetPlayerName(std::string_view name);
+
+void SaveGameOptions();
+void SaveGameOptions(const class GameOptions& gameOptions);
+
+class RoleOptions {
+public:
+	RoleOptions(app::IRoleOptionsCollection* options)
+		: _options(options) {
+	}
+
+	RoleOptions& SetRoleRate(app::RoleTypes__Enum role, int32_t maxCount, int32_t chance);
+	RoleOptions& SetRoleRecommended(app::RoleTypes__Enum role);
+
+	int32_t GetNumPerGame(app::RoleTypes__Enum role) const;
+	int32_t GetChancePerGame(app::RoleTypes__Enum role) const;
+private:
+	app::IRoleOptionsCollection* _options;
+};
+
+class GameOptions {
+public:
+	GameOptions();
+	GameOptions(app::IGameOptions* options) : _options(options){};
+
+	constexpr bool HasOptions() const {
+		return _options != nullptr;
+	}
+
+	GameOptions& SetByte(app::ByteOptionNames__Enum option, uint8_t value);
+	GameOptions& SetFloat(app::FloatOptionNames__Enum option, float value);
+	GameOptions& SetBool(app::BoolOptionNames__Enum option, bool value);
+	GameOptions& SetInt(app::Int32OptionNames__Enum option, int32_t value);
+	GameOptions& SetUInt(app::UInt32OptionNames__Enum option, uint32_t value);
+
+	uint8_t GetByte(app::ByteOptionNames__Enum option, uint8_t defaultValue = 0) const;
+	float GetFloat(app::FloatOptionNames__Enum option, float defaultValue = 0.0) const;
+	bool GetBool(app::BoolOptionNames__Enum option, bool defaultValue = false) const;
+	int32_t GetInt(app::Int32OptionNames__Enum option, int32_t defaultValue = 0) const;
+
+	app::GameModes__Enum GetGameMode() const;
+	int32_t GetMaxPlayers() const;
+	uint8_t GetMapId() const;
+	int32_t GetNumImpostors() const;
+	int32_t GetTotalTaskCount() const;
+	RoleOptions GetRoleOptions() const;
+
+	float GetPlayerSpeedMod() const;
+	float GetKillCooldown() const;
+private:
+	app::IGameOptions* _options;
+};

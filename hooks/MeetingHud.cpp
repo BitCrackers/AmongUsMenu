@@ -103,18 +103,19 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 		}
 	}
 
-	auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+	GameOptions options;
+	const auto prevAnonymousVotes = options.GetBool(app::BoolOptionNames__Enum::AnonymousVotes);
 	if (prevAnonymousVotes && State.RevealAnonymousVotes)
-		(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+		options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
 	MeetingHud_PopulateResults(__this, states, method);
-	(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
+	options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
 }
 
 void RevealAnonymousVotes() {
 	if (!State.InMeeting
 		|| !app::MeetingHud__TypeInfo
 		|| !app::MeetingHud__TypeInfo->static_fields->Instance
-		|| !(*Game::pGameOptionsData)->fields.AnonymousVotes)
+		|| !GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes))
 		return;
 	auto meetingHud = app::MeetingHud__TypeInfo->static_fields->Instance;
 	for (auto votedForArea : il2cpp::Array(meetingHud->fields.playerStates)) {
@@ -179,9 +180,10 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 
 				// avoid duplicate votes
 				if (isBeforeResultsState) {
-					auto prevAnonymousVotes = (*Game::pGameOptionsData)->fields.AnonymousVotes;
+					GameOptions options;
+					const auto prevAnonymousVotes = options.GetBool(app::BoolOptionNames__Enum::AnonymousVotes);
 					if (prevAnonymousVotes && State.RevealAnonymousVotes)
-						(*Game::pGameOptionsData)->fields.AnonymousVotes = false;
+						options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
 					if (playerVoteArea->fields.VotedFor != Game::SkippedVote) {
 						for (auto votedForArea : playerStates) {
 							if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
@@ -195,7 +197,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 						auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
 						MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
 					}
-					(*Game::pGameOptionsData)->fields.AnonymousVotes = prevAnonymousVotes;
+					options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
 				}
 			}
 			else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())

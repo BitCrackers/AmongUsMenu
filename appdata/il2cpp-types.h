@@ -4022,7 +4022,7 @@ namespace app
         int32_t m_spriteIndex;
         int32_t m_spriteAnimationID;
         bool m_ignoreActiveState;
-		struct TMP_Text_TextBackingContainer m_TextBackingArray;
+        struct TMP_Text_TextBackingContainer m_TextBackingArray;
         void* k_Power;
     };
 
@@ -4169,9 +4169,8 @@ namespace app
         VirtualInvokeData InternalUpdate;
     };
 
-    struct TMP_Text__StaticFields
-    {
-        
+    struct TMP_Text__StaticFields {
+        // ...
     };
 
     struct TMP_Text__Class
@@ -4495,13 +4494,11 @@ namespace app
 #pragma endregion
 
 #pragma region FullAccount
-    struct FullAccount__Fields
-    {
+    struct FullAccount__Fields {
         struct MonoBehaviour__Fields _;
         struct GameObject* randomizeNameButton;
         struct GameObject* editNameButton;
-        void* linkUnlinkAccountsButton;
-        struct GameObject* goOfflineButton;
+        struct GameObject* manageAccount;
     };
 
     struct FullAccount
@@ -4658,6 +4655,7 @@ namespace app
         struct SpriteRenderer* HighlightedFX;
         struct TextMeshPro* NameText;
         struct TextMeshPro* LevelNumberText;
+        struct TextMeshPro* ColorBlindName;
         bool AnimateButtonsFromLeft;
         bool AmDead;
         bool DidReport;
@@ -4934,6 +4932,7 @@ namespace app
         void* EmergencyOverlay;
         void* ReportOverlay;
         void* MeetingBackground;
+        void* EmergencyButton;
         struct Vector2 InitialSpawnCenter;
         struct Vector2 MeetingSpawnCenter;
         struct Vector2 MeetingSpawnCenter2;
@@ -4973,7 +4972,6 @@ namespace app
 #else
         int32_t Type;
 #endif
-        bool _ShouldCheckForGameEnd_k__BackingField;
         float _HideCountdown_k__BackingField;
         void* _CosmeticsCache_k__BackingField;
         void* logger;
@@ -5573,6 +5571,10 @@ namespace app
         StatsScientistChargesGained = 0x00000604,
         StatsGuardianAngelCrewmatesProtected = 0x00000605,
         StatsShapeshifterShiftedKills = 0x00000606,
+        CrewmateGhostRole = 0x00000607,
+        ImpostorGhostRole = 0x00000608,
+        HauntAbilityName = 0x00000609,
+        SeekButton = 0x0000060a,
         SanctionDuration = 0x000006a4,
         SanctionPermanent = 0x000006a5,
         SanctionConduct = 0x000006a6,
@@ -5602,6 +5604,24 @@ namespace app
         FeaturedCubes = 0x0000076f,
         BugReportPopUpAttachScreenshotDesc = 0x00000770,
         UserIdTokenError = 0x00000771,
+        NewGameMode = 0x00000772,
+        NewModeInfo = 0x00000773,
+        HideSeekHowToPlayTitleOne = 0x00000774,
+        HideSeekHowToPlayCaptionOne = 0x00000775,
+        HideSeekHowToPlayCaptionTwo = 0x00000776,
+        HideSeekHowToPlayCaptionThree = 0x00000777,
+        HideSeekHowToPlayPageOne = 0x00000778,
+        HideSeekHowToPlayImpostorOne = 0x00000779,
+        HideSeekHowToPlaySubtextOne = 0x0000077a,
+        HideSeekHowToPlayCrewmateInfoOne = 0x0000077b,
+        HideSeekHowToPlayCrewmateInfoTwo = 0x0000077c,
+        HideSeekHowToPlayImpostorInfoOne = 0x0000077d,
+        HideSeekHowToPlayFlashlightDefault = 0x0000077e,
+        HideSeekHowToPlayFinalHide = 0x0000077f,
+        HideSeekHowToPlayFlashlightMobile = 0x00000780,
+        HideSeekHowToPlayFlashlightSwitch = 0x00000781,
+        HideSeekHowToPlayFlashlightConsoles = 0x00000782,
+        HideSeekHowToPlayFlashlightPlayStation = 0x00000783,
         QCLocationLaptop = 0x000007d0,
         QCLocationSkeld = 0x000007d1,
         QCLocationMira = 0x000007d2,
@@ -5933,19 +5953,54 @@ namespace app
         MaxVentUses = 0x00000a8c,
         MaxTimeInVent = 0x00000a8d,
         MinCrewmatesForVitals = 0x00000a8e,
-        FinalEscapeTime = 0x00000a8f,
+        EscapeTime = 0x00000a8f,
         AllTasksComplete = 0x00000a90,
         EscapePrompt = 0x00000a91,
-        CrewmateFlashlightFov = 0x00000a92,
-        ImpostorFlashlightFov = 0x00000a93,
+        CrewmateFlashlightSize = 0x00000a92,
+        ImpostorFlashlightSize = 0x00000a93,
         CrewmateLeadTime = 0x00000a94,
         CrewmadeHideBlurb = 0x00000a95,
         ImpostorKillBlurb = 0x00000a96,
         HideCountdown = 0x00000a97,
-        MusicDistance = 0x00000a98,
+        ScaryMusicDistance = 0x00000a98,
         ShortTaskTimeValue = 0x00000a99,
         LongTaskTimeValue = 0x00000a9a,
         CommonTaskTimeValue = 0x00000a9b,
+        UseFlashlight = 0x00000a9c,
+        FinalEscapeTime = 0x00000a9d,
+        VeryScaryMusicDistance = 0x00000a9e,
+        SeekerFinalSpeed = 0x00000a9f,
+        SeekerFinalVents = 0x00000aa0,
+        SeekerFinalMap = 0x00000aa1,
+        CrewmateVentCooldown = 0x00000aa2,
+        SeekerPings = 0x00000aa3,
+        MaxPingTime = 0x00000aa4,
+        ShowPingTime = 0x00000aa5,
+        MinPingTime = 0x00000aa6,
+        ShowCrewmateNames = 0x00000aa7,
+        ShowImpostorNames = 0x00000aa8,
+        HideActionButton = 0x00000aa9,
+        RuleOneCrewmates = 0x00000aaa,
+        RuleTwoCrewmates = 0x00000aab,
+        RuleThreeCrewmates = 0x00000aac,
+        RuleOneImpostor = 0x00000aad,
+        RuleTwoImpostor = 0x00000aae,
+        RuleThreeImpostor = 0x00000aaf,
+        RuleOneCrewmatesTitle = 0x00000ab0,
+        RuleTwoCrewmatesTitle = 0x00000ab1,
+        RuleThreeCrewmatesTitle = 0x00000ab2,
+        RuleOneImpostorTitle = 0x00000ab3,
+        RuleTwoImpostorTitle = 0x00000ab4,
+        RoundRobin = 0x00000ab5,
+        OptionUnavailablePublicLobby = 0x00000ab6,
+        StatsHidenSeekGamesCrewmateSurvived = 0x00000ab7,
+        StatsHidenSeekTimesVented = 0x00000ab8,
+        StatsTimesPettedPet = 0x00000ab9,
+        StatsImpostorKills_HideAndSeek = 0x00000aba,
+        StatsFastestCrewmateWin_HideAndSeek = 0x00000abb,
+        StatsFastestImpostorWin_HideAndSeek = 0x00000abc,
+        StatsHideAndSeekImpostorVictory = 0x00000abd,
+        StatsHideAndSeekCrewmateVictory = 0x00000abe,
         AmongUsFriends = 0x00000af0,
         FriendsGuestWarning = 0x00000af1,
         PlatformFriends = 0x00000af2,
@@ -5999,6 +6054,9 @@ namespace app
         FriendListUnavailable = 0x00000b22,
         SignInIssueTitle = 0x00000b23,
         SignInIssueText = 0x00000b24,
+        Ghost = 0x00000b25,
+        CurrentlyHaunting = 0x00000b26,
+        RestorePurchases = 0x00000b27,
         QCAccIsRole = 0x00000bb8,
         QCAccIsRoleNeg = 0x00000bb9,
         QCAccShapeshited = 0x00000bba,
@@ -6057,6 +6115,24 @@ namespace app
         ConfirmDeleteAccounts = 0x00000c88,
         ConfirmDeleteAccountsEmpty = 0x00000c89,
         AccountRequestDelete = 0x00000c8a,
+        HasBeenKilled = 0x00000c8b,
+        GameType = 0x00000dac,
+        GameTypeError = 0x00000dad,
+        GameTypeClassic = 0x00000dae,
+        GameTypeHideAndSeek = 0x00000daf,
+        PetAction = 0x00000db0,
+        CreateLabel = 0x00000db1,
+        TagFiltersTitle = 0x00000db2,
+        TagFiltersHelpFindGame = 0x00000db3,
+        TagFiltersHelpCreate = 0x00000db4,
+        TagsFilteredSingular = 0x00000db5,
+        TagsFilteredPlural = 0x00000db6,
+        TagsAppliedSingular = 0x00000db7,
+        TagsAppliedPlural = 0x00000db8,
+        DefaultFilterTag_FirstTime = 0x00000db9,
+        DefaultFilterTag_Casual = 0x00000dba,
+        DefaultFilterTag_Serious = 0x00000dbb,
+        DefaultFilterTag_Expert = 0x00000dbc,
     };
 
 #else
@@ -6606,6 +6682,10 @@ namespace app
         StringNames__Enum_StatsScientistChargesGained = 0x00000604,
         StringNames__Enum_StatsGuardianAngelCrewmatesProtected = 0x00000605,
         StringNames__Enum_StatsShapeshifterShiftedKills = 0x00000606,
+        StringNames__Enum_CrewmateGhostRole = 0x00000607,
+        StringNames__Enum_ImpostorGhostRole = 0x00000608,
+        StringNames__Enum_HauntAbilityName = 0x00000609,
+        StringNames__Enum_SeekButton = 0x0000060a,
         StringNames__Enum_SanctionDuration = 0x000006a4,
         StringNames__Enum_SanctionPermanent = 0x000006a5,
         StringNames__Enum_SanctionConduct = 0x000006a6,
@@ -6635,6 +6715,24 @@ namespace app
         StringNames__Enum_FeaturedCubes = 0x0000076f,
         StringNames__Enum_BugReportPopUpAttachScreenshotDesc = 0x00000770,
         StringNames__Enum_UserIdTokenError = 0x00000771,
+        StringNames__Enum_NewGameMode = 0x00000772,
+        StringNames__Enum_NewModeInfo = 0x00000773,
+        StringNames__Enum_HideSeekHowToPlayTitleOne = 0x00000774,
+        StringNames__Enum_HideSeekHowToPlayCaptionOne = 0x00000775,
+        StringNames__Enum_HideSeekHowToPlayCaptionTwo = 0x00000776,
+        StringNames__Enum_HideSeekHowToPlayCaptionThree = 0x00000777,
+        StringNames__Enum_HideSeekHowToPlayPageOne = 0x00000778,
+        StringNames__Enum_HideSeekHowToPlayImpostorOne = 0x00000779,
+        StringNames__Enum_HideSeekHowToPlaySubtextOne = 0x0000077a,
+        StringNames__Enum_HideSeekHowToPlayCrewmateInfoOne = 0x0000077b,
+        StringNames__Enum_HideSeekHowToPlayCrewmateInfoTwo = 0x0000077c,
+        StringNames__Enum_HideSeekHowToPlayImpostorInfoOne = 0x0000077d,
+        StringNames__Enum_HideSeekHowToPlayFlashlightDefault = 0x0000077e,
+        StringNames__Enum_HideSeekHowToPlayFinalHide = 0x0000077f,
+        StringNames__Enum_HideSeekHowToPlayFlashlightMobile = 0x00000780,
+        StringNames__Enum_HideSeekHowToPlayFlashlightSwitch = 0x00000781,
+        StringNames__Enum_HideSeekHowToPlayFlashlightConsoles = 0x00000782,
+        StringNames__Enum_HideSeekHowToPlayFlashlightPlayStation = 0x00000783,
         StringNames__Enum_QCLocationLaptop = 0x000007d0,
         StringNames__Enum_QCLocationSkeld = 0x000007d1,
         StringNames__Enum_QCLocationMira = 0x000007d2,
@@ -6966,19 +7064,54 @@ namespace app
         StringNames__Enum_MaxVentUses = 0x00000a8c,
         StringNames__Enum_MaxTimeInVent = 0x00000a8d,
         StringNames__Enum_MinCrewmatesForVitals = 0x00000a8e,
-        StringNames__Enum_FinalEscapeTime = 0x00000a8f,
+        StringNames__Enum_EscapeTime = 0x00000a8f,
         StringNames__Enum_AllTasksComplete = 0x00000a90,
         StringNames__Enum_EscapePrompt = 0x00000a91,
-        StringNames__Enum_CrewmateFlashlightFov = 0x00000a92,
-        StringNames__Enum_ImpostorFlashlightFov = 0x00000a93,
+        StringNames__Enum_CrewmateFlashlightSize = 0x00000a92,
+        StringNames__Enum_ImpostorFlashlightSize = 0x00000a93,
         StringNames__Enum_CrewmateLeadTime = 0x00000a94,
         StringNames__Enum_CrewmadeHideBlurb = 0x00000a95,
         StringNames__Enum_ImpostorKillBlurb = 0x00000a96,
         StringNames__Enum_HideCountdown = 0x00000a97,
-        StringNames__Enum_MusicDistance = 0x00000a98,
+        StringNames__Enum_ScaryMusicDistance = 0x00000a98,
         StringNames__Enum_ShortTaskTimeValue = 0x00000a99,
         StringNames__Enum_LongTaskTimeValue = 0x00000a9a,
         StringNames__Enum_CommonTaskTimeValue = 0x00000a9b,
+        StringNames__Enum_UseFlashlight = 0x00000a9c,
+        StringNames__Enum_FinalEscapeTime = 0x00000a9d,
+        StringNames__Enum_VeryScaryMusicDistance = 0x00000a9e,
+        StringNames__Enum_SeekerFinalSpeed = 0x00000a9f,
+        StringNames__Enum_SeekerFinalVents = 0x00000aa0,
+        StringNames__Enum_SeekerFinalMap = 0x00000aa1,
+        StringNames__Enum_CrewmateVentCooldown = 0x00000aa2,
+        StringNames__Enum_SeekerPings = 0x00000aa3,
+        StringNames__Enum_MaxPingTime = 0x00000aa4,
+        StringNames__Enum_ShowPingTime = 0x00000aa5,
+        StringNames__Enum_MinPingTime = 0x00000aa6,
+        StringNames__Enum_ShowCrewmateNames = 0x00000aa7,
+        StringNames__Enum_ShowImpostorNames = 0x00000aa8,
+        StringNames__Enum_HideActionButton = 0x00000aa9,
+        StringNames__Enum_RuleOneCrewmates = 0x00000aaa,
+        StringNames__Enum_RuleTwoCrewmates = 0x00000aab,
+        StringNames__Enum_RuleThreeCrewmates = 0x00000aac,
+        StringNames__Enum_RuleOneImpostor = 0x00000aad,
+        StringNames__Enum_RuleTwoImpostor = 0x00000aae,
+        StringNames__Enum_RuleThreeImpostor = 0x00000aaf,
+        StringNames__Enum_RuleOneCrewmatesTitle = 0x00000ab0,
+        StringNames__Enum_RuleTwoCrewmatesTitle = 0x00000ab1,
+        StringNames__Enum_RuleThreeCrewmatesTitle = 0x00000ab2,
+        StringNames__Enum_RuleOneImpostorTitle = 0x00000ab3,
+        StringNames__Enum_RuleTwoImpostorTitle = 0x00000ab4,
+        StringNames__Enum_RoundRobin = 0x00000ab5,
+        StringNames__Enum_OptionUnavailablePublicLobby = 0x00000ab6,
+        StringNames__Enum_StatsHidenSeekGamesCrewmateSurvived = 0x00000ab7,
+        StringNames__Enum_StatsHidenSeekTimesVented = 0x00000ab8,
+        StringNames__Enum_StatsTimesPettedPet = 0x00000ab9,
+        StringNames__Enum_StatsImpostorKills_HideAndSeek = 0x00000aba,
+        StringNames__Enum_StatsFastestCrewmateWin_HideAndSeek = 0x00000abb,
+        StringNames__Enum_StatsFastestImpostorWin_HideAndSeek = 0x00000abc,
+        StringNames__Enum_StatsHideAndSeekImpostorVictory = 0x00000abd,
+        StringNames__Enum_StatsHideAndSeekCrewmateVictory = 0x00000abe,
         StringNames__Enum_AmongUsFriends = 0x00000af0,
         StringNames__Enum_FriendsGuestWarning = 0x00000af1,
         StringNames__Enum_PlatformFriends = 0x00000af2,
@@ -7032,6 +7165,9 @@ namespace app
         StringNames__Enum_FriendListUnavailable = 0x00000b22,
         StringNames__Enum_SignInIssueTitle = 0x00000b23,
         StringNames__Enum_SignInIssueText = 0x00000b24,
+        StringNames__Enum_Ghost = 0x00000b25,
+        StringNames__Enum_CurrentlyHaunting = 0x00000b26,
+        StringNames__Enum_RestorePurchases = 0x00000b27,
         StringNames__Enum_QCAccIsRole = 0x00000bb8,
         StringNames__Enum_QCAccIsRoleNeg = 0x00000bb9,
         StringNames__Enum_QCAccShapeshited = 0x00000bba,
@@ -7090,6 +7226,24 @@ namespace app
         StringNames__Enum_ConfirmDeleteAccounts = 0x00000c88,
         StringNames__Enum_ConfirmDeleteAccountsEmpty = 0x00000c89,
         StringNames__Enum_AccountRequestDelete = 0x00000c8a,
+        StringNames__Enum_HasBeenKilled = 0x00000c8b,
+        StringNames__Enum_GameType = 0x00000dac,
+        StringNames__Enum_GameTypeError = 0x00000dad,
+        StringNames__Enum_GameTypeClassic = 0x00000dae,
+        StringNames__Enum_GameTypeHideAndSeek = 0x00000daf,
+        StringNames__Enum_PetAction = 0x00000db0,
+        StringNames__Enum_CreateLabel = 0x00000db1,
+        StringNames__Enum_TagFiltersTitle = 0x00000db2,
+        StringNames__Enum_TagFiltersHelpFindGame = 0x00000db3,
+        StringNames__Enum_TagFiltersHelpCreate = 0x00000db4,
+        StringNames__Enum_TagsFilteredSingular = 0x00000db5,
+        StringNames__Enum_TagsFilteredPlural = 0x00000db6,
+        StringNames__Enum_TagsAppliedSingular = 0x00000db7,
+        StringNames__Enum_TagsAppliedPlural = 0x00000db8,
+        StringNames__Enum_DefaultFilterTag_FirstTime = 0x00000db9,
+        StringNames__Enum_DefaultFilterTag_Casual = 0x00000dba,
+        StringNames__Enum_DefaultFilterTag_Serious = 0x00000dbb,
+        StringNames__Enum_DefaultFilterTag_Expert = 0x00000dbc,
     };
 
 #endif
@@ -7451,14 +7605,14 @@ namespace app
 #pragma endregion
 
 #pragma region AirshipStatus
-    struct AirshipStatus__Fields
-    {
+    struct AirshipStatus__Fields {
         struct ShipStatus__Fields _;
         void* Ladders;
         void* SpawnInGame;
         struct MovingPlatformBehaviour* GapPlatform;
         void* ShowerParticles;
         void* LightAffectors;
+        struct GameObject* outOfOrderPlat;
     };
 
     struct AirshipStatus
@@ -7704,25 +7858,27 @@ namespace app
 
 #pragma region RoleTypes__Enum
 #if defined(_CPLUSPLUS_)
-    enum class RoleTypes__Enum : uint16_t
-    {
+    enum class RoleTypes__Enum : uint16_t {
         Crewmate = 0x0000,
         Impostor = 0x0001,
         Scientist = 0x0002,
         Engineer = 0x0003,
         GuardianAngel = 0x0004,
         Shapeshifter = 0x0005,
+        CrewmateGhost = 0x0006,
+        ImpostorGhost = 0x0007,
     };
 
 #else
-    enum RoleTypes__Enum
-    {
+    enum RoleTypes__Enum {
         RoleTypes__Enum_Crewmate = 0x0000,
         RoleTypes__Enum_Impostor = 0x0001,
         RoleTypes__Enum_Scientist = 0x0002,
         RoleTypes__Enum_Engineer = 0x0003,
         RoleTypes__Enum_GuardianAngel = 0x0004,
         RoleTypes__Enum_Shapeshifter = 0x0005,
+        RoleTypes__Enum_CrewmateGhost = 0x0006,
+        RoleTypes__Enum_ImpostorGhost = 0x0007,
     };
 
 #endif
@@ -7765,8 +7921,7 @@ namespace app
 #pragma endregion
 
 #pragma region RoleBehaviour
-    struct RoleBehaviour__Fields
-    {
+    struct RoleBehaviour__Fields {
         struct MonoBehaviour__Fields _;
 #if defined(_CPLUSPLUS_)
         RoleTypes__Enum Role;
@@ -7806,9 +7961,15 @@ namespace app
         int32_t TeamType;
 #endif
         struct AbilityButtonSettings* Ability;
+#if defined(_CPLUSPLUS_)
+        RoleTypes__Enum DefaultGhostRole;
+#else
+        uint16_t DefaultGhostRole;
+#endif
         struct AudioClip* UseSound;
         struct AudioClip* IntroSound;
         struct PlayerControl* Player;
+        void* buttonManager;
     };
 
     struct RoleBehaviour
@@ -7823,6 +7984,8 @@ namespace app
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+        VirtualInvokeData __unknown;
+        VirtualInvokeData get_IsAffectedByComms;
         VirtualInvokeData CanUse;
         VirtualInvokeData DidWin;
         VirtualInvokeData Deinitialize;
@@ -7835,8 +7998,10 @@ namespace app
         VirtualInvokeData SetPlayerTarget;
         VirtualInvokeData SetCooldown;
         VirtualInvokeData IsValidTarget;
-        VirtualInvokeData __unknown;
+        VirtualInvokeData FindClosestTarget;
         VirtualInvokeData GetAbilityDistance;
+        VirtualInvokeData AdjustTasks;
+        VirtualInvokeData AppendTaskHint;
     };
 
     struct RoleBehaviour__StaticFields {
@@ -7854,6 +8019,18 @@ namespace app
     };
 #pragma endregion
 
+#pragma region Nullable_1_AmongUs_GameOptions_RoleTypes_
+    struct Nullable_1_AmongUs_GameOptions_RoleTypes_
+    {
+#if defined(_CPLUSPLUS_)
+        RoleTypes__Enum value;
+#else
+        uint16_t value;
+#endif
+        bool has_value;
+    };
+#pragma endregion
+
 #pragma region GameData_PlayerInfo
     struct __declspec(align(4)) GameData_PlayerInfo__Fields {
         uint8_t PlayerId;
@@ -7864,6 +8041,7 @@ namespace app
 #else
         uint16_t RoleType;
 #endif
+        struct Nullable_1_AmongUs_GameOptions_RoleTypes_ RoleWhenAlive;
         struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_* Outfits;
         uint32_t PlayerLevel;
         bool Disconnected;
@@ -7904,11 +8082,11 @@ namespace app
 #pragma endregion
 
 #pragma region MovingPlatformBehaviour
-    struct MovingPlatformBehaviour__Fields
-    {
+    struct MovingPlatformBehaviour__Fields {
         struct MonoBehaviour__Fields _;
         struct Vector3 LeftPosition;
         struct Vector3 RightPosition;
+        struct Vector3 DisabledPosition;
         struct Vector3 LeftUsePosition;
         struct Vector3 RightUsePosition;
         void* MovingSound;
@@ -7992,14 +8170,14 @@ namespace app
 
 #endif
 
-    struct Minigame__Fields
-    {
+    struct Minigame__Fields {
         struct MonoBehaviour__Fields _;
 #if defined(_CPLUSPLUS_)
         TransitionType__Enum TransType;
 #else
         int32_t TransType;
 #endif
+        struct Vector2 TargetPosition;
         void* MyTask;
         void* MyNormTask;
         void* _Console_k__BackingField;
@@ -8362,66 +8540,66 @@ namespace app
 #pragma endregion
 
 #pragma region List_1_RoleEffectAnimation_
-struct __declspec(align(4)) List_1_RoleEffectAnimation___Fields {
-    struct RoleEffectAnimation__Array *_items;
-    int32_t _size;
-    int32_t _version;
-    struct Object *_syncRoot;
-};
+    struct __declspec(align(4)) List_1_RoleEffectAnimation___Fields {
+        struct RoleEffectAnimation__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
 
-struct List_1_RoleEffectAnimation_ {
-    void *klass;
-    MonitorData *monitor;
-    struct List_1_RoleEffectAnimation___Fields fields;
-};
+    struct List_1_RoleEffectAnimation_ {
+        void* klass;
+        MonitorData* monitor;
+        struct List_1_RoleEffectAnimation___Fields fields;
+    };
 
 #if defined(_CPLUSPLUS_)
-enum class RoleEffectAnimation_EffectType__Enum : int32_t {
-    Default = 0x00000000,
-    ProtectLoop = 0x00000001,
-    Shapeshift = 0x00000002,
-};
+    enum class RoleEffectAnimation_EffectType__Enum : int32_t {
+        Default = 0x00000000,
+        ProtectLoop = 0x00000001,
+        Shapeshift = 0x00000002,
+    };
 
 #else
-enum RoleEffectAnimation_EffectType__Enum {
-    RoleEffectAnimation_EffectType__Enum_Default = 0x00000000,
-    RoleEffectAnimation_EffectType__Enum_ProtectLoop = 0x00000001,
-    RoleEffectAnimation_EffectType__Enum_Shapeshift = 0x00000002,
-};
+    enum RoleEffectAnimation_EffectType__Enum {
+        RoleEffectAnimation_EffectType__Enum_Default = 0x00000000,
+        RoleEffectAnimation_EffectType__Enum_ProtectLoop = 0x00000001,
+        RoleEffectAnimation_EffectType__Enum_Shapeshift = 0x00000002,
+    };
 
 #endif
 #pragma endregion
 
 #pragma region RoleEffectAnimation
-struct RoleEffectAnimation__Fields {
-    struct MonoBehaviour__Fields _;
+    struct RoleEffectAnimation__Fields {
+        struct MonoBehaviour__Fields _;
 #if defined(_CPLUSPLUS_)
-    RoleEffectAnimation_EffectType__Enum effectType;
+        RoleEffectAnimation_EffectType__Enum effectType;
 #else
-    int32_t effectType;
+        int32_t effectType;
 #endif
-    struct AnimationClip* Clip;
-    struct SpriteAnim* Animator;
-    struct Action* MidAnimCB;
-    struct SpriteRenderer* Renderer;
-    struct AudioClip* UseSound;
-    struct AudioSource* AudioSource;
-    struct PlayerControl* parent;
-};
+        struct AnimationClip* Clip;
+        struct SpriteAnim* Animator;
+        struct Action* MidAnimCB;
+        struct SpriteRenderer* Renderer;
+        struct AudioClip* UseSound;
+        struct AudioSource* AudioSource;
+        struct PlayerControl* parent;
+    };
 
-struct RoleEffectAnimation {
-    void* klass;
-    MonitorData* monitor;
-    struct RoleEffectAnimation__Fields fields;
-};
+    struct RoleEffectAnimation {
+        void* klass;
+        MonitorData* monitor;
+        struct RoleEffectAnimation__Fields fields;
+    };
 
-struct RoleEffectAnimation__Array {
-    void* klass;
-    MonitorData* monitor;
-    Il2CppArrayBounds* bounds;
-    il2cpp_array_size_t max_length;
-    struct RoleEffectAnimation* vector[32];
-};
+    struct RoleEffectAnimation__Array {
+        void* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct RoleEffectAnimation* vector[32];
+    };
 #pragma endregion
 
 #pragma region List_1_PlayerTask_
@@ -8532,10 +8710,9 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region FollowerCamera
-    struct FollowerCamera__Fields
-    {
+    struct FollowerCamera__Fields {
         struct MonoBehaviour__Fields _;
-        void* Target;
+        struct MonoBehaviour* Target;
         struct Vector2 Offset;
         bool Locked;
         float shakeAmount;
@@ -8633,8 +8810,7 @@ struct RoleEffectAnimation__Array {
         int32_t PoolIndex;
     };
 
-    struct ChatBubble__Fields
-    {
+    struct ChatBubble__Fields {
         struct PoolableBehavior__Fields _;
         void* Player; // struct PoolablePlayer
         struct SpriteRenderer* Xmark;
@@ -8644,6 +8820,7 @@ struct RoleEffectAnimation__Array {
         struct SpriteRenderer* Background;
         struct SpriteRenderer* MaskArea;
         void* PlatformIcon;
+        struct TextMeshPro* ColorBlindName;
         struct GameData_PlayerInfo* playerInfo;
         int32_t maskLayer;
     };
@@ -8749,6 +8926,38 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
+#pragma region PlayerMaterial
+#if defined(_CPLUSPLUS_)
+    enum class PlayerMaterial_MaskType__Enum : int32_t {
+        None = 0x00000000,
+        SimpleUI = 0x00000001,
+        ComplexUI = 0x00000002,
+        Exile = 0x00000003,
+        ScrollingUI = 0x00000004,
+    };
+
+#else
+    enum PlayerMaterial_MaskType__Enum {
+        PlayerMaterial_MaskType__Enum_None = 0x00000000,
+        PlayerMaterial_MaskType__Enum_SimpleUI = 0x00000001,
+        PlayerMaterial_MaskType__Enum_ComplexUI = 0x00000002,
+        PlayerMaterial_MaskType__Enum_Exile = 0x00000003,
+        PlayerMaterial_MaskType__Enum_ScrollingUI = 0x00000004,
+    };
+
+#endif
+
+    struct PlayerMaterial_Properties {
+#if defined(_CPLUSPLUS_)
+        PlayerMaterial_MaskType__Enum MaskType;
+#else
+        int32_t MaskType;
+#endif
+        int32_t MaskLayer;
+        int32_t ColorId;
+    };
+#pragma endregion
+
 #pragma region SkinLayer
 
     struct SkinLayer__Fields {
@@ -8756,6 +8965,7 @@ struct RoleEffectAnimation__Array {
         struct SpriteRenderer* layer;
         void* animator;
         void* skin;
+        struct PlayerMaterial_Properties matProperties;
     };
 
     struct SkinLayer {
@@ -8786,19 +8996,41 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region PlayerPhysics
+
+#if defined(_CPLUSPLUS_)
+    enum class PlayerBodyTypes__Enum : int32_t {
+        Normal = 0x00000000,
+        Horse = 0x00000001,
+        Seeker = 0x00000002,
+    };
+
+#else
+    enum PlayerBodyTypes__Enum {
+        PlayerBodyTypes__Enum_Normal = 0x00000000,
+        PlayerBodyTypes__Enum_Horse = 0x00000001,
+        PlayerBodyTypes__Enum_Seeker = 0x00000002,
+    };
+
+#endif
+
     struct PlayerPhysics__Fields {
         struct InnerNetObject__Fields _;
         uint8_t lastClimbLadderSid;
-        void* AnimationGroups;
-        void* CurrentAnimationGroup;
+        void* ImpostorDiscoveredSound;
+        void* Animations;
+        void* inputHandler;
         float Speed;
         float GhostSpeed;
+        void* logger;
         void* body;
         struct PlayerControl* myPlayer;
-        void* logger;
-        void* GlowAnimator;
-        void* ImpostorDiscoveredSound;
-        void* inputHandler;
+#if defined(_CPLUSPLUS_)
+        PlayerBodyTypes__Enum bodyType;
+#else
+        int32_t bodyType;
+#endif
+        void* petCoroutine;
+        bool _DoingCustomAnimation_k__BackingField;
     };
 
     struct PlayerPhysics {
@@ -8837,57 +9069,33 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
-#pragma region PlayerMaterial
-#if defined(_CPLUSPLUS_)
-    enum class PlayerMaterial_MaskType__Enum : int32_t {
-        None = 0x00000000,
-        SimpleUI = 0x00000001,
-        ComplexUI = 0x00000002,
-        Exile = 0x00000003,
-        ScrollingUI = 0x00000004,
-    };
-
-#else
-    enum PlayerMaterial_MaskType__Enum {
-        PlayerMaterial_MaskType__Enum_None = 0x00000000,
-        PlayerMaterial_MaskType__Enum_SimpleUI = 0x00000001,
-        PlayerMaterial_MaskType__Enum_ComplexUI = 0x00000002,
-        PlayerMaterial_MaskType__Enum_Exile = 0x00000003,
-        PlayerMaterial_MaskType__Enum_ScrollingUI = 0x00000004,
-    };
-
-#endif
-
-    struct PlayerMaterial_Properties {
-#if defined(_CPLUSPLUS_)
-        PlayerMaterial_MaskType__Enum MaskType;
-#else
-        int32_t MaskType;
-#endif
-        int32_t MaskLayer;
-        int32_t ColorId;
-    };
-#pragma endregion
-
 #pragma region CosmeticsLayer
     struct CosmeticsLayer__Fields {
         struct MonoBehaviour__Fields _;
         bool alwaysDrawNormalPlayer;
+        bool uiPet;
+        float zIndexSpacing;
+        bool showColorBlindText;
         void* bodySprites;
         struct TextMeshPro* colorBlindText;
         void* hat;
         struct TextMeshPro* nameText;
+        struct GameObject* nameTextContainer;
         struct Transform* petParent;
-        bool showColorBlindText;
         struct SkinLayer* skin;
-        bool uiPet;
         void* visor;
-        float zIndexSpacing;
+#if defined(_CPLUSPLUS_)
+        PlayerBodyTypes__Enum bodyType;
+#else
+        int32_t bodyType;
+#endif
         struct PlayerMaterial_Properties bodyMatProperties;
         void* currentBodySprite;
         struct PetBehaviour* currentPet;
-        bool initialized;
         void* normalBodySprite;
+        bool initialized;
+        bool visible;
+        bool isNameVisible;
         bool lockVisible;
     };
 
@@ -8935,7 +9143,10 @@ struct RoleEffectAnimation__Array {
         int32_t _CurrentOutfitType_k__BackingField;
 #endif
         bool inVent;
+        bool walkingToVent;
+        bool petting;
         bool inMovingPlat;
+        bool onLadder;
         bool protectedByGuardianThisRound;
         bool shapeshifting;
         struct GameData_PlayerInfo* _cachedData;
@@ -8947,23 +9158,21 @@ struct RoleEffectAnimation__Array {
         float killTimer;
         int32_t RemainingEmergencies;
         void* LightPrefab;
-        void* myLight;
+        void* lightSource;
         struct Collider2D* Collider;
         struct PlayerPhysics* MyPhysics;
         struct CustomNetworkTransform* NetTransform;
-        void* myAnim;
-        void* horseAnim;
+        struct Collider2D* clickKillCollider;
         struct List_1_PlayerTask_* myTasks;
         struct Vector3 defaultPlayerScale;
-        void* ScannerAnims;
-        struct SpriteRenderer__Array* ScannersImages;
         struct List_1_RoleEffectAnimation_* currentRoleAnimations;
+        struct GameObject* TargetFlashlight;
         bool isDummy;
         bool notRealPlayer;
+        void* logger;
         void* hitBuffer;
         void* closest;
         bool isNew;
-        void* logger;
         void* cache;
         void* itemsInRange;
         void* newItemsInRange;
@@ -8992,10 +9201,8 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData Deserialize;
     };
 
-    struct PlayerControl__StaticFields
-    {
+    struct PlayerControl__StaticFields {
         struct PlayerControl* LocalPlayer;
-        struct GameOptionsData* GameOptions;
         struct List_1_PlayerControl_* AllPlayerControls;
     };
 
@@ -9128,23 +9335,29 @@ struct RoleEffectAnimation__Array {
         void* SabotageButton;
         void* ImpostorVentButton;
         void* UseButton;
+        void* PetButton;
         void* AbilityButton;
         void* ReportButton;
         struct TextMeshPro* GameSettings;
         struct GameObject* TaskStuff;
+        struct TaskPanelBehaviour* TaskPanel;
+        struct CrewmatesKilledTracker* CrewmatesKilled;
         struct ChatController* Chat;
         void* Dialogue;
-        struct TextMeshPro* TaskText;
         struct Transform* TaskCompleteOverlay;
         float taskDirtyTimer;
         void* ShadowQuad;
         struct SpriteRenderer* FullScreen;
         void* _ReactorFlash_k__BackingField;
         void* _OxyFlash_k__BackingField;
-        struct SpriteRenderer* MapButton;
+        void* MapButton;
         void* KillOverlay;
         void* joystick;
+        void* joystickR;
         void* Joysticks;
+        struct MonoBehaviour* RightVJoystick;
+        struct Collider2D* LeftStickDeadZone;
+        struct Collider2D* RightStickDeadZone;
         void* discussEmblem;
         void* shhhEmblem;
         void* IntroPrefab;
@@ -9159,6 +9372,9 @@ struct RoleEffectAnimation__Array {
         struct GameObject* GameLoadAnimation;
         float consoleUIHorizontalShift;
         struct GameObject* playerListPrompt;
+        void* AlertFlash;
+        void* DangerMeter;
+        struct GameObject* SettingsButton;
         void* tasksString;
         void* lightFlashHandle;
         bool _IsIntroDisplayed_k__BackingField;
@@ -9282,13 +9498,13 @@ struct RoleEffectAnimation__Array {
         struct KeyboardJoystick__Fields fields;
     };
 
-    struct KeyboardJoystick__VTable
-    {
+    struct KeyboardJoystick__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
-        VirtualInvokeData get_Delta;
+        VirtualInvokeData get_DeltaL;
+        VirtualInvokeData get_DeltaR;
         VirtualInvokeData ToggleVisuals;
     };
 
@@ -9325,13 +9541,13 @@ struct RoleEffectAnimation__Array {
         struct ScreenJoystick__Fields fields;
     };
 
-    struct ScreenJoystick__VTable
-    {
+    struct ScreenJoystick__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
-        VirtualInvokeData get_Delta;
+        VirtualInvokeData get_DeltaL;
+        VirtualInvokeData get_DeltaR;
         VirtualInvokeData ToggleVisuals;
     };
 
@@ -9398,6 +9614,9 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+    };
+
+    struct VoteSpreader__StaticFields {
     };
 
     struct VoteSpreader__Class {
@@ -9518,14 +9737,12 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region CustomNetworkTransform
-    struct CustomNetworkTransform__Fields
-    {
+    struct CustomNetworkTransform__Fields {
         struct InnerNetObject__Fields _;
-        void* XRange;
-        void* YRange;
         float sendInterval;
         float snapThreshold;
         float interpolateMovement;
+        struct PlayerControl* myPlayer;
         void* body;
         struct Vector2 targetSyncPosition;
         struct Vector2 targetSyncVelocity;
@@ -9733,19 +9950,33 @@ struct RoleEffectAnimation__Array {
 #endif
 
 #if defined(_CPLUSPLUS_)
-    enum class GameModes__Enum : int32_t
-    {
+    enum class GameModes__Enum : uint8_t {
+        None = 0x00,
+        Normal = 0x01,
+        HideNSeek = 0x02,
+    };
+
+#else
+    enum GameModes__Enum {
+        GameModes__Enum_None = 0x00,
+        GameModes__Enum_Normal = 0x01,
+        GameModes__Enum_HideNSeek = 0x02,
+    };
+
+#endif
+
+#if defined(_CPLUSPLUS_)
+    enum class NetworkModes__Enum : int32_t {
         LocalGame = 0x00000000,
         OnlineGame = 0x00000001,
         FreePlay = 0x00000002,
     };
 
 #else
-    enum GameModes__Enum
-    {
-        GameModes__Enum_LocalGame = 0x00000000,
-        GameModes__Enum_OnlineGame = 0x00000001,
-        GameModes__Enum_FreePlay = 0x00000002,
+    enum NetworkModes__Enum {
+        NetworkModes__Enum_LocalGame = 0x00000000,
+        NetworkModes__Enum_OnlineGame = 0x00000001,
+        NetworkModes__Enum_FreePlay = 0x00000002,
     };
 
 #endif
@@ -9770,8 +10001,7 @@ struct RoleEffectAnimation__Array {
 
 #endif
 
-    struct InnerNetClient__Fields
-    {
+    struct InnerNetClient__Fields {
         struct MonoBehaviour__Fields _;
         float MinSendInterval;
         uint32_t NetIdCnt;
@@ -9784,6 +10014,7 @@ struct RoleEffectAnimation__Array {
         void* allObjectsFast;
         void* Streams;
         int32_t msgNum;
+        void* serverLogger;
         struct String* networkAddress;
         int32_t networkPort;
         bool useDtls;
@@ -9794,9 +10025,9 @@ struct RoleEffectAnimation__Array {
         int32_t mode;
 #endif
 #if defined(_CPLUSPLUS_)
-        GameModes__Enum GameMode;
+        NetworkModes__Enum NetworkMode;
 #else
-        int32_t GameMode;
+        int32_t NetworkMode;
 #endif
         int32_t GameId;
         int32_t HostId;
@@ -9813,6 +10044,7 @@ struct RoleEffectAnimation__Array {
         void* LastMatchmakerError;
         void* PreSpawnDispatcher;
         void* Dispatcher;
+        void* gameOptionsFactory;
         bool _IsGamePublic_k__BackingField;
 #if defined(_CPLUSPLUS_)
         InnerNetClient_GameStates__Enum GameState;
@@ -10400,14 +10632,13 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region DeadBody
-    struct DeadBody__Fields
-    {
+    struct DeadBody__Fields {
         struct MonoBehaviour__Fields _;
         bool Reported;
         uint8_t ParentId;
-        void* myCollider;
-        void* bloodSplatter;
-        void* bodyRenderer;
+        struct Collider2D* myCollider;
+        struct SpriteRenderer* bloodSplatter;
+        struct SpriteRenderer* bodyRenderer;
     };
 
     struct DeadBody
@@ -10577,8 +10808,7 @@ struct RoleEffectAnimation__Array {
         MonitorData* monitor;
         struct CosmeticData__Fields fields;
     };
-    struct CosmeticData__VTable
-    {
+    struct CosmeticData__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -10591,6 +10821,7 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData PreviewOnPlayer;
         VirtualInvokeData GetItemCategory;
         VirtualInvokeData SetProdId;
+        VirtualInvokeData CoLoadIcon;
     };
 
     struct CosmeticData__StaticFields
@@ -10660,11 +10891,11 @@ struct RoleEffectAnimation__Array {
 #pragma region HatData__Array
 
     struct HatData__Array {
-    struct HatData__Array__Class* klass;
-    MonitorData* monitor;
-    Il2CppArrayBounds* bounds;
-    il2cpp_array_size_t max_length;
-    struct HatData* vector[32];
+        struct HatData__Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct HatData* vector[32];
     };
 
     struct HatData__Array__VTable {
@@ -10694,9 +10925,9 @@ struct RoleEffectAnimation__Array {
     };
 
     struct List_1_HatData_ {
-    struct List_1_HatData___Class* klass;
-    MonitorData* monitor;
-    struct List_1_HatData___Fields fields;
+        struct List_1_HatData___Class* klass;
+        MonitorData* monitor;
+        struct List_1_HatData___Fields fields;
     };
 
     struct List_1_HatData___VTable {
@@ -10851,10 +11082,13 @@ struct RoleEffectAnimation__Array {
         void* shadowRend;
         void* body;
         struct Collider2D* Collider;
+        struct Transform* PettingHandPosition;
         void* idleClip;
         void* sadClip;
         void* scaredClip;
         void* walkClip;
+        void* petClip;
+        bool beingPet;
     };
 
     struct PetBehaviour {
@@ -11047,98 +11281,91 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
-#pragma region GameOptionsDataParent
-    struct __declspec(align(4)) GameOptionsDataParent__Fields {
-        float playerSpeedMod;
-        int32_t killDistance;
-        float killCooldown;
-        int32_t numCommonTasks;
-        int32_t numLongTasks;
-        int32_t numShortTasks;
-        int32_t numImpostors;
-        bool isDefaults;
-    };
-
-    struct GameOptionsDataParent {
-        struct GameOptionsDataParent__Class* klass;
+#pragma region IRoleOptionsCollection
+    struct IRoleOptionsCollection {
+        struct IRoleOptionsCollection__Class* klass;
         MonitorData* monitor;
-        struct GameOptionsDataParent__Fields fields;
     };
 
-    struct GameOptionsDataParent__VTable {
+    struct IRoleOptionsCollection__VTable {
+        VirtualInvokeData GetNumPerGame;
+        VirtualInvokeData GetChancePerGame;
+        VirtualInvokeData SetRoleRate;
+        VirtualInvokeData SetRoleRecommended;
+    };
+
+    struct IRoleOptionsCollection__StaticFields {
+    };
+
+    struct IRoleOptionsCollection__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct IRoleOptionsCollection__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct IRoleOptionsCollection__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region LogicOptions
+    struct LogicOptions {
+        struct LogicOptions__Class* klass;
+        MonitorData* monitor;
+        //struct LogicOptions__Fields fields;
+    };
+
+    struct LogicOptions__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+        VirtualInvokeData __unknown;
+        VirtualInvokeData __unknown_1;
+        VirtualInvokeData __unknown_2;
+        VirtualInvokeData __unknown_3;
+        VirtualInvokeData OnPlayerDisconnect;
+        VirtualInvokeData HandleRPC;
+        VirtualInvokeData Serialize;
+        VirtualInvokeData Deserialize;
+        VirtualInvokeData __unknown_4;
+        VirtualInvokeData GetAdjustedNumImpostors;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData __unknown_5;
+        VirtualInvokeData GetGhostsDoTasks;
+        VirtualInvokeData GetEngineerCooldown;
+        VirtualInvokeData GetEngineerInVentTime;
+        VirtualInvokeData GetGuardianAngelCooldown;
+        VirtualInvokeData GetShapeshifterDuration;
+        VirtualInvokeData GetShapeshifterCooldown;
+        VirtualInvokeData GetShapeshifterLeaveSkin;
+        VirtualInvokeData GetScientistCooldown;
+        VirtualInvokeData GetScientistBatteryCharge;
+        VirtualInvokeData GetKillCooldown;
+        VirtualInvokeData GetKillDistance;
+        VirtualInvokeData GetPlayerSpeedMod;
+        VirtualInvokeData GetConfirmImpostor;
+        VirtualInvokeData GetEmergencyCooldown;
+        VirtualInvokeData GetNumEmergencyMeetings;
+        VirtualInvokeData GetVisualTasks;
+        VirtualInvokeData GetAnonymousVotes;
+        VirtualInvokeData GetTaskBarMode;
+        VirtualInvokeData GetShowCrewmateNames;
     };
 
-    struct GameOptionsDataParent__StaticFields {
+    struct LogicOptions__StaticFields {
     };
 
-    struct GameOptionsDataParent__Class {
+    struct LogicOptions__Class {
         Il2CppClass_0 _0;
         Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct GameOptionsDataParent__StaticFields* static_fields;
+        struct LogicOptions__StaticFields* static_fields;
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
-        struct GameOptionsDataParent__VTable vtable;
+        struct LogicOptions__VTable vtable;
     };
-
 #pragma endregion
 
-#pragma region GameOptionsData
-
-#if defined(_CPLUSPLUS_)
-    enum class GameKeywords__Enum : uint32_t
-    {
-        All = 0x00000000,
-        English = 0x00000100,
-        SpanishLA = 0x00000002,
-        Brazilian = 0x00000800,
-        Portuguese = 0x00000010,
-        Korean = 0x00000004,
-        Russian = 0x00000008,
-        Dutch = 0x00001000,
-        Filipino = 0x00000040,
-        French = 0x00002000,
-        German = 0x00004000,
-        Italian = 0x00008000,
-        Japanese = 0x00000200,
-        SpanishEU = 0x00000400,
-        Arabic = 0x00000020,
-        Polish = 0x00000080,
-        SChinese = 0x00010000,
-        TChinese = 0x00020000,
-        Irish = 0x00040000,
-        Other = 0x00000001,
-    };
-
-#else
-    enum GameKeywords__Enum
-    {
-        GameKeywords__Enum_All = 0x00000000,
-        GameKeywords__Enum_English = 0x00000100,
-        GameKeywords__Enum_SpanishLA = 0x00000002,
-        GameKeywords__Enum_Brazilian = 0x00000800,
-        GameKeywords__Enum_Portuguese = 0x00000010,
-        GameKeywords__Enum_Korean = 0x00000004,
-        GameKeywords__Enum_Russian = 0x00000008,
-        GameKeywords__Enum_Dutch = 0x00001000,
-        GameKeywords__Enum_Filipino = 0x00000040,
-        GameKeywords__Enum_French = 0x00002000,
-        GameKeywords__Enum_German = 0x00004000,
-        GameKeywords__Enum_Italian = 0x00008000,
-        GameKeywords__Enum_Japanese = 0x00000200,
-        GameKeywords__Enum_SpanishEU = 0x00000400,
-        GameKeywords__Enum_Arabic = 0x00000020,
-        GameKeywords__Enum_Polish = 0x00000080,
-        GameKeywords__Enum_SChinese = 0x00010000,
-        GameKeywords__Enum_TChinese = 0x00020000,
-        GameKeywords__Enum_Irish = 0x00040000,
-        GameKeywords__Enum_Other = 0x00000001,
-    };
-
-#endif
+#pragma region IGameOptions
 
 #if defined(_CPLUSPLUS_)
     enum class TaskBarMode__Enum : int32_t
@@ -11159,86 +11386,243 @@ struct RoleEffectAnimation__Array {
 #endif
 
 #if defined(_CPLUSPLUS_)
-    enum class GameType__Enum : int32_t {
-        Normal = 0x00000000,
+    enum class ByteOptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        MapId = 0x00000001,
     };
 
 #else
-    enum GameType__Enum {
-        GameType__Enum_Normal = 0x00000000,
+    enum ByteOptionNames__Enum {
+        ByteOptionNames__Enum_Invalid = 0x00000000,
+        ByteOptionNames__Enum_MapId = 0x00000001,
     };
 
 #endif
 
-    struct GameOptionsData__Fields
-    {
-        struct GameOptionsDataParent__Fields _;
-        int32_t MaxPlayers;
 #if defined(_CPLUSPLUS_)
-        GameKeywords__Enum Keywords;
+    enum class FloatOptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        KillCooldown = 0x00000001,
+        PlayerSpeedMod = 0x00000002,
+        ImpostorLightMod = 0x00000003,
+        CrewLightMod = 0x00000004,
+        CrewmateTimeInVent = 0x00000064,
+        FinalEscapeTime = 0x00000065,
+        EscapeTime = 0x00000066,
+        SeekerFinalSpeed = 0x00000067,
+        MaxPingTime = 0x00000068,
+        CrewmateFlashlightSize = 0x00000069,
+        ImpostorFlashlightSize = 0x0000006a,
+        ShapeshifterCooldown = 0x000003e8,
+        ShapeshifterDuration = 0x000003e9,
+        ProtectionDurationSeconds = 0x0000044c,
+        GuardianAngelCooldown = 0x0000044d,
+        ScientistCooldown = 0x000004b0,
+        ScientistBatteryCharge = 0x000004b1,
+        EngineerCooldown = 0x00000514,
+        EngineerInVentMaxTime = 0x00000515,
+    };
+
 #else
-        uint32_t Keywords;
+    enum FloatOptionNames__Enum {
+        FloatOptionNames__Enum_Invalid = 0x00000000,
+        FloatOptionNames__Enum_KillCooldown = 0x00000001,
+        FloatOptionNames__Enum_PlayerSpeedMod = 0x00000002,
+        FloatOptionNames__Enum_ImpostorLightMod = 0x00000003,
+        FloatOptionNames__Enum_CrewLightMod = 0x00000004,
+        FloatOptionNames__Enum_CrewmateTimeInVent = 0x00000064,
+        FloatOptionNames__Enum_FinalEscapeTime = 0x00000065,
+        FloatOptionNames__Enum_EscapeTime = 0x00000066,
+        FloatOptionNames__Enum_SeekerFinalSpeed = 0x00000067,
+        FloatOptionNames__Enum_MaxPingTime = 0x00000068,
+        FloatOptionNames__Enum_CrewmateFlashlightSize = 0x00000069,
+        FloatOptionNames__Enum_ImpostorFlashlightSize = 0x0000006a,
+        FloatOptionNames__Enum_ShapeshifterCooldown = 0x000003e8,
+        FloatOptionNames__Enum_ShapeshifterDuration = 0x000003e9,
+        FloatOptionNames__Enum_ProtectionDurationSeconds = 0x0000044c,
+        FloatOptionNames__Enum_GuardianAngelCooldown = 0x0000044d,
+        FloatOptionNames__Enum_ScientistCooldown = 0x000004b0,
+        FloatOptionNames__Enum_ScientistBatteryCharge = 0x000004b1,
+        FloatOptionNames__Enum_EngineerCooldown = 0x00000514,
+        FloatOptionNames__Enum_EngineerInVentMaxTime = 0x00000515,
+    };
+
 #endif
-        uint8_t MapId;
-        int32_t NumEmergencyMeetings;
-        int32_t EmergencyCooldown;
-        bool ghostsDoTasks;
-        int32_t DiscussionTime;
-        int32_t VotingTime;
-        float CrewLightMod;
-        float ImpostorLightMod;
-        bool ConfirmImpostor;
-        bool VisualTasks;
-        bool AnonymousVotes;
+
 #if defined(_CPLUSPLUS_)
-        TaskBarMode__Enum TaskBarMode;
+    enum class BoolOptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        VisualTasks = 0x00000001,
+        GhostsDoTasks = 0x00000002,
+        ConfirmImpostor = 0x00000003,
+        AnonymousVotes = 0x00000004,
+        IsDefaults = 0x00000005,
+        UseFlashlight = 0x00000006,
+        SeekerFinalVents = 0x00000007,
+        SeekerFinalMap = 0x00000008,
+        SeekerPings = 0x00000009,
+        ShowCrewmateNames = 0x0000000a,
+        ShapeshifterLeaveSkin = 0x000003e8,
+        ImpostorsCanSeeProtect = 0x0000044c,
+    };
+
 #else
-        int32_t TaskBarMode;
+    enum BoolOptionNames__Enum {
+        BoolOptionNames__Enum_Invalid = 0x00000000,
+        BoolOptionNames__Enum_VisualTasks = 0x00000001,
+        BoolOptionNames__Enum_GhostsDoTasks = 0x00000002,
+        BoolOptionNames__Enum_ConfirmImpostor = 0x00000003,
+        BoolOptionNames__Enum_AnonymousVotes = 0x00000004,
+        BoolOptionNames__Enum_IsDefaults = 0x00000005,
+        BoolOptionNames__Enum_UseFlashlight = 0x00000006,
+        BoolOptionNames__Enum_SeekerFinalVents = 0x00000007,
+        BoolOptionNames__Enum_SeekerFinalMap = 0x00000008,
+        BoolOptionNames__Enum_SeekerPings = 0x00000009,
+        BoolOptionNames__Enum_ShowCrewmateNames = 0x0000000a,
+        BoolOptionNames__Enum_ShapeshifterLeaveSkin = 0x000003e8,
+        BoolOptionNames__Enum_ImpostorsCanSeeProtect = 0x0000044c,
+    };
+
 #endif
-        struct RoleOptionsData* RoleOptions;
+
 #if defined(_CPLUSPLUS_)
-        GameType__Enum gameType;
+    enum class Int32OptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        NumImpostors = 0x00000001,
+        KillDistance = 0x00000002,
+        NumEmergencyMeetings = 0x00000003,
+        EmergencyCooldown = 0x00000004,
+        DiscussionTime = 0x00000005,
+        VotingTime = 0x00000006,
+        MaxImpostors = 0x00000007,
+        MinPlayers = 0x00000008,
+        MaxPlayers = 0x00000009,
+        NumCommonTasks = 0x0000000a,
+        NumShortTasks = 0x0000000b,
+        NumLongTasks = 0x0000000c,
+        TaskBarMode = 0x0000000d,
+        CrewmatesRemainingForVitals = 0x00000064,
+        CrewmateVentUses = 0x00000065,
+        ImpostorPlayerID = 0x00000066,
+    };
+
 #else
-        int32_t gameType;
+    enum Int32OptionNames__Enum {
+        Int32OptionNames__Enum_Invalid = 0x00000000,
+        Int32OptionNames__Enum_NumImpostors = 0x00000001,
+        Int32OptionNames__Enum_KillDistance = 0x00000002,
+        Int32OptionNames__Enum_NumEmergencyMeetings = 0x00000003,
+        Int32OptionNames__Enum_EmergencyCooldown = 0x00000004,
+        Int32OptionNames__Enum_DiscussionTime = 0x00000005,
+        Int32OptionNames__Enum_VotingTime = 0x00000006,
+        Int32OptionNames__Enum_MaxImpostors = 0x00000007,
+        Int32OptionNames__Enum_MinPlayers = 0x00000008,
+        Int32OptionNames__Enum_MaxPlayers = 0x00000009,
+        Int32OptionNames__Enum_NumCommonTasks = 0x0000000a,
+        Int32OptionNames__Enum_NumShortTasks = 0x0000000b,
+        Int32OptionNames__Enum_NumLongTasks = 0x0000000c,
+        Int32OptionNames__Enum_TaskBarMode = 0x0000000d,
+        Int32OptionNames__Enum_CrewmatesRemainingForVitals = 0x00000064,
+        Int32OptionNames__Enum_CrewmateVentUses = 0x00000065,
+        Int32OptionNames__Enum_ImpostorPlayerID = 0x00000066,
+    };
+
 #endif
-        void* settings;
+
+#if defined(_CPLUSPLUS_)
+    enum class UInt32OptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        Keywords = 0x00000001,
     };
 
-    struct GameOptionsData
-    {
-        struct GameOptionsData__Class* klass;
-        void* monitor;
-        struct GameOptionsData__Fields fields;
+#else
+    enum UInt32OptionNames__Enum {
+        UInt32OptionNames__Enum_Invalid = 0x00000000,
+        UInt32OptionNames__Enum_Keywords = 0x00000001,
     };
 
-    struct GameOptionsData__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
+#endif
+
+#if defined(_CPLUSPLUS_)
+    enum class Int32ArrayOptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        MaxImpostors = 0x00000001,
+        MinPlayers = 0x00000002,
     };
 
-    struct GameOptionsData__StaticFields
-    {
-        void* KillDistances;
-        void* KillDistanceStrings;
-        void* RecommendedKillCooldown;
-        void* RecommendedImpostors;
-        void* MaxImpostors;
-        void* MinPlayers;
+#else
+    enum Int32ArrayOptionNames__Enum {
+        Int32ArrayOptionNames__Enum_Invalid = 0x00000000,
+        Int32ArrayOptionNames__Enum_MaxImpostors = 0x00000001,
+        Int32ArrayOptionNames__Enum_MinPlayers = 0x00000002,
     };
 
-    struct GameOptionsData__Class
-    {
+#endif
+
+#if defined(_CPLUSPLUS_)
+    enum class FloatArrayOptionNames__Enum : int32_t {
+        Invalid = 0x00000000,
+        KillDistances = 0x00000001,
+    };
+
+#else
+    enum FloatArrayOptionNames__Enum {
+        FloatArrayOptionNames__Enum_Invalid = 0x00000000,
+        FloatArrayOptionNames__Enum_KillDistances = 0x00000001,
+    };
+
+#endif
+
+    struct IGameOptions {
+        struct IGameOptions__Class* klass;
+        MonitorData* monitor;
+    };
+
+    struct IGameOptions__VTable {
+        VirtualInvokeData get_Version;
+        VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_MaxPlayers;
+        VirtualInvokeData get_Keywords;
+        VirtualInvokeData get_MapId;
+        VirtualInvokeData get_NumImpostors;
+        VirtualInvokeData get_TotalTaskCount;
+        VirtualInvokeData get_IsDefaults;
+        VirtualInvokeData get_RoleOptions;
+        VirtualInvokeData AreInvalid;
+        VirtualInvokeData SetRecommendations;
+        VirtualInvokeData SetByte;
+        VirtualInvokeData SetFloat;
+        VirtualInvokeData SetBool;
+        VirtualInvokeData SetInt;
+        VirtualInvokeData SetUInt;
+        VirtualInvokeData GetByte;
+        VirtualInvokeData GetFloat;
+        VirtualInvokeData GetBool;
+        VirtualInvokeData GetInt;
+        VirtualInvokeData GetIntArray;
+        VirtualInvokeData GetFloatArray;
+        VirtualInvokeData TryGetByte;
+        VirtualInvokeData TryGetFloat;
+        VirtualInvokeData TryGetBool;
+        VirtualInvokeData TryGetInt;
+        VirtualInvokeData TryGetIntArray;
+        VirtualInvokeData TryGetFloatArray;
+    };
+
+    struct IGameOptions__StaticFields {
+    };
+
+    struct IGameOptions__Class {
         Il2CppClass_0 _0;
         Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct GameOptionsData__StaticFields* static_fields;
+        struct IGameOptions__StaticFields* static_fields;
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
-        struct GameOptionsData__VTable vtable;
+        struct IGameOptions__VTable vtable;
     };
+
 #pragma endregion
+
 
 #pragma region List_1_GameData_PlayerInfo_
     struct __declspec(align(4)) List_1_GameData_PlayerInfo___Fields
@@ -11319,315 +11703,6 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
-#pragma region RoleOptionsData
-    struct __declspec(align(4)) RoleOptionsData__Fields
-    {
-        bool ShapeshifterLeaveSkin;
-        float ShapeshifterCooldown;
-        float ShapeshifterDuration;
-        float ScientistCooldown;
-        float ScientistBatteryCharge;
-        float GuardianAngelCooldown;
-        bool ImpostorsCanSeeProtect;
-        float ProtectionDurationSeconds;
-        float EngineerCooldown;
-        float EngineerInVentMaxTime;
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate_* roleRates;
-    };
-
-    struct RoleOptionsData
-    {
-        struct RoleOptionsData__Class* klass;
-        void* monitor;
-        struct RoleOptionsData__Fields fields;
-    };
-
-    struct RoleOptionsData__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct IEqualityComparer_1_RoleTypes_
-    {
-        struct IEqualityComparer_1_RoleTypes___Class* klass;
-        MonitorData* monitor;
-    };
-
-    struct IEqualityComparer_1_RoleTypes___StaticFields
-    {
-    };
-
-    struct IEqualityComparer_1_RoleTypes___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData GetHashCode;
-    };
-
-    struct IEqualityComparer_1_RoleTypes___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct IEqualityComparer_1_RoleTypes___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct IEqualityComparer_1_RoleTypes___VTable vtable;
-    };
-
-    struct __declspec(align(4)) Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___Fields
-    {
-        struct Int32__Array* buckets;
-        struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array* entries;
-        int32_t count;
-        int32_t version;
-        int32_t freeList;
-        int32_t freeCount;
-        struct IEqualityComparer_1_RoleTypes_* comparer;
-        struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate_* keys;
-        struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate_* values;
-        struct Object* _syncRoot;
-    };
-
-    struct __declspec(align(4)) Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___Fields
-    {
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate_* dictionary;
-    };
-
-    struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate_
-    {
-        struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___Class* klass;
-        MonitorData* monitor;
-        struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___Fields fields;
-    };
-
-    struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_TValue__get_IsReadOnly;
-        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Add;
-        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Clear;
-        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData System_Collections_Generic_ICollection_TValue__Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_TValue__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___StaticFields
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_TKey_TValue_ValueCollection_RoleTypes_RoleOptionsData_RoleRate___VTable vtable;
-    };
-
-    struct __declspec(align(4)) Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___Fields
-    {
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate_* dictionary;
-    };
-
-    struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate_
-    {
-        struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___Class* klass;
-        MonitorData* monitor;
-        struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___Fields fields;
-    };
-
-    struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_TKey__get_IsReadOnly;
-        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Add;
-        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Clear;
-        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData System_Collections_Generic_ICollection_TKey__Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_TKey__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___StaticFields
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_TKey_TValue_KeyCollection_RoleTypes_RoleOptionsData_RoleRate___VTable vtable;
-    };
-
-    struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate_
-    {
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___Class* klass;
-        MonitorData* monitor;
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___Fields fields;
-    };
-
-    struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Keys;
-        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Values;
-        VirtualInvokeData ContainsKey;
-        VirtualInvokeData Add;
-        VirtualInvokeData Remove;
-        VirtualInvokeData TryGetValue;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___get_IsReadOnly;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Contains;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___CopyTo;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_TKey_TValue___GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IDictionary_get_Item;
-        VirtualInvokeData System_Collections_IDictionary_set_Item;
-        VirtualInvokeData System_Collections_IDictionary_get_Keys;
-        VirtualInvokeData System_Collections_IDictionary_get_Values;
-        VirtualInvokeData System_Collections_IDictionary_Contains;
-        VirtualInvokeData System_Collections_IDictionary_Add;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IDictionary_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IDictionary_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IDictionary_GetEnumerator;
-        VirtualInvokeData System_Collections_IDictionary_Remove;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData ContainsKey_1;
-        VirtualInvokeData TryGetValue_1;
-        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
-        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
-        VirtualInvokeData get_Count_2;
-        VirtualInvokeData GetObjectData;
-        VirtualInvokeData OnDeserialization;
-        VirtualInvokeData GetObjectData_1;
-        VirtualInvokeData OnDeserialization_1;
-    };
-
-    struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___VTable vtable;
-    };
-
-    struct Dictionary_2_RoleTypes_RoleOptionsData_RoleRate___StaticFields
-    {
-    };
-
-    struct RoleOptionsData_RoleRate
-    {
-        int32_t MaxCount;
-        int32_t Chance;
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate_
-    {
-        int32_t hashCode;
-        int32_t next;
-#if defined(_CPLUSPLUS_)
-        RoleTypes__Enum key;
-#else
-        uint16_t key;
-#endif
-        struct RoleOptionsData_RoleRate value;
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array
-    {
-        struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__Class* klass;
-        MonitorData* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate_ vector[32];
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__VTable
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__VTable vtable;
-    };
-
-    struct RoleOptionsData__StaticFields
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_RoleTypes_RoleOptionsData_RoleRate___Array__StaticFields
-    {
-    };
-
-    struct RoleOptionsData__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct RoleOptionsData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct RoleOptionsData__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region Nullable_1_RoleTypes_
-    struct Nullable_1_RoleTypes_
-    {
-#if defined(_CPLUSPLUS_)
-        RoleTypes__Enum value;
-#else
-        uint16_t value;
-#endif
-        bool has_value;
-    };
-#pragma endregion
-
 #pragma region RoleTypes__Enum__Array
     struct RoleTypes__Enum__Array
     {
@@ -11657,23 +11732,20 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region List_1_RoleTypes_
-    struct __declspec(align(4)) List_1_RoleTypes___Fields
-    {
+    struct __declspec(align(4)) List_1_AmongUs_GameOptions_RoleTypes___Fields {
         struct RoleTypes__Enum__Array* _items;
         int32_t _size;
         int32_t _version;
         struct Object* _syncRoot;
     };
 
-    struct List_1_RoleTypes_
-    {
-        struct List_1_RoleTypes___Class* klass;
-        void* monitor;
-        struct List_1_RoleTypes___Fields fields;
+    struct List_1_AmongUs_GameOptions_RoleTypes_ {
+        struct List_1_AmongUs_GameOptions_RoleTypes___Class* klass;
+        MonitorData* monitor;
+        struct List_1_AmongUs_GameOptions_RoleTypes___Fields fields;
     };
 
-    struct List_1_RoleTypes___VTable
-    {
+    struct List_1_AmongUs_GameOptions_RoleTypes___VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -11711,19 +11783,17 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData get_Count_2;
     };
 
-    struct List_1_RoleTypes___StaticFields
-    {
+    struct List_1_AmongUs_GameOptions_RoleTypes___StaticFields {
         struct RoleTypes__Enum__Array* _emptyArray;
     };
 
-    struct List_1_RoleTypes___Class
-    {
+    struct List_1_AmongUs_GameOptions_RoleTypes___Class {
         Il2CppClass_0 _0;
         Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct List_1_RoleTypes___StaticFields* static_fields;
+        struct List_1_AmongUs_GameOptions_RoleTypes___StaticFields* static_fields;
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
-        struct List_1_RoleTypes___VTable vtable;
+        struct List_1_AmongUs_GameOptions_RoleTypes___VTable vtable;
     };
 #pragma endregion
 
@@ -11802,8 +11872,7 @@ struct RoleEffectAnimation__Array {
         struct MonoBehaviour__Fields _;
     };
 
-    struct PlainDoor__Fields
-    {
+    struct PlainDoor__Fields {
         struct SomeKindaDoor__Fields _;
 #if defined(_CPLUSPLUS_)
         SystemTypes__Enum Room;
@@ -11813,6 +11882,7 @@ struct RoleEffectAnimation__Array {
         int32_t Id;
         bool Open;
         void* myCollider;
+        struct Collider2D* shadowCollider;
         void* animator;
         void* OpenDoorAnim;
         void* CloseDoorAnim;
@@ -11898,8 +11968,7 @@ struct RoleEffectAnimation__Array {
 #pragma endregion
 
 #pragma region Vent
-    struct Vent__Fields
-    {
+    struct Vent__Fields {
         struct MonoBehaviour__Fields _;
         int32_t Id;
         struct Vent* Left;
@@ -11912,7 +11981,7 @@ struct RoleEffectAnimation__Array {
         struct Vector3 Offset;
         float spreadAmount;
         float spreadShift;
-        void* myRend;
+        struct SpriteRenderer* myRend;
     };
 
     struct Vent
@@ -11957,6 +12026,8 @@ struct RoleEffectAnimation__Array {
     struct __declspec(align(4)) StatsManager_Stats__Fields {
         float banPoints;
         int64_t lastGameStarted;
+        float FastestCrewmateWin_HideAndSeek;
+        float FastestImpostorWin_HideAndSeek;
         void* gameplayStats;
         void* winReasons;
         void* loseReasons;
@@ -12288,6 +12359,8 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
+        VirtualInvokeData get_IsDead;
+        VirtualInvokeData get_IsAffectedByComms;
         VirtualInvokeData CanUse;
         VirtualInvokeData DidWin;
         VirtualInvokeData Deinitialize;
@@ -12302,6 +12375,8 @@ struct RoleEffectAnimation__Array {
         VirtualInvokeData IsValidTarget;
         VirtualInvokeData FindClosestTarget;
         VirtualInvokeData GetAbilityDistance;
+        VirtualInvokeData AdjustTasks;
+        VirtualInvokeData AppendTaskHint;
     };
 
     struct EngineerRole__StaticFields
@@ -12504,8 +12579,97 @@ struct RoleEffectAnimation__Array {
     };
 #pragma endregion
 
+#pragma region AchievementManager
+    struct GameModes__Enum__Array {
+        void* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        GameModes__Enum vector[32];
+    };
+
+    struct __declspec(align(4)) List_1_AmongUs_GameOptions_GameModes___Fields {
+        struct GameModes__Enum__Array* _items;
+        int32_t _size;
+        int32_t _version;
+        struct Object* _syncRoot;
+    };
+
+    struct List_1_AmongUs_GameOptions_GameModes_ {
+        void* klass;
+        MonitorData* monitor;
+        struct List_1_AmongUs_GameOptions_GameModes___Fields fields;
+    };
+
+    struct __declspec(align(4)) Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes___Fields {
+        struct Int32__Array* buckets;
+        struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes___Array* entries;
+        int32_t count;
+        int32_t version;
+        int32_t freeList;
+        int32_t freeCount;
+        void* comparer;
+        void* keys;
+        void* values;
+        struct Object* _syncRoot;
+    };
+
+    struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_ {
+        void* klass;
+        MonitorData* monitor;
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes___Fields fields;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes_ {
+        int32_t hashCode;
+        int32_t next;
+        struct String* key;
+        struct List_1_AmongUs_GameOptions_GameModes_* value;
+    };
+
+    struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes___Array {
+        void* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes_ vector[32];
+    };
+
+    struct AchievementManager_1 {
+        struct AchievementManager_1__Class* klass;
+        MonitorData* monitor;
+        //struct AchievementManager_1__Fields fields;
+    };
+
+    struct AchievementManager_1__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData Awake;
+        VirtualInvokeData OnDestroy;
+    };
+
+    struct AchievementManager_1__StaticFields {
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_* AchievementGameModeKey;
+        struct Dictionary_2_System_String_List_1_AmongUs_GameOptions_GameModes_* StatsGameModeKey;
+    };
+
+    struct AchievementManager_1__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct AchievementManager_1__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct AchievementManager_1__VTable vtable;
+    };
+#pragma endregion
+
     typedef Il2CppObject PlayerData;
     typedef Il2CppObject PlayerCustomizationData;
     typedef Il2CppObject PlayerPurchasesData;
 
+    typedef Il2CppObject GameOptionsManager;
+    typedef Il2CppObject GameManager;
+    typedef Il2CppObject GameOptionsFactory;
 }

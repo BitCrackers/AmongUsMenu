@@ -7,18 +7,18 @@
 
 namespace HostTab {
 	static void SetRoleAmount(RoleTypes__Enum type, int amount) {
-		il2cpp::Dictionary roleRates = (*Game::pGameOptionsData)->fields.RoleOptions->fields.roleRates;
-		if (auto value = roleRates[type]) {
-			if (amount > 0)
-				value->Chance = 100;
-			if (amount > value->MaxCount)
-				value->MaxCount = amount;
-		}
+		auto&& options = GameOptions().GetRoleOptions();
+		auto maxCount = options.GetNumPerGame(type);
+		if (amount > maxCount)
+			options.SetRoleRate(type, amount, 100);
+		else if (amount > 0)
+			options.SetRoleRate(type, maxCount, 100);
 	}
 
 	void Render() {
 		if (IsHost() && IsInLobby()) {
 			if (ImGui::BeginTabItem("Host")) {
+				GameOptions options;
 				ImGui::Text("Select Roles:");
 				ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true);
 				bool shouldEndListBox = ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
@@ -56,8 +56,8 @@ namespace HostTab {
 							SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
 							SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
 							SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
-							if((*Game::pGameOptionsData)->fields._.numImpostors <= State.impostors_amount + State.shapeshifters_amount)
-								(*Game::pGameOptionsData)->fields._.numImpostors = State.impostors_amount + State.shapeshifters_amount;
+							if(options.GetNumImpostors() <= State.impostors_amount + State.shapeshifters_amount)
+								options.SetInt(app::Int32OptionNames__Enum::NumImpostors, State.impostors_amount + State.shapeshifters_amount);
 						}
 					}
 				}
@@ -68,16 +68,16 @@ namespace HostTab {
 				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
 
 				// AU v2022.8.24 has been able to change maps in lobby.
-				State.mapHostChoice = (*Game::pGameOptionsData)->fields.MapId;
+				State.mapHostChoice = options.GetByte(app::ByteOptionNames__Enum::MapId);
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {
-							(*Game::pGameOptionsData)->fields.MapId = 0;
+							options.SetByte(app::ByteOptionNames__Enum::MapId, 0);
 							State.FlipSkeld = true;
 						}
 						else {
-							(*Game::pGameOptionsData)->fields.MapId = State.mapHostChoice;
+							options.SetByte(app::ByteOptionNames__Enum::MapId, State.mapHostChoice);
 							State.FlipSkeld = false;
 						}
 					}
