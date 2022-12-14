@@ -486,6 +486,9 @@
     <ClInclude Include="gui\aum-chat.hpp">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="user\DestroyableSingleton.h">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\mira_hq.png">

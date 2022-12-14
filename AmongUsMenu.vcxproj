@@ -355,6 +355,7 @@
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="user\achievements.hpp" />
+    <ClInclude Include="user\DestroyableSingleton.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />

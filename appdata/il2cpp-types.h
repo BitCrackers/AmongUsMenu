@@ -12665,6 +12665,8 @@ namespace app
     };
 #pragma endregion
 
+    typedef Il2CppReflectionMethod MonoMethod;
+
     typedef Il2CppObject PlayerData;
     typedef Il2CppObject PlayerCustomizationData;
     typedef Il2CppObject PlayerPurchasesData;

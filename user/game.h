@@ -1,4 +1,5 @@
 #pragma once
+#include "DestroyableSingleton.h"
 
 using namespace app;
 
@@ -26,7 +27,8 @@ namespace Game {
 	extern PlayerControl** pLocalPlayer;
 	extern ShipStatus** pShipStatus;
 	extern LobbyBehaviour** pLobbyBehaviour;
-	extern RoleManager** pRoleManager;
+
+	extern DestroyableSingleton<app::RoleManager*> RoleManager;
 
 	//typedef bool STEAMUSERSTATS_SETACHIEVEMENT(String* pchName);
 	//typedef bool STEAMUSERSTATS_STORESTATS();

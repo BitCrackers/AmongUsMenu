@@ -1,6 +1,9 @@
 using namespace app;
 
 DO_APP_FUNC(Type*, Type_GetType, (String* typeName, MethodInfo* method), "mscorlib, System.Type System.Type::GetType(System.String)");
+DO_APP_FUNC(Type*, RuntimeType_MakeGenericType_1, (Type* gt, /*Type__Array**/void* types, MethodInfo* method), "mscorlib, System.Type System.RuntimeType::MakeGenericType(System.Type, System.Type[])");
+
+DO_APP_FUNC(Object*, MonoMethod_InternalInvoke, (MonoMethod* __this, Object* obj, /*Object__Array*/void* parameters, Exception** exc, MethodInfo* method), "mscorlib, System.Object System.Reflection.MonoMethod::InternalInvoke(System.Object, System.Object[], System.Exception&)");
 
 DO_APP_FUNC(GameObject*, Component_get_gameObject, (Component_1* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.GameObject UnityEngine.Component::get_gameObject()");
 DO_APP_FUNC(Transform*, Component_get_transform, (Component_1* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Transform UnityEngine.Component::get_transform()");
