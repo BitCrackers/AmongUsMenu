@@ -845,13 +845,20 @@ void SetPlayerName(std::string_view name) {
 		+ offsetof(decltype(obj->klass->vtable), method) \
 		/ sizeof(VirtualInvokeData)]
 
-GameOptions::GameOptions() : _options(nullptr) {
+GameLogicOptions::GameLogicOptions() {
 	auto mgr = app::GameManager_get_Instance(nullptr);
 	LOG_ASSERT(mgr != nullptr);
 	auto logic = app::GameManager_get_LogicOptions(mgr, nullptr);
 	LOG_ASSERT(logic != nullptr);
 	auto& func = GET_VIRTUAL_INVOKE(logic, __unknown_4);
-	_options = ((app::IGameOptions*(*)(void*, const void*))(func.methodPtr))(logic, func.method);
+	_options = ((app::IGameOptions * (*)(void*, const void*))(func.methodPtr))(logic, func.method);
+	LOG_ASSERT(_options != nullptr);
+}
+
+GameOptions::GameOptions() : _options(nullptr) {
+	auto mgr = app::GameOptionsManager_get_Instance(nullptr);
+	LOG_ASSERT(mgr != nullptr);
+	_options = app::GameOptionsManager_get_CurrentGameOptions(mgr, nullptr);
 	LOG_ASSERT(_options != nullptr);
 }
 

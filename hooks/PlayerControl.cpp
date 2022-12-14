@@ -87,6 +87,38 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 									  killTimer);
 		}
 
+		// SeeProtect
+		do {
+			if (!__this->fields.protectedByGuardian)
+				break;
+			if (localData->fields.IsDead)
+				break;
+			GameOptions options;
+			if (PlayerIsImpostor(localData)
+				&& options.GetBool(app::BoolOptionNames__Enum::ImpostorsCanSeeProtect))
+				break;
+			bool isPlaying = false;
+			for (auto anim : il2cpp::List(__this->fields.currentRoleAnimations))
+				if (anim->fields.effectType == RoleEffectAnimation_EffectType__Enum::ProtectLoop) {
+					isPlaying = true;
+					break;
+				}
+			if (isPlaying == State.ShowProtections)
+				break;
+			if (!State.ShowProtections)
+				app::PlayerControl_RemoveProtection(__this, nullptr);
+			std::pair<int32_t/*ColorId*/, float/*Time*/> pair;
+			synchronized(State.protectMutex) {
+				pair = State.protectMonitor[__this->fields.PlayerId];
+			}
+			const float ProtectionDurationSeconds = options.GetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, 1.0F);
+			float _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, _Duration);
+			if (_Duration > 0.f)
+				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, nullptr);
+			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
+		} while (0);
+
 		String* playerNameStr = convert_to_string(playerName);
 		app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
