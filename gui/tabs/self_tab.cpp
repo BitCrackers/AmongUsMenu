@@ -67,7 +67,6 @@ namespace SelfTab {
             {
                 State.Save();
             }
-
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
@@ -115,6 +114,10 @@ namespace SelfTab {
                 if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
                     (*Game::pLocalPlayer)->fields.moveable = false;
                 }
+            }
+
+            if (ImGui::Checkbox("Right-click Teleport", &State.RightClickTeleport)) {
+                State.Save();
             }
 
             ImGui::EndTabItem();
