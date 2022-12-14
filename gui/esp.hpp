@@ -8,7 +8,7 @@
 #include "DirectX.h"
 #include <imgui/imgui.h>
 
-static bool IsWithinScreenBounds(Vector2& pos)
+static bool IsWithinScreenBounds(const Vector2& pos)
 {
 	return pos.x < (float)Screen_get_width(nullptr) && pos.y < (float)Screen_get_height(nullptr);
 }
@@ -26,12 +26,12 @@ static float GetScaleFromValue(float value)
 	return (value * scale) / cameraHeight;
 }
 
-static ImVec2 WorldToScreen(Vector2 pos)
+static ImVec2 WorldToScreen(const Vector2& pos)
 {
 	auto mainCamera = Camera_get_main(nullptr);
 	Transform* cameraTransform = Component_get_transform(reinterpret_cast<Component_1*>(mainCamera), nullptr);
 	Vector3 cameraPosition = Transform_get_position(cameraTransform, nullptr);
-	Vector2 localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
+	const Vector2& localPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, nullptr);
 
 	// Calculation to compensate for Camera movement
 	cameraPosition.x = localPos.x - (localPos.x - cameraPosition.x);

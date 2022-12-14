@@ -62,7 +62,7 @@ namespace SelfTab {
             if (ImGui::Checkbox("Reveal Roles", &State.RevealRoles)) {
                 State.Save();
             }
-            ImGui::SameLine();
+            ImGui::SameLine(120.0f * State.dpiScale);
             if (ImGui::Checkbox("Abbrv. Role", &State.AbbreviatedRoleNames))
             {
                 State.Save();
@@ -74,7 +74,7 @@ namespace SelfTab {
             if (!IsInGame() && !IsInLobby() 
                 || GameOptions().GetGameMode() != GameModes__Enum::Normal
                 || GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes)) {
-                ImGui::SameLine();
+                ImGui::SameLine(120.0f * State.dpiScale);
                 if (ImGui::Checkbox("Reveal Anonymous Votes", &State.RevealAnonymousVotes)) {
                     State.Save();
                     RevealAnonymousVotes();
@@ -84,15 +84,25 @@ namespace SelfTab {
             if (ImGui::Checkbox("See Ghosts", &State.ShowGhosts)) {
                 State.Save();
             }
-
+            ImGui::SameLine(120.0f * State.dpiScale);
             if (ImGui::Checkbox("See Protections", &State.ShowProtections))
             {
                 State.Save();
                 _SeeProtect();
             }
+            ImGui::SameLine(260.0f * State.dpiScale);
+            if (ImGui::Checkbox("See Kill Cooldown", &State.ShowKillCD)) {
+                State.Save();
+            }
 
             if (ImGui::Checkbox("Unlock Vents", &State.UnlockVents)) {
                 State.Save();
+            }
+            ImGui::SameLine(120.0f * State.dpiScale);
+            if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent) && IsInGame()) {
+                if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
+                    (*Game::pLocalPlayer)->fields.moveable = false;
+                }
             }
 
             if (ImGui::Checkbox("No Clip", &State.NoClip)) {
@@ -110,12 +120,6 @@ namespace SelfTab {
             }
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Noclip);
-
-            if (ImGui::Checkbox("Move While in Vent", &State.MoveInVent) && IsInGame()) {
-                if (!State.MoveInVent && (State.InMeeting || (*Game::pLocalPlayer)->fields.inVent)) {
-                    (*Game::pLocalPlayer)->fields.moveable = false;
-                }
-            }
 
             ImGui::EndTabItem();
         }
