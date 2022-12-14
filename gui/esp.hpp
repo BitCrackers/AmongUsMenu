@@ -53,11 +53,7 @@ static ImVec2 WorldToScreen(Vector2 pos)
 static Vector2 ScreenToWorld(Vector2 pos)
 {
 	auto mainCamera = Camera_get_main(nullptr);
-
-	// use screen to world point
-	Vector3 vec3 = { pos.x, pos.y, 0 };
-	vec3 = Camera_ScreenToWorldPoint(mainCamera, vec3, nullptr);
-
+	Vector3 vec3 = Camera_ScreenToWorldPoint(mainCamera, { pos.x, pos.y, 0 }, nullptr);
 	return { vec3.x, vec3.y };
 }
 
