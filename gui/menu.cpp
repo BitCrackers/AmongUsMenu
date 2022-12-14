@@ -20,7 +20,7 @@
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 330) * State.dpiScale, ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2(520, 350) * State.dpiScale, ImGuiCond_None);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
