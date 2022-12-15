@@ -24,11 +24,13 @@ namespace GameTab {
 					State.PrevKillDistance = State.KillDistance;
 				}
 			}
-			if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
-				if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
-				else {
-					GameLogicOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
-					State.PrevTaskBarUpdates = State.TaskBarUpdates;
+			if (GameOptions().GetGameMode() == GameModes__Enum::Normal) {
+				if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
+					if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
+					else {
+						GameLogicOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
+						State.PrevTaskBarUpdates = State.TaskBarUpdates;
+					}
 				}
 			}
 
