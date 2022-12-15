@@ -66,7 +66,6 @@ namespace SelfTab {
             {
                 State.Save();
             }
-
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
@@ -118,6 +117,10 @@ namespace SelfTab {
             }
             ImGui::SameLine();
             HotKey(State.KeyBinds.Toggle_Noclip);
+
+            if (ImGui::Checkbox("Right-click Teleport", &State.RightClickTeleport)) {
+                State.Save();
+            }
 
             ImGui::EndTabItem();
         }

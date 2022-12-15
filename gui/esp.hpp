@@ -50,6 +50,13 @@ static ImVec2 WorldToScreen(const Vector2& pos)
 	return value;
 }
 
+static Vector2 ScreenToWorld(Vector2 pos)
+{
+	auto mainCamera = Camera_get_main(nullptr);
+	Vector3 vec3 = Camera_ScreenToWorldPoint(mainCamera, { pos.x, pos.y, 0 }, nullptr);
+	return { vec3.x, vec3.y };
+}
+
 struct EspPlayerData
 {
 	ImVec2 Position = { 0.0f, 0.0f };
