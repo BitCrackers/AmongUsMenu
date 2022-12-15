@@ -36,6 +36,9 @@ protected:
 			LOG_ASSERT(_get_InstanceExists);
 			return true;
 		}
+		else {
+			LOG_ERROR("init failed");
+		}
 		return false;
 	}
 };

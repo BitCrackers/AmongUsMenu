@@ -71,7 +71,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			) {
 			float killTimer = __this->fields.killTimer;
 			Color32&& color = GetKillCooldownColor(killTimer);
-			playerName += std::format("\n<size=70%><color=#{:02x}{:02x}{:02x}{:02x}>Cooldown:{:.1f}s",
+			playerName += std::format("\n<size=70%><color=#{:02x}{:02x}{:02x}{:02x}>Cooldown: {:.1f}s",
 									  color.r, color.g, color.b, color.a,
 									  killTimer);
 		}
