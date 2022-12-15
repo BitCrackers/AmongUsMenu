@@ -13,7 +13,7 @@ public:
 	bool IsInstanceExists() {
 		if (!is_inited() && !_init())
 			return false;
-		return ((T(*)(const void*))(_get_InstanceExists->methodPointer))(_get_InstanceExists);
+		return ((bool(*)(const void*))(_get_InstanceExists->methodPointer))(_get_InstanceExists);
 	}
 
 	T GetInstance() {
