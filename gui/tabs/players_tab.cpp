@@ -74,7 +74,8 @@ namespace PlayersTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0) * State.dpiScale, true);
 
-				if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
+				GameOptions options;
+				if (IsInGame() && options.GetGameMode() == GameModes__Enum::HideNSeek && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
 					if (ImGui::Button("Call Meeting")) {
 						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
