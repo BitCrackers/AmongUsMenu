@@ -170,29 +170,8 @@ Il2CppMethodPointer get_method(std::string methodSignature) {
 	methodName.erase(methodName.rfind("("));
 	paramTypes.pop_back();
 
-	auto klass_translation = translate_klass({ namespaze, className });
-	namespaze = klass_translation.namespaze;
-	className = klass_translation.klass_name;
-
-	Il2CppDomain* domain = il2cpp_domain_get();
-	const Il2CppAssembly* assembly = il2cpp_domain_assembly_open(domain, assemblyName.c_str());
-	if (assembly == NULL) return NULL;
-
-	const auto& vecClassNames = Tokenize(className, "+");
-
-	Il2CppClass* klass = il2cpp_class_from_name(assembly->image, namespaze.c_str(), vecClassNames[0].c_str());
+	Il2CppClass* klass = get_class(assemblyName, namespaze, className);
 	if (klass == NULL) return NULL;
-
-	for (size_t i = 1; i < vecClassNames.size(); i++) {
-		void* iter = nullptr;
-		Il2CppClass* nested;
-		while (nested = il2cpp_class_get_nested_types(klass, &iter)) {
-			if (vecClassNames[i].compare(nested->name) == 0)
-				break;
-		}
-		if (!nested) return nullptr;
-		klass = nested;
-	}
 
 	return find_method(klass, returnType, methodName, paramTypes);
 }
@@ -207,14 +186,16 @@ Il2CppClass* get_class(std::string classSignature) {
 		classSignature.erase(0, namespaze.length() + 1);
 	}
 
-	std::string className = classSignature;
+	return get_class(assemblyName, namespaze, classSignature);
+}
 
+Il2CppClass* get_class(std::string_view assemblyName, std::string namespaze, std::string className) {
 	auto klass_translation = translate_klass({ namespaze, className });
 	namespaze = klass_translation.namespaze;
 	className = klass_translation.klass_name;
 
 	Il2CppDomain* domain = il2cpp_domain_get();
-	const Il2CppAssembly* assembly = il2cpp_domain_assembly_open(domain, assemblyName.c_str());
+	const Il2CppAssembly* assembly = il2cpp_domain_assembly_open(domain, assemblyName.data());
 	if (assembly == NULL) return NULL;
 
 	const auto& vecClassNames = Tokenize(className, "+");
@@ -318,4 +299,69 @@ bool cctor_finished(Il2CppClass* klass)
 		}
 	}
 	return true;
+}
+
+namespace app {
+	namespace il2cpp {
+
+		Il2CppClass* get_system_type() {
+			static auto klass = get_class("mscorlib, System.Type");
+			return klass;
+		}
+
+		app::Type* get_type_of(Il2CppClass* klass) {
+			auto il2cpp_type = il2cpp_class_get_type(klass);
+			LOG_ASSERT(il2cpp_type);
+			return reinterpret_cast<app::Type*>(il2cpp_type_get_object(il2cpp_type));
+		}
+
+		bool generic_class::init(std::string_view classSignature,
+								 std::initializer_list<std::string_view> types) {
+#ifdef _DEBUG
+			LOG_ASSERT(types.size() >= 1);
+			LOG_ASSERT(classSignature.find('`') == std::string_view::npos);
+			LOG_ASSERT(classSignature.find('<') == std::string_view::npos);
+			LOG_ASSERT(classSignature.find('>') == std::string_view::npos);
+#endif
+			auto klass = get_class(std::string(classSignature) + std::format("`{}", types.size()));
+			if (!klass || !il2cpp_class_is_generic(klass)) {
+				return false;
+			}
+			auto runtimeType = get_type_of(klass);
+			LOG_ASSERT(runtimeType);
+
+			auto arr = reinterpret_cast<Il2CppArraySize*>(
+				il2cpp_array_new_specific(
+					get_system_type(),
+					types.size()));
+			LOG_ASSERT(arr != nullptr);
+
+			size_t i = 0;
+			for (auto& typeSig : types) {
+				auto klass = get_class(std::string(typeSig));
+				if (!klass) {
+					return false;
+				}
+				if (il2cpp_class_is_generic(klass)) {
+					// TODO: Foo<Bar<T>>, Foo<String, Bar<T>>, ...
+					return false;
+				}
+				auto type = get_type_of(klass);
+				LOG_ASSERT(type);
+				arr->vector[i++] = type;
+			}
+
+			auto genericType = app::RuntimeType_MakeGenericType_1(runtimeType, arr, nullptr);
+			if (!genericType) {
+				return false;
+			}
+			auto genericClass = il2cpp_class_from_system_type(reinterpret_cast<Il2CppReflectionType*>(genericType));
+			if (!genericClass) {
+				return false;
+			}
+
+			this->_klass = genericClass;
+			return true;
+		}
+	}
 }

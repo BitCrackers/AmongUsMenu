@@ -8,6 +8,7 @@ std::string translate_type_name(std::string input);
 Il2CppMethodPointer find_method(Il2CppClass* klass, std::string_view returnType, std::string_view methodName, std::string_view paramTypes);
 Il2CppMethodPointer get_method(std::string methodSignature);
 Il2CppClass* get_class(std::string classSignature);
+Il2CppClass* get_class(std::string_view assemblyName, std::string namespaze, std::string className);
 std::string get_method_description(const MethodInfo* methodInfo);
 void output_class_methods(Il2CppClass* klass);
 void output_assembly_methods(const Il2CppAssembly* assembly);
@@ -111,6 +112,27 @@ namespace app {
 			constexpr E* get() const { return _Ptr; }
 		protected:
 			E* _Ptr;
+		};
+
+		Il2CppClass* get_system_type();
+		app::Type* get_type_of(Il2CppClass* klass);
+
+		class generic_class {
+		public:
+			operator Il2CppClass* () const {
+				return _klass;
+			}
+		protected:
+			generic_class() = default;
+
+			bool is_inited() const {
+				return _klass != nullptr;
+			}
+
+			bool init(std::string_view classSignature,
+					  std::initializer_list<std::string_view> types);
+
+			Il2CppClass* _klass = nullptr;
 		};
 	}
 }

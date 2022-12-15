@@ -143,24 +143,23 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 
 		if (playerData && localData && outfit) {
-			Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-			Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
 			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
 				playerName += "\n<size=50%>(" + roleName + ")";
-				roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
-			}
-			else if (PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
-			{
-				roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->ImpostorRed, NULL);
+				Color32&& roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
+
+				playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
+										 roleColor.r, roleColor.g, roleColor.b,
+										 roleColor.a, playerName);
+				if (IsColorBlindMode()) {
+					playerName += "\n ";
+				}
 			}
 
 			String* playerNameStr = convert_to_string(playerName);
 			app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
-			app::TextMeshPro_SetFaceColor(playerNameTMP, roleColor, NULL);
-			app::TextMeshPro_SetOutlineColor(playerNameTMP, faceColor, NULL);
 		}
 
 		if (playerData)

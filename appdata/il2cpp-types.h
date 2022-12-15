@@ -12665,11 +12665,16 @@ namespace app
     };
 #pragma endregion
 
+    typedef Il2CppReflectionMethod MonoMethod;
+
     typedef Il2CppObject PlayerData;
     typedef Il2CppObject PlayerCustomizationData;
     typedef Il2CppObject PlayerPurchasesData;
-
+    typedef Il2CppObject ExileController;
+    typedef Il2CppObject SabotageSystemType;
     typedef Il2CppObject GameOptionsManager;
     typedef Il2CppObject GameManager;
     typedef Il2CppObject GameOptionsFactory;
+    typedef Il2CppObject SettingsData;
+    typedef Il2CppObject AccessibilitySettingsData;
 }

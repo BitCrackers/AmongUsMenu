@@ -1,6 +1,9 @@
 using namespace app;
 
 DO_APP_FUNC(Type*, Type_GetType, (String* typeName, MethodInfo* method), "mscorlib, System.Type System.Type::GetType(System.String)");
+DO_APP_FUNC(Type*, RuntimeType_MakeGenericType_1, (Type* gt, /*Type__Array**/void* types, MethodInfo* method), "mscorlib, System.Type System.RuntimeType::MakeGenericType(System.Type, System.Type[])");
+
+DO_APP_FUNC(Object*, MonoMethod_InternalInvoke, (MonoMethod* __this, Object* obj, /*Object__Array*/void* parameters, Exception** exc, MethodInfo* method), "mscorlib, System.Object System.Reflection.MonoMethod::InternalInvoke(System.Object, System.Object[], System.Exception&)");
 
 DO_APP_FUNC(GameObject*, Component_get_gameObject, (Component_1* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.GameObject UnityEngine.Component::get_gameObject()");
 DO_APP_FUNC(Transform*, Component_get_transform, (Component_1* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Transform UnityEngine.Component::get_transform()");
@@ -19,6 +22,8 @@ DO_APP_FUNC(String*, Scene_GetNameInternal, (int32_t sceneHandle, MethodInfo* me
 DO_APP_FUNC(void, SceneManager_Internal_ActiveSceneChanged, (Scene previousActiveScene, Scene newActiveScene, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.SceneManagement.SceneManager::Internal_ActiveSceneChanged(UnityEngine.SceneManagement.Scene, UnityEngine.SceneManagement.Scene)");
 DO_APP_FUNC(Vector3, Transform_get_position, (Transform* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Vector3 UnityEngine.Transform::get_position()");
 DO_APP_FUNC(void, Transform_set_position, (Transform* __this, Vector3 value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Transform::set_position(UnityEngine.Vector3)");
+DO_APP_FUNC(Vector3, Transform_get_localPosition, (Transform* __this, MethodInfo* method), "UnityEngine.CoreModule, UnityEngine.Vector3 UnityEngine.Transform::get_localPosition()");
+DO_APP_FUNC(void, Transform_set_localPosition, (Transform* __this, Vector3 value, MethodInfo* method), "UnityEngine.CoreModule, System.Void UnityEngine.Transform::set_localPosition(UnityEngine.Vector3)");
 DO_APP_FUNC(float, Vector2_Distance, (Vector2 a, Vector2 b, MethodInfo* method), "UnityEngine.CoreModule, System.Single UnityEngine.Vector2::Distance(UnityEngine.Vector2, UnityEngine.Vector2)");
 DO_APP_FUNC(bool, Collider2D_OverlapPoint, (Collider2D* __this, Vector2 point, MethodInfo* method), "UnityEngine.Physics2DModule, System.Boolean UnityEngine.Collider2D::OverlapPoint(UnityEngine.Vector2)");
 DO_APP_FUNC(String*, Application_get_version, (MethodInfo* method), "UnityEngine.CoreModule, System.String UnityEngine.Application::get_version()");
@@ -205,6 +210,10 @@ DO_APP_FUNC(void, PlayerControl_RemoveProtection, (PlayerControl* __this, Method
 DO_APP_FUNC(bool, Object_1_op_Implicit, (Object_1* exists, MethodInfo* method), "UnityEngine.CoreModule, System.Boolean UnityEngine.Object::op_Implicit(UnityEngine.Object)");
 DO_APP_FUNC(void, PlayerControl_ShowFailedMurder, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ShowFailedMurder()");
 
+DO_APP_FUNC(bool, PlayerControl_get_IsKillTimerEnabled, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::get_IsKillTimerEnabled()");
+DO_APP_FUNC(void, ExileController_ReEnableGameplay, (ExileController* __this, MethodInfo* method), "Assembly-CSharp, System.Void ExileController::ReEnableGameplay()");
+DO_APP_FUNC(void, SabotageSystemType_ForceSabTime, (SabotageSystemType* __this, float t, MethodInfo* method), "Assembly-CSharp, System.Void SabotageSystemType::ForceSabTime(System.Single)");
+
 DO_APP_FUNC(PlayerControl*, GameData_PlayerInfo_get_Object, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, PlayerControl GameData+PlayerInfo::get_Object()");
 DO_APP_FUNC(GameData_PlayerOutfit*, GameData_PlayerInfo_get_DefaultOutfit, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, GameData.PlayerOutfit GameData+PlayerInfo::get_DefaultOutfit()");
 DO_APP_FUNC(String*, GameData_PlayerOutfit_get_PlayerName, (GameData_PlayerOutfit* __this, MethodInfo* method), "Assembly-CSharp, System.String GameData+PlayerOutfit::get_PlayerName()");
@@ -220,8 +229,14 @@ DO_APP_FUNC(PlayerData*, DataManager_get_Player, (MethodInfo* method), "Assembly
 DO_APP_FUNC(String*, PlayerCustomizationData_get_Name, (PlayerCustomizationData* __this, MethodInfo* method), "Assembly-CSharp, System.String AmongUs.Data.Player.PlayerCustomizationData::get_Name()");
 DO_APP_FUNC(void, PlayerCustomizationData_set_Name, (PlayerCustomizationData* __this, String* value, MethodInfo* method), "Assembly-CSharp, System.Void AmongUs.Data.Player.PlayerCustomizationData::set_Name(System.String)");
 DO_APP_FUNC(bool, PlayerPurchasesData_GetPurchase, (PlayerPurchasesData* __this, String* itemKey, String* bundleKey, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerPurchasesData::GetPurchase(System.String, System.String)");
+DO_APP_FUNC(SettingsData*, DataManager_get_Settings, (MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Settings.SettingsData AmongUs.Data.DataManager::get_Settings()");
+DO_APP_FUNC(AccessibilitySettingsData*, SettingsData_get_Accessibility, (SettingsData* __this, MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Settings.AccessibilitySettingsData AmongUs.Data.Settings.SettingsData::get_Accessibility()");
+DO_APP_FUNC(bool, AccessibilitySettingsData_get_ColorBlindMode, (AccessibilitySettingsData* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean AmongUs.Data.Settings.AccessibilitySettingsData::get_ColorBlindMode()");
 
 // 2022.12.08e
+DO_APP_FUNC(GameOptionsManager*, GameOptionsManager_get_Instance, (MethodInfo* method), "Assembly-CSharp, GameOptionsManager GameOptionsManager::get_Instance()");
+DO_APP_FUNC(bool, GameOptionsManager_get_HasOptions, (GameOptionsManager* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean GameOptionsManager::get_HasOptions()");
+DO_APP_FUNC(IGameOptions*, GameOptionsManager_get_CurrentGameOptions, (GameOptionsManager* __this, MethodInfo* method), "Assembly-CSharp, AmongUs.GameOptions.IGameOptions GameOptionsManager::get_CurrentGameOptions()");
 DO_APP_FUNC(void, GameOptionsManager_set_CurrentGameOptions, (GameOptionsManager* __this, IGameOptions* value, MethodInfo* method), "Assembly-CSharp, System.Void GameOptionsManager::set_CurrentGameOptions(AmongUs.GameOptions.IGameOptions)");
 DO_APP_FUNC(GameManager*, GameManager_get_Instance, (MethodInfo* method), "Assembly-CSharp, GameManager GameManager::get_Instance()");
 DO_APP_FUNC(LogicOptions*, GameManager_get_LogicOptions, (GameManager* __this, MethodInfo* method), "Assembly-CSharp, LogicOptions GameManager::get_LogicOptions()");

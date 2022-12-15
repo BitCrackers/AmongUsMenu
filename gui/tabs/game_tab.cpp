@@ -13,22 +13,24 @@ namespace GameTab {
 			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.5f, 3.f, 0.25f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				if (!IsInGame()) State.PlayerSpeed = State.PrevPlayerSpeed;
 				else {
-					GameOptions().SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeed);
+					GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeed);
 					State.PrevPlayerSpeed = State.PlayerSpeed;
 				}
 			}
 			if (CustomListBoxInt("Kill Distance", &State.KillDistance, KILL_DISTANCE, 225 * State.dpiScale)) {
 				if (!IsInGame()) State.KillDistance = State.PrevKillDistance;
 				else {
-					GameOptions().SetInt(app::Int32OptionNames__Enum::KillDistance, State.KillDistance);
+					GameLogicOptions().SetInt(app::Int32OptionNames__Enum::KillDistance, State.KillDistance);
 					State.PrevKillDistance = State.KillDistance;
 				}
 			}
-			if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
-				if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
-				else {
-					GameOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
-					State.PrevTaskBarUpdates = State.TaskBarUpdates;
+			if (GameOptions().GetGameMode() == GameModes__Enum::Normal) {
+				if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
+					if (!IsInGame()) State.TaskBarUpdates = State.PrevTaskBarUpdates;
+					else {
+						GameLogicOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
+						State.PrevTaskBarUpdates = State.TaskBarUpdates;
+					}
 				}
 			}
 
