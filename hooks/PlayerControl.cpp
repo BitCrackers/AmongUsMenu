@@ -63,6 +63,18 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
 			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		if (State.ShowKillCD
+			&& __this != *Game::pLocalPlayer
+			&& !playerData->fields.IsDead
+			&& playerData->fields.Role
+			&& playerData->fields.Role->fields.CanUseKillButton
+			) {
+			float killTimer = __this->fields.killTimer;
+			Color32&& color = GetKillCooldownColor(killTimer);
+			playerName += std::format("\n<size=70%><color=#{:02x}{:02x}{:02x}{:02x}>Cooldown:{:.1f}s",
+									  color.r, color.g, color.b, color.a,
+									  killTimer);
+		}
 		if (State.RevealRoles)
 		{
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
@@ -74,17 +86,11 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 									 roleColor.a, playerName);
 		}
 
-		if (State.ShowKillCD
-			&& __this != *Game::pLocalPlayer
-			&& !playerData->fields.IsDead
-			&& playerData->fields.Role
-			&& playerData->fields.Role->fields.CanUseKillButton
-			) {
-			float killTimer = __this->fields.killTimer;
-			Color32&& color = GetKillCooldownColor(killTimer);
-			playerName += std::format("\n<size=70%%><color=#{:02x}{:02x}{:02x}{:02x}>KillCD {:.1f}s</color></size>",
-									  color.r, color.g, color.b, color.a,
-									  killTimer);
+		String* playerNameStr = convert_to_string(playerName);
+		app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
+
+		if (IsColorBlindMode()) {
+			// TODO: Adjust the position of nameTextTMP
 		}
 
 		// SeeProtect
@@ -118,9 +124,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, nullptr);
 			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
 		} while (0);
-
-		String* playerNameStr = convert_to_string(playerName);
-		app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
 
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);

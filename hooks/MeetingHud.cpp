@@ -153,6 +153,9 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
 										 roleColor.r, roleColor.g, roleColor.b,
 										 roleColor.a, playerName);
+				if (IsColorBlindMode()) {
+					playerName += "\n ";
+				}
 			}
 
 			String* playerNameStr = convert_to_string(playerName);

@@ -140,6 +140,7 @@ bool IsInLobby();
 bool IsHost();
 bool IsInGame();
 bool IsInMultiplayerGame();
+bool IsColorBlindMode();
 int GetMaxImposterAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);

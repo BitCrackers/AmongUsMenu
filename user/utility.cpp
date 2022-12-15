@@ -259,6 +259,15 @@ bool IsInMultiplayerGame() {
 	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
+bool IsColorBlindMode() {
+	if (auto settings = DataManager_get_Settings(nullptr)) {
+		if (auto accessibility = SettingsData_get_Accessibility(settings, nullptr)) {
+			return AccessibilitySettingsData_get_ColorBlindMode(accessibility, nullptr);
+		}
+	}
+	return false;
+}
+
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
 	if (player) return app::PlayerControl_get_Data(player, NULL);
 	return NULL;

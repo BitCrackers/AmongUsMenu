@@ -12675,4 +12675,6 @@ namespace app
     typedef Il2CppObject GameOptionsManager;
     typedef Il2CppObject GameManager;
     typedef Il2CppObject GameOptionsFactory;
+    typedef Il2CppObject SettingsData;
+    typedef Il2CppObject AccessibilitySettingsData;
 }
