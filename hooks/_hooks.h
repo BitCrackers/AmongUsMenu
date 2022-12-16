@@ -71,3 +71,5 @@ void dAccountManager_UpdateKidAccountDisplay(AccountManager* __this, MethodInfo*
 void dPlayerStorageManager_OnReadPlayerPrefsComplete(PlayerStorageManager* __this, void* data, MethodInfo* method);
 bool dPlayerPurchasesData_GetPurchase(PlayerPurchasesData* __this, String* itemKey, String* bundleKey, MethodInfo* method);
 void dGameOptionsManager_set_CurrentGameOptions(GameOptionsManager* __this, IGameOptions* value, MethodInfo* method);
+void dExileController_ReEnableGameplay(ExileController* __this, MethodInfo* method);
+void dSabotageSystemType_ForceSabTime(SabotageSystemType* __this, float t, MethodInfo* method);

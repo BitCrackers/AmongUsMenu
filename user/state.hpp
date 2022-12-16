@@ -49,6 +49,8 @@ public:
     bool RevealVotes = false;
     bool RevealAnonymousVotes = false;
 
+    bool ShowKillCD = false;
+
     bool ChatPaste = false;
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;

@@ -63,6 +63,7 @@
     <ClCompile Include="hooks\DirectX.cpp" />
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\EOSManager.cpp" />
+    <ClCompile Include="hooks\ExileController.cpp" />
     <ClCompile Include="hooks\GameOptionsManager.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="hooks\PlayerStorageManager.cpp" />
     <ClCompile Include="hooks\PolusShipStatus.cpp" />
     <ClCompile Include="hooks\RoleManager.cpp" />
+    <ClCompile Include="hooks\SabotageSystemType.cpp" />
     <ClCompile Include="hooks\SaveManager.cpp" />
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
@@ -355,6 +357,7 @@
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="user\achievements.hpp" />
+    <ClInclude Include="user\DestroyableSingleton.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />
     <ClInclude Include="rpc\_rpc.h" />

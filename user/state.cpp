@@ -85,6 +85,7 @@ void Settings::Load() {
 
         JSON_TRYGET("ShowChat", this->ShowChat);
         JSON_TRYGET("RightClickTeleport", this->RightClickTeleport);
+        JSON_TRYGET("ShowKillCD", this->ShowKillCD);
     } catch (...) {
         Log.Info("Unable to load settings.json");
     }
@@ -155,6 +156,7 @@ void Settings::Save() {
 
             {"ShowChat", this->ShowChat},
             {"RightClickTeleport", this->RightClickTeleport},
+            {"ShowKillCD", this->ShowKillCD},
         };
 
         std::ofstream outSettings(settingsPath);

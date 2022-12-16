@@ -22,6 +22,18 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 	PlayerControl_CompleteTask(__this, idx, method);
 }
 
+static Color32 GetKillCooldownColor(float killTimer) {
+	if (killTimer < 2.0) {
+		return app::Color32_op_Implicit(Palette__TypeInfo->static_fields->ImpostorRed, NULL);
+	}
+	else if (killTimer < 5.0) {
+		return app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Orange, NULL);
+	}
+	else {
+		return app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White_75Alpha, NULL);
+	}
+}
+
 float dPlayerControl_fixedUpdateTimer = 50;
 float dPlayerControl_fixedUpdateCount = 0;
 void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
@@ -47,27 +59,71 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!playerData || !localData)
 			return;
 
-		Color32 faceColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->Black, NULL);
-		Color32 roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->White, NULL);
 		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
 			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		if (State.ShowKillCD
+			&& __this != *Game::pLocalPlayer
+			&& !playerData->fields.IsDead
+			&& playerData->fields.Role
+			&& playerData->fields.Role->fields.CanUseKillButton
+			) {
+			float killTimer = __this->fields.killTimer;
+			Color32&& color = GetKillCooldownColor(killTimer);
+			playerName += std::format("\n<size=70%><color=#{:02x}{:02x}{:02x}{:02x}>Cooldown: {:.1f}s",
+									  color.r, color.g, color.b, color.a,
+									  killTimer);
+		}
 		if (State.RevealRoles)
 		{
 			std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
 			playerName += "\n<size=50%>(" + roleName + ")";
-			roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
-		}
-		else if (PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
-		{
-			roleColor = app::Color32_op_Implicit(Palette__TypeInfo->static_fields->ImpostorRed, NULL);
+			Color32&& roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
+
+			playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
+									 roleColor.r, roleColor.g, roleColor.b,
+									 roleColor.a, playerName);
 		}
 
 		String* playerNameStr = convert_to_string(playerName);
 		app::TMP_Text_set_text((app::TMP_Text*)nameTextTMP, playerNameStr, NULL);
-		app::TextMeshPro_SetFaceColor(nameTextTMP, roleColor, NULL);
-		app::TextMeshPro_SetOutlineColor(nameTextTMP, faceColor, NULL);
+
+		if (IsColorBlindMode()) {
+			// TODO: Adjust the position of nameTextTMP
+		}
+
+		// SeeProtect
+		do {
+			if (!__this->fields.protectedByGuardian)
+				break;
+			if (localData->fields.IsDead)
+				break;
+			GameOptions options;
+			if (PlayerIsImpostor(localData)
+				&& options.GetBool(app::BoolOptionNames__Enum::ImpostorsCanSeeProtect))
+				break;
+			bool isPlaying = false;
+			for (auto anim : il2cpp::List(__this->fields.currentRoleAnimations))
+				if (anim->fields.effectType == RoleEffectAnimation_EffectType__Enum::ProtectLoop) {
+					isPlaying = true;
+					break;
+				}
+			if (isPlaying == State.ShowProtections)
+				break;
+			if (!State.ShowProtections)
+				app::PlayerControl_RemoveProtection(__this, nullptr);
+			std::pair<int32_t/*ColorId*/, float/*Time*/> pair;
+			synchronized(State.protectMutex) {
+				pair = State.protectMonitor[__this->fields.PlayerId];
+			}
+			const float ProtectionDurationSeconds = options.GetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, 1.0F);
+			float _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
+			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, _Duration);
+			if (_Duration > 0.f)
+				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, nullptr);
+			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
+		} while (0);
 
 		if (State.Wallhack && __this == *Game::pLocalPlayer && !State.FreeCam && !State.playerToFollow.has_value()) {
 			auto mainCamera = Camera_get_main(NULL);
@@ -96,6 +152,15 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				Vector3 cameraVector3 = Transform_get_position(cameraTransform, NULL);
 				if(State.EnableZoom && !State.InMeeting && State.CameraHeight > 3.0f)
 				Transform_set_position(cameraTransform, { cameraVector3.x, cameraVector3.y, 100 }, NULL);
+			}
+		}
+		else if (auto role = playerData->fields.Role) {
+			// ESP: Calculate Kill Cooldown
+			if (role->fields.CanUseKillButton && !playerData->fields.IsDead) {
+				if (__this->fields.ForceKillTimerContinue
+					|| app::PlayerControl_get_IsKillTimerEnabled(__this, nullptr)) {
+					__this->fields.killTimer = (std::max)(__this->fields.killTimer - app::Time_get_fixedDeltaTime(nullptr), 0.f);
+				}
 			}
 		}
 
@@ -256,6 +321,16 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 		State.liveReplayEvents.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
 		State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
 	}
+
+	// ESP: Reset Kill Cooldown
+	if (__this->fields._.OwnerId != (*Game::pAmongUsClient)->fields._.ClientId) {
+		if (!target || target->fields.protectedByGuardian == false)
+			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown(), 0.f);
+		else
+			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown() * 0.5f, 0.f);
+		//STREAM_DEBUG("Player " << ToString(__this) << " KillTimer " << __this->fields.killTimer);
+	}
+
 	do {
 		if (!State.ShowProtections) break;
 		if (!target || target->fields.protectedByGuardian == false)

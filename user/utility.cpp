@@ -259,6 +259,15 @@ bool IsInMultiplayerGame() {
 	return (LocalInGame || OnlineInGame) && Object_1_IsNotNull((Object_1*)*Game::pShipStatus) && Object_1_IsNotNull((Object_1*)*Game::pLocalPlayer);
 }
 
+bool IsColorBlindMode() {
+	if (auto settings = DataManager_get_Settings(nullptr)) {
+		if (auto accessibility = SettingsData_get_Accessibility(settings, nullptr)) {
+			return AccessibilitySettingsData_get_ColorBlindMode(accessibility, nullptr);
+		}
+	}
+	return false;
+}
+
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
 	if (player) return app::PlayerControl_get_Data(player, NULL);
 	return NULL;
@@ -845,14 +854,23 @@ void SetPlayerName(std::string_view name) {
 		+ offsetof(decltype(obj->klass->vtable), method) \
 		/ sizeof(VirtualInvokeData)]
 
-GameOptions::GameOptions() : _options(nullptr) {
+GameLogicOptions::GameLogicOptions() {
 	auto mgr = app::GameManager_get_Instance(nullptr);
 	LOG_ASSERT(mgr != nullptr);
 	auto logic = app::GameManager_get_LogicOptions(mgr, nullptr);
 	LOG_ASSERT(logic != nullptr);
 	auto& func = GET_VIRTUAL_INVOKE(logic, __unknown_4);
-	_options = ((app::IGameOptions*(*)(void*, const void*))(func.methodPtr))(logic, func.method);
+	_options = ((app::IGameOptions * (*)(void*, const void*))(func.methodPtr))(logic, func.method);
 	LOG_ASSERT(_options != nullptr);
+}
+
+GameOptions::GameOptions() : _options(nullptr) {
+	auto mgr = app::GameOptionsManager_get_Instance(nullptr);
+	LOG_ASSERT(mgr != nullptr);
+	if (app::GameOptionsManager_get_HasOptions(mgr, nullptr)) {
+		_options = app::GameOptionsManager_get_CurrentGameOptions(mgr, nullptr);
+		LOG_ASSERT(_options != nullptr);
+	}
 }
 
 GameOptions& GameOptions::SetByte(app::ByteOptionNames__Enum option, uint8_t value) {
@@ -891,6 +909,7 @@ GameOptions& GameOptions::SetUInt(app::UInt32OptionNames__Enum option, uint32_t 
 }
 
 uint8_t GameOptions::GetByte(app::ByteOptionNames__Enum option, uint8_t defaultValue) const {
+	if (!_options) return defaultValue;
 	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetByte);
 	uint8_t value;
 	bool succ = ((bool(*)(void*, app::ByteOptionNames__Enum, uint8_t*, const void*))(func.methodPtr))
@@ -901,6 +920,7 @@ uint8_t GameOptions::GetByte(app::ByteOptionNames__Enum option, uint8_t defaultV
 }
 
 float GameOptions::GetFloat(app::FloatOptionNames__Enum option, float defaultValue) const {
+	if (!_options) return defaultValue;
 	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetFloat);
 	float value;
 	bool succ = ((bool(*)(void*, app::FloatOptionNames__Enum, float*, const void*))(func.methodPtr))
@@ -911,6 +931,7 @@ float GameOptions::GetFloat(app::FloatOptionNames__Enum option, float defaultVal
 }
 
 bool GameOptions::GetBool(app::BoolOptionNames__Enum option, bool defaultValue) const {
+	if (!_options) return defaultValue;
 	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetBool);
 	bool value;
 	bool succ = ((bool(*)(void*, app::BoolOptionNames__Enum, bool*, const void*))(func.methodPtr))
@@ -921,6 +942,7 @@ bool GameOptions::GetBool(app::BoolOptionNames__Enum option, bool defaultValue) 
 }
 
 int32_t GameOptions::GetInt(app::Int32OptionNames__Enum option, int32_t defaultValue) const {
+	if (!_options) return defaultValue;
 	auto& func = GET_VIRTUAL_INVOKE(_options, TryGetInt);
 	int32_t value;
 	bool succ = ((bool(*)(void*, app::Int32OptionNames__Enum, int32_t*, const void*))(func.methodPtr))
@@ -931,26 +953,31 @@ int32_t GameOptions::GetInt(app::Int32OptionNames__Enum option, int32_t defaultV
 }
 
 app::GameModes__Enum GameOptions::GetGameMode() const {
+	if (!_options) return app::GameModes__Enum::None;
 	auto& func = GET_VIRTUAL_INVOKE(_options, get_GameMode);
 	return ((app::GameModes__Enum(*)(void*, const void*))(func.methodPtr))(_options, func.method);
 }
 
 int32_t GameOptions::GetMaxPlayers() const {
+	if (!_options) return 0;
 	auto& func = GET_VIRTUAL_INVOKE(_options, get_MaxPlayers);
 	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
 }
 
 uint8_t GameOptions::GetMapId() const {
+	if (!_options) return 0;
 	auto& func = GET_VIRTUAL_INVOKE(_options, get_MapId);
 	return ((uint8_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
 }
 
 int32_t GameOptions::GetNumImpostors() const {
+	if (!_options) return 0;
 	auto& func = GET_VIRTUAL_INVOKE(_options, get_NumImpostors);
 	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
 }
 
 int32_t GameOptions::GetTotalTaskCount() const {
+	if (!_options) return 0;
 	auto& func = GET_VIRTUAL_INVOKE(_options, get_TotalTaskCount);
 	return ((int32_t(*)(void*, const void*))(func.methodPtr))(_options, func.method);
 }

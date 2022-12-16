@@ -140,6 +140,7 @@ bool IsInLobby();
 bool IsHost();
 bool IsInGame();
 bool IsInMultiplayerGame();
+bool IsColorBlindMode();
 int GetMaxImposterAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
@@ -257,6 +258,11 @@ public:
 
 	float GetPlayerSpeedMod() const;
 	float GetKillCooldown() const;
-private:
+protected:
 	app::IGameOptions* _options;
+};
+
+class GameLogicOptions : public GameOptions {
+public:
+	GameLogicOptions();
 };

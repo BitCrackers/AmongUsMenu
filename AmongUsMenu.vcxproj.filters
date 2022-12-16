@@ -304,6 +304,12 @@
     <ClCompile Include="user\achievements.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\ExileController.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\SabotageSystemType.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -485,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="gui\aum-chat.hpp">
       <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="user\DestroyableSingleton.h">
+      <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
