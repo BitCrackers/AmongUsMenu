@@ -856,7 +856,8 @@ void SetPlayerName(std::string_view name) {
 
 GameLogicOptions::GameLogicOptions() {
 	auto mgr = app::GameManager_get_Instance(nullptr);
-	LOG_ASSERT(mgr != nullptr);
+	if (mgr == nullptr)
+		return;
 	auto logic = app::GameManager_get_LogicOptions(mgr, nullptr);
 	LOG_ASSERT(logic != nullptr);
 	auto& func = GET_VIRTUAL_INVOKE(logic, __unknown_4);
@@ -866,7 +867,8 @@ GameLogicOptions::GameLogicOptions() {
 
 GameOptions::GameOptions() : _options(nullptr) {
 	auto mgr = app::GameOptionsManager_get_Instance(nullptr);
-	LOG_ASSERT(mgr != nullptr);
+	if (mgr == nullptr) // see issue 477.
+		return;
 	if (app::GameOptionsManager_get_HasOptions(mgr, nullptr)) {
 		_options = app::GameOptionsManager_get_CurrentGameOptions(mgr, nullptr);
 		LOG_ASSERT(_options != nullptr);
