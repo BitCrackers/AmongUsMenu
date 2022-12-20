@@ -61,6 +61,13 @@ public:
 	virtual void Process() override;
 };
 
+class CmdCheckMurder : public RPCInterface {
+	PlayerSelection target;
+public:
+	CmdCheckMurder(const PlayerSelection& target);
+	virtual void Process() override;
+};
+
 class RpcMurderPlayer : public RPCInterface {
 	PlayerSelection target;
 public:
