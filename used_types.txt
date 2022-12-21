@@ -49,6 +49,8 @@ TMP_TextProcessingStack_1_TMP_ColorGradient_
 WordWrapState
 TMP_TextProcessingStack_1_WordWrapState_
 TMP_Text_SpecialCharacter
+TextBoxTMP
+TextBoxTMP__Fields
 # ------------ End TMP Dependencies ------------ #
 TMP_Text
 TextMeshPro
