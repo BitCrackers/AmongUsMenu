@@ -30,13 +30,12 @@ First you will need protontricks, you can install it with your packager of choic
 3. Put version.dll into Among Us folder
 4. Run `protontricks --gui`
 5. Choose **Among Us**
-6. Click on **Select the default wineprefix**
-7. Click on **Run winecfg**
-8. Click **OK**
-9. In the configuration window, click on **Libraries**
-10. Type `version` into the **New override for library** input
-11. Click **Add** and then **Apply**
-12. AmongUsMenu should now work properly in the game
+6. Click on **Select the default wineprefix** and then **OK**
+7. Click on **Run winecfg** and then **OK**
+8. In the configuration window, click on **Libraries**
+9. Type `version` into the **New override for library** input
+10. Click **Add** and then **Apply**
+11. AmongUsMenu should now work properly in the game
 
 ### Default Hotkeys
 - Show Menu - DELETE
