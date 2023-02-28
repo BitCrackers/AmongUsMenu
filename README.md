@@ -22,6 +22,21 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 - Debug_Version (With Debug Information and can be attached to process)
 - Release_Version (Optimized with all information stripped)
 
+### Running on Proton (Version Proxy Only)
+First you will need protontricks, you can install it with your packager of choice.
+
+1. Make sure you are running Among Us under Proton  
+   You can check by going to **Properties -> Compatibility**
+3. Put version.dll into Among Us folder
+4. Run `protontricks --gui`
+5. Choose **Among Us**
+6. Click on **Select the default wineprefix** and then **OK**
+7. Click on **Run winecfg** and then **OK**
+8. In the configuration window, click on **Libraries**
+9. Type `version` into the **New override for library** input
+10. Click **Add** and then **Apply**
+11. AmongUsMenu should now work properly in the game
+
 ### Default Hotkeys
 - Show Menu - DELETE
 - Show Radar - INSERT
