@@ -108,6 +108,9 @@ void Settings::Save() {
             {"ShowDebug", this->showDebugTab},
     #endif
 
+            {"PlayerSpeed", this->PlayerSpeed},
+            {"CameraHeight", this->CameraHeight},
+            {"FreeCamSpeed", this->FreeCamSpeed},
             {"ShowGhosts", this->ShowGhosts},
             {"ShowRadar", this->ShowRadar},
             {"ShowRadar_DeadBodies", this->ShowRadar_DeadBodies},
