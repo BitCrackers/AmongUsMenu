@@ -35,6 +35,7 @@ void Settings::Load() {
         JSON_TRYGET("PlayerSpeed", this->PlayerSpeed);
         JSON_TRYGET("CameraHeight", this->CameraHeight);
         JSON_TRYGET("FreeCamSpeed", this->FreeCamSpeed);
+        JSON_TRYGET("UserName", this->userName);
         JSON_TRYGET("ShowGhosts", this->ShowGhosts);
         JSON_TRYGET("ShowRadar", this->ShowRadar);
         JSON_TRYGET("ShowRadar_DeadBodies", this->ShowRadar_DeadBodies);
@@ -111,6 +112,7 @@ void Settings::Save() {
             {"PlayerSpeed", this->PlayerSpeed},
             {"CameraHeight", this->CameraHeight},
             {"FreeCamSpeed", this->FreeCamSpeed},
+            {"UserName", this->userName},
             {"ShowGhosts", this->ShowGhosts},
             {"ShowRadar", this->ShowRadar},
             {"ShowRadar_DeadBodies", this->ShowRadar_DeadBodies},
