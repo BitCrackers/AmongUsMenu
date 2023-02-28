@@ -32,6 +32,9 @@ void Settings::Load() {
         JSON_TRYGET("ShowDebug", this->showDebugTab);
 #endif
 
+        JSON_TRYGET("PlayerSpeed", this->PlayerSpeed);
+        JSON_TRYGET("CameraHeight", this->CameraHeight);
+        JSON_TRYGET("FreeCamSpeed", this->FreeCamSpeed);
         JSON_TRYGET("ShowGhosts", this->ShowGhosts);
         JSON_TRYGET("ShowRadar", this->ShowRadar);
         JSON_TRYGET("ShowRadar_DeadBodies", this->ShowRadar_DeadBodies);
