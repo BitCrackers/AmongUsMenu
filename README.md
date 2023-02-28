@@ -25,7 +25,7 @@ Will automatically be loaded by the Game itself if the dll is in the game direct
 ### Running on Proton (Version Proxy Only)
 First you will need protontricks, you can install it with your packager of choice.
 
-1. Make sure you are running Among Us under Proton
+1. Make sure you are running Among Us under Proton  
    You can check by going to **Properties -> Compatibility**
 3. Put version.dll into Among Us folder
 4. Run `protontricks --gui`
