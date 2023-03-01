@@ -6116,6 +6116,14 @@ namespace app
         ConfirmDeleteAccountsEmpty = 0x00000c89,
         AccountRequestDelete = 0x00000c8a,
         HasBeenKilled = 0x00000c8b,
+        ScrollList = 0x00000ce4,
+        ScrollNews = 0x00000ce5,
+        AmongUsAnnouncements = 0x00000ce6,
+        AnnouncementErrorSubtitle = 0x00000ce7,
+        AnnouncementErrorText = 0x00000ce8,
+        ReadMoreLabel = 0x00000ce9,
+        ReturnToList = 0x00000cea,
+        NavigateLinks = 0x00000ceb,
         GameType = 0x00000dac,
         GameTypeError = 0x00000dad,
         GameTypeClassic = 0x00000dae,
@@ -6133,6 +6141,23 @@ namespace app
         DefaultFilterTag_Casual = 0x00000dba,
         DefaultFilterTag_Serious = 0x00000dbb,
         DefaultFilterTag_Expert = 0x00000dbc,
+        HttpErrorContextNone = 0x00000dbd,
+        HttpErrorContextAuthenticate = 0x00000dbe,
+        HttpErrorContextRequestGameCode = 0x00000dbf,
+        HttpErrorContextFindHostServer = 0x00000dc0,
+        HttpErrorContextRequestGamesList = 0x00000dc1,
+        HttpErrorUnknown = 0x00000dc2,
+        HttpErrorBadRequest = 0x00000dc3,
+        HttpErrorUnauthorized = 0x00000dc4,
+        HttpErrorForbidden = 0x00000dc5,
+        HttpErrorNotFound = 0x00000dc6,
+        HttpErrorMethodNotAllowed = 0x00000dc7,
+        HttpErrorRequestTimeout = 0x00000dc8,
+        HttpErrorTooManyRequests = 0x00000dc9,
+        HttpErrorInternalServerError = 0x00000dca,
+        HttpErrorBadGateway = 0x00000dcb,
+        HttpErrorServiceUnavailable = 0x00000dcc,
+        HttpErrorGatewayTimeout = 0x00000dcd,
     };
 
 #else
@@ -7227,6 +7252,14 @@ namespace app
         StringNames__Enum_ConfirmDeleteAccountsEmpty = 0x00000c89,
         StringNames__Enum_AccountRequestDelete = 0x00000c8a,
         StringNames__Enum_HasBeenKilled = 0x00000c8b,
+        StringNames__Enum_ScrollList = 0x00000ce4,
+        StringNames__Enum_ScrollNews = 0x00000ce5,
+        StringNames__Enum_AmongUsAnnouncements = 0x00000ce6,
+        StringNames__Enum_AnnouncementErrorSubtitle = 0x00000ce7,
+        StringNames__Enum_AnnouncementErrorText = 0x00000ce8,
+        StringNames__Enum_ReadMoreLabel = 0x00000ce9,
+        StringNames__Enum_ReturnToList = 0x00000cea,
+        StringNames__Enum_NavigateLinks = 0x00000ceb,
         StringNames__Enum_GameType = 0x00000dac,
         StringNames__Enum_GameTypeError = 0x00000dad,
         StringNames__Enum_GameTypeClassic = 0x00000dae,
@@ -7244,6 +7277,23 @@ namespace app
         StringNames__Enum_DefaultFilterTag_Casual = 0x00000dba,
         StringNames__Enum_DefaultFilterTag_Serious = 0x00000dbb,
         StringNames__Enum_DefaultFilterTag_Expert = 0x00000dbc,
+        StringNames__Enum_HttpErrorContextNone = 0x00000dbd,
+        StringNames__Enum_HttpErrorContextAuthenticate = 0x00000dbe,
+        StringNames__Enum_HttpErrorContextRequestGameCode = 0x00000dbf,
+        StringNames__Enum_HttpErrorContextFindHostServer = 0x00000dc0,
+        StringNames__Enum_HttpErrorContextRequestGamesList = 0x00000dc1,
+        StringNames__Enum_HttpErrorUnknown = 0x00000dc2,
+        StringNames__Enum_HttpErrorBadRequest = 0x00000dc3,
+        StringNames__Enum_HttpErrorUnauthorized = 0x00000dc4,
+        StringNames__Enum_HttpErrorForbidden = 0x00000dc5,
+        StringNames__Enum_HttpErrorNotFound = 0x00000dc6,
+        StringNames__Enum_HttpErrorMethodNotAllowed = 0x00000dc7,
+        StringNames__Enum_HttpErrorRequestTimeout = 0x00000dc8,
+        StringNames__Enum_HttpErrorTooManyRequests = 0x00000dc9,
+        StringNames__Enum_HttpErrorInternalServerError = 0x00000dca,
+        StringNames__Enum_HttpErrorBadGateway = 0x00000dcb,
+        StringNames__Enum_HttpErrorServiceUnavailable = 0x00000dcc,
+        StringNames__Enum_HttpErrorGatewayTimeout = 0x00000dcd,
     };
 
 #endif
@@ -7668,6 +7718,7 @@ namespace app
         struct String* SkinId;
         struct String* VisorId;
         struct String* NamePlateId;
+        void* /* struct Action_1_String_* */nameCallback;
         struct String* preCensorName;
         struct String* postCensorName;
     };
@@ -7991,7 +8042,6 @@ namespace app
         VirtualInvokeData Deinitialize;
         VirtualInvokeData SpawnTaskHeader;
         VirtualInvokeData UseAbility;
-        VirtualInvokeData OnMeetingStart;
         VirtualInvokeData OnVotingComplete;
         VirtualInvokeData Initialize;
         VirtualInvokeData SetUsableTarget;
@@ -8869,7 +8919,6 @@ namespace app
         struct SpriteRenderer* TextBubble;
         struct TextBoxTMP* TextArea;
         struct TextMeshPro* CharCount;
-        int32_t MaxChat;
         void* scroller;
         struct GameObject* Content;
         struct SpriteRenderer* BackgroundImage;
@@ -9675,6 +9724,7 @@ namespace app
         void* VoteSound;
         void* VoteLockinSound;
         void* VoteEndingSound;
+        struct Transform* meetingContents;
 #if defined(_CPLUSPLUS_)
         MeetingHud_VoteStates__Enum state;
 #else
@@ -12366,7 +12416,6 @@ namespace app
         VirtualInvokeData Deinitialize;
         VirtualInvokeData SpawnTaskHeader;
         VirtualInvokeData UseAbility;
-        VirtualInvokeData OnMeetingStart;
         VirtualInvokeData OnVotingComplete;
         VirtualInvokeData Initialize;
         VirtualInvokeData SetUsableTarget;
