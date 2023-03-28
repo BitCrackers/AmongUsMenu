@@ -6124,6 +6124,12 @@ namespace app
         ReadMoreLabel = 0x00000ce9,
         ReturnToList = 0x00000cea,
         NavigateLinks = 0x00000ceb,
+        AgeVerificationTitle = 0x00000cec,
+        AgeVerificationInfoTitle = 0x00000ced,
+        AgeVerificationInfo = 0x00000cee,
+        AgeVerificationMoreInfo = 0x00000cef,
+        EditLabel = 0x00000cf0,
+        VerifyAgeText = 0x00000cf1,
         GameType = 0x00000dac,
         GameTypeError = 0x00000dad,
         GameTypeClassic = 0x00000dae,
@@ -7260,6 +7266,12 @@ namespace app
         StringNames__Enum_ReadMoreLabel = 0x00000ce9,
         StringNames__Enum_ReturnToList = 0x00000cea,
         StringNames__Enum_NavigateLinks = 0x00000ceb,
+        StringNames__Enum_AgeVerificationTitle = 0x00000cec,
+        StringNames__Enum_AgeVerificationInfoTitle = 0x00000ced,
+        StringNames__Enum_AgeVerificationInfo = 0x00000cee,
+        StringNames__Enum_AgeVerificationMoreInfo = 0x00000cef,
+        StringNames__Enum_EditLabel = 0x00000cf0,
+        StringNames__Enum_VerifyAgeText = 0x00000cf1,
         StringNames__Enum_GameType = 0x00000dac,
         StringNames__Enum_GameTypeError = 0x00000dad,
         StringNames__Enum_GameTypeClassic = 0x00000dae,
@@ -8767,6 +8779,7 @@ namespace app
         bool Locked;
         float shakeAmount;
         float shakePeriod;
+        bool OverrideScreenShakeEnabled;
         struct Vector2 centerPosition;
     };
 
@@ -9133,6 +9146,7 @@ namespace app
         struct Transform* petParent;
         struct SkinLayer* skin;
         void* visor;
+        struct Vector3 defaultHatVisorPosition;
 #if defined(_CPLUSPLUS_)
         PlayerBodyTypes__Enum bodyType;
 #else
@@ -9201,6 +9215,7 @@ namespace app
         struct GameData_PlayerInfo* _cachedData;
         bool protectedByGuardian;
         float flashlightAngle;
+        int32_t shapeshiftTargetPlayerId;
         void* FootSteps;
         void* KillSfx;
         void* KillAnimations;
@@ -9212,8 +9227,8 @@ namespace app
         struct PlayerPhysics* MyPhysics;
         struct CustomNetworkTransform* NetTransform;
         struct Collider2D* clickKillCollider;
+        struct Vector3 defaultCosmeticsScale;
         struct List_1_PlayerTask_* myTasks;
-        struct Vector3 defaultPlayerScale;
         struct List_1_RoleEffectAnimation_* currentRoleAnimations;
         struct GameObject* TargetFlashlight;
         bool isDummy;
@@ -10122,6 +10137,7 @@ namespace app
         VirtualInvokeData ToString;
         VirtualInvokeData Start;
         VirtualInvokeData OnDestroy;
+        VirtualInvokeData Update;
         VirtualInvokeData OnApplicationPause;
         VirtualInvokeData __unknown;
         VirtualInvokeData __unknown_1;
@@ -10188,6 +10204,13 @@ namespace app
 
 #endif
 
+    struct AsyncOperationHandle_1_UnityEngine_GameObject_ {
+        struct AsyncOperationBase_1_UnityEngine_GameObject_* m_InternalOp;
+        int32_t m_Version;
+        struct String* m_LocationName;
+        bool m_UnloadSceneOpExcludeReleaseCallback;
+    };
+
     struct AmongUsClient__Fields {
         struct InnerNetClient__Fields _;
         struct String* OnlineScene;
@@ -10211,6 +10234,7 @@ namespace app
 #endif
         int32_t MAX_CLIENT_WAIT_TIME;
         void* logger;
+        struct AsyncOperationHandle_1_UnityEngine_GameObject_ ShipLoadingAsyncHandle;
     };
 
     struct AmongUsClient {
@@ -10227,6 +10251,7 @@ namespace app
         VirtualInvokeData ToString;
         VirtualInvokeData Start;
         VirtualInvokeData OnDestroy;
+        VirtualInvokeData Update;
         VirtualInvokeData OnApplicationPause;
         VirtualInvokeData OnGameCreated;
         VirtualInvokeData OnGameJoined;
@@ -11104,20 +11129,6 @@ namespace app
         void* klass;
         MonitorData* monitor;
         struct NamePlateData__Fields fields;
-    };
-#pragma endregion
-
-#pragma region VisorData
-    struct VisorData__Fields {
-        struct CosmeticData__Fields _;
-        void* ViewDataRef;
-        void* viewData;
-    };
-
-    struct VisorData {
-        void* klass;
-        MonitorData* monitor;
-        struct VisorData__Fields fields;
     };
 #pragma endregion
 

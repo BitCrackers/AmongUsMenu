@@ -144,7 +144,8 @@ LimitedTime
 LimitedTimeStartEnd
 CosmeticData
 NamePlateData
-VisorData
+FollowerCamera__Fields
+AmongUsClient__Fields
 PetBehaviour
 PetData
 List_1_PetData_
