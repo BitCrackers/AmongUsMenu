@@ -40,10 +40,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 	dPlayerControl_fixedUpdateTimer = round(1.f / Time_get_fixedDeltaTime(nullptr));
 	if (__this == *Game::pLocalPlayer) {
 		if (State.rpcCooldown == 0) {
-			MessageWriter* rpcMessage = InnerNetClient_StartRpc((InnerNetClient*)(*Game::pAmongUsClient), __this->fields._.NetId, (uint8_t)42069, (SendOption__Enum)1, NULL);
-			MessageWriter_WriteByte(rpcMessage, __this->fields.PlayerId, NULL);
-			MessageWriter_EndMessage(rpcMessage, NULL);
-			State.rpcCooldown = 15;
 		}
 		else {
 			State.rpcCooldown--;
