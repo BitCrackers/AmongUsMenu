@@ -109,9 +109,6 @@ PlayerControl__Array
 List_1_PlayerControl_
 DestroyableSingleton_1_HudManager___Fields
 HudManager
-Delegate__Fields
-MulticastDelegate__Fields
-Action_1_MapBehaviour_
 KeyboardJoystick
 ScreenJoystick
 MeetingHud_VoteStates__Enum
@@ -197,7 +194,6 @@ NormalPlayerTask_TimerState__Enum
 NormalPlayerTask
 Palette
 ControlTypes__Enum
-Announcement
 SaveManager
 DestroyableSingleton_1_RoleManager_
 EngineerRole
