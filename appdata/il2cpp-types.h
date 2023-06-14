@@ -3453,6 +3453,7 @@ namespace app
         bool m_SkipLayoutUpdate;
         bool m_SkipMaterialUpdate;
         bool m_RaycastTarget;
+        bool m_RaycastTargetCache;
         struct Vector4 m_RaycastPadding;
         void* m_RectTransform;
         void* m_CanvasRenderer;
@@ -4402,6 +4403,7 @@ namespace app
         struct TextMeshPro* friendCode;
         struct TextMeshPro* friendCodeTitle;
         void* playerImage; // struct PoolablePlayer, not actual img
+        struct GameObject* friendCodeObject;
         struct SpriteRenderer* FriendCodeHiddenIcon;
         struct GameObject* offlineMode;
         struct GameObject* guestMode;
@@ -4410,19 +4412,17 @@ namespace app
         struct TextMeshPro* guardianEmailText;
         void* editNameScreen;
         struct GameObject* idCard;
-        struct SpriteRenderer* actualTabSprite;
         struct GameObject* resendEmailButton;
-        void* LinkExistingAccountPopup;
         struct TextMeshPro* levelText;
         void* xpProgressBar;
-        struct GameObject* signIntoAccountButton;
-        struct GameObject* askForGuardianEmailButton;
         struct TextMeshPro* veryBadErrorText;
         struct Collider2D* clickToCloseCollider;
         struct TextMeshPro* accountIDDisplayText;
         struct GameObject* showAccountIDButton;
         struct SpriteRenderer* SpaceBean;
         struct SpriteRenderer* SpaceHorse;
+        void* InfoTextBoxDisplay;
+        void* signInStatusComponent;
         bool showAccountID;
         struct String* friendCodeHiddenText;
         void* BackButton;
@@ -5026,7 +5026,7 @@ namespace app
 
 #if defined(_CPLUSPLUS_)
     enum class StringNames__Enum : int32_t {
-        ExitButton = 0x00000000,
+        None = 0x00000000,
         BackButton = 0x00000001,
         AvailableGamesLabel = 0x00000002,
         CreateGameButton = 0x00000003,
@@ -5452,6 +5452,7 @@ namespace app
         KeyboardOptions = 0x000001a7,
         RemapBindings = 0x000001a8,
         KeyboardBindingsHeader = 0x000001a9,
+        ExitButton = 0x000001aa,
         PolishRuby = 0x000001f4,
         ResetBreakers = 0x000001f5,
         Decontaminate = 0x000001f6,
@@ -5622,6 +5623,47 @@ namespace app
         HideSeekHowToPlayFlashlightSwitch = 0x00000781,
         HideSeekHowToPlayFlashlightConsoles = 0x00000782,
         HideSeekHowToPlayFlashlightPlayStation = 0x00000783,
+        QCInputSelf = 0x00000785,
+        QCInputFavorite = 0x00000786,
+        QCCrewMyself = 0x0000079e,
+        QCTagSelf = 0x0000079f,
+        QCTagFavorites = 0x000007a0,
+        QCBuilderHeader = 0x000007a1,
+        QCRemarks = 0x000007a2,
+        QCCrewDead = 0x000007a3,
+        QCSelfVoted = 0x000007a4,
+        QCSelfReportedBody = 0x000007a5,
+        QCSelfCams = 0x000007a6,
+        QCCrewReportedBody = 0x000007a7,
+        QCCrewCams = 0x000007a8,
+        QCSelfWasProtected = 0x000007a9,
+        QCCrewWasProtected = 0x000007aa,
+        QCSelfWasntMe = 0x000007ab,
+        QCWhoWasAt = 0x000007ac,
+        QCSelfDoingTask = 0x000007ad,
+        QCWhoIsRole = 0x000007ae,
+        QCSelfFixedSystem = 0x000007af,
+        QCCrewFixedSystem = 0x000007b0,
+        QCSelfAccAtLocation = 0x000007b1,
+        QCSelfDidTaskAtLocation = 0x000007b2,
+        QCCrewDidTaskAtLocation = 0x000007b3,
+        QCSelfSawCrewVentAtLocation = 0x000007b4,
+        QCSelfDidntVent = 0x000007b5,
+        QCFollowMe = 0x000007b6,
+        QCItsNotMe = 0x000007b7,
+        QCSelfDoneWithTasks = 0x000007b8,
+        QCGhostsDoYourTasks = 0x000007b9,
+        QCSelfNotTheImpostor = 0x000007ba,
+        QCHello = 0x000007bb,
+        QCThanks = 0x000007bc,
+        QCSorry = 0x000007bd,
+        QCGG = 0x000007be,
+        QCBye = 0x000007bf,
+        QCWhereWasTheBody = 0x000007c0,
+        QCSelfReady = 0x000007c1,
+        QCSelfWasRole = 0x000007c2,
+        QCWhoWasRole = 0x000007c3,
+        QCCoolOutfitCrew = 0x000007c4,
         QCLocationLaptop = 0x000007d0,
         QCLocationSkeld = 0x000007d1,
         QCLocationMira = 0x000007d2,
@@ -5950,6 +5992,7 @@ namespace app
         AbbreviatedHour = 0x00000915,
         AbbreviatedMinute = 0x00000916,
         AbbreviatedSecond = 0x00000917,
+        StreamingTwitch = 0x00000918,
         MaxVentUses = 0x00000a8c,
         MaxTimeInVent = 0x00000a8d,
         MinCrewmatesForVitals = 0x00000a8e,
@@ -6104,6 +6147,140 @@ namespace app
         BugReportIssueButton = 0x00000be4,
         BugReportPopUpSubmissionFailedText = 0x00000be5,
         BugReportPopUpAttachScreenshotLabel = 0x00000be6,
+        QCQstWhy = 0x00000bea,
+        QCTagAccuse = 0x00000beb,
+        QCTagDefend = 0x00000bec,
+        QCTagQuestion = 0x00000bed,
+        QCTagLobby = 0x00000bee,
+        QCTagImpostor = 0x00000bef,
+        QCTagMeeting = 0x00000bf0,
+        QCTagHiding = 0x00000bf1,
+        QCTagFlashlight = 0x00000bf2,
+        QCTagRoles = 0x00000bf3,
+        QCInputRole = 0x00000bf4,
+        QCTagTasks = 0x00000bf5,
+        QCInputTask = 0x00000bf6,
+        QCTagSabotages = 0x00000bf7,
+        QCInputSabotages = 0x00000bf8,
+        QCTagRemarks = 0x00000bf9,
+        QCInputRemark = 0x00000bfa,
+        QCInputAccusation = 0x00000bfb,
+        QCInputDefense = 0x00000bfc,
+        QCTagQuestionSingular = 0x00000bfd,
+        QCResAgree = 0x00000bfe,
+        QCResDisagree = 0x00000bff,
+        QCResNice = 0x00000c00,
+        QCResUhOh = 0x00000c01,
+        QCResOops = 0x00000c02,
+        QCResExclamationMarks = 0x00000c03,
+        QCResQuestionMarks = 0x00000c04,
+        QCBuildingPlaceholder = 0x00000c05,
+        QCTagQuickRemarks = 0x00000c06,
+        Undo = 0x00000c17,
+        Clear = 0x00000c18,
+        DivertPower = 0x00000c19,
+        ResetReactorName = 0x00000c1a,
+        RestoreOxyName = 0x00000c1b,
+        QCAccADidntReport_QCCrewMe = 0x00000c1c,
+        QCStaACalledMeeting_QCCrewMe = 0x00000c1d,
+        QCAccAIsLyingNeg_QCCrewMe = 0x00000c1e,
+        QCResADid_QCCrewMe = 0x00000c1f,
+        QCResADidNeg_QCCrewMe = 0x00000c20,
+        QCResAWas_QCCrewMe = 0x00000c21,
+        QCResAWasNeg_QCCrewMe = 0x00000c22,
+        QCResIsBeingFramed_QCCrewMe = 0x00000c23,
+        QCAccAKilledBNeg_QCCrewMe_ANY = 0x00000c24,
+        QCStaAWasWithB_QCCrewMe_ANY = 0x00000c25,
+        QCStaAWasWithB_ANY_QCCrewMe = 0x00000c26,
+        QCResCloseTo_QCCrewMe_ANY = 0x00000c27,
+        QCAccAWasChasingB_QCCrewMe_ANY = 0x00000c28,
+        QCAccAWasChasingBNeg_QCCrewMe_ANY = 0x00000c29,
+        QCAccAWasChasingB_ANY_QCCrewMe = 0x00000c2a,
+        QCAccAWasChasingBNeg_ANY_QCCrewMe = 0x00000c2b,
+        QCStaASawB_QCCrewMe_ANY = 0x00000c2c,
+        QCAccASawBVent_QCCrewMe_ANY = 0x00000c2d,
+        QCAccASawBVentNeg_QCCrewMe_ANY = 0x00000c2e,
+        QCAccASawBVentNeg_ANY_QCCrewMe = 0x00000c2f,
+        QCResAWasAtB_QCCrewMe_ANY = 0x00000c30,
+        QCResAWasAtBNeg_QCCrewMe_ANY = 0x00000c31,
+        QCStaADidB_QCCrewMe_ANY = 0x00000c32,
+        QCAccIsRole_QCCrewMe_ANY = 0x00000c33,
+        QCAccIsRoleNeg_QCCrewMe_ANY = 0x00000c34,
+        QCResProtected_ANY_QCCrewMe = 0x00000c35,
+        QCCrewSomeone = 0x00000c36,
+        QCResUrWelcome = 0x00000c37,
+        QCResNp = 0x00000c38,
+        QCResYikes = 0x00000c39,
+        QCResRipCrew = 0x00000c3a,
+        QCResYeetCrew = 0x00000c3b,
+        QCSelfWasOnVitals = 0x00000c3c,
+        QCSawDeadCrewOnVitals = 0x00000c3d,
+        QCSelfSawTwoCrew = 0x00000c3e,
+        QCCrewShapeshifted = 0x00000c3f,
+        QCSelfSawCrewDoVisualTask = 0x00000c40,
+        QCSelfWasOnDoorlogs = 0x00000c41,
+        QCSelfWasOnAdmin = 0x00000c42,
+        QCSelfAmVotingCrew = 0x00000c43,
+        QCCrewWasPretendingTasks = 0x00000c44,
+        QCCrewWasPretendingSabotage = 0x00000c45,
+        QCLobbyMoreImpostors = 0x00000c46,
+        QCLobbyLessImpostors = 0x00000c47,
+        QCLobbyConfirmEjects = 0x00000c48,
+        QCLobbyMoreEmergencyMeetings = 0x00000c49,
+        QCLobbyLessEmergencyMeetings = 0x00000c4a,
+        QCLobbyAnonymousVotes = 0x00000c4b,
+        QCLobbyMoreEmergencyCooldownTime = 0x00000c4c,
+        QCLobbyLessEmergencyCooldownTime = 0x00000c4d,
+        QCLobbyMoreDiscussionTime = 0x00000c4e,
+        QCLobbyLessDiscussionTime = 0x00000c4f,
+        QCLobbyMoreVotingTime = 0x00000c50,
+        QCLobbyLessVotingTime = 0x00000c51,
+        QCLobbyFasterPlayerSpeed = 0x00000c52,
+        QCLobbySlowerPlayerSpeed = 0x00000c53,
+        QCLobbyTaskBarUpdates = 0x00000c54,
+        QCLobbyVisualTasks = 0x00000c55,
+        QCLobbyMoreCrewmateVision = 0x00000c56,
+        QCLobbyLessCrewmateVision = 0x00000c57,
+        QCLobbyMoreImpostorVision = 0x00000c58,
+        QCLobbyLessImpostorVision = 0x00000c59,
+        QCLobbyMoreKillCooldownTime = 0x00000c5a,
+        QCLobbyLessKillCooldownTime = 0x00000c5b,
+        QCLobbyLongerKillDistance = 0x00000c5c,
+        QCLobbyShorderKillDistance = 0x00000c5d,
+        QCLobbyMoreCommonTasks = 0x00000c5e,
+        QCLobbyLessCommonTasks = 0x00000c5f,
+        QCLobbyMoreLongTasks = 0x00000c60,
+        QCLobbyLessLongTasks = 0x00000c61,
+        QCLobbyMoreShortTasks = 0x00000c62,
+        QCLobbyLessShortTasks = 0x00000c63,
+        QCLobbyRoleScientists = 0x00000c64,
+        QCLobbyRoleGuardianAngels = 0x00000c65,
+        QCLobbyRoleEngineers = 0x00000c66,
+        QCLobbyRoleShapeshifters = 0x00000c67,
+        QCLobbyRoleNone = 0x00000c68,
+        QCResLess = 0x00000c69,
+        QCResMore = 0x00000c6a,
+        QCResNone = 0x00000c6b,
+        QCLobbyHNSMoreHideTime = 0x00000c6c,
+        QCLobbyHNSLessHideTime = 0x00000c6d,
+        QCLobbyHNSMoreFinalHideTime = 0x00000c6e,
+        QCLobbyHNSLessFinalHideTime = 0x00000c6f,
+        QCLobbyHNSFlashlightMode = 0x00000c70,
+        QCLobbyHNSMoreCrewmateFlashlightSize = 0x00000c71,
+        QCLobbyHNSLessCrewmateFlashlightSize = 0x00000c72,
+        QCLobbyHNSMoreImpostorFlashlightSize = 0x00000c73,
+        QCLobbyHNSLessImpostorFlashlightSize = 0x00000c74,
+        QCLobbyHNSShowNames = 0x00000c75,
+        QCLobbyHNSMoreVents = 0x00000c76,
+        QCLobbyHNSLessVents = 0x00000c77,
+        QCLobbyHNSMoreTimeInVent = 0x00000c78,
+        QCLobbyHNSLessTimeInVent = 0x00000c79,
+        QCLobbyHNSMoreFinalHideImpostorSpeed = 0x00000c7a,
+        QCLobbyHNSLessFinalHideImpostorSpeed = 0x00000c7b,
+        QCLobbyHNSFinalHideSeekMap = 0x00000c7c,
+        QCLobbyHNSFinalHidePings = 0x00000c7d,
+        QCLobbyHNSMorePingInterval = 0x00000c7e,
+        QCLobbyHNSLessPingInterval = 0x00000c7f,
         SettingsColorblind = 0x00000c80,
         SettingsHelp = 0x00000c81,
         SecLogEntryColorblind = 0x00000c82,
@@ -6130,6 +6307,15 @@ namespace app
         AgeVerificationMoreInfo = 0x00000cef,
         EditLabel = 0x00000cf0,
         VerifyAgeText = 0x00000cf1,
+        PlayLabel = 0x00000cf2,
+        SettingsLabel = 0x00000cf3,
+        NewsLabel = 0x00000cf4,
+        AccountLabel = 0x00000cf5,
+        CreditsLabel = 0x00000cf6,
+        ShopLabel = 0x00000cf7,
+        InventoryLabel = 0x00000cf8,
+        StatsLabel = 0x00000cf9,
+        FriendsLabel = 0x00000cfa,
         GameType = 0x00000dac,
         GameTypeError = 0x00000dad,
         GameTypeClassic = 0x00000dae,
@@ -6168,7 +6354,7 @@ namespace app
 
 #else
     enum StringNames__Enum {
-        StringNames__Enum_ExitButton = 0x00000000,
+        StringNames__Enum_None = 0x00000000,
         StringNames__Enum_BackButton = 0x00000001,
         StringNames__Enum_AvailableGamesLabel = 0x00000002,
         StringNames__Enum_CreateGameButton = 0x00000003,
@@ -6594,6 +6780,7 @@ namespace app
         StringNames__Enum_KeyboardOptions = 0x000001a7,
         StringNames__Enum_RemapBindings = 0x000001a8,
         StringNames__Enum_KeyboardBindingsHeader = 0x000001a9,
+        StringNames__Enum_ExitButton = 0x000001aa,
         StringNames__Enum_PolishRuby = 0x000001f4,
         StringNames__Enum_ResetBreakers = 0x000001f5,
         StringNames__Enum_Decontaminate = 0x000001f6,
@@ -6764,6 +6951,47 @@ namespace app
         StringNames__Enum_HideSeekHowToPlayFlashlightSwitch = 0x00000781,
         StringNames__Enum_HideSeekHowToPlayFlashlightConsoles = 0x00000782,
         StringNames__Enum_HideSeekHowToPlayFlashlightPlayStation = 0x00000783,
+        StringNames__Enum_QCInputSelf = 0x00000785,
+        StringNames__Enum_QCInputFavorite = 0x00000786,
+        StringNames__Enum_QCCrewMyself = 0x0000079e,
+        StringNames__Enum_QCTagSelf = 0x0000079f,
+        StringNames__Enum_QCTagFavorites = 0x000007a0,
+        StringNames__Enum_QCBuilderHeader = 0x000007a1,
+        StringNames__Enum_QCRemarks = 0x000007a2,
+        StringNames__Enum_QCCrewDead = 0x000007a3,
+        StringNames__Enum_QCSelfVoted = 0x000007a4,
+        StringNames__Enum_QCSelfReportedBody = 0x000007a5,
+        StringNames__Enum_QCSelfCams = 0x000007a6,
+        StringNames__Enum_QCCrewReportedBody = 0x000007a7,
+        StringNames__Enum_QCCrewCams = 0x000007a8,
+        StringNames__Enum_QCSelfWasProtected = 0x000007a9,
+        StringNames__Enum_QCCrewWasProtected = 0x000007aa,
+        StringNames__Enum_QCSelfWasntMe = 0x000007ab,
+        StringNames__Enum_QCWhoWasAt = 0x000007ac,
+        StringNames__Enum_QCSelfDoingTask = 0x000007ad,
+        StringNames__Enum_QCWhoIsRole = 0x000007ae,
+        StringNames__Enum_QCSelfFixedSystem = 0x000007af,
+        StringNames__Enum_QCCrewFixedSystem = 0x000007b0,
+        StringNames__Enum_QCSelfAccAtLocation = 0x000007b1,
+        StringNames__Enum_QCSelfDidTaskAtLocation = 0x000007b2,
+        StringNames__Enum_QCCrewDidTaskAtLocation = 0x000007b3,
+        StringNames__Enum_QCSelfSawCrewVentAtLocation = 0x000007b4,
+        StringNames__Enum_QCSelfDidntVent = 0x000007b5,
+        StringNames__Enum_QCFollowMe = 0x000007b6,
+        StringNames__Enum_QCItsNotMe = 0x000007b7,
+        StringNames__Enum_QCSelfDoneWithTasks = 0x000007b8,
+        StringNames__Enum_QCGhostsDoYourTasks = 0x000007b9,
+        StringNames__Enum_QCSelfNotTheImpostor = 0x000007ba,
+        StringNames__Enum_QCHello = 0x000007bb,
+        StringNames__Enum_QCThanks = 0x000007bc,
+        StringNames__Enum_QCSorry = 0x000007bd,
+        StringNames__Enum_QCGG = 0x000007be,
+        StringNames__Enum_QCBye = 0x000007bf,
+        StringNames__Enum_QCWhereWasTheBody = 0x000007c0,
+        StringNames__Enum_QCSelfReady = 0x000007c1,
+        StringNames__Enum_QCSelfWasRole = 0x000007c2,
+        StringNames__Enum_QCWhoWasRole = 0x000007c3,
+        StringNames__Enum_QCCoolOutfitCrew = 0x000007c4,
         StringNames__Enum_QCLocationLaptop = 0x000007d0,
         StringNames__Enum_QCLocationSkeld = 0x000007d1,
         StringNames__Enum_QCLocationMira = 0x000007d2,
@@ -7092,6 +7320,7 @@ namespace app
         StringNames__Enum_AbbreviatedHour = 0x00000915,
         StringNames__Enum_AbbreviatedMinute = 0x00000916,
         StringNames__Enum_AbbreviatedSecond = 0x00000917,
+        StringNames__Enum_StreamingTwitch = 0x00000918,
         StringNames__Enum_MaxVentUses = 0x00000a8c,
         StringNames__Enum_MaxTimeInVent = 0x00000a8d,
         StringNames__Enum_MinCrewmatesForVitals = 0x00000a8e,
@@ -7246,6 +7475,140 @@ namespace app
         StringNames__Enum_BugReportIssueButton = 0x00000be4,
         StringNames__Enum_BugReportPopUpSubmissionFailedText = 0x00000be5,
         StringNames__Enum_BugReportPopUpAttachScreenshotLabel = 0x00000be6,
+        StringNames__Enum_QCQstWhy = 0x00000bea,
+        StringNames__Enum_QCTagAccuse = 0x00000beb,
+        StringNames__Enum_QCTagDefend = 0x00000bec,
+        StringNames__Enum_QCTagQuestion = 0x00000bed,
+        StringNames__Enum_QCTagLobby = 0x00000bee,
+        StringNames__Enum_QCTagImpostor = 0x00000bef,
+        StringNames__Enum_QCTagMeeting = 0x00000bf0,
+        StringNames__Enum_QCTagHiding = 0x00000bf1,
+        StringNames__Enum_QCTagFlashlight = 0x00000bf2,
+        StringNames__Enum_QCTagRoles = 0x00000bf3,
+        StringNames__Enum_QCInputRole = 0x00000bf4,
+        StringNames__Enum_QCTagTasks = 0x00000bf5,
+        StringNames__Enum_QCInputTask = 0x00000bf6,
+        StringNames__Enum_QCTagSabotages = 0x00000bf7,
+        StringNames__Enum_QCInputSabotages = 0x00000bf8,
+        StringNames__Enum_QCTagRemarks = 0x00000bf9,
+        StringNames__Enum_QCInputRemark = 0x00000bfa,
+        StringNames__Enum_QCInputAccusation = 0x00000bfb,
+        StringNames__Enum_QCInputDefense = 0x00000bfc,
+        StringNames__Enum_QCTagQuestionSingular = 0x00000bfd,
+        StringNames__Enum_QCResAgree = 0x00000bfe,
+        StringNames__Enum_QCResDisagree = 0x00000bff,
+        StringNames__Enum_QCResNice = 0x00000c00,
+        StringNames__Enum_QCResUhOh = 0x00000c01,
+        StringNames__Enum_QCResOops = 0x00000c02,
+        StringNames__Enum_QCResExclamationMarks = 0x00000c03,
+        StringNames__Enum_QCResQuestionMarks = 0x00000c04,
+        StringNames__Enum_QCBuildingPlaceholder = 0x00000c05,
+        StringNames__Enum_QCTagQuickRemarks = 0x00000c06,
+        StringNames__Enum_Undo = 0x00000c17,
+        StringNames__Enum_Clear = 0x00000c18,
+        StringNames__Enum_DivertPower = 0x00000c19,
+        StringNames__Enum_ResetReactorName = 0x00000c1a,
+        StringNames__Enum_RestoreOxyName = 0x00000c1b,
+        StringNames__Enum_QCAccADidntReport_QCCrewMe = 0x00000c1c,
+        StringNames__Enum_QCStaACalledMeeting_QCCrewMe = 0x00000c1d,
+        StringNames__Enum_QCAccAIsLyingNeg_QCCrewMe = 0x00000c1e,
+        StringNames__Enum_QCResADid_QCCrewMe = 0x00000c1f,
+        StringNames__Enum_QCResADidNeg_QCCrewMe = 0x00000c20,
+        StringNames__Enum_QCResAWas_QCCrewMe = 0x00000c21,
+        StringNames__Enum_QCResAWasNeg_QCCrewMe = 0x00000c22,
+        StringNames__Enum_QCResIsBeingFramed_QCCrewMe = 0x00000c23,
+        StringNames__Enum_QCAccAKilledBNeg_QCCrewMe_ANY = 0x00000c24,
+        StringNames__Enum_QCStaAWasWithB_QCCrewMe_ANY = 0x00000c25,
+        StringNames__Enum_QCStaAWasWithB_ANY_QCCrewMe = 0x00000c26,
+        StringNames__Enum_QCResCloseTo_QCCrewMe_ANY = 0x00000c27,
+        StringNames__Enum_QCAccAWasChasingB_QCCrewMe_ANY = 0x00000c28,
+        StringNames__Enum_QCAccAWasChasingBNeg_QCCrewMe_ANY = 0x00000c29,
+        StringNames__Enum_QCAccAWasChasingB_ANY_QCCrewMe = 0x00000c2a,
+        StringNames__Enum_QCAccAWasChasingBNeg_ANY_QCCrewMe = 0x00000c2b,
+        StringNames__Enum_QCStaASawB_QCCrewMe_ANY = 0x00000c2c,
+        StringNames__Enum_QCAccASawBVent_QCCrewMe_ANY = 0x00000c2d,
+        StringNames__Enum_QCAccASawBVentNeg_QCCrewMe_ANY = 0x00000c2e,
+        StringNames__Enum_QCAccASawBVentNeg_ANY_QCCrewMe = 0x00000c2f,
+        StringNames__Enum_QCResAWasAtB_QCCrewMe_ANY = 0x00000c30,
+        StringNames__Enum_QCResAWasAtBNeg_QCCrewMe_ANY = 0x00000c31,
+        StringNames__Enum_QCStaADidB_QCCrewMe_ANY = 0x00000c32,
+        StringNames__Enum_QCAccIsRole_QCCrewMe_ANY = 0x00000c33,
+        StringNames__Enum_QCAccIsRoleNeg_QCCrewMe_ANY = 0x00000c34,
+        StringNames__Enum_QCResProtected_ANY_QCCrewMe = 0x00000c35,
+        StringNames__Enum_QCCrewSomeone = 0x00000c36,
+        StringNames__Enum_QCResUrWelcome = 0x00000c37,
+        StringNames__Enum_QCResNp = 0x00000c38,
+        StringNames__Enum_QCResYikes = 0x00000c39,
+        StringNames__Enum_QCResRipCrew = 0x00000c3a,
+        StringNames__Enum_QCResYeetCrew = 0x00000c3b,
+        StringNames__Enum_QCSelfWasOnVitals = 0x00000c3c,
+        StringNames__Enum_QCSawDeadCrewOnVitals = 0x00000c3d,
+        StringNames__Enum_QCSelfSawTwoCrew = 0x00000c3e,
+        StringNames__Enum_QCCrewShapeshifted = 0x00000c3f,
+        StringNames__Enum_QCSelfSawCrewDoVisualTask = 0x00000c40,
+        StringNames__Enum_QCSelfWasOnDoorlogs = 0x00000c41,
+        StringNames__Enum_QCSelfWasOnAdmin = 0x00000c42,
+        StringNames__Enum_QCSelfAmVotingCrew = 0x00000c43,
+        StringNames__Enum_QCCrewWasPretendingTasks = 0x00000c44,
+        StringNames__Enum_QCCrewWasPretendingSabotage = 0x00000c45,
+        StringNames__Enum_QCLobbyMoreImpostors = 0x00000c46,
+        StringNames__Enum_QCLobbyLessImpostors = 0x00000c47,
+        StringNames__Enum_QCLobbyConfirmEjects = 0x00000c48,
+        StringNames__Enum_QCLobbyMoreEmergencyMeetings = 0x00000c49,
+        StringNames__Enum_QCLobbyLessEmergencyMeetings = 0x00000c4a,
+        StringNames__Enum_QCLobbyAnonymousVotes = 0x00000c4b,
+        StringNames__Enum_QCLobbyMoreEmergencyCooldownTime = 0x00000c4c,
+        StringNames__Enum_QCLobbyLessEmergencyCooldownTime = 0x00000c4d,
+        StringNames__Enum_QCLobbyMoreDiscussionTime = 0x00000c4e,
+        StringNames__Enum_QCLobbyLessDiscussionTime = 0x00000c4f,
+        StringNames__Enum_QCLobbyMoreVotingTime = 0x00000c50,
+        StringNames__Enum_QCLobbyLessVotingTime = 0x00000c51,
+        StringNames__Enum_QCLobbyFasterPlayerSpeed = 0x00000c52,
+        StringNames__Enum_QCLobbySlowerPlayerSpeed = 0x00000c53,
+        StringNames__Enum_QCLobbyTaskBarUpdates = 0x00000c54,
+        StringNames__Enum_QCLobbyVisualTasks = 0x00000c55,
+        StringNames__Enum_QCLobbyMoreCrewmateVision = 0x00000c56,
+        StringNames__Enum_QCLobbyLessCrewmateVision = 0x00000c57,
+        StringNames__Enum_QCLobbyMoreImpostorVision = 0x00000c58,
+        StringNames__Enum_QCLobbyLessImpostorVision = 0x00000c59,
+        StringNames__Enum_QCLobbyMoreKillCooldownTime = 0x00000c5a,
+        StringNames__Enum_QCLobbyLessKillCooldownTime = 0x00000c5b,
+        StringNames__Enum_QCLobbyLongerKillDistance = 0x00000c5c,
+        StringNames__Enum_QCLobbyShorderKillDistance = 0x00000c5d,
+        StringNames__Enum_QCLobbyMoreCommonTasks = 0x00000c5e,
+        StringNames__Enum_QCLobbyLessCommonTasks = 0x00000c5f,
+        StringNames__Enum_QCLobbyMoreLongTasks = 0x00000c60,
+        StringNames__Enum_QCLobbyLessLongTasks = 0x00000c61,
+        StringNames__Enum_QCLobbyMoreShortTasks = 0x00000c62,
+        StringNames__Enum_QCLobbyLessShortTasks = 0x00000c63,
+        StringNames__Enum_QCLobbyRoleScientists = 0x00000c64,
+        StringNames__Enum_QCLobbyRoleGuardianAngels = 0x00000c65,
+        StringNames__Enum_QCLobbyRoleEngineers = 0x00000c66,
+        StringNames__Enum_QCLobbyRoleShapeshifters = 0x00000c67,
+        StringNames__Enum_QCLobbyRoleNone = 0x00000c68,
+        StringNames__Enum_QCResLess = 0x00000c69,
+        StringNames__Enum_QCResMore = 0x00000c6a,
+        StringNames__Enum_QCResNone = 0x00000c6b,
+        StringNames__Enum_QCLobbyHNSMoreHideTime = 0x00000c6c,
+        StringNames__Enum_QCLobbyHNSLessHideTime = 0x00000c6d,
+        StringNames__Enum_QCLobbyHNSMoreFinalHideTime = 0x00000c6e,
+        StringNames__Enum_QCLobbyHNSLessFinalHideTime = 0x00000c6f,
+        StringNames__Enum_QCLobbyHNSFlashlightMode = 0x00000c70,
+        StringNames__Enum_QCLobbyHNSMoreCrewmateFlashlightSize = 0x00000c71,
+        StringNames__Enum_QCLobbyHNSLessCrewmateFlashlightSize = 0x00000c72,
+        StringNames__Enum_QCLobbyHNSMoreImpostorFlashlightSize = 0x00000c73,
+        StringNames__Enum_QCLobbyHNSLessImpostorFlashlightSize = 0x00000c74,
+        StringNames__Enum_QCLobbyHNSShowNames = 0x00000c75,
+        StringNames__Enum_QCLobbyHNSMoreVents = 0x00000c76,
+        StringNames__Enum_QCLobbyHNSLessVents = 0x00000c77,
+        StringNames__Enum_QCLobbyHNSMoreTimeInVent = 0x00000c78,
+        StringNames__Enum_QCLobbyHNSLessTimeInVent = 0x00000c79,
+        StringNames__Enum_QCLobbyHNSMoreFinalHideImpostorSpeed = 0x00000c7a,
+        StringNames__Enum_QCLobbyHNSLessFinalHideImpostorSpeed = 0x00000c7b,
+        StringNames__Enum_QCLobbyHNSFinalHideSeekMap = 0x00000c7c,
+        StringNames__Enum_QCLobbyHNSFinalHidePings = 0x00000c7d,
+        StringNames__Enum_QCLobbyHNSMorePingInterval = 0x00000c7e,
+        StringNames__Enum_QCLobbyHNSLessPingInterval = 0x00000c7f,
         StringNames__Enum_SettingsColorblind = 0x00000c80,
         StringNames__Enum_SettingsHelp = 0x00000c81,
         StringNames__Enum_SecLogEntryColorblind = 0x00000c82,
@@ -7272,6 +7635,15 @@ namespace app
         StringNames__Enum_AgeVerificationMoreInfo = 0x00000cef,
         StringNames__Enum_EditLabel = 0x00000cf0,
         StringNames__Enum_VerifyAgeText = 0x00000cf1,
+        StringNames__Enum_PlayLabel = 0x00000cf2,
+        StringNames__Enum_SettingsLabel = 0x00000cf3,
+        StringNames__Enum_NewsLabel = 0x00000cf4,
+        StringNames__Enum_AccountLabel = 0x00000cf5,
+        StringNames__Enum_CreditsLabel = 0x00000cf6,
+        StringNames__Enum_ShopLabel = 0x00000cf7,
+        StringNames__Enum_InventoryLabel = 0x00000cf8,
+        StringNames__Enum_StatsLabel = 0x00000cf9,
+        StringNames__Enum_FriendsLabel = 0x00000cfa,
         StringNames__Enum_GameType = 0x00000dac,
         StringNames__Enum_GameTypeError = 0x00000dad,
         StringNames__Enum_GameTypeClassic = 0x00000dae,
@@ -9157,6 +9529,7 @@ namespace app
         struct PetBehaviour* currentPet;
         void* normalBodySprite;
         bool initialized;
+        void* petAsset;
         bool visible;
         bool isNameVisible;
         bool lockVisible;
@@ -9475,76 +9848,6 @@ namespace app
     };
 #pragma endregion
 
-#pragma region Action_1_MapBehaviour_
-
-    struct __declspec(align(4)) Delegate__Fields
-    {
-        void* method_ptr;
-        void* invoke_impl;
-        struct Object* m_target;
-        void* method;
-        void* delegate_trampoline;
-        void* extra_arg;
-        void* method_code;
-        struct MethodInfo_1* method_info;
-        struct MethodInfo_1* original_method_info;
-        struct DelegateData* data;
-        bool method_is_virtual;
-    };
-
-    struct MulticastDelegate__Fields
-    {
-        struct Delegate__Fields _;
-        void* delegates;
-    };
-
-    struct Action_1_MapBehaviour___Fields
-    {
-        struct MulticastDelegate__Fields _;
-    };
-
-    struct Action_1_MapBehaviour_
-    {
-        struct Action_1_MapBehaviour___Class* klass;
-        void* monitor;
-        struct Action_1_MapBehaviour___Fields fields;
-    };
-
-    struct Action_1_MapBehaviour___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData Clone;
-        VirtualInvokeData GetObjectData;
-        VirtualInvokeData DynamicInvokeImpl;
-        VirtualInvokeData Clone_1;
-        VirtualInvokeData GetMethodImpl;
-        VirtualInvokeData GetObjectData_1;
-        VirtualInvokeData GetInvocationList;
-        VirtualInvokeData CombineImpl;
-        VirtualInvokeData RemoveImpl;
-        VirtualInvokeData Invoke;
-        VirtualInvokeData BeginInvoke;
-        VirtualInvokeData EndInvoke;
-    };
-
-    struct Action_1_MapBehaviour___StaticFields
-    {
-    };
-
-    struct Action_1_MapBehaviour___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Action_1_MapBehaviour___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Action_1_MapBehaviour___VTable vtable;
-    };
-#pragma endregion
-
 #pragma region KeyboardJoystick
     struct KeyboardJoystick__Fields
     {
@@ -9857,11 +10160,30 @@ namespace app
     struct MainMenuManager__Fields {
         struct MonoBehaviour__Fields _;
         void* AdsPolicy;
-        void* Announcement;
-        void* googlePlayAssetHandler;
+        void* PlayOnlineButton;
         struct HatManager* HatManagerRef;
         void* CosmicubeManagerRef;
         void* playerCustomizationPrefab;
+        void* announcementPopUp;
+        struct GameObject* gameModeButtons;
+        struct GameObject* accountButtons;
+        void* screenMask;
+        struct GameObject* mainMenuUI;
+        struct GameObject* rightPanelMask;
+        struct SpriteRenderer* screenTint;
+        void* playButton;
+        void* inventoryButton;
+        void* shopButton;
+        void* myAccountButton;
+        void* newsButton;
+        void* settingsButton;
+        void* creditsButton;
+        void* quitButton;
+        void* playLocalButton;
+        void* howToPlayButton;
+        void* accountCTAButton;
+        void* mainButtons;
+        struct GameObject* creditsScreen;
         void* DefaultButtonSelected;
         void* ControllerSelectable;
         void* disableOnStartup;
@@ -10436,7 +10758,8 @@ namespace app
         void* SpawnPositions;
         void* DropShipSound;
         void* AllRooms;
-        float timer;
+        float lastFriendsCheckTime;
+        float optionsTimer;
     };
 
     struct LobbyBehaviour
@@ -10876,6 +11199,8 @@ namespace app
         int32_t displayOrder;
         bool NotInStore;
         bool Free;
+        void* SpritePreview;
+        bool PreviewCrewmateColor;
     };
     struct CosmeticData
     {
@@ -10924,7 +11249,6 @@ namespace app
         bool BlocksVisors;
         struct String* StoreName;
         struct SkinData* RelatedSkin;
-        void* hatViewData;
     };
 
     struct HatData {
@@ -10947,6 +11271,8 @@ namespace app
         VirtualInvokeData GetItemCategory;
         VirtualInvokeData SetProdId;
         VirtualInvokeData CoLoadIcon;
+        VirtualInvokeData CreateAddressableAsset;
+        VirtualInvokeData GetAssetReference;
     };
 
     struct HatData__StaticFields {
@@ -11073,7 +11399,6 @@ namespace app
         void* PlayerMaterial;
         void* MaskedPlayerMaterial;
         void* MaskedMaterial;
-        void* Groups;
         struct PetData__Array* allPets;
         struct HatData__Array* allHats;
         struct SkinData__Array* allSkins;
@@ -11122,7 +11447,6 @@ namespace app
     struct NamePlateData__Fields {
         struct CosmeticData__Fields _;
         void* ViewDataRef;
-        void* viewData;
     };
 
     struct NamePlateData {
@@ -11166,7 +11490,6 @@ namespace app
         int32_t StoreName;
 #endif
         void* PetPrefabRef;
-        void* viewData;
     };
 
     struct PetData {
@@ -11202,7 +11525,6 @@ namespace app
         struct CosmeticData__Fields _;
         void* ViewDataRef;
         struct String* StoreName;
-        void* viewData;
     };
 
     struct SkinData
@@ -11226,6 +11548,8 @@ namespace app
         VirtualInvokeData GetItemCategory;
         VirtualInvokeData SetProdId;
         VirtualInvokeData CoLoadIcon;
+        VirtualInvokeData CreateAddressableAsset;
+        VirtualInvokeData GetAssetReference;
     };
 
     struct SkinData__StaticFields
@@ -12307,6 +12631,9 @@ namespace app
         struct Color CosmicubeQuality_Kill;
         struct Color InventorySelectedTextColor;
         struct Color InventoryTextColor;
+        struct Color LogSuccessColor;
+        struct Color LogWarningColor;
+        struct Color LogErrorColor;
         struct StringNames__Enum__Array* ColorNames;
         struct Color32__Array* PlayerColors;
         struct Color32__Array* ShadowColors;
@@ -12345,12 +12672,6 @@ namespace app
     };
 
 #endif
-
-    struct Announcement
-    {
-        uint32_t Id;
-        struct String* Text;
-    };
 
     struct SaveManager {
         Il2CppClass* klass;
@@ -12405,7 +12726,7 @@ namespace app
         struct Vent* currentTarget;
         float cooldownSecondsRemaining;
         float inVentTimeRemaining;
-        float usesRemaining;
+        int32_t usesRemaining;
     };
 
     struct EngineerRole
