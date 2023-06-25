@@ -124,13 +124,18 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         nameChangeCycleDelay--;
     }
     // Right-click Teleport
-    if (IsInGame() && State.RightClickTeleport && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+    if (State.RightClickTeleport && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
         ImVec2 mouse = ImGui::GetMousePos();
         Vector2 target = {
             (mouse.x - DirectX::GetWindowSize().x / 2) + DirectX::GetWindowSize().x / 2,
             ((mouse.y - DirectX::GetWindowSize().y / 2) - DirectX::GetWindowSize().y / 2) * -1.0f
         };
-        State.rpcQueue.push(new RpcSnapTo(ScreenToWorld(target)));
+        if (IsInGame()) {
+            State.rpcQueue.push(new RpcSnapTo(ScreenToWorld(target)));
+        }
+        if (IsInLobby()) {
+            State.lobbyRpcQueue.push(new RpcSnapTo(ScreenToWorld(target)));
+        }
     }
     InnerNetClient_Update(__this, method);
 }

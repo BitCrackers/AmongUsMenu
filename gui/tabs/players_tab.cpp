@@ -79,6 +79,9 @@ namespace PlayersTab {
 					if (ImGui::Button("Call Meeting")) {
 						State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 					}
+					if (ImGui::Button("Force report body")) {
+						State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
+					}
 				}
 				if (State.activeImpersonation)
 				{
