@@ -13,11 +13,19 @@ void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	auto roleRates = RoleRates(options, (int)allPlayers.size());
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
+	if (options.GetGameMode() != GameModes__Enum::HideNSeek)
+	{
 	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
 	AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
 	AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
 	AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
 	AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+	}
+	else 
+	{
+	AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+	AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);	
+	}
 }
 
 /*void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
@@ -47,7 +55,11 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 
 void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2cpp::List<List_1_PlayerControl_>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
+	GameOptions options;
 	auto roleCount = roleRates.GetRoleCount(role);
+	if (role == RoleTypes__Enum::Engineer && options.GetGameMode() == GameModes__Enum::HideNSeek)
+		roleCount = allPlayers.size() - 1;
+
 	if (roleCount < 1)
 		return;
 
