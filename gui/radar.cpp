@@ -50,6 +50,10 @@ namespace Radar {
 			};
 
 			State.rpcQueue.push(new RpcSnapTo(target));
+
+			//Fixed #546
+			ImGui::GetIO().MouseDown[ImGuiMouseButton_Right] = false;
+			ImGui::GetIO().MouseDownDuration[ImGuiMouseButton_Right] = -1.0f;
 		}
 	}
 
