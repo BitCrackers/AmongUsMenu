@@ -90,8 +90,8 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0xA3, "R CTRL"},
 };
 
-static std::bitset<0xFF> PrevKeyState;
-static std::bitset<0xFF> KeyState;
+static std::bitset<256> PrevKeyState;
+static std::bitset<256> KeyState;
 
 void KeyBinds::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
