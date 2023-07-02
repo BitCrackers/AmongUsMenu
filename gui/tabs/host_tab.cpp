@@ -25,6 +25,10 @@ namespace HostTab {
 				auto allPlayers = GetAllPlayerData();
 				auto playerAmount = allPlayers.size();
 				auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
+
+				if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+					maxImposterAmount = 1; //You can assign more than 1 imposter in hide n seek and game will run. But what's the use?
+
 				for (size_t index = 0; index < playerAmount; index++) {
 					auto playerData = allPlayers[index];
 					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
@@ -42,6 +46,18 @@ namespace HostTab {
 						State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
 						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
 						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
+						//No need for crewmates count.
+
+						if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+						{
+							if (State.assignedRoles[index] == RoleType::Shapeshifter)
+								State.assignedRoles[index] = RoleType::Random; //Not Imposter to avoid more bugs.
+							else if (State.assignedRoles[index] == RoleType::Scientist || State.assignedRoles[index] == RoleType::Crewmate)
+								State.assignedRoles[index] = RoleType::Engineer;
+							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+							State.engineers_amount = (int)GetRoleCount(RoleType::Engineer);
+						} //Do not assign other roles in hide n seek or game may bug.
+
 						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
 							if(State.assignedRoles[index] == RoleType::Shapeshifter)
