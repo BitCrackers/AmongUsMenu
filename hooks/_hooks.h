@@ -14,7 +14,7 @@ float dStatsManager_get_BanPoints(StatsManager* __this, MethodInfo* method);
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method);
 int32_t dStatsManager_get_BanMinutesLeft(StatsManager* __this, MethodInfo* method);
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method);
-void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method);
+void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, bool censor, MethodInfo* method);
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method);
 void dHudManager_Update(HudManager* __this, MethodInfo* method);
 Vector3 dCamera_ScreenToWorldPoint(Camera* __this, Vector3 position, MethodInfo* method);

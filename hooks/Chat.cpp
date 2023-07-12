@@ -4,7 +4,7 @@
 #include "game.h"
 #include "state.hpp"
 
-void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
+void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, bool censor, MethodInfo* method) {
 	if (State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
@@ -14,13 +14,13 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 			local->fields.IsDead = true;
 			wasDead = true;
 		}
-		ChatController_AddChat(__this, sourcePlayer, chatText, method);
+		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
 		if (wasDead) {
 			local->fields.IsDead = false;
 		}
 	}
 	else
-		ChatController_AddChat(__this, sourcePlayer, chatText, method);
+		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {

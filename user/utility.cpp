@@ -201,22 +201,22 @@ std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
 }
 
 Game::PlayerId PlayerSelection::get_PlayerId() const noexcept {
-#if _DEBUG
-	assert(this->has_value());
+#if 0//_DEBUG
+	LOG_ASSERT(this->has_value());
 #endif
 	return this->playerId;
 }
 
 Game::ClientId PlayerSelection::get_ClientId() const noexcept {
-#if _DEBUG
-	assert(this->has_value());
+#if 0//_DEBUG
+	LOG_ASSERT(this->has_value());
 #endif
 	return this->clientId;
 }
 
 bool PlayerSelection::is_LocalPlayer() const noexcept {
-#if _DEBUG
-	assert(this->has_value());
+#if 0//_DEBUG
+	LOG_ASSERT(this->has_value());
 #endif
 	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }
