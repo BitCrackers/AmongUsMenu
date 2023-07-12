@@ -3436,7 +3436,6 @@ namespace app
         bool hasFocus;
         struct System_Text_StringBuilder_o* tempTxt;
         struct UnityEngine_SpriteRenderer_o* sendButtonGlyph;
-        struct UnityEngine_SpriteRenderer_o* quickChatGlyph;
     };
 
     struct TextBoxTMP {
@@ -4947,6 +4946,7 @@ namespace app
         void* AllConsoles;
         struct Dictionary_2_SystemTypes_ISystemType_* Systems;
         void* SystemNames;
+        void* ExtraTaskNames;
         void* _AllStepWatchers_k__BackingField;
         struct PlainShipRoom__Array* _AllRooms_k__BackingField;
         void* _FastRooms_k__BackingField;
@@ -8786,7 +8786,7 @@ namespace app
         MonitorOxygen = 0x0000001e,
         StoreArtifacts = 0x0000001f,
         FillCanisters = 0x00000020,
-        ActivateWeatherNodes = 0x00000021,
+        FixWeatherNode = 0x00000021,
         InsertKeys = 0x00000022,
         ResetSeismic = 0x00000023,
         ScanBoardingPass = 0x00000024,
@@ -8853,7 +8853,7 @@ namespace app
         TaskTypes__Enum_MonitorOxygen = 0x0000001e,
         TaskTypes__Enum_StoreArtifacts = 0x0000001f,
         TaskTypes__Enum_FillCanisters = 0x00000020,
-        TaskTypes__Enum_ActivateWeatherNodes = 0x00000021,
+        TaskTypes__Enum_FixWeatherNode = 0x00000021,
         TaskTypes__Enum_InsertKeys = 0x00000022,
         TaskTypes__Enum_ResetSeismic = 0x00000023,
         TaskTypes__Enum_ScanBoardingPass = 0x00000024,
@@ -9296,45 +9296,88 @@ namespace app
 #pragma endregion
 
 #pragma region ChatController
-    struct ChatController__Fields
-    {
-        struct MonoBehaviour__Fields _;
-        void* chatBubPool;
-        struct Transform* TypingArea;
-        struct SpriteRenderer* TextBubble;
-        struct TextBoxTMP* TextArea;
-        struct TextMeshPro* CharCount;
-        void* scroller;
-        struct GameObject* Content;
-        struct SpriteRenderer* BackgroundImage;
-        struct SpriteRenderer* ChatNotifyDot;
-        struct TextMeshPro* SendRateMessage;
-        struct Vector3 SourcePos;
-        struct Vector3 TargetPos;
-        struct Vector3 MeetingHudPos;
-        void* AspectPosition;
-        float TimeSinceLastMessage;
-        void* MessageSound;
-        void* WarningSound;
-        bool animating;
-        void* notificationRoutine;
-        void* BanButton;
-        void* quickChatMenu;
-        void* quickChatData;
-        struct GameObject* OpenKeyboardButton;
-        struct GameObject* ChatButton;
-        void* BackButton;
-        void* DefaultButtonSelected;
-        void* ControllerSelectable;
-        void* specialInputHandler;
-        void* logger;
+
+#if defined(_CPLUSPLUS_)
+    enum class ChatControllerState__Enum : int32_t {
+        Closed = 0x00000000,
+        Closing = 0x00000001,
+        Open = 0x00000002,
+        Opening = 0x00000003,
     };
 
-    struct ChatController
-    {
+#else
+    enum ChatControllerState__Enum {
+        ChatControllerState__Enum_Closed = 0x00000000,
+        ChatControllerState__Enum_Closing = 0x00000001,
+        ChatControllerState__Enum_Open = 0x00000002,
+        ChatControllerState__Enum_Opening = 0x00000003,
+    };
+
+#endif
+
+    struct ChatController__Fields {
+        struct MonoBehaviour__Fields _;
+        struct GameObject* chatButton;
+        void* chatButtonAspectPosition;
+        void* banButton;
+        struct GameObject* openKeyboardButton;
+        void* quickChatButton;
+        struct GameObject* chatScreen;
+        void* chatBubblePool;
+        void* scroller;
+        struct SpriteRenderer* backgroundImage;
+        struct SpriteRenderer* chatNotifyDot;
+        struct TextMeshPro* sendRateMessageText;
+        void* aspectPosition;
+        struct FreeChatInputField* freeChatField;
+        void* quickChatMenu;
+        void* quickChatField;
+        void* messageSound;
+        void* warningSound;
+        void* chatAnimationIn;
+        void* chatAnimationOut;
+        void* backButton;
+        void* defaultButtonSelected;
+        void* controllerSelectable;
+#if defined(_CPLUSPLUS_)
+        ChatControllerState__Enum state;
+#else
+        int32_t state;
+#endif
+        struct Vector3 targetChatPosition;
+        float timeSinceLastMessage;
+        void* notificationRoutine;
+        void* specialInputHandler;
+        float targetScale;
+    };
+
+    struct ChatController {
         struct ChatController__Class* klass;
-        void* monitor;
+        MonitorData* monitor;
         struct ChatController__Fields fields;
+    };
+
+    struct AbstractChatInputField__Fields {
+        struct MonoBehaviour__Fields _;
+        struct SpriteRenderer* background;
+        void* submitButton;
+        bool visible;
+        bool canSubmit;
+        void* OnSubmitEvent;
+    };
+
+    struct FreeChatInputField__Fields {
+        struct AbstractChatInputField__Fields _;
+        struct TextBoxTMP* textArea;
+        void* fieldButton;
+        struct TextMeshPro* charCountText;
+        void* OnChangedEvent;
+    };
+
+    struct FreeChatInputField {
+        void* klass;
+        MonitorData* monitor;
+        struct FreeChatInputField__Fields fields;
     };
 
     struct ChatController__VTable
@@ -9345,8 +9388,8 @@ namespace app
         VirtualInvokeData ToString;
     };
 
-    struct ChatController__StaticFields
-    {
+    struct ChatController__StaticFields {
+        void* Logger;
     };
 
     struct ChatController__Class
@@ -9788,6 +9831,7 @@ namespace app
         void* _ReactorFlash_k__BackingField;
         void* _OxyFlash_k__BackingField;
         void* MapButton;
+        struct GameObject* MapButtonGlyph;
         void* KillOverlay;
         void* joystick;
         void* joystickR;
@@ -10026,6 +10070,7 @@ namespace app
     {
         struct InnerNetObject__Fields _;
         struct SpriteRenderer* BlackBackground;
+        void* OuterMasks;
         void* PlayerColoredParts;
         void* MeetingIntro;
         struct Transform* ButtonParent;
@@ -10264,6 +10309,7 @@ namespace app
         PlatformParentalControlsBlock = 0x000000d3,
         PlatformUserBlock = 0x000000d4,
         PlatformFailedToGetUserBlock = 0x000000d5,
+        ServerNotFound = 0x000000d6,
         Unknown = 0x000000ff,
     };
 
@@ -10310,6 +10356,7 @@ namespace app
         DisconnectReasons__Enum_PlatformParentalControlsBlock = 0x000000d3,
         DisconnectReasons__Enum_PlatformUserBlock = 0x000000d4,
         DisconnectReasons__Enum_PlatformFailedToGetUserBlock = 0x000000d5,
+        DisconnectReasons__Enum_ServerNotFound = 0x000000d6,
         DisconnectReasons__Enum_Unknown = 0x000000ff,
     };
 

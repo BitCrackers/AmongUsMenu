@@ -201,7 +201,6 @@ RoleManager
 HatData
 HatData__Array
 List_1_HatData_
-GameOptionsDataParent
 StatsManager_Stats
 SkinLayer
 VoteSpreader__Fields
@@ -219,3 +218,6 @@ DestroyableSingleton_1_PlayerStorageManager___Fields
 PlayerStorageManager_CloudPlayerPrefs
 PlayerStorageManager__Fields
 UpdateState__Enum
+AbstractChatInputField__Fields
+FreeChatInputField__Fields
+FreeChatInputField
