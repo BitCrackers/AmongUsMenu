@@ -132,6 +132,7 @@ public:
     int shapeshifters_amount = 0;
     int engineers_amount = 0;
     int scientists_amount = 0;
+    int crewmates_amount = 0;
 
     bool Wallhack = false;
     bool FreeCam = false;

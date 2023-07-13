@@ -9,6 +9,7 @@
 #include "profiler.h"
 #include <sstream>
 #include "esp.hpp"
+#include <algorithm>
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
@@ -218,6 +219,7 @@ static void onGameEnd() {
     Replay::Reset();
     State.aumUsers.clear();
     State.chatMessages.clear();
+    std::fill(State.assignedRoles.begin(), State.assignedRoles.end(), RoleType::Random); //Clear Pre assigned roles to avoid bugs.
     State.MatchEnd = std::chrono::system_clock::now();
 
     drawing_t& instance = Esp::GetDrawing();

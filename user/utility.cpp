@@ -94,9 +94,12 @@ void RoleRates::SubtractRole(RoleTypes__Enum role) {
 
 int GetMaxImposterAmount(int playerAmount)
 {
-	if(playerAmount >= 9)
+	GameOptions options;
+	if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+		return 1;
+	if (playerAmount >= 9)
 		return 3;
-	if(playerAmount >= 7)
+	if (playerAmount >= 7)
 		return 2;
 	return 1;
 }
