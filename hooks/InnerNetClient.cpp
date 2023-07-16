@@ -220,6 +220,11 @@ static void onGameEnd() {
     State.aumUsers.clear();
     State.chatMessages.clear();
     std::fill(State.assignedRoles.begin(), State.assignedRoles.end(), RoleType::Random); //Clear Pre assigned roles to avoid bugs.
+    State.engineers_amount = 0;
+    State.scientists_amount = 0;
+    State.shapeshifters_amount = 0;
+    State.impostors_amount = 0;
+    State.crewmates_amount = 0; //We need to reset these. Or if the host doesn't turn on host tab ,these value won't update.
     State.MatchEnd = std::chrono::system_clock::now();
 
     drawing_t& instance = Esp::GetDrawing();
