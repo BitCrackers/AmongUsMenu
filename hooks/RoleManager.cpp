@@ -60,10 +60,10 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2
 	auto playerAmount = allPlayers.size();
 	auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
 
-	if (role == RoleTypes__Enum::Shapeshifter || role == RoleTypes__Enum::Impostor) {
-		if (State.shapeshifters_amount + State.impostors_amount >= maxImposterAmount)
-			return; //Skip assigns when pre assigned enough imps.
-	}
+	//if (role == RoleTypes__Enum::Shapeshifter || role == RoleTypes__Enum::Impostor) {
+	//	if (State.shapeshifters_amount + State.impostors_amount >= maxImposterAmount)
+	//		return; //Skip assigns when pre assigned enough imps.
+	//}
 
 	if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
 		if (role == RoleTypes__Enum::Impostor)
