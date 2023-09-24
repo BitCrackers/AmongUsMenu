@@ -42,7 +42,6 @@ void Settings::Load() {
         JSON_TRYGET("FakeLevel", this->FakeLevel);
         JSON_TRYGET("ShowKeybinds", this->ShowKeybinds);
 
-<<<<<<< HEAD
         JSON_TRYGET("SelectedColorId", this->SelectedColorId);
         JSON_TRYGET("SnipeColor", this->SnipeColor);
         JSON_TRYGET("CycleInMeeting", this->CycleInMeeting);
@@ -58,13 +57,10 @@ void Settings::Load() {
         JSON_TRYGET("CycleSkin", this->RandomSkin);
         JSON_TRYGET("CyclePet", this->RandomPet);
         JSON_TRYGET("CycleNamePlate", this->RandomNamePlate);
-        
-=======
         JSON_TRYGET("PlayerSpeed", this->PlayerSpeed);
         JSON_TRYGET("CameraHeight", this->CameraHeight);
         JSON_TRYGET("FreeCamSpeed", this->FreeCamSpeed);
         JSON_TRYGET("UserName", this->userName);
->>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
         JSON_TRYGET("ShowGhosts", this->ShowGhosts);
         JSON_TRYGET("ShowRadar", this->ShowRadar);
         JSON_TRYGET("ShowRadar_DeadBodies", this->ShowRadar_DeadBodies);
@@ -180,7 +176,6 @@ void Settings::Save() {
             {"FakeLevel", this->FakeLevel},
             {"ShowKeybinds", this->ShowKeybinds},
 
-<<<<<<< HEAD
             {"SelectedColorId", this->SelectedColorId},
             {"SnipeColor", this->SnipeColor},
             {"CycleInMeeting", this->CycleInMeeting},
@@ -197,12 +192,10 @@ void Settings::Save() {
             {"CyclePet", this->RandomPet},
             {"CycleNamePlate", this->RandomNamePlate},
             
-=======
             {"PlayerSpeed", this->PlayerSpeed},
             {"CameraHeight", this->CameraHeight},
             {"FreeCamSpeed", this->FreeCamSpeed},
             {"UserName", this->userName},
->>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
             {"ShowGhosts", this->ShowGhosts},
             {"ShowRadar", this->ShowRadar},
             {"ShowRadar_DeadBodies", this->ShowRadar_DeadBodies},

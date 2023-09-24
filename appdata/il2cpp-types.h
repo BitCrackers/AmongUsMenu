@@ -9497,7 +9497,6 @@ namespace app
         Closing = 0x00000001,
         Open = 0x00000002,
         Opening = 0x00000003,
-<<<<<<< HEAD
     };
 
 #else
@@ -9509,81 +9508,40 @@ namespace app
     };
 
 #endif
-
-    struct ChatController__Fields
-    {
-        struct MonoBehaviour__Fields _;
-        struct GameObject* chatButton;
-        void* chatButtonAspectPosition;
-        void* banButton;
-        struct GameObject* openKeyboardButton;
-        void* quickChatButton;
-        struct GameObject* chatScreen;
-        void* chatBubblePool;
-        void* scroller;
-        struct SpriteRenderer* backgroundImage;
-        struct SpriteRenderer* chatNotifyDot;
-        struct TextMeshPro* sendRateMessageText;
-        void* aspectPosition;
-        struct FreeChatInputField* freeChatField;
-        void* quickChatMenu;
-        void* quickChatField;
-        void* messageSound;
-        void* warningSound;
-        void* chatAnimationIn;
-        void* chatAnimationOut;
-        void* backButton;
-        void* defaultButtonSelected;
-        void* controllerSelectable;
+    struct ChatControllerState__Enum__Boxed {
+        struct ChatControllerState__Enum__Class* klass;
+        MonitorData* monitor;
 #if defined(_CPLUSPLUS_)
-        ChatControllerState__Enum state;
+        ChatControllerState__Enum value;
 #else
-        int32_t state;
+        int32_t value;
 #endif
-        struct Vector3 targetChatPosition;
-        float timeSinceLastMessage;
-        void* notificationRoutine;
-        void* specialInputHandler;
-        float targetScale;
     };
-
-=======
-    };
-
-#else
-    enum ChatControllerState__Enum {
-        ChatControllerState__Enum_Closed = 0x00000000,
-        ChatControllerState__Enum_Closing = 0x00000001,
-        ChatControllerState__Enum_Open = 0x00000002,
-        ChatControllerState__Enum_Opening = 0x00000003,
-    };
-
-#endif
 
     struct ChatController__Fields {
         struct MonoBehaviour__Fields _;
         struct GameObject* chatButton;
-        void* chatButtonAspectPosition;
-        void* banButton;
+        struct AspectPosition* chatButtonAspectPosition;
+        struct BanMenu* banButton;
         struct GameObject* openKeyboardButton;
-        void* quickChatButton;
+        struct PassiveButton* quickChatButton;
         struct GameObject* chatScreen;
-        void* chatBubblePool;
-        void* scroller;
+        struct ObjectPoolBehavior* chatBubblePool;
+        struct Scroller* scroller;
         struct SpriteRenderer* backgroundImage;
         struct SpriteRenderer* chatNotifyDot;
         struct TextMeshPro* sendRateMessageText;
-        void* aspectPosition;
+        struct AspectPosition* aspectPosition;
         struct FreeChatInputField* freeChatField;
-        void* quickChatMenu;
-        void* quickChatField;
-        void* messageSound;
-        void* warningSound;
-        void* chatAnimationIn;
-        void* chatAnimationOut;
-        void* backButton;
-        void* defaultButtonSelected;
-        void* controllerSelectable;
+        struct QuickChatMenu* quickChatMenu;
+        struct QuickChatPreviewField* quickChatField;
+        struct AudioClip* messageSound;
+        struct AudioClip* warningSound;
+        struct AnimationCurve* chatAnimationIn;
+        struct AnimationCurve* chatAnimationOut;
+        struct UiElement* backButton;
+        struct UiElement* defaultButtonSelected;
+        struct List_1_UiElement_* controllerSelectable;
 #if defined(_CPLUSPLUS_)
         ChatControllerState__Enum state;
 #else
@@ -9591,43 +9549,31 @@ namespace app
 #endif
         struct Vector3 targetChatPosition;
         float timeSinceLastMessage;
-        void* notificationRoutine;
-        void* specialInputHandler;
+        struct Coroutine* notificationRoutine;
+        struct SpecialInputHandler* specialInputHandler;
         float targetScale;
     };
 
->>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
     struct ChatController {
         struct ChatController__Class* klass;
         MonitorData* monitor;
         struct ChatController__Fields fields;
     };
 
-    struct AbstractChatInputField__Fields {
-        struct MonoBehaviour__Fields _;
-        struct SpriteRenderer* background;
-        void* submitButton;
-        bool visible;
-        bool canSubmit;
-        void* OnSubmitEvent;
-    };
-
     struct FreeChatInputField__Fields {
-        struct AbstractChatInputField__Fields _;
         struct TextBoxTMP* textArea;
-        void* fieldButton;
+        struct PassiveButton* fieldButton;
         struct TextMeshPro* charCountText;
-        void* OnChangedEvent;
+        struct Action* OnChangedEvent;
     };
 
     struct FreeChatInputField {
-        void* klass;
+        struct FreeChatInputField__Class* klass;
         MonitorData* monitor;
         struct FreeChatInputField__Fields fields;
     };
 
-    struct ChatController__VTable
-    {
+    struct ChatController__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
@@ -9635,11 +9581,10 @@ namespace app
     };
 
     struct ChatController__StaticFields {
-        void* Logger;
+        struct Logger_2* Logger;
     };
 
-    struct ChatController__Class
-    {
+    struct ChatController__Class {
         Il2CppClass_0 _0;
         Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
         struct ChatController__StaticFields* static_fields;
