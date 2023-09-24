@@ -35,11 +35,7 @@ First you will need protontricks, you can install it with your packager of choic
 8. In the configuration window, click on **Libraries**
 9. Type `version` into the **New override for library** input
 10. Click **Add** and then **Apply**
-<<<<<<< HEAD
 11. SickoModeAU should now work properly in the game
-=======
-11. AmongUsMenu should now work properly in the game
->>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
 
 ### Default Hotkeys
 - Show Menu - DELETE
