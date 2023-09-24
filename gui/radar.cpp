@@ -49,6 +49,10 @@ namespace Radar {
 			};
 
 			State.rpcQueue.push(new RpcSnapTo(target));
+
+			/* Workaround for https://github.com/BitCrackers/AmongUsMenu/issues/546 */
+			ImGui::GetIO().MouseDown[ImGuiMouseButton_Right] = false;
+			ImGui::GetIO().MouseDownDuration[ImGuiMouseButton_Right] = -1.0f;
 		}
 		if (State.TeleportEveryone && !(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsKeyPressed(0x12) || ImGui::IsKeyDown(0x12)) && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
 			ImVec2 mouse = ImGui::GetMousePos();

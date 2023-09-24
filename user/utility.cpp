@@ -216,7 +216,11 @@ Game::ClientId PlayerSelection::get_ClientId() const noexcept {
 
 bool PlayerSelection::is_LocalPlayer() const noexcept {
 #if 0//_DEBUG
+<<<<<<< HEAD
 	//assert(this->has_value());
+=======
+	LOG_ASSERT(this->has_value());
+>>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
 #endif
 	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }

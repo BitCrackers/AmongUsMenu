@@ -295,6 +295,12 @@
     <ClCompile Include="hooks\PlayerStorageManager.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="rpc\RpcChatMessage.cpp">
+      <Filter>rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\aum-chat.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
     <ClCompile Include="user\achievements.cpp">
       <Filter>user</Filter>
     </ClCompile>
@@ -304,14 +310,9 @@
     <ClCompile Include="hooks\SabotageSystemType.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
-<<<<<<< HEAD:SickoModeAU.filters
-    <ClCompile Include="rpc\CmdCheckMurder.cpp" />
-    <ClCompile Include="appdata\il2cpp-functions.cpp" />
-=======
     <ClCompile Include="rpc\CmdCheckMurder.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
->>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81:AmongUsMenu.vcxproj.filters
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">
@@ -490,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="user\profiler.h">
       <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\aum-chat.hpp">
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="user\DestroyableSingleton.h">
       <Filter>user</Filter>

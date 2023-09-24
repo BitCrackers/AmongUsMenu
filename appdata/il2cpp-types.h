@@ -9497,6 +9497,7 @@ namespace app
         Closing = 0x00000001,
         Open = 0x00000002,
         Opening = 0x00000003,
+<<<<<<< HEAD
     };
 
 #else
@@ -9546,6 +9547,56 @@ namespace app
         float targetScale;
     };
 
+=======
+    };
+
+#else
+    enum ChatControllerState__Enum {
+        ChatControllerState__Enum_Closed = 0x00000000,
+        ChatControllerState__Enum_Closing = 0x00000001,
+        ChatControllerState__Enum_Open = 0x00000002,
+        ChatControllerState__Enum_Opening = 0x00000003,
+    };
+
+#endif
+
+    struct ChatController__Fields {
+        struct MonoBehaviour__Fields _;
+        struct GameObject* chatButton;
+        void* chatButtonAspectPosition;
+        void* banButton;
+        struct GameObject* openKeyboardButton;
+        void* quickChatButton;
+        struct GameObject* chatScreen;
+        void* chatBubblePool;
+        void* scroller;
+        struct SpriteRenderer* backgroundImage;
+        struct SpriteRenderer* chatNotifyDot;
+        struct TextMeshPro* sendRateMessageText;
+        void* aspectPosition;
+        struct FreeChatInputField* freeChatField;
+        void* quickChatMenu;
+        void* quickChatField;
+        void* messageSound;
+        void* warningSound;
+        void* chatAnimationIn;
+        void* chatAnimationOut;
+        void* backButton;
+        void* defaultButtonSelected;
+        void* controllerSelectable;
+#if defined(_CPLUSPLUS_)
+        ChatControllerState__Enum state;
+#else
+        int32_t state;
+#endif
+        struct Vector3 targetChatPosition;
+        float timeSinceLastMessage;
+        void* notificationRoutine;
+        void* specialInputHandler;
+        float targetScale;
+    };
+
+>>>>>>> e5f1c6f3dbd1732fa54ae7e021bbea9492767f81
     struct ChatController {
         struct ChatController__Class* klass;
         MonitorData* monitor;
