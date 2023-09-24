@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="appdata\il2cpp-functions.cpp" />
     <ClCompile Include="events\CastVoteEvent.cpp" />
     <ClCompile Include="events\CheatDetectedEvent.cpp" />
     <ClCompile Include="events\DisconnectEvent.cpp" />
@@ -29,7 +30,6 @@
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="events\WalkEvent.cpp" />
-    <ClCompile Include="gui\aum-chat.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\esp.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
@@ -79,7 +79,6 @@
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CmdCheckMurder.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
-    <ClCompile Include="rpc\RpcChatMessage.cpp" />
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
@@ -331,7 +330,6 @@
     <ClInclude Include="appdata\il2cpp-functions.h" />
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
-    <ClInclude Include="gui\aum-chat.hpp" />
     <ClInclude Include="gui\console.hpp" />
     <ClInclude Include="gui\esp.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />
@@ -418,7 +416,7 @@
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{AA556AC8-55E7-46C4-B59E-A7A781A4710A}</ProjectGuid>
-    <RootNamespace>AmongUsMenu</RootNamespace>
+    <RootNamespace>SickoModeAU</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <!--<WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>-->
   </PropertyGroup>
@@ -493,16 +491,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_CONFIGURATION_NAME="$(ConfigurationName)";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+      <BuildStlModules>false</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -536,17 +535,18 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_CONFIGURATION_NAME="$(ConfigurationName)";_DEBUG;_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BuildStlModules>false</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -581,11 +581,11 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_CONFIGURATION_NAME="$(ConfigurationName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -594,6 +594,7 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
+      <BuildStlModules>false</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -629,11 +630,11 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_WINDOWS;_USRDLL;_CONFIGURATION_NAME="$(ConfigurationName)";_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch-il2cpp.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>$(ProjectDir)appdata;$(ProjectDir)events;$(ProjectDir)framework;$(ProjectDir)gui;$(ProjectDir)hooks;$(ProjectDir)includes;$(ProjectDir)resources;$(ProjectDir)rpc;$(ProjectDir)user;$(ProjectDir)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>None</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -642,6 +643,7 @@ git rev-parse --abbrev-ref HEAD &gt;&gt;  gitparams.h</Command>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <MinimalRebuild>false</MinimalRebuild>
+      <BuildStlModules>false</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

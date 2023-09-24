@@ -28,14 +28,15 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 
 	State.mapType = Settings::MapType::Airship;
 
-	State.userName = GetPlayerName();
-	ResetOriginalAppearance();
+	if (State.DisableSabotages) {
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 7));
+	}
 }
 
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method)
 {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
-		return 10.F;
+		return 420.F;
 	else
 		return AirshipStatus_CalculateLightRadius(__this, player, method);
 }

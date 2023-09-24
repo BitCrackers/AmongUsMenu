@@ -12,13 +12,3 @@ void RpcSetRole::Process()
 {
 	PlayerControl_RpcSetRole(Player, Role, NULL);
 }
-
-SetRole::SetRole(RoleTypes__Enum role)
-{
-	this->Role = role;
-}
-
-void SetRole::Process()
-{
-	PlayerControl_SetRole(*Game::pLocalPlayer, Role, NULL);
-}

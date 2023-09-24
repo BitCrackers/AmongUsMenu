@@ -42,7 +42,7 @@ void load_version() {
 #if _DEBUG
 	if (!version_dll) {
 		std::string message = "Unable to load " + std::string(systemPath);
-		MessageBoxA(NULL, message.c_str(), "AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		MessageBoxA(NULL, message.c_str(), "SickoModeAU", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 	}
 #endif
 

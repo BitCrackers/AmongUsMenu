@@ -4,16 +4,18 @@
 using namespace app;
 
 namespace Game {
-	constexpr size_t MAX_PLAYERS = 15;
+	constexpr size_t MAX_PLAYERS = 511; //we don't want other modders/hackers to crash our game
 
 	using PlayerId = uint8_t;
 	using ClientId = int32_t;
 	using ColorId = int32_t;
+	using SkinId = int32_t;
 
 	using Voter = PlayerId;
 	using VotedFor = PlayerId;
 
 	constexpr ColorId NoColorId = -1;
+	constexpr SkinId NoSkinId = -1;
 	constexpr PlayerId NoPlayerId = -1;
 	constexpr ClientId NoClientId = -1;
 	constexpr ClientId HostInherit = -2;

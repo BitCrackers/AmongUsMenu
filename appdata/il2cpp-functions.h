@@ -66,6 +66,7 @@ DO_APP_FUNC(void, ScreenJoystick_FixedUpdate, (ScreenJoystick* __this, MethodInf
 
 DO_APP_FUNC(void, MainMenuManager_Start, (MainMenuManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void MainMenuManager::Start()");
 
+DO_APP_FUNC(void, MeetingHud_RpcClose, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::RpcClose()");
 DO_APP_FUNC(void, MeetingHud_Awake, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Awake()");
 DO_APP_FUNC(void, MeetingHud_Close, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Close()");
 DO_APP_FUNC(void, MeetingHud_Update, (MeetingHud* __this, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::Update()");
@@ -82,7 +83,9 @@ DO_APP_FUNC(void, DoorBreakerGame_Start, (DoorBreakerGame* __this, MethodInfo* m
 DO_APP_FUNC(void, DoorCardSwipeGame_Begin, (DoorCardSwipeGame* __this, PlayerTask* playerTask, MethodInfo* method), "Assembly-CSharp, System.Void DoorCardSwipeGame::Begin(PlayerTask)");
 DO_APP_FUNC(void, Minigame_Close, (Minigame* __this, MethodInfo* method), "Assembly-CSharp, System.Void Minigame::Close()");
 
+DO_APP_FUNC(void, PlayerControl_Revive, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::Revive()");
 DO_APP_FUNC(void, PlayerControl_CompleteTask, (PlayerControl* __this, uint32_t idx, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CompleteTask(System.UInt32)");
+DO_APP_FUNC(void, PlayerControl_RpcCompleteTask, (PlayerControl* __this, uint32_t idx, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcCompleteTask(System.UInt32)");
 DO_APP_FUNC(void, PlayerControl_FixedUpdate, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::FixedUpdate()");
 DO_APP_FUNC(GameData_PlayerInfo*, PlayerControl_get_Data, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, GameData.PlayerInfo PlayerControl::get_Data()");
 DO_APP_FUNC(Vector2, PlayerControl_GetTruePosition, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, UnityEngine.Vector2 PlayerControl::GetTruePosition()");
@@ -94,11 +97,15 @@ DO_APP_FUNC(void, PlayerControl_MurderPlayer, (PlayerControl* __this, PlayerCont
 DO_APP_FUNC(void, PlayerControl_RpcMurderPlayer, (PlayerControl* __this, PlayerControl* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcMurderPlayer(PlayerControl)");
 DO_APP_FUNC(void, PlayerControl_ReportDeadBody, (PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ReportDeadBody(GameData.PlayerInfo)");
 DO_APP_FUNC(void, PlayerControl_StartMeeting, (PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::StartMeeting(GameData.PlayerInfo)");
+DO_APP_FUNC(void, PlayerControl_RpcStartMeeting, (PlayerControl* __this, GameData_PlayerInfo* info, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcStartMeeting(GameData.PlayerInfo)");
 DO_APP_FUNC(void, PlayerControl_RpcSetRole, (PlayerControl* __this, RoleTypes__Enum roleType, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetRole(AmongUs.GameOptions.RoleTypes)");
+DO_APP_FUNC(void, PlayerControl_SetRole, (PlayerControl* __this, RoleTypes__Enum roleType, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::SetRole(AmongUs.GameOptions.RoleTypes)");
 DO_APP_FUNC(void, PlayerControl_RpcSetScanner, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetScanner(System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_RpcSetColor, (PlayerControl* __this, uint8_t bodyColor, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetColor(System.Byte)");
 DO_APP_FUNC(void, PlayerControl_CmdCheckName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckName(System.String)");
+DO_APP_FUNC(void, PlayerControl_RpcSetLevel, (PlayerControl* __this, uint32_t level, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetLevel(System.UInt32)");
+DO_APP_FUNC(void, PlayerControl_RpcSetName, (PlayerControl* __this, String* name, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetName(System.String)");
 DO_APP_FUNC(void, PlayerControl_set_Visible, (PlayerControl* __this, bool value, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::set_Visible(System.Boolean)");
 DO_APP_FUNC(void, PlayerControl_HandleRpc, (PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::HandleRpc(System.Byte, Hazel.MessageReader)");
 DO_APP_FUNC(void, PlayerControl_RpcSetPet, (PlayerControl* __this, String* petId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetPet(System.String)");
@@ -108,9 +115,16 @@ DO_APP_FUNC(void, PlayerControl_RpcSetVisor, (PlayerControl* __this, String* vis
 DO_APP_FUNC(void, PlayerControl_RpcSetNamePlate, (PlayerControl* __this, String* namePlateId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcSetNamePlate(System.String)");
 DO_APP_FUNC(bool, PlayerControl_RpcSendChat, (PlayerControl* __this, String* message, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::RpcSendChat(System.String)");
 DO_APP_FUNC(void, PlayerControl_Shapeshift, (PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::Shapeshift(PlayerControl, System.Boolean)");
+DO_APP_FUNC(void, PlayerControl_RpcRevertShapeshift, (PlayerControl* __this, bool shouldAnimate, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcRevertShapeshift(System.Boolean)");
+DO_APP_FUNC(void, PlayerControl_RpcShapeshift, (PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcShapeshift(PlayerControl, System.Boolean)");
+DO_APP_FUNC(void, PlayerControl_CmdCheckProtect, (PlayerControl* __this, PlayerControl* target, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::CmdCheckProtect(PlayerControl)");
+DO_APP_FUNC(void, PlayerControl_RpcProtectPlayer, (PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RpcProtectPlayer(PlayerControl, System.Int32)");
 DO_APP_FUNC(void, PlayerControl_ProtectPlayer, (PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::ProtectPlayer(PlayerControl, System.Int32)");
 DO_APP_FUNC(void, PlayerMaterial_SetColors, (int32_t colorId, Renderer* rend, MethodInfo* method), "Assembly-CSharp, System.Void PlayerMaterial::SetColors(System.Int32, UnityEngine.Renderer)");
 DO_APP_FUNC(void, PlayerMaterial_SetColors_1, (Color color, Renderer* rend, MethodInfo* method), "Assembly-CSharp, System.Void PlayerMaterial::SetColors(UnityEngine.Color, UnityEngine.Renderer)");
+DO_APP_FUNC(void, PlayerControl_OnGameEnd, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::OnGameEnd()");
+DO_APP_FUNC(bool, PlayerControl_get_CanMove, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerControl::get_CanMove()");
+DO_APP_FUNC(void, PlayerControl_OnGameStart, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::OnGameStart()");
 
 DO_APP_FUNC(void, PolusShipStatus_OnEnable, (PolusShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void PolusShipStatus::OnEnable()");
 
@@ -131,13 +145,16 @@ DO_APP_FUNC(void, Vent_ExitVent, (Vent* __this, PlayerControl* pc, MethodInfo* m
 
 DO_APP_FUNC(void, HudManager_Update, (HudManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void HudManager::Update()");
 DO_APP_FUNC(void, HudManager_SetHudActive, (HudManager* __this, bool isActive, MethodInfo* method), "Assembly-CSharp, System.Void HudManager::SetHudActive(System.Boolean)");
-DO_APP_FUNC(void, ChatController_AddChat, (ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method), "Assembly-CSharp, System.Void ChatController::AddChat(PlayerControl, System.String)");
+DO_APP_FUNC(void, ChatController_AddChat, (ChatController* __this, PlayerControl* sourcePlayer, String* chatText, bool censor, MethodInfo* method), "Assembly-CSharp, System.Void ChatController::AddChat(PlayerControl, System.String, System.Boolean)");
 DO_APP_FUNC(void, ChatController_SetVisible, (ChatController* __this, bool visible, MethodInfo* method), "Assembly-CSharp, System.Void ChatController::SetVisible(System.Boolean)");
 DO_APP_FUNC(void, ChatController_Update, (ChatController* __this, MethodInfo* method), "Assembly-CSharp, System.Void ChatController::Update()");
 DO_APP_FUNC(void, ChatBubble_SetName, (ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method), "Assembly-CSharp, System.Void ChatBubble::SetName(System.String, System.Boolean, System.Boolean, UnityEngine.Color)");
 
+DO_APP_FUNC(void, AmongUsClient_OnGameJoined, (AmongUsClient* __this, String* gameIdString, MethodInfo* method), "Assembly-CSharp, System.Void AmongUsClient::OnGameJoined(System.String)");
 DO_APP_FUNC(void, AmongUsClient_OnPlayerLeft, (AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method), "Assembly-CSharp, System.Void AmongUsClient::OnPlayerLeft(InnerNet.ClientData, DisconnectReasons)");
 DO_APP_FUNC(bool, InnerNetClient_get_AmHost, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean InnerNet.InnerNetClient::get_AmHost()");
+DO_APP_FUNC(ClientData*, InnerNetClient_GetHost, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, InnerNet.ClientData InnerNet.InnerNetClient::GetHost()");
+DO_APP_FUNC(void, InnerNetClient_KickPlayer, (InnerNetClient* __this, int32_t clientId, bool ban, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::KickPlayer(System.Int32, System.Boolean)");
 DO_APP_FUNC(void, InnerNetClient_SendStartGame, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::SendStartGame()");
 DO_APP_FUNC(void, InnerNetClient_Update, (InnerNetClient* __this, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::Update()");
 DO_APP_FUNC(MessageWriter*, InnerNetClient_StartRpc, (InnerNetClient* __this, uint32_t targetNetId, uint8_t callId, SendOption__Enum option, MethodInfo* method), "Assembly-CSharp, Hazel.MessageWriter InnerNet.InnerNetClient::StartRpc(System.UInt32, System.Byte, Hazel.SendOption)");
@@ -204,6 +221,8 @@ DO_APP_FUNC(void, InnerNetClient_EnqueueDisconnect, (InnerNetClient* __this, Dis
 DO_APP_FUNC(void, InnerNetClient_DisconnectInternal, (InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.InnerNetClient::DisconnectInternal(DisconnectReasons, System.String)");
 
 DO_APP_FUNC(void, PlayerPhysics_FixedUpdate, (PlayerPhysics* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::FixedUpdate()");
+DO_APP_FUNC(void, PlayerPhysics_RpcEnterVent, (PlayerPhysics* __this, int32_t id, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::RpcEnterVent(System.Int32)");
+DO_APP_FUNC(void, PlayerPhysics_RpcExitVent, (PlayerPhysics* __this, int32_t id, MethodInfo* method), "Assembly-CSharp, System.Void PlayerPhysics::RpcExitVent(System.Int32)");
 
 DO_APP_FUNC(void, PlayerControl_TurnOnProtection, (PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::TurnOnProtection(System.Boolean, System.Int32)");
 DO_APP_FUNC(void, PlayerControl_RemoveProtection, (PlayerControl* __this, MethodInfo* method), "Assembly-CSharp, System.Void PlayerControl::RemoveProtection()");
@@ -221,6 +240,7 @@ DO_APP_FUNC(String*, GameData_PlayerOutfit_get_PlayerName, (GameData_PlayerOutfi
 DO_APP_FUNC(String*, GameData_PlayerInfo_get_PlayerName, (GameData_PlayerInfo* __this, MethodInfo* method), "Assembly-CSharp, System.String GameData+PlayerInfo::get_PlayerName()");
 
 DO_APP_FUNC(void, AccountManager_UpdateKidAccountDisplay, (AccountManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void AccountManager::UpdateKidAccountDisplay()");
+DO_APP_FUNC(String*, AccountManager_GetRandomName, (AccountManager* __this, MethodInfo* method), "Assembly-CSharp, System.String AccountManager::GetRandomName()");
 DO_APP_FUNC(void, PlayerStorageManager_OnReadPlayerPrefsComplete, (PlayerStorageManager* __this, void* data, MethodInfo* method), "Assembly-CSharp, System.Void PlayerStorageManager::OnReadPlayerPrefsComplete(Epic.OnlineServices.PlayerDataStorage.ReadFileCallbackInfo)");
 
 DO_APP_FUNC(void, AchievementManager_1_UnlockAchievement, (AchievementManager_1* __this, String* key, MethodInfo* method), "Assembly-CSharp, System.Void AchievementManager::UnlockAchievement(System.String)");
@@ -232,7 +252,9 @@ DO_APP_FUNC(void, PlayerCustomizationData_set_Name, (PlayerCustomizationData* __
 DO_APP_FUNC(bool, PlayerPurchasesData_GetPurchase, (PlayerPurchasesData* __this, String* itemKey, String* bundleKey, MethodInfo* method), "Assembly-CSharp, System.Boolean PlayerPurchasesData::GetPurchase(System.String, System.String)");
 DO_APP_FUNC(SettingsData*, DataManager_get_Settings, (MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Settings.SettingsData AmongUs.Data.DataManager::get_Settings()");
 DO_APP_FUNC(AccessibilitySettingsData*, SettingsData_get_Accessibility, (SettingsData* __this, MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Settings.AccessibilitySettingsData AmongUs.Data.Settings.SettingsData::get_Accessibility()");
+DO_APP_FUNC(GameplaySettingsData*, SettingsData_get_Gameplay, (SettingsData* __this, MethodInfo* method), "Assembly-CSharp, AmongUs.Data.Settings.GameplaySettingsData AmongUs.Data.Settings.SettingsData::get_Gameplay()");
 DO_APP_FUNC(bool, AccessibilitySettingsData_get_ColorBlindMode, (AccessibilitySettingsData* __this, MethodInfo* method), "Assembly-CSharp, System.Boolean AmongUs.Data.Settings.AccessibilitySettingsData::get_ColorBlindMode()");
+DO_APP_FUNC(bool, GameplaySettingsData_get_StreamerMode, (GameplaySettingsData* __this, MethodInfo* method),"Assembly-CSharp, System.Boolean AmongUs.Data.Settings.GameplaySettingsData::get_StreamerMode()" );
 
 // 2022.12.08e
 DO_APP_FUNC(GameOptionsManager*, GameOptionsManager_get_Instance, (MethodInfo* method), "Assembly-CSharp, GameOptionsManager GameOptionsManager::get_Instance()");
@@ -241,3 +263,17 @@ DO_APP_FUNC(IGameOptions*, GameOptionsManager_get_CurrentGameOptions, (GameOptio
 DO_APP_FUNC(void, GameOptionsManager_set_CurrentGameOptions, (GameOptionsManager* __this, IGameOptions* value, MethodInfo* method), "Assembly-CSharp, System.Void GameOptionsManager::set_CurrentGameOptions(AmongUs.GameOptions.IGameOptions)");
 DO_APP_FUNC(GameManager*, GameManager_get_Instance, (MethodInfo* method), "Assembly-CSharp, GameManager GameManager::get_Instance()");
 DO_APP_FUNC(LogicOptions*, GameManager_get_LogicOptions, (GameManager* __this, MethodInfo* method), "Assembly-CSharp, LogicOptions GameManager::get_LogicOptions()");
+
+//adding kick/vote functions; these may have to be updated every time the game updates
+DO_APP_FUNC(void, MeetingHud_CmdCastVote, (MeetingHud* __this, uint8_t playerId, uint8_t suspectIdx, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::CmdCastVote(System.Byte, System.Byte)");
+DO_APP_FUNC(void, MeetingHud_RpcClearVote, (MeetingHud* __this, int32_t clientId, MethodInfo* method), "Assembly-CSharp, System.Void MeetingHud::RpcClearVote(System.Int32)");
+DO_APP_FUNC(void, VoteBanSystem_CmdAddVote, (VoteBanSystem* __this, int32_t clientId, MethodInfo* method), "Assembly-CSharp, System.Void VoteBanSystem::CmdAddVote(System.Int32)");
+DO_APP_FUNC(bool, VoteBanSystem_HasMyVote, (VoteBanSystem* __this, int32_t clientId, MethodInfo* method), "Assembly-CSharp, System.Boolean VoteBanSystem::HasMyVote(System.Int32)");
+DO_APP_FUNC(void, GameStartManager_Update, (GameStartManager* __this, MethodInfo* method), "Assembly-CSharp, System.Void GameStartManager::Update()");
+DO_APP_FUNC(void, PingTracker_Update, (PingTracker* __this, MethodInfo* method), "Assembly-CSharp, System.Void PingTracker::Update()");
+DO_APP_FUNC(String*, InnerNet_GameCode_IntToGameName, (int32_t gameId, MethodInfo* method), "Assembly-CSharp, System.String InnerNet.GameCode::IntToGameName(System.Int32)");
+DO_APP_FUNC(bool, TextBoxTMP_IsCharAllowed, (TextBoxTMP* __this, uint16_t i, MethodInfo* method), "Assembly-CSharp, System.Boolean TextBoxTMP::IsCharAllowed(System.Char)");
+DO_APP_FUNC(void, TextBoxTMP_SetText, (TextBoxTMP* __this, String* input, String* inputCompo, MethodInfo* method), "Assembly-CSharp, System.Void TextBoxTMP::SetText(System.String, System.String)");
+DO_APP_FUNC(void, GameManager_RpcEndGame, (GameManager* __this, GameOverReason__Enum endReason, bool showAd, MethodInfo* method), "Assembly-CSharp, System.Void GameManager::RpcEndGame(GameOverReason, System.Boolean)");
+DO_APP_FUNC(void, KillOverlay_ShowKillAnimation_1, (KillOverlay* __this, GameData_PlayerInfo* killer, GameData_PlayerInfo* victim, MethodInfo* method), "Assembly-CSharp, System.Void KillOverlay::ShowKillAnimation(GameData.PlayerInfo, GameData.PlayerInfo)");
+//DO_APP_FUNC(void, EOSManager_set_FriendCode, (EOSManager* __this, String* value, MethodInfo* method), "EOSManager::set_FriendCode(System.String)");

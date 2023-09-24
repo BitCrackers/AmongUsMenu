@@ -7,11 +7,8 @@
 namespace EspTab {
 
 	void Render() {
-		if (not IsInGame())
-			return;
-
 		bool changed = false;
-		if (ImGui::BeginTabItem("Esp")) {
+		if (ImGui::BeginTabItem("ESP")) {
 
 			changed |= ImGui::Checkbox("Enable", &State.ShowEsp);
 

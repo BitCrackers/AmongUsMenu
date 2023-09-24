@@ -141,12 +141,17 @@ bool IsHost();
 bool IsInGame();
 bool IsInMultiplayerGame();
 bool IsColorBlindMode();
+bool IsStreamerMode();
+std::string GetHostUsername();
+std::string RemoveHtmlTags(std::string html_str);
 int GetMaxImposterAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
 PlayerControl* GetPlayerControlById(Game::PlayerId id);
+bool IsColorAvailable(int colorId);
+std::string GenerateRandomString();
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
@@ -184,6 +189,7 @@ void ImpersonateName(PlayerSelection& player);
 Game::ColorId GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
+void ControlAppearance(bool randomize);
 bool PlayerIsImpostor(GameData_PlayerInfo* player);
 GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted = false);
 Color GetRoleColor(RoleBehaviour* roleBehaviour);
@@ -258,6 +264,7 @@ public:
 
 	float GetPlayerSpeedMod() const;
 	float GetKillCooldown() const;
+	float GetGACooldown() const;
 protected:
 	app::IGameOptions* _options;
 };

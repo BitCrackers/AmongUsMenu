@@ -4,13 +4,13 @@
 #include <iostream>
 #include "utility.h"
 
-AUMLogger Log;
+SMAULogger Log;
 
-void AUMLogger::Create()
+void SMAULogger::Create()
 {
 	const auto path = getModulePath(NULL);
-	const auto logPath = path.parent_path() / "aum-log.txt";
-	const auto prevLogPath = path.parent_path() / "aum-prev-log.txt";
+	const auto logPath = path.parent_path() / "smau-log.txt";
+	const auto prevLogPath = path.parent_path() / "smau-prev-log.txt";
 
 	std::error_code errCode;
 	std::filesystem::remove(prevLogPath, errCode);
@@ -20,7 +20,7 @@ void AUMLogger::Create()
 	this->filePath = logPath;
 }
 
-void AUMLogger::Write(std::string_view verbosity, std::string_view source, std::string_view message)
+void SMAULogger::Write(std::string_view verbosity, std::string_view source, std::string_view message)
 {
 	std::stringstream ss;
 	// FIXME: std::chrono::current_zone requires Windows 10 version 1903/19H1 or later.
@@ -34,32 +34,32 @@ void AUMLogger::Write(std::string_view verbosity, std::string_view source, std::
 	file.close();
 }
 
-void AUMLogger::Debug(std::string_view source, std::string_view message)
+void SMAULogger::Debug(std::string_view source, std::string_view message)
 {
 	Write("DEBUG", source, message);
 }
 
-void AUMLogger::Error(std::string_view source, std::string_view message)
+void SMAULogger::Error(std::string_view source, std::string_view message)
 {
 	Write("ERROR", source, message);
 }
 
-void AUMLogger::Info(std::string_view source, std::string_view message)
+void SMAULogger::Info(std::string_view source, std::string_view message)
 {
 	Write("INFO", source, message);
 }
 
-void AUMLogger::Debug(std::string_view message)
+void SMAULogger::Debug(std::string_view message)
 {
-	Debug("AUM", message);
+	Debug("SMAU", message);
 }
 
-void AUMLogger::Error(std::string_view message)
+void SMAULogger::Error(std::string_view message)
 {
-	Error("AUM", message);
+	Error("SMAU", message);
 }
 
-void AUMLogger::Info(std::string_view message)
+void SMAULogger::Info(std::string_view message)
 {
-	Info("AUM", message);
+	Info("SMAU", message);
 }

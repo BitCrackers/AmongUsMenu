@@ -5,10 +5,11 @@
 #include "utility.h"
 #include "replay.hpp"
 #include "profiler.h"
+#include "game.h"
 
 float dShipStatus_CalculateLightRadius(ShipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method) {
 	if (State.MaxVision || State.EnableZoom || State.FreeCam)
-		return 10.F;
+		return 420.F;
 	else
 		return ShipStatus_CalculateLightRadius(__this, player, method);
 }
@@ -41,6 +42,38 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
 
-	State.userName = GetPlayerName();
-	ResetOriginalAppearance();
+	if (State.DisableSabotages) {
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 7));
+	}
+}
+
+void dShipStatus_RpcRepairSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method) {
+	if (State.DisableSabotages) {
+		return;
+	}
+	ShipStatus_RpcRepairSystem(__this, systemType, amount, method);
+}
+
+void dShipStatus_RpcCloseDoorsOfType (ShipStatus* __this, SystemTypes__Enum type, MethodInfo* method) {
+	if (State.DisableSabotages) {
+		return;
+	}
+	ShipStatus_RpcCloseDoorsOfType(__this, type, method);
+}
+
+void dGameStartManager_Update(GameStartManager* __this, MethodInfo* method) {
+	if (State.HideCode && IsStreamerMode()) {
+		if (State.RgbLobbyCode)
+			TMP_Text_set_text((TMP_Text*)__this->fields.GameRoomNameCode, convert_to_string(State.rgbCode + State.customCode), NULL);
+		else
+			TMP_Text_set_text((TMP_Text*)__this->fields.GameRoomNameCode, convert_to_string(State.customCode), NULL);
+	}
+	else {
+		std::string LobbyCode = convert_from_string(InnerNet_GameCode_IntToGameName((*Game::pAmongUsClient)->fields._.GameId, NULL));
+		if (State.RgbLobbyCode)
+			TMP_Text_set_text((TMP_Text*)__this->fields.GameRoomNameCode, convert_to_string(State.rgbCode + LobbyCode), NULL);
+		else
+			TMP_Text_set_text((TMP_Text*)__this->fields.GameRoomNameCode, convert_to_string(LobbyCode), NULL);
+	}
+	GameStartManager_Update(__this, method);
 }

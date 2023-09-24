@@ -28,9 +28,9 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: cmd
         run: |
-          move /y Release\AmongUsMenu.dll AmongUsMenu.dll
+          move /y Release\SickoModeAU.dll SickoModeAU.dll
           move /y Release_Version\version.dll version.dll
-          tar -caf Release.zip AmongUsMenu.dll version.dll LICENSE
+          tar -caf Release.zip SickoModeAU.dll version.dll LICENSE
         
       - name: Upload Release Artifact
         if: ${{ github.event_name == 'push' }}
@@ -57,9 +57,9 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         shell: cmd
         run: |
-          move /y Debug\AmongUsMenu.dll AmongUsMenu.dll
+          move /y Debug\SickoModeAU.dll SickoModeAU.dll
           move /y Debug_Version\version.dll version.dll
-          tar -caf Debug.zip AmongUsMenu.dll version.dll LICENSE
+          tar -caf Debug.zip SickoModeAU.dll version.dll LICENSE
         
       - name: Upload Debug Artifact
         if: ${{ github.event_name == 'push' }}
@@ -111,26 +111,3 @@ jobs:
           files: |
             Release.zip
             Debug.zip
-  
-  Notification:
-    if: ${{ github.event_name == 'push' && github.repository == 'BitCrackers/AmongUsMenu' }}
-    runs-on: ubuntu-latest
-    needs: [AutoRelease]
-    steps:
-      - name: Parse tag into env
-        # credit: mcraiha via [https://github.community/t/how-to-get-just-the-tag-name/16241/17]
-        id: get_tag
-        shell: bash
-        run: echo ::set-output name=THIS_TAG::${GITHUB_REF/refs\/tags\//}
-        
-      - name: Debug tag parsing
-        run: echo '${{ steps.get_tag.outputs.THIS_TAG }}'
-        
-      - name: Discord Notification
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        with:
-          severity: info
-          description: "Project Build"
-          # note: we could also link directly to the asset, but that might not be very user-friendly
-          details: "${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.get_tag.outputs.THIS_TAG }}"
-          webhookUrl: ${{ secrets.DISCORD_BUILD_WEBHOOK }}

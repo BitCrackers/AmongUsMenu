@@ -15,6 +15,8 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 	voteSpreaderType = app::Type_GetType(convert_to_string(strVoteSpreaderType), nullptr);
 
 	MeetingHud_Awake(__this, method);
+	if (State.confuser && State.confuseOnMeeting)
+		ControlAppearance(true);
 }
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
@@ -139,23 +141,69 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		}
 		auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
+		auto playerControl = GetPlayerControlById(playerVoteArea->fields.TargetPlayerId);
 		auto playerNameTMP = playerVoteArea->fields.NameText;
 		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+		std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		if (playerData == GetPlayerData(*Game::pLocalPlayer) && State.CustomName && (!State.ServerSideCustomName || State.ServerSideCustomName && (!IsHost() || State.SafeMode)) && !State.userName.empty()) {
+			if (State.CustomName && !State.ServerSideCustomName) {
+				if (State.BoldName)
+					playerName = "<b>" + playerName + "</b>";
+				if (State.ItalicName)
+					playerName = "<i>" + playerName + "</i>";
+				if (State.UnderlineName)
+					playerName = "<u>" + playerName + "</u>";
+				if (State.StrikethroughName)
+					playerName = "<s>" + playerName + "</s>";
+				if (State.ColoredName && !State.RgbName) {
+					std::string colorCode = std::format("<#{:02x}{:02x}{:02x}{:02x}>", int(State.NameColor.x * 255), int(State.NameColor.y * 255), int(State.NameColor.z * 255), int(State.NameColor.w * 255));
+					playerName = colorCode + "" + playerName + "</color>";
+				}
+				if (State.RgbName) {
+					playerName = State.rgbCode + playerName + "</color>";
+				}
+			}
+		}
 
 		if (playerData && localData && outfit) {
-			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+			if (State.PlayerColoredNames)
+			{
+				playerName = playerName + "</color>";
+				Color32&& nameColor = GetPlayerColor(outfit->fields.ColorId);
+
+				playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
+					nameColor.r, nameColor.g, nameColor.b,
+					nameColor.a, playerName);
+			}
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
-				playerName += "\n<size=50%>(" + roleName + ")";
+				if (!playerData->fields.Disconnected) {
+					int completedTasks = 0;
+					int totalTasks = 0;
+					auto tasks = GetNormalPlayerTasks(playerControl);
+					for (auto task : tasks)
+					{
+						if (task->fields.taskStep == task->fields.MaxStep) {
+							completedTasks++;
+							totalTasks++;
+						}
+						else
+							totalTasks++;
+					}
+					std::string tasksText = std::format("({}/{})", completedTasks, totalTasks);
+					if (totalTasks == 0 || PlayerIsImpostor(playerData))
+						playerName = "<size=1.2>" + roleName + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
+					else
+						playerName = "<size=1.2>" + roleName + " " + tasksText + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
+				}
+				else
+					playerName = "<size=1.2>" + roleName + " (D/C)\n</size>" + playerName + "\n<size=1.2><#0000>0";
 				Color32&& roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
 
 				playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
 										 roleColor.r, roleColor.g, roleColor.b,
 										 roleColor.a, playerName);
-				if (IsColorBlindMode()) {
-					playerName += "\n ";
-				}
 			}
 
 			String* playerNameStr = convert_to_string(playerName);

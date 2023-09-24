@@ -90,8 +90,11 @@ void DetourInitilization() {
 
 	HOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	HOOKFUNC(PlayerControl_FixedUpdate);
+	HOOKFUNC(PlayerControl_get_CanMove);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(PlayerControl_Shapeshift);
+	HOOKFUNC(PlayerControl_RpcShapeshift);
+	HOOKFUNC(PlayerControl_RpcRevertShapeshift);
 	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(MeetingHud_PopulateResults);
@@ -110,22 +113,29 @@ void DetourInitilization() {
 	HOOKFUNC(ChatBubble_SetName);
 	HOOKFUNC(ChatController_AddChat);
 	HOOKFUNC(ChatController_SetVisible);
+	HOOKFUNC(GameStartManager_Update);
 	HOOKFUNC(HudManager_Update);
 	HOOKFUNC(Camera_ScreenToWorldPoint);
 	HOOKFUNC(KeyboardJoystick_Update);
 	HOOKFUNC(ScreenJoystick_FixedUpdate);
 	HOOKFUNC(PlainDoor_SetDoorway);
 	HOOKFUNC(PlayerControl_MurderPlayer);
+	HOOKFUNC(PlayerControl_CmdCheckMurder);
 	HOOKFUNC(PlayerControl_CompleteTask);
 	HOOKFUNC(PlayerControl_StartMeeting);
 	HOOKFUNC(RoleManager_SelectRoles);
 	//HOOKFUNC(RoleManager_AssignRolesForTeam);
 	//HOOKFUNC(RoleManager_AssignRolesFromList);
 	HOOKFUNC(PlayerControl_HandleRpc);
+	HOOKFUNC(PlayerControl_RpcStartMeeting);
+	HOOKFUNC(PlayerControl_CmdReportDeadBody);
+	HOOKFUNC(PlayerControl_RpcSendChat);
 	HOOKFUNC(Renderer_set_enabled);
 	HOOKFUNC(MeetingHud_Awake);
 	HOOKFUNC(MeetingHud_Close);
 	HOOKFUNC(InnerNetClient_Update);
+	HOOKFUNC(AmongUsClient_OnGameJoined);
+	HOOKFUNC(PlayerControl_OnGameStart);
 	HOOKFUNC(AmongUsClient_OnPlayerLeft);
 	HOOKFUNC(CustomNetworkTransform_SnapTo);
 	HOOKFUNC(Constants_ShouldFlipSkeld);
@@ -144,7 +154,12 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_InitializePlatformInterface);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
 	HOOKFUNC(ChatController_Update);
+	HOOKFUNC(TextBoxTMP_IsCharAllowed);
+	HOOKFUNC(TextBoxTMP_SetText);
+	HOOKFUNC(ShipStatus_RpcRepairSystem);
+	HOOKFUNC(ShipStatus_RpcCloseDoorsOfType);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
+	HOOKFUNC(GameManager_RpcEndGame);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
 	HOOKFUNC(PlayerPurchasesData_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
@@ -156,7 +171,9 @@ void DetourInitilization() {
 	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	HOOKFUNC(ExileController_ReEnableGameplay);
 	HOOKFUNC(SabotageSystemType_ForceSabTime);
-
+	HOOKFUNC(PingTracker_Update);
+	HOOKFUNC(KillOverlay_ShowKillAnimation_1);
+	//HOOKFUNC(EOSManager_set_FriendCode);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -174,8 +191,11 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameObject_SetActive);
 	UNHOOKFUNC(SceneManager_Internal_ActiveSceneChanged);
 	UNHOOKFUNC(PlayerControl_FixedUpdate);
+	UNHOOKFUNC(PlayerControl_get_CanMove);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(PlayerControl_Shapeshift);
+	UNHOOKFUNC(PlayerControl_RpcShapeshift);
+	UNHOOKFUNC(PlayerControl_RpcRevertShapeshift);
 	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
 	UNHOOKFUNC(MeetingHud_PopulateResults);
@@ -194,22 +214,29 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatBubble_SetName);
 	UNHOOKFUNC(ChatController_AddChat);
 	UNHOOKFUNC(ChatController_SetVisible);
+	UNHOOKFUNC(GameStartManager_Update);
 	UNHOOKFUNC(HudManager_Update);
 	UNHOOKFUNC(ScreenJoystick_FixedUpdate);
 	UNHOOKFUNC(KeyboardJoystick_Update);
 	UNHOOKFUNC(Camera_ScreenToWorldPoint);
 	UNHOOKFUNC(PlainDoor_SetDoorway);
 	UNHOOKFUNC(PlayerControl_MurderPlayer);
+	UNHOOKFUNC(PlayerControl_CmdCheckMurder);
 	UNHOOKFUNC(PlayerControl_CompleteTask);
 	UNHOOKFUNC(PlayerControl_StartMeeting);
 	UNHOOKFUNC(RoleManager_SelectRoles);
 	//UNHOOKFUNC(RoleManager_AssignRolesForTeam);
 	//UNHOOKFUNC(RoleManager_AssignRolesFromList);
 	UNHOOKFUNC(PlayerControl_HandleRpc);
+	UNHOOKFUNC(PlayerControl_RpcStartMeeting);
+	UNHOOKFUNC(PlayerControl_CmdReportDeadBody);
+	UNHOOKFUNC(PlayerControl_RpcSendChat);
 	UNHOOKFUNC(Renderer_set_enabled);
 	UNHOOKFUNC(MeetingHud_Awake);
 	UNHOOKFUNC(MeetingHud_Close);
 	UNHOOKFUNC(InnerNetClient_Update);
+	UNHOOKFUNC(AmongUsClient_OnGameJoined);
+	UNHOOKFUNC(PlayerControl_OnGameStart);
 	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
 	UNHOOKFUNC(Constants_ShouldFlipSkeld);
@@ -227,7 +254,12 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
 	UNHOOKFUNC(ChatController_Update);
+	UNHOOKFUNC(TextBoxTMP_IsCharAllowed);
+	HOOKFUNC(TextBoxTMP_SetText);
+	UNHOOKFUNC(ShipStatus_RpcRepairSystem);
+	UNHOOKFUNC(ShipStatus_RpcCloseDoorsOfType);
 	UNHOOKFUNC(InnerNetClient_EnqueueDisconnect);
+	UNHOOKFUNC(GameManager_RpcEndGame);
 	UNHOOKFUNC(PlayerControl_TurnOnProtection);
 	UNHOOKFUNC(AmongUsClient_OnGameEnd);
 	UNHOOKFUNC(InnerNetClient_DisconnectInternal);
@@ -237,6 +269,9 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
 	UNHOOKFUNC(SabotageSystemType_ForceSabTime);
+	UNHOOKFUNC(PingTracker_Update);
+	UNHOOKFUNC(KillOverlay_ShowKillAnimation_1);
+	//UNHOOKFUNC(EOSManager_set_FriendCode);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

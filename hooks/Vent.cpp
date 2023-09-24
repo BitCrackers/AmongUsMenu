@@ -5,7 +5,7 @@
 #include <memory>
 
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
-	if (State.UnlockVents) {
+	if (State.UnlockVents || (*Game::pLocalPlayer)->fields.inVent) {
 		auto object = GameData_PlayerInfo_get_Object(pc, nullptr);
 		if (!object) {
 			LOG_ERROR(ToString(pc) + " _object is null");
@@ -39,6 +39,8 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 		State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
 	}
 	Vent_EnterVent(__this, pc, method);
+	if (State.confuser && State.confuseOnVent && pc == *Game::pLocalPlayer)
+		ControlAppearance(true);
 }
 
 void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {

@@ -37,7 +37,7 @@ enum class CHEAT_ACTIONS {
 	CHEAT_KILL_IMPOSTOR
 };
 
-const std::vector<const char*> CHEAT_ACTION_NAMES = { "Teleporting", "Killed impostor" };
+const std::vector<const char*> CHEAT_ACTION_NAMES = { "Teleporting", "Killed abnormally" };
 
 struct EVENT_PLAYER {
 	Game::PlayerId playerId;

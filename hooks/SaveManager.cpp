@@ -11,5 +11,8 @@ bool dSaveManager_GetPurchase(String* itemKey, String* bundleKey, MethodInfo* me
 
 // v2022.10.25s
 bool dPlayerPurchasesData_GetPurchase(PlayerPurchasesData* __this, String* itemKey, String* bundleKey, MethodInfo* method) {
-	return true;
+	if (State.UnlockCosmetics) {
+		return true;
+	}
+	return PlayerPurchasesData_GetPurchase(__this, itemKey, bundleKey, method);
 }

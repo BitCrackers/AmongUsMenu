@@ -36,46 +36,50 @@ namespace DoorsTab {
 							State.selectedDoor = systemType;
 					}
 				}
-				if (shouldEndListBox) 
+				if (shouldEndListBox)
 					ImGui::ListBoxFooter();
 				ImGui::EndChild();
 
 				ImGui::SameLine();
 				ImGui::BeginChild("doors#options", ImVec2(200, 0) * State.dpiScale);
 
-				if (ImGui::Button("Close All Doors"))
+				if (!State.DisableSabotages && ImGui::Button("Close All Doors"))
 				{
-					for(auto door : State.mapDoors)
+					for (auto door : State.mapDoors)
 					{
 						State.rpcQueue.push(new RpcCloseDoorsOfType(door, false));
 					}
 				}
-				ImGui::SameLine();
-				if (HotKey(State.KeyBinds.Close_All_Doors)) {
+				if (State.ShowKeybinds)
+					ImGui::SameLine();
+
+				if (!State.DisableSabotages && State.ShowKeybinds && HotKey(State.KeyBinds.Close_All_Doors)) {
 					State.Save();
 				}
 
-				if (ImGui::Button("Close Room Door"))
+				if (!State.DisableSabotages && ImGui::Button("Close Room Door"))
 				{
 					State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
 				}
-				ImGui::SameLine();
-				if (HotKey(State.KeyBinds.Close_Current_Room_Door)) {
+				if (State.ShowKeybinds)
+					ImGui::SameLine();
+
+				if (!State.DisableSabotages && State.ShowKeybinds && HotKey(State.KeyBinds.Close_Current_Room_Door)) {
 					State.Save();
 				}
 
-				if (ImGui::Button("Pin All Doors"))
+				if (!State.DisableSabotages && ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							if(door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
+							if (door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
 								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}
 				}
-				if (ImGui::Button("Unpin All Doors"))
+				if (!State.DisableSabotages && ImGui::Button("Unpin All Doors"))
 				{
 					State.pinnedDoors.clear();
 				}
@@ -83,17 +87,17 @@ namespace DoorsTab {
 				if (State.selectedDoor != SystemTypes__Enum::Hallway) {
 					auto plainDoor = GetPlainDoorByRoom(State.selectedDoor);
 
-					if (ImGui::Button("Close Door")) {
+					if (!State.DisableSabotages && ImGui::Button("Close Door")) {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
 					}
 
 					if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor) == State.pinnedDoors.end()) {
-						if (ImGui::Button("Pin Door")) {
+						if (!State.DisableSabotages && ImGui::Button("Pin Door")) {
 							State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, true));
 						}
 					}
 					else {
-						if (ImGui::Button("Unpin Door")) {
+						if (!State.DisableSabotages && ImGui::Button("Unpin Door")) {
 							State.pinnedDoors.erase(std::remove(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor), State.pinnedDoors.end());
 						}
 					}
@@ -101,7 +105,7 @@ namespace DoorsTab {
 				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
 				{
 					ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
-					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
+					if (!State.DisableSabotages && ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
 						State.Save();
 					}
 				}

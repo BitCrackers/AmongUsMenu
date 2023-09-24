@@ -5,7 +5,7 @@
 #include <sstream>
 #include <assert.h>
 
-class AUMLogger {
+class SMAULogger {
 public:
 	void Create();
 	void Write(std::string_view verbosity, std::string_view source, std::string_view message);
@@ -20,7 +20,7 @@ private:
 	std::filesystem::path filePath;
 	std::string currentVerbosity;
 };
-#define _log_source (std::string() + "AUM - " + __func__)
+#define _log_source (std::string() + "SMAU - " + __func__)
 
 #define LOG_INFO(x) Log.Info(_log_source, x)
 #define LOG_DEBUG(x) Log.Debug(_log_source, x)
@@ -47,4 +47,4 @@ private:
 		exit(1); \
 	}
 
-extern AUMLogger Log;
+extern SMAULogger Log;

@@ -1,6 +1,7 @@
 #include "pch-il2cpp.h"
 #include "_hooks.h"
-#include "logger.h"	
+#include "logger.h"
+#include "state.hpp"
 
 /*void fakeSuccessfulLogin(EOSManager* eosManager)
 {
@@ -39,3 +40,9 @@ void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, Method
 
 	app::EOSManager_UpdatePermissionKeys(__this, callback, method);
 }
+
+/*void dEOSManager_set_FriendCode(EOSManager* __this, String* value, MethodInfo* method) {
+	if (State.SpoofFriendCode && State.FakeFriendCode != "")
+		return EOSManager_set_FriendCode(__this, convert_to_string(State.FakeFriendCode), method);
+	return EOSManager_set_FriendCode(__this, value, method);
+}*/

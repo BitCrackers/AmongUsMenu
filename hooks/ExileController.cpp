@@ -2,6 +2,7 @@
 #include "_hooks.h"
 #include "utility.h"
 #include "logger.h"
+#include <state.hpp>
 
 void dExileController_ReEnableGameplay(ExileController* __this, MethodInfo* method) {
     app::ExileController_ReEnableGameplay(__this, method);

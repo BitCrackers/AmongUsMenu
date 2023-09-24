@@ -488,12 +488,13 @@ namespace Replay
 		float cursorPosX = winPos.x + 15.f * State.dpiScale;
 		float cursorPosY = winPos.y + (winSize.y * 0.15f) - ((float)(map.mapImage.imageHeight * 0.15f) * 0.5f) * State.dpiScale;
 
+		GameOptions options;
 		// TODO: Center image in childwindow and calculate new cursorPos
 		drawList->AddImage((void*)map.mapImage.shaderResourceView,
 			ImVec2(cursorPosX, cursorPosY) + 5.0f * State.dpiScale,
 			ImVec2(cursorPosX, cursorPosY) + ImVec2(5.0f + ((float)map.mapImage.imageWidth * 0.5f),  5.0f + ((float)map.mapImage.imageHeight * 0.5f)) * State.dpiScale,
-			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
+			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
+			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			ImGui::GetColorU32(State.SelectedReplayMapColor));
 
 		// pre-processing of filters

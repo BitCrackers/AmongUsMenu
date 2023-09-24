@@ -42,18 +42,22 @@ namespace HostTab {
 						State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
 						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
 						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
-						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
-						{
-							if(State.assignedRoles[index] == RoleType::Shapeshifter)
-								State.assignedRoles[index] = RoleType::Engineer;
-							else if(State.assignedRoles[index] == RoleType::Impostor)
-								State.assignedRoles[index] = RoleType::Random;
-							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
-							State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
-						}
+						// if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
+						// {
+						// 	if(State.assignedRoles[index] == RoleType::Shapeshifter)
+						// 		State.assignedRoles[index] = RoleType::Engineer;
+						// 	else if(State.assignedRoles[index] == RoleType::Impostor)
+						// 		State.assignedRoles[index] = RoleType::Random;
+						// 	State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+						// 	State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
+						// }
+						// Remove these stupid limitations
 
 						if (!IsInGame()) {
-							SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
+							if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+								SetRoleAmount(RoleTypes__Enum::Engineer, 15);
+							else
+								SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
 							SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
 							SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
 							if(options.GetNumImpostors() <= State.impostors_amount + State.shapeshifters_amount)

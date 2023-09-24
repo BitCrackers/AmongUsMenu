@@ -33,6 +33,11 @@ namespace DebugTab {
 			{
 				State.Save();
 			}
+			if (ImGui::Button("Clear RPC Queues"))
+			{
+				State.rpcQueue = std::queue<RPCInterface*>();
+				State.lobbyRpcQueue = std::queue<RPCInterface*>();
+			}
 
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
@@ -81,7 +86,7 @@ namespace DebugTab {
 				{
 					const app::Color32& col = colArr_raw[i];
 					const ImVec4& conv_col = AmongUsColorToImVec4(col);
-					static constexpr std::array COLORS = { "Red", "Blue", "Dark Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral" };
+					static constexpr std::array COLORS = { "Red", "Blue", "Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral", "Fortegreen" };
 					ImGui::TextColored(conv_col, "%s [%d]: (%d, %d, %d, %d)", COLORS.at(i), i, col.r, col.g, col.b, col.a);
 				}
 			}

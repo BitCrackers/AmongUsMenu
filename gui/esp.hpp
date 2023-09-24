@@ -16,13 +16,13 @@ static bool IsWithinScreenBounds(const Vector2& pos)
 static float GetScaleFromValue(float value)
 {
 	// NOTE : The res of the game can not be lower than the desktop res if the game is in fullscreen.
-	// We always need to divide the camera height by 3
-	// since 3 is the default zoom in the menu for some reason.
+	// We always need to divide the camera height by 3 (not required as default zoom is now 1)
+	// since 3 is the default zoom in the menu for some reason. (changed it to 1 XD)
 	// We offset from 1080 since the w2s scale is defaulted to that.
 	float scale = DirectX::GetWindowSize().y / 1080.0f;
 
 	// If we enable zoom then we scale but otherwise don't
-	float cameraHeight = State.EnableZoom ? State.CameraHeight / 3.0f : 1.0f;
+	float cameraHeight = State.EnableZoom ? State.CameraHeight : 1.0f;
 	return (value * scale) / cameraHeight;
 }
 

@@ -14,11 +14,10 @@ namespace Radar {
 	}
 
 	ImU32 GetRadarPlayerColorStatus(GameData_PlayerInfo* playerData) {
-		if (playerData->fields.IsDead)
-			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->HalfWhite));
-		else if (State.RevealRoles
-			&& PlayerIsImpostor(playerData))
+		if (State.RevealRoles && playerData->fields.Role != nullptr)
 			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role)));
+		else if (playerData->fields.IsDead)
+			return ImGui::ColorConvertFloat4ToU32(AmongUsColorToImVec4(app::Palette__TypeInfo->static_fields->HalfWhite));
 		else
 			return ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0));
 	}
@@ -29,7 +28,7 @@ namespace Radar {
 	}
 
 	void OnClick() {
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+		if (!(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
@@ -51,6 +50,30 @@ namespace Radar {
 
 			State.rpcQueue.push(new RpcSnapTo(target));
 		}
+		if (State.TeleportEveryone && !(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsKeyPressed(0x12) || ImGui::IsKeyDown(0x12)) && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+			ImVec2 mouse = ImGui::GetMousePos();
+			ImVec2 winpos = ImGui::GetWindowPos();
+			ImVec2 winsize = ImGui::GetWindowSize();
+
+			if (mouse.x < winpos.x
+				|| mouse.x > winpos.x + winsize.x
+				|| mouse.y < winpos.y
+				|| mouse.y > winpos.y + winsize.y)
+				return;
+
+			const auto& map = maps[(size_t)State.mapType];
+			float xOffset = getMapXOffsetSkeld(map.x_offset);
+			float yOffset = map.y_offset;
+
+			Vector2 target = {
+				((mouse.x - winpos.x) / State.dpiScale - xOffset) / map.scale,
+				(((mouse.y - winpos.y) / State.dpiScale - yOffset) * -1.F) / map.scale
+			};
+
+			for (auto player : GetAllPlayerControl()) {
+				State.rpcQueue.push(new RpcForceSnapTo(player, target));
+			}
+		}
 	}
 
 	void Init() {
@@ -64,7 +87,7 @@ namespace Radar {
 			Radar::Init();
 
 		const auto& map = maps[(size_t)State.mapType];
-		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5f + 10.f, (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * (0.5F + 10.F), (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
 
 		if(State.LockRadar)
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
@@ -73,12 +96,20 @@ namespace Radar {
 
 		ImVec2 winpos = ImGui::GetWindowPos();
 
+		ImVec4 RadarColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
+		if (State.RgbMenuTheme)
+			RadarColor = {State.RgbColor.x, State.RgbColor.y, State.RgbColor.z, State.SelectedColor.w};
+		else
+			RadarColor = State.SelectedColor;
+		
+		GameOptions options;
+
 		ImGui::Image((void*)map.mapImage.shaderResourceView,
-			ImVec2((float)map.mapImage.imageWidth * 0.5F, (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
+			ImVec2((float)map.mapImage.imageWidth * (options.GetByte(app::ByteOptionNames__Enum::MapId) == 3 ? (-0.5F) : 0.5F), (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
 			ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
-			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
-			State.SelectedColor);
+			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
+			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
+			RadarColor);
 
 		for (auto player : GetAllPlayerControl()) {
 			auto playerData = GetPlayerData(player);
@@ -103,7 +134,7 @@ namespace Radar {
 			}
 		}
 
-		if (State.ShowRadar_RightClick_Teleport)
+		if (State.ShowRadar_RightClickTP)
 			OnClick();
 
 		ImGui::End();

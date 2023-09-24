@@ -11,14 +11,3 @@ void RpcSetName::Process()
 {
 	PlayerControl_CmdCheckName(*Game::pLocalPlayer, convert_to_string(name), NULL);
 }
-
-RpcForceName::RpcForceName(PlayerControl* player, std::string_view name)
-{
-	this->Player = player;
-	this->name = name;
-}
-
-void RpcForceName::Process()
-{
-	PlayerControl_CmdCheckName(Player, convert_to_string(name), NULL);
-}

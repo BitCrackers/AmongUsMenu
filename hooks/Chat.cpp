@@ -4,7 +4,7 @@
 #include "game.h"
 #include "state.hpp"
 
-void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, MethodInfo* method) {
+void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, bool censor, MethodInfo* method) {
 	if (State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
@@ -14,23 +14,21 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 			local->fields.IsDead = true;
 			wasDead = true;
 		}
-		ChatController_AddChat(__this, sourcePlayer, chatText, method);
+		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
 		if (wasDead) {
 			local->fields.IsDead = false;
 		}
 	}
 	else
-		ChatController_AddChat(__this, sourcePlayer, chatText, method);
+		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {
-	if (State.ChatAlwaysActive)
+	State.ChatActiveOriginalState = visible;
+	if ( (State.ChatAlwaysActive || (IsInLobby() || State.InMeeting || GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) && !State.RefreshChatButton )
 		ChatController_SetVisible(__this, true, method);
 	else
-	{
-		State.ChatActiveOriginalState = visible;
-		ChatController_SetVisible(__this, visible, method);
-	}
+		ChatController_SetVisible(__this, false, method);
 }
 
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
@@ -51,5 +49,43 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 
 void dChatController_Update(ChatController* __this, MethodInfo* method)
 {
+	__this->fields.freeChatField->fields.textArea->fields.characterLimit = 2147483647;
+	__this->fields.freeChatField->fields.textArea->fields.allowAllCharacters = true;
+	__this->fields.freeChatField->fields.textArea->fields.AllowEmail = true;
+	__this->fields.freeChatField->fields.textArea->fields.AllowSymbols = true;
+	if (!State.SafeMode)
+		__this->fields.timeSinceLastMessage = 3.f;
+
+	if (State.MessageSent && State.SafeMode) {
+		__this->fields.timeSinceLastMessage = 0.f;
+		State.MessageSent = false;
+	}
+	State.ChatCooldown = __this->fields.timeSinceLastMessage;
+	State.ChatFocused = __this->fields.freeChatField->fields.textArea->fields.hasFocus;
+
 	ChatController_Update(__this, method);
+}
+
+bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
+{
+	return (unicode_char != 0x08 && unicode_char != 0x0D);
+}
+
+void dTextBoxTMP_SetText(TextBoxTMP* __this, String* input, String* inputCompo, MethodInfo* method)
+{
+	if (IsHost() || !State.SafeMode)
+		__this->fields.characterLimit = 2147483647;
+	else
+		__this->fields.characterLimit = 100;
+
+	TextBoxTMP_SetText(__this, input, inputCompo, method);
+	
+}
+
+void dPlayerControl_RpcSendChat(PlayerControl* __this, String* chatText, MethodInfo* method)
+{
+	if (__this == *Game::pLocalPlayer && !State.SafeMode && State.activeChatSpoof && State.playerToChatAs.has_value())
+		PlayerControl_RpcSendChat(GetPlayerControlById(State.playerToChatAs.get_PlayerId()), chatText, NULL);
+	else
+		PlayerControl_RpcSendChat(__this, chatText, NULL);
 }

@@ -20,7 +20,12 @@ public:
         0x00, // toggle zoom
         0x00, // toggle freecam
         0x00, // close current room door
-        VK_END // toggle replay
+        VK_END, // toggle replay
+        0x00, //toggle HUD
+        0x00, //reset appearance
+        0x00, //save appearance
+        0x00, //randomize appearance
+        0x00 //complete tasks
     };
 
     bool ImGuiInitialized = false;
@@ -29,6 +34,13 @@ public:
 #ifdef _DEBUG
     bool showDebugTab = false;
 #endif
+    bool RgbMenuTheme = false;
+    bool SetName = false;
+    bool SafeMode = true;
+    bool UnlockCosmetics = false;
+    bool SetLevel = false;
+    int FakeLevel = 1;
+    bool ShowKeybinds = true;
 
     bool AdjustByDPI = true;
     float dpiScale = 1.f;
@@ -39,13 +51,29 @@ public:
     bool MaxVision = false;
     float PrevPlayerSpeed = 1.f;
     float PlayerSpeed = 1.f;
+	float PrevKillCooldown = 30.f;
+	float KillCooldown = 30.f;
+    float PrevGACooldown = 60.f;
+    float GACooldown = 60.f;
+    float CycleTimer = 0.5f;
+    float PrevCycleTimer = 0.5f;
+    float CycleDuration = CycleTimer * 50;
     bool UnlockVents = false;
     bool ShowGhosts = false;
+    int FakeRole = 0;
+    bool FakeRoleToggle = false;
+    bool SpamReport = false;
+    bool DisableMeetings = false;
+    bool DisableSabotages = false;
+    bool NoGameEnd = false;
+    bool ChatSpam = false;
+    bool ChatSpamEveryone = false;
 
     bool ShowProtections = false;
     std::map<Game::PlayerId, std::pair<Game::ColorId, float/*Time*/>> protectMonitor;
     std::mutex protectMutex;
 
+    bool RefreshChatButton = false;
     bool RevealVotes = false;
     bool RevealAnonymousVotes = false;
 
@@ -54,10 +82,39 @@ public:
     bool ChatPaste = false;
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
+    bool PlayerColoredNames = false;
+    bool ShowPlayerInfo = false;
     int PrevKillDistance = 0;
     int KillDistance = 0;
     int PrevTaskBarUpdates = 0;
     int TaskBarUpdates = 0;
+	bool PrevVisualTasks = true;
+	bool VisualTasks = true;
+    bool PrevShowNames = false;
+    bool ShowNames = false;
+    bool Cycler = false;
+    bool CycleName = false;
+    bool RandomColor = false;
+    bool RandomHat = false;
+    bool RandomSkin = false;
+    bool RandomVisor = false;
+    bool RandomPet = false;
+    bool RandomNamePlate = false;
+    bool CycleForEveryone = false;
+    bool ForceNameForEveryone = false;
+    bool ForceColorForEveryone = false;
+    bool CustomName = false;
+    bool RgbName = false;
+    bool BoldName = false;
+    bool ItalicName = false;
+    bool UnderlineName = false;
+    bool StrikethroughName = false;
+    bool ColoredName = false;
+    ImVec4 NameColor = ImVec4(1.f, 1.f, 1.f, 1.f);
+    float RgbNameColor = 0.f;
+    bool ServerSideCustomName = false;
+    bool NoAbilityCD = false;
+    bool CycleInMeeting = true;
 
     bool NoClip = false;
     bool HotkeyNoClip = false;
@@ -65,6 +122,11 @@ public:
     bool DisableLights = false;
 
     bool MoveInVent = false;
+    bool AlwaysMove = false;
+    bool AnimationlessShapeshift = false;
+    bool DisableKillAnimation = false;
+    bool KillImpostors = false;
+    bool FakeAlive = false;
 
     PlayerSelection selectedPlayer;
     std::queue<RPCInterface*> rpcQueue;
@@ -73,9 +135,8 @@ public:
     bool ShowRadar = false;
     bool ShowRadar_DeadBodies = false;
     bool ShowRadar_Ghosts = false;
-    bool ShowHud = true;
     bool HideRadar_During_Meetings = false;
-    bool ShowRadar_RightClick_Teleport = false;
+    bool ShowRadar_RightClickTP = false;
     bool LockRadar = false;
     bool RadarDrawIcons = true;
 
@@ -89,11 +150,24 @@ public:
 
     bool InMeeting = false;
     bool PlayMedbayScan = false;
+    bool PlayWeaponsAnimation = false;
 
     bool ChatAlwaysActive = false;
     bool ChatActiveOriginalState = false;
     bool ReadGhostMessages = false;
-    bool RightClickTeleport = false;
+    bool ShiftRightClickTP = false;
+    bool TeleportEveryone = false;
+    bool RotateEveryone = false;
+    float RotateRadius = 1.f;
+    float xCoordinate = 0.f;
+    float yCoordinate = 0.f;
+
+    bool confuser = false;
+    bool confuseOnJoin = false;
+    bool confuseOnStart = false;
+    bool confuseOnKill = false;
+    bool confuseOnVent = false;
+    bool confuseOnMeeting = false;
 
     SystemTypes__Enum selectedDoor = SystemTypes__Enum::Hallway;
     std::vector<SystemTypes__Enum> mapDoors;
@@ -141,23 +215,43 @@ public:
     Camera* FollowerCam = nullptr;
     bool EnableZoom = false;
 
+    bool DisableHud = false;
+
+    bool ActiveAttach = false;
+    bool ActiveShapeshift = false;
+
     bool FakeCameraUsage = false;
 
+    ImVec4 MenuThemeColor = ImVec4(0.502f, 0.075f, 0.256f, 1.f);
+    ImVec4 RgbColor = ImVec4(1.f, 0.071f, 0.f, 1.f);
     ImVec4 SelectedColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
     ImVec4 SelectedReplayMapColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
 
     Game::ColorId SelectedColorId = 0; // Red
+    Game::ColorId RandomColorId = 0; // Red
+    Game::ColorId HostSelectedColorId = 0; //Red
+    int SelectedRoleId = 0; // Crewmate
+    int SelectedGameEndReasonId = 0;
     std::string originalName = "-";
     String* originalNamePlate = nullptr;
     String* originalSkin = nullptr;
     String* originalHat = nullptr;
     String* originalVisor = nullptr;
     String* originalPet = nullptr;
+    String* cyclerNamePlate = nullptr;
+    String* cyclerSkin = nullptr;
+    String* cyclerHat = nullptr;
+    String* cyclerVisor = nullptr;
+    String* cyclerPet = nullptr;
     Game::ColorId originalColor = Game::NoColorId;
 
+    bool SnipeColor = false;
     bool activeImpersonation = false;
+    bool activeChatSpoof = false;
 
     PlayerSelection playerToFollow;
+    PlayerSelection playerToAttach;
+    PlayerSelection playerToChatAs;
 
     Vector3 camPos = { NULL, NULL, NULL };
     Vector3 prevCamPos = { NULL, NULL, NULL };
@@ -168,12 +262,19 @@ public:
     bool ShowUnityLogs = true;
 
     int LobbyTimer = -1;
+    float ChatCooldown = 0.f;
+    bool MessageSent = false;
+    bool ChatFocused = false;
 
+    std::string chatMessage = "";
     std::string userName = "";
-
-    bool ShowChat = false;
-    bool newChatMessage = false;
-    std::vector<std::unique_ptr<RpcChatMessage>> chatMessages;
+    std::string userName1 = "";
+    std::string userName2 = "";
+    std::string rgbCode = "";
+    std::string hostUserName = "";
+    std::string customCode = "GOATYY";
+    bool HideCode = false;
+    bool RgbLobbyCode = false;
 
     enum class MapType : uint8_t
     {

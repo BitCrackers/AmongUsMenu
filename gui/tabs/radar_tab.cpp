@@ -11,9 +11,11 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Show Radar", &State.ShowRadar)) {
 				State.Save();
 			}
-			ImGui::SameLine();
-			if (HotKey(State.KeyBinds.Toggle_Radar)) {
-				State.Save();
+			if (State.ShowKeybinds) {
+				ImGui::SameLine();
+				if (HotKey(State.KeyBinds.Toggle_Radar)) {
+					State.Save();
+				}
 			}
 
 			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
@@ -26,7 +28,7 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Show Ghosts", &State.ShowRadar_Ghosts)) {
 				State.Save();
 			}
-			if (ImGui::Checkbox("Right Click to Teleport", &State.ShowRadar_RightClick_Teleport)) {
+			if (ImGui::Checkbox("Right Click to Teleport", &State.ShowRadar_RightClickTP)) {
 				State.Save();
 			}
 

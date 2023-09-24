@@ -60,6 +60,8 @@ EOSManager
 FullAccount
 SpawnFlags__Enum
 InnerNetObject
+GameOverReason__Enum
+GameManager
 PlainDoor__Array
 PlayerVoteArea
 PlayerVoteArea__Array
@@ -109,9 +111,6 @@ PlayerControl__Array
 List_1_PlayerControl_
 DestroyableSingleton_1_HudManager___Fields
 HudManager
-Delegate__Fields
-MulticastDelegate__Fields
-Action_1_MapBehaviour_
 KeyboardJoystick
 ScreenJoystick
 MeetingHud_VoteStates__Enum
@@ -128,8 +127,11 @@ AmongUsClient
 ClientData
 ClientData__Array
 List_1_InnerNet_ClientData_
+VoteBanSystem
+GameStartManager
 LobbyBehaviour
 NoShadowBehaviour
+PingTracker
 PolusShipStatus
 DoorBreakerGame
 SabotageTask
@@ -144,7 +146,8 @@ LimitedTime
 LimitedTimeStartEnd
 CosmeticData
 NamePlateData
-VisorData
+FollowerCamera__Fields
+AmongUsClient__Fields
 PetBehaviour
 PetData
 List_1_PetData_
@@ -196,7 +199,6 @@ NormalPlayerTask_TimerState__Enum
 NormalPlayerTask
 Palette
 ControlTypes__Enum
-Announcement
 SaveManager
 DestroyableSingleton_1_RoleManager_
 EngineerRole

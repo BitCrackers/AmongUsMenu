@@ -15,3 +15,18 @@ void RpcSetColor::Process()
 	else
 		PlayerControl_CmdCheckColor(*Game::pLocalPlayer, bodyColor, NULL);
 }
+
+RpcForceColor::RpcForceColor(PlayerControl* player, uint8_t bodyColor, bool force)
+{
+	this->Player = player;
+	this->bodyColor = bodyColor;
+	this->forceColor = force;
+}
+
+void RpcForceColor::Process()
+{
+	if (forceColor)
+		PlayerControl_RpcSetColor(Player, bodyColor, NULL);
+	else
+		PlayerControl_CmdCheckColor(Player, bodyColor, NULL);
+}

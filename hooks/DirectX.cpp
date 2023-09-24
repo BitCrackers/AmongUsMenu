@@ -19,7 +19,6 @@
 #include "resource_data.h"
 #include "game.h"
 #include "console.hpp"
-#include "aum-chat.hpp"
 #include "profiler.h"
 
 #include <future>
@@ -63,17 +62,12 @@ ImVec2 DirectX::GetWindowSize()
 
 static bool CanDrawEsp()
 {
-	return IsInGame() && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
+	return (IsInGame() || IsInLobby()) && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
 }
 
 static bool CanDrawRadar()
 {
 	return IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
-}
-
-static bool CanDrawChat()
-{
-    return (IsInGame() || IsInLobby()) && State.ShowChat;
 }
 
 static bool CanDrawReplay()
@@ -113,11 +107,21 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Noclip) && (IsInGame() || IsInLobby())) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Zoom) && IsInGame()) State.EnableZoom = !State.EnableZoom;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Freecam) && IsInGame()) State.FreeCam = !State.FreeCam;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Zoom) && (IsInGame() || IsInLobby())) State.EnableZoom = !State.EnableZoom;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Freecam) && (IsInGame() || IsInLobby())) State.FreeCam = !State.FreeCam;
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Replay)) State.ShowReplay = !State.ShowReplay;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Chat)) State.ShowChat = !State.ShowChat;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Hud) && (IsInGame() || IsInLobby())) State.DisableHud = !State.DisableHud;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Reset_Appearance) && (IsInGame() || IsInLobby())) ControlAppearance(false);
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Save_Appearance) && (IsInGame() || IsInLobby())) SaveOriginalAppearance();
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Randomize_Appearance)) ControlAppearance(true);
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Complete_Tasks) && IsInGame()) {
+        auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
+        for (auto task : tasks) {
+            if (task->fields.taskStep != task->fields.MaxStep)
+                State.rpcQueue.push(new RpcCompleteTask(task->fields._._Id_k__BackingField));
+        }
+    }
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -317,12 +321,7 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
         ImGuiRenderer::Submit([]() { ConsoleGui::Render(); });
     }
 
-    if (CanDrawChat())
-    {
-        ImGuiRenderer::Submit([]() { ChatGui::Render(); });
-    }
-
-	if (CanDrawEsp())
+    if (CanDrawEsp())
 	{
 		ImGuiRenderer::Submit([&]()
 		{

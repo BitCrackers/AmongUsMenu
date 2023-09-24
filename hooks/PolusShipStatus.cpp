@@ -30,6 +30,7 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 
 	State.mapType = Settings::MapType::Pb;
 
-	State.userName = GetPlayerName();
-	ResetOriginalAppearance();
+	if (State.DisableSabotages) {
+		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 7));
+	}
 }

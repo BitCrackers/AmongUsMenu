@@ -41,13 +41,13 @@ bool GameVersionCheck() {
 
 	if (!IsWindows10OrGreater()) {
 		Log.Error("Version of windows not supported exiting!");
-		MessageBox(NULL, L"This version of Windows is not supported!", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		MessageBox(NULL, L"This version of Windows is not supported!", L"SickoModeAU", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
 	if (!std::filesystem::exists(gameAssembly)) {
 		Log.Error("GameAssembly.dll was not found");
-		MessageBox(NULL, L"Unable to locate GameAssembly.dll", L"AmongUsMenu", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		MessageBox(NULL, L"Unable to locate GameAssembly.dll", L"SickoModeAU", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 		return false;
 	}
 
@@ -86,7 +86,7 @@ void Run(LPVOID lpParam) {
 	ScopedThreadAttacher managedThreadAttached;
 	{
 		std::ostringstream ss;
-		ss << "\n\tAmongUsMenu - " << __DATE__ << " - " << __TIME__ << std::endl; // Log amongusmenu info
+		ss << "\n\SickoModeAU - " << __DATE__ << " - " << __TIME__ << std::endl; // Log SickoModeAU info
 		ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
 		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
 		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info

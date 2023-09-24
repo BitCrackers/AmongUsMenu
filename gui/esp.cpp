@@ -82,7 +82,6 @@ void Esp::Render()
 			if (const auto& player = it.playerData.validate();
 				player.has_value()						//Verify PlayerControl hasn't been destroyed (happens when disconnected)
 				&& !player.is_Disconnected()		//Sanity check, shouldn't ever be true
-				&& !player.is_LocalPlayer()			//Don't highlight yourself, you're ugly
 				&& (!player.get_PlayerData()->fields.IsDead || State.ShowEsp_Ghosts)
 				&& it.OnScreen)
 			{
@@ -99,24 +98,26 @@ void Esp::Render()
 
 					RenderBox(top, bottom, height, width, it.Color);
 				}
-				/////////////////////////////////
-				//// Distance ///////////////////
-				/////////////////////////////////
-				if (State.ShowEsp_Distance)
-				{
-					const ImVec2 position{ it.Position.x, it.Position.y + 15.0f * State.dpiScale };
+				if (!player.is_LocalPlayer()) { //Don't highlight yourself, you're ugly
+					/////////////////////////////////
+					//// Distance ///////////////////
+					/////////////////////////////////
+					if (State.ShowEsp_Distance)
+					{
+						const ImVec2 position{ it.Position.x, it.Position.y + 15.0f * State.dpiScale };
 
-					char distance[32];
-					sprintf_s(distance, "[%.0fm]", it.Distance);
+						char distance[32];
+						sprintf_s(distance, "[%.2fm]", it.Distance);
 
-					RenderText(distance, position, it.Color);
-				}
-				/////////////////////////////////
-				//// Tracers ////////////////////
-				/////////////////////////////////
-				if (State.ShowEsp_Tracers)
-				{
-					RenderLine(instance.LocalPosition, it.Position, it.Color, true);
+						RenderText(distance, position, it.Color);
+					}
+					/////////////////////////////////
+					//// Tracers ////////////////////
+					/////////////////////////////////
+					if (State.ShowEsp_Tracers && !player.is_LocalPlayer())
+					{
+						RenderLine(instance.LocalPosition, it.Position, it.Color, true);
+					}
 				}
 			}
 		}

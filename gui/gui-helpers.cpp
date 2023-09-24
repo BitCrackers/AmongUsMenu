@@ -171,8 +171,8 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 			}
 			else if (PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
 				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
-			else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
-				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
+			//else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
+				//nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
 
 			if (playerData->fields.IsDead)
 				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->DisabledGrey);

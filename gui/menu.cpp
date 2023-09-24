@@ -20,7 +20,7 @@
 
 namespace Menu {
 	void Init() {
-		ImGui::SetNextWindowSize(ImVec2(520, 350) * State.dpiScale, ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2(520, 400) * State.dpiScale, ImGuiCond_None);
 		ImGui::SetNextWindowBgAlpha(1.F);
 	}
 
@@ -30,7 +30,7 @@ namespace Menu {
 		if (!init)
 			Menu::Init();
 
-		ImGui::Begin("AmongUsMenu", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("SickoModeAU", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 		ImGui::BeginTabBar("AmongUs#TopBar", ImGuiTabBarFlags_NoTabListScrollingButtons);
 
 		if(!firstRender)
