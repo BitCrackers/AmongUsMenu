@@ -9518,6 +9518,47 @@ namespace app
 #endif
     };
 
+    struct AbstractChatInputField__Fields {
+        struct MonoBehaviour__Fields _;
+        struct SpriteRenderer* background;
+        struct ChatInputFieldButton* submitButton;
+        bool visible;
+        bool canSubmit;
+        struct Action* OnSubmitEvent;
+    };
+
+    struct AbstractChatInputField {
+        struct AbstractChatInputField__Class* klass;
+        MonitorData* monitor;
+        struct AbstractChatInputField__Fields fields;
+    };
+
+    struct AbstractChatInputField__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData Awake;
+        VirtualInvokeData Start;
+        VirtualInvokeData OnTextFieldTransformChanged;
+        VirtualInvokeData SetVisible;
+        VirtualInvokeData SetButtonsEnabled;
+        VirtualInvokeData Clear;
+        VirtualInvokeData Submit;
+    };
+
+    struct AbstractChatInputField__StaticFields {
+    };
+
+    struct AbstractChatInputField__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct AbstractChatInputField__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct AbstractChatInputField__VTable vtable;
+    };
+
     struct ChatController__Fields {
         struct MonoBehaviour__Fields _;
         struct GameObject* chatButton;
@@ -9561,6 +9602,7 @@ namespace app
     };
 
     struct FreeChatInputField__Fields {
+        struct AbstractChatInputField__Fields _;
         struct TextBoxTMP* textArea;
         struct PassiveButton* fieldButton;
         struct TextMeshPro* charCountText;

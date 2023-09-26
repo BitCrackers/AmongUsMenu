@@ -86,7 +86,7 @@ void Run(LPVOID lpParam) {
 	ScopedThreadAttacher managedThreadAttached;
 	{
 		std::ostringstream ss;
-		ss << "\n\SickoModeAU - " << __DATE__ << " - " << __TIME__ << std::endl; // Log SickoModeAU info
+		ss << "\nSickoModeAU - " << __DATE__ << " - " << __TIME__ << std::endl; // Log SickoModeAU info
 		ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
 		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
 		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
