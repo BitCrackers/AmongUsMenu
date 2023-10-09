@@ -8,7 +8,7 @@
 This project is for Educational Use only. We do not condone this software being used to gain an advantage against other people. This project is aimed to make Innersloth's anticheat better.
 
 ## Compile (Configurations)
-You can compile two different versions of the menu. Normal or Version Proxy.
+You can compile two different versions of the menu. Normal or Version Proxy. Steps to compile can be found here: https://docs.google.com/document/d/16Tnqk7LIqyQlw74TuV34Wsy9JDqIfVy7DgUndwIL3uw/edit?usp=sharing
 
 ### Normal (SickoModeAU.dll)
 Inject it with any injector you have.
@@ -63,7 +63,7 @@ First you will need protontricks, you can install it with your packager of choic
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
 
-##Added/Changed Features
+## Added/Changed Features
 Settings Tab:
 1. Hide Keybinds (so u don't accidentally change any keybind when opening menu)
 2. Menu Size (More control over size with slider)
@@ -157,9 +157,9 @@ Miscellaneous:
 3. Added mod version and shows when freecam/noclip is turned on
 4. Disable freecam moving when chat text is focused
 
-##Removed Features
+## Removed Features
 1. Removed custom RPC and AUM chat (prevents detection by other mod users)
 
-##Notes
+## Notes
 1. If you get crashes, make sure you upload your "smau-log.txt" (in your Among Us directory) and mark the issue on the repo.
 2. If your game crashes when joining a lobby, host a local lobby then join that lobby.
