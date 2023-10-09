@@ -30,6 +30,7 @@
     <ClCompile Include="events\TaskCompletedEvent.cpp" />
     <ClCompile Include="events\VentEvent.cpp" />
     <ClCompile Include="events\WalkEvent.cpp" />
+	<ClCompile Include="gui\gamechat.cpp" />
     <ClCompile Include="gui\console.cpp" />
     <ClCompile Include="gui\esp.cpp" />
     <ClCompile Include="gui\gui-helpers.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="hooks\UnityDebug.cpp" />
     <ClCompile Include="rpc\CmdCheckMurder.cpp" />
     <ClCompile Include="rpc\CustomRpcHandler.cpp" />
+	<ClCompile Include="rpc\RpcChatMessage.cpp" />
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp" />
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
@@ -330,6 +332,7 @@
     <ClInclude Include="appdata\il2cpp-functions.h" />
     <ClInclude Include="appdata\il2cpp-translations.h" />
     <ClInclude Include="events\_events.h" />
+	<ClInclude Include="gui\gamechat.hpp" />
     <ClInclude Include="gui\console.hpp" />
     <ClInclude Include="gui\esp.hpp" />
     <ClInclude Include="gui\gui-helpers.hpp" />

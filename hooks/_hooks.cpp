@@ -153,6 +153,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_LoginFromAccountTab);
 	HOOKFUNC(EOSManager_InitializePlatformInterface);
 	HOOKFUNC(EOSManager_IsFreechatAllowed);
+	HOOKFUNC(EOSManager_IsFriendsListAllowed);
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(TextBoxTMP_IsCharAllowed);
 	HOOKFUNC(TextBoxTMP_SetText);
@@ -253,6 +254,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_LoginFromAccountTab);
 	UNHOOKFUNC(EOSManager_InitializePlatformInterface);
 	UNHOOKFUNC(EOSManager_IsFreechatAllowed);
+	UNHOOKFUNC(EOSManager_IsFriendsListAllowed);
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(TextBoxTMP_IsCharAllowed);
 	HOOKFUNC(TextBoxTMP_SetText);

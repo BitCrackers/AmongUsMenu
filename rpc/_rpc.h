@@ -173,12 +173,24 @@ public:
 	virtual void Process() override;
 };
 
-class RpcChatMessage : public RPCInterface {
+class RpcSendChat : public RPCInterface {
 	PlayerControl* Player;
 	std::string msg;
 public:
-	RpcChatMessage(PlayerControl* Player, std::string_view msg);
+	RpcSendChat(PlayerControl* Player, std::string_view msg);
 	virtual void Process() override;
+};
+
+class RpcChatMessage : public RPCInterface {
+	std::string SenderName;
+	std::string Message;
+	uint32_t ColorId;
+	std::chrono::system_clock::time_point Timestamp;
+public:
+	RpcChatMessage(std::string sendername, std::string message, uint32_t colorId, std::chrono::system_clock::time_point timestamp);
+	virtual void Process() override;
+	virtual void PrintUser();
+	virtual void PrintMessage();
 };
 
 class RpcVotePlayer : public RPCInterface {
@@ -213,6 +225,12 @@ public:
 class EndMeeting : public RPCInterface {
 public:
 	EndMeeting();
+	virtual void Process() override;
+};
+
+class DestroyMap : public RPCInterface {
+public:
+	DestroyMap();
 	virtual void Process() override;
 };
 

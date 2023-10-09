@@ -12,7 +12,7 @@
 
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
 {
-
+    static bool onStart = true;
     if (!IsInLobby()) {
         State.LobbyTimer = -1;
     }
@@ -41,6 +41,10 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
         else
             app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+        for (auto player : GetAllPlayerControl()) {
+            if (player != *Game::pLocalPlayer)
+                app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(player), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
+        }
     }
 
     if (!IsInGame()) {
@@ -298,8 +302,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     }
     
     static int nameChangeCycleDelay = 0; //If we spam too many name changes, we're banned
-
-    if (nameChangeCycleDelay <= 0 && State.SetName && !State.activeImpersonation && !State.ServerSideCustomName) {
+    if ((nameChangeCycleDelay <= 0 && State.SetName && !State.activeImpersonation && !State.ServerSideCustomName) || onStart) {
         if ((((IsInGame() || IsInLobby()) && (convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer)), nullptr)) != State.userName)) || ((!IsInGame() && !IsInLobby()) && GetPlayerName() != State.userName)) && !State.userName.empty()) {
             SetPlayerName(State.userName);
             LOG_INFO("Name mismatch, setting name to \"" + State.userName + "\"");
@@ -518,6 +521,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
     auto color_g = calculate(State.RgbNameColor + 4.f);
     auto color_b = calculate(State.RgbNameColor + 2.f);
     State.rgbCode = std::format("<#{:02x}{:02x}{:02x}>", int(color_r * 255), int(color_g * 255), int(color_b * 255));
+    onStart = false;
 
     if (State.RgbMenuTheme) {
         State.RgbColor.x = color_r;
@@ -659,6 +663,7 @@ static void onGameEnd() {
     LOG_DEBUG("Reset All");
     Replay::Reset();
     State.aumUsers.clear();
+    State.chatMessages.clear();
     State.activeImpersonation = false;
     State.FollowerCam = nullptr;
     State.EnableZoom = false;

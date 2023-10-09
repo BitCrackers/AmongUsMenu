@@ -27,13 +27,13 @@ void RpcShapeshift::Process()
 	PlayerControl_RpcShapeshift(Player, target.get_PlayerControl().value_or(nullptr), animate,  NULL);
 }
 
-RpcChatMessage::RpcChatMessage(PlayerControl* Player, std::string_view msg)
+RpcSendChat::RpcSendChat(PlayerControl* Player, std::string_view msg)
 {
 	this->Player = Player;
 	this->msg = msg;
 }
 
-void RpcChatMessage::Process()
+void RpcSendChat::Process()
 {
 	PlayerControl_RpcSendChat(Player, convert_to_string(msg), NULL);
 }
@@ -89,6 +89,15 @@ EndMeeting::EndMeeting() {
 void EndMeeting::Process()
 {
 	MeetingHud_Close(MeetingHud__TypeInfo->static_fields->Instance, NULL);
+}
+
+DestroyMap::DestroyMap() {
+
+}
+
+void DestroyMap::Process()
+{
+	ShipStatus_OnDestroy(ShipStatus__TypeInfo->static_fields->Instance, NULL);
 }
 
 RpcRevive::RpcRevive(PlayerControl* Player)

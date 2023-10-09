@@ -95,11 +95,11 @@ namespace GameTab {
 				if (ImGui::Button("Send"))
 				{
 					if (IsInGame()) {
-						State.rpcQueue.push(new RpcChatMessage(*Game::pLocalPlayer, State.chatMessage));
+						State.rpcQueue.push(new RpcSendChat(*Game::pLocalPlayer, State.chatMessage));
 						State.MessageSent = true;
 					}
 					else if (IsInLobby()) {
-						State.lobbyRpcQueue.push(new RpcChatMessage(*Game::pLocalPlayer, State.chatMessage));
+						State.lobbyRpcQueue.push(new RpcSendChat(*Game::pLocalPlayer, State.chatMessage));
 						State.MessageSent = true;
 					}
 				}
@@ -117,6 +117,13 @@ namespace GameTab {
 				}
 			}
 
+			if ((IsInGame() || IsInLobby()) && ImGui::Button("Destroy Map")) {
+				if (IsInGame())
+					State.rpcQueue.push(new DestroyMap());
+				else if (IsInLobby())
+					State.lobbyRpcQueue.push(new DestroyMap());
+			}
+			
 			if (ImGui::Checkbox("Cycler", &State.Cycler)) {
 				State.Save();
 			}
@@ -289,6 +296,18 @@ namespace GameTab {
 			if (ImGui::Checkbox("Console", &State.ShowConsole)) {
 				State.Save();
 			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Game Chat", &State.ShowChat)) {
+				State.Save();
+			}
+			if (State.ShowKeybinds) {
+				ImGui::SameLine();
+				if (HotKey(State.KeyBinds.Toggle_Chat)) {
+					State.Save();
+				}
+			}
+
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 

@@ -132,12 +132,16 @@ namespace SettingsTab {
 				State.Save();
 			}
 
+			if (ImGui::Checkbox("Hide Friend Code", &State.HideFriendCode)) {
+				State.Save();
+			}
+			ImGui::SameLine();
 			if (ImGui::Checkbox("Safe Mode", &State.SafeMode)) {
 				State.Save();
 			}
 
-			ImGui::Text("Keep safe mode on in official servers (NA, Europe, Asia) to prevent anticheat detection!\n");
-			ImGui::Text("SickoModeAU v1.0_pr1 | Original menu: Bitcrackers/AmongUsMenu | Modded by @g0atyy (YT)");
+			ImGui::Text("Keep safe mode on in official servers (NA, Europe, Asia) to prevent anticheat detection!");
+			ImGui::Text("SickoModeAU v1.0_pr2 | Original menu: Bitcrackers/AmongUsMenu | Modded by @goatwo (YT)");
 
 			ImGui::EndTabItem();
 		}

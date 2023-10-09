@@ -19,6 +19,7 @@
 #include "resource_data.h"
 #include "game.h"
 #include "console.hpp"
+#include "gamechat.hpp"
 #include "profiler.h"
 
 #include <future>
@@ -70,6 +71,12 @@ static bool CanDrawRadar()
 	return IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
 }
 
+
+static bool CanDrawChat()
+{
+    return (IsInGame() || IsInLobby()) && State.ShowChat;
+}
+
 static bool CanDrawReplay()
 {
     return IsInGame() && State.ShowReplay;
@@ -111,6 +118,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Freecam) && (IsInGame() || IsInLobby())) State.FreeCam = !State.FreeCam;
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Replay)) State.ShowReplay = !State.ShowReplay;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Chat)) State.ShowChat = !State.ShowChat;
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Hud) && (IsInGame() || IsInLobby())) State.DisableHud = !State.DisableHud;
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Reset_Appearance) && (IsInGame() || IsInLobby())) ControlAppearance(false);
     if (KeyBinds::IsKeyPressed(State.KeyBinds.Save_Appearance) && (IsInGame() || IsInLobby())) SaveOriginalAppearance();
@@ -319,6 +327,11 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     if (State.ShowConsole)
     {
         ImGuiRenderer::Submit([]() { ConsoleGui::Render(); });
+    }
+
+    if (CanDrawChat())
+    {
+        ImGuiRenderer::Submit([]() { ChatGui::Render(); });
     }
 
     if (CanDrawEsp())

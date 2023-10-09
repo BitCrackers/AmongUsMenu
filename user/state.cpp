@@ -41,6 +41,7 @@ void Settings::Load() {
         JSON_TRYGET("SetLevel", this->SetLevel);
         JSON_TRYGET("FakeLevel", this->FakeLevel);
         JSON_TRYGET("ShowKeybinds", this->ShowKeybinds);
+        JSON_TRYGET("HideFriendCode", this->HideFriendCode);
 
         JSON_TRYGET("SelectedColorId", this->SelectedColorId);
         JSON_TRYGET("SnipeColor", this->SnipeColor);
@@ -130,6 +131,7 @@ void Settings::Load() {
 
         JSON_TRYGET("ShowConsole", this->ShowConsole);
         JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
+        JSON_TRYGET("ShowChat", this->ShowChat);
 
         JSON_TRYGET("RevealAnonymousVotes", this->RevealAnonymousVotes);
 
@@ -175,6 +177,7 @@ void Settings::Save() {
             {"SetLevel", this->SetLevel},
             {"FakeLevel", this->FakeLevel},
             {"ShowKeybinds", this->ShowKeybinds},
+            {"HideFriendCode", this->HideFriendCode},
 
             {"SelectedColorId", this->SelectedColorId},
             {"SnipeColor", this->SnipeColor},
@@ -265,6 +268,7 @@ void Settings::Save() {
 
             {"ShowConsole", this->ShowConsole},
             {"ShowUnityLogs", this->ShowUnityLogs},
+            {"ShowChat", this->ShowChat},
 
             {"ShiftRightClickTP", this->ShiftRightClickTP},
             {"RotateRadius", this->RotateRadius},

@@ -29,6 +29,13 @@ bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method)
 	return app::EOSManager_IsFreechatAllowed(__this, method);
 }
 
+bool dEOSManager_IsFriendsListAllowed(EOSManager* __this, MethodInfo* method)
+{
+	if (State.HideFriendCode)
+		return false;
+	return app::EOSManager_IsFriendsListAllowed(__this, method);
+}
+
 void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, MethodInfo* method) {
 	// Compatible with Steam and Epic
 	Il2CppClass* klass = get_class("Assembly-CSharp, EOSManager");

@@ -25,7 +25,8 @@ public:
         0x00, //reset appearance
         0x00, //save appearance
         0x00, //randomize appearance
-        0x00 //complete tasks
+        0x00, //complete tasks
+        0x00 //toggle chat
     };
 
     bool ImGuiInitialized = false;
@@ -41,6 +42,7 @@ public:
     bool SetLevel = false;
     int FakeLevel = 1;
     bool ShowKeybinds = true;
+    bool HideFriendCode = false;
 
     bool AdjustByDPI = true;
     float dpiScale = 1.f;
@@ -158,6 +160,7 @@ public:
     bool ShiftRightClickTP = false;
     bool TeleportEveryone = false;
     bool RotateEveryone = false;
+    bool RotateServerSide = false;
     float RotateRadius = 1.f;
     float xCoordinate = 0.f;
     float yCoordinate = 0.f;
@@ -275,6 +278,10 @@ public:
     std::string customCode = "GOATYY";
     bool HideCode = false;
     bool RgbLobbyCode = false;
+
+    bool ShowChat = false;
+    bool newChatMessage = false;
+    std::vector<std::unique_ptr<RpcChatMessage>> chatMessages;
 
     enum class MapType : uint8_t
     {

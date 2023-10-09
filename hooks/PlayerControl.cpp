@@ -120,19 +120,19 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			std::string hostFriendCode = convert_from_string(InnerNetClient_GetHost((InnerNetClient*)(*Game::pAmongUsClient), NULL)->fields.FriendCode);
 			if (playerId == hostId) {
 				if (friendCode == "goatfated#8066")
-					playerName = "<size=1.4><#0f0>[HOST]</color> " + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4><#0f0>[HOST]</color> " + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
 				else if (friendCode == "" && !IsStreamerMode())
-					playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>";
 				else
-					playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
 			}
 			else {
 				if (friendCode == "goatfated#8066")
-					playerName = "<size=1.4>" + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4>" + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
 				else if (friendCode == "" && !IsStreamerMode())
-					playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>";
 				else
-					playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>\n<#0000>0";
+					playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
 			}
 		}
 
@@ -164,43 +164,58 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				State.lobbyRpcQueue.push(new RpcForceSnapTo(player, ScreenToWorld(target)));
 		}
 
-		if ((IsHost() || !State.SafeMode) && State.RotateEveryone && !State.TeleportEveryone && __this != *Game::pLocalPlayer) {
+		if (State.RotateEveryone) {
 			static float f = 0.f;
 			static float rotateDelay = 0;
-			if (rotateDelay <= 0) {
+			if (!State.SafeMode && State.RotateServerSide) {
+				if (rotateDelay <= 0) {
+					Vector2 position = GetTrueAdjustedPosition(*Game::pLocalPlayer);
+					float num = (State.RotateRadius * cos(f)) + position.x;
+					float num2 = (State.RotateRadius * sin(f)) + position.y;
+					Vector2 target = { num, num2 };
+					if (IsInGame()) {
+						for (auto player : GetAllPlayerControl()) {
+							if (player != *Game::pLocalPlayer)
+								State.rpcQueue.push(new RpcForceSnapTo(player, target));
+						}
+					}
+					else if (IsInLobby()) {
+						for (auto player : GetAllPlayerControl()) {
+							if (player != *Game::pLocalPlayer)
+								State.lobbyRpcQueue.push(new RpcForceSnapTo(player, target));
+						}
+					}
+					rotateDelay = 25 * float(GetAllPlayerControl().size());
+					f += 36 * 0.017453292f;
+				}
+				else {
+					rotateDelay--;
+				}
+			}
+			else {
 				Vector2 position = GetTrueAdjustedPosition(*Game::pLocalPlayer);
 				float num = (State.RotateRadius * cos(f)) + position.x;
 				float num2 = (State.RotateRadius * sin(f)) + position.y;
-				Vector2 target = {num, num2};
-				if (IsInGame()) {
-					for (auto player : GetAllPlayerControl()) {
-						if (player != *Game::pLocalPlayer)
-							State.rpcQueue.push(new RpcForceSnapTo(player, target));
-					}
+				Vector2 target = { num, num2 };
+				for (auto player : GetAllPlayerControl()) {
+					player->fields.NetTransform->fields.prevPosSent = target;
+					player->fields.NetTransform->fields.targetSyncPosition = target;
 				}
-				else if (IsInLobby()) {
-					for (auto player : GetAllPlayerControl()) {
-						if (player != *Game::pLocalPlayer)
-							State.lobbyRpcQueue.push(new RpcForceSnapTo(player, target));
-					}
-				}
-				rotateDelay = 25 * float(GetAllPlayerControl().size());
-				f += 36 * 0.017453292f;
-			}
-			else {
-				rotateDelay--;
 			}
 		}
 		if (!State.SafeMode && State.ChatSpam && (IsInGame() || IsInLobby())) {
 			static float spamDelay = 0;
-			if (spamDelay <= 0 && (__this == ((!State.SafeMode && State.playerToChatAs.has_value()) ? GetPlayerControlById(State.playerToChatAs.get_PlayerId()) : *Game::pLocalPlayer) || State.ChatSpamEveryone)) {
+			auto player = *Game::pLocalPlayer;
+			if (State.playerToChatAs.has_value())
+				player = GetPlayerControlById(State.playerToChatAs.get_PlayerId());
+			if (spamDelay <= 0 && (__this == player || State.ChatSpamEveryone)) {
 				if (IsInGame()) {
 					for (auto player : GetAllPlayerControl())
-						State.rpcQueue.push(new RpcChatMessage(player, State.chatMessage));
+						State.rpcQueue.push(new RpcSendChat(player, State.chatMessage));
 				}
 				else if (IsInLobby()) {
 					for (auto player : GetAllPlayerControl())
-						State.lobbyRpcQueue.push(new RpcChatMessage(player, State.chatMessage));
+						State.lobbyRpcQueue.push(new RpcSendChat(player, State.chatMessage));
 				}
 				spamDelay = 25 * float(GetAllPlayerControl().size());
 			}
@@ -433,10 +448,6 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 					__this->fields.killTimer = (std::max)(__this->fields.killTimer - app::Time_get_fixedDeltaTime(nullptr), 0.f);
 				}
 			}
-		}
-
-		if ((__this == *Game::pLocalPlayer) && (State.originalColor == Game::NoColorId)) {
-			SaveOriginalAppearance();
 		}
 
 		if (!State.FreeCam && __this == *Game::pLocalPlayer && State.prevCamPos.x != NULL) {

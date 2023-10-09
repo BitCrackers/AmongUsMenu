@@ -232,6 +232,9 @@
     <ClCompile Include="rpc\RpcPlayerAppearance.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+	<ClCompile Include="gui\gamechat.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
     <ClCompile Include="gui\console.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -294,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="hooks\PlayerStorageManager.cpp">
       <Filter>hooks</Filter>
+    </ClCompile>
+	<ClCompile Include="rpc\RpcChatMessage.cpp">
+      <Filter>rpc</Filter>
     </ClCompile>
     <ClCompile Include="user\achievements.cpp">
       <Filter>user</Filter>
@@ -469,6 +475,9 @@
     </ClInclude>
     <ClInclude Include="user\logger.h">
       <Filter>user</Filter>
+    </ClInclude>
+	<ClInclude Include="gui\gamechat.hpp">
+      <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="gui\console.hpp">
       <Filter>gui</Filter>

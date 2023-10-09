@@ -197,6 +197,7 @@ void KeyBinds::to_json(nlohmann::ordered_json& j, KeyBinds::Config value)
         {"Save_Appearance", value.Save_Appearance},
         {"Randomize_Appearance", value.Randomize_Appearance},
         {"Complete_Tasks", value.Complete_Tasks},
+        {"Toggle_Chat", value.Toggle_Chat},
     };
 }
 
@@ -217,4 +218,5 @@ void KeyBinds::from_json(const nlohmann::ordered_json& j, KeyBinds::Config& valu
     j.at("Save_Appearance").get_to(value.Save_Appearance);
     j.at("Randomize_Appearance").get_to(value.Randomize_Appearance);
     j.at("Complete_Tasks").get_to(value.Complete_Tasks);
+    j.at("Toggle_Chat").get_to(value.Toggle_Chat);
 }

@@ -14,13 +14,31 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 			local->fields.IsDead = true;
 			wasDead = true;
 		}
+		auto outfit = GetPlayerOutfit(GetPlayerData(sourcePlayer));
+		std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		std::string message = convert_from_string(chatText);
+		uint32_t colorId = outfit->fields.ColorId;
+		State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(playerName, message, colorId, std::chrono::system_clock::now()));
+		State.newChatMessage = true;
 		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
 		if (wasDead) {
 			local->fields.IsDead = false;
 		}
 	}
-	else
+	else {
+		auto player = *Game::pLocalPlayer;
+		if (State.playerToChatAs.has_value())
+			player = GetPlayerControlById(State.playerToChatAs.get_PlayerId());
+		if (sourcePlayer != player) {
+			auto outfit = GetPlayerOutfit(GetPlayerData(sourcePlayer));
+			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+			std::string message = convert_from_string(chatText);
+			uint32_t colorId = outfit->fields.ColorId;
+			State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(playerName, message, colorId, std::chrono::system_clock::now()));
+			State.newChatMessage = true;
+		}
 		ChatController_AddChat(__this, sourcePlayer, chatText, censor, method);
+	}
 }
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {

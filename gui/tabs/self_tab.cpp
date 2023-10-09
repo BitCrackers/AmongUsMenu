@@ -212,20 +212,19 @@ namespace SelfTab {
             if (ImGui::Checkbox("(Shift + Right Click) to Teleport", &State.ShiftRightClickTP)) {
                 State.Save();
             }
-
-            if (!State.SafeMode) {
-                ImGui::SameLine();
-                if (ImGui::Checkbox("Hold ALT to Teleport Everyone", &State.TeleportEveryone)) {
-                    State.Save();
-                }
-
-                if (ImGui::Checkbox("Rotate Everyone", &State.RotateEveryone)) {
-                    State.Save();
-                }
-                ImGui::SameLine();
-                if (ImGui::InputFloat("Radius", &State.RotateRadius, 0.0f, 0.0f, "%.2f m")) {
-                    State.Save();
-                }
+            ImGui::SameLine();
+            if (!State.SafeMode && ImGui::Checkbox("Hold ALT to Teleport Everyone", &State.TeleportEveryone)) {
+                State.Save();
+            }
+            if (ImGui::Checkbox("Rotate Everyone", &State.RotateEveryone)) {
+                State.Save();
+            }
+            ImGui::SameLine();
+            if (!State.SafeMode && ImGui::Checkbox("Server-sided", &State.RotateServerSide)) {
+                State.Save();
+            }
+            if (ImGui::InputFloat("Radius", &State.RotateRadius, 0.0f, 0.0f, "%.2f m")) {
+                State.Save();
             }
 
             if (ImGui::InputFloat("X Coordinate", &State.xCoordinate, 0.0f, 0.0f, "%.4f X")) {
