@@ -8,6 +8,7 @@ This project is no longer in active development by the BitCrackers team. Therefo
 </p>
 
 ## Disclaimer
+我知道有人在拿这个分支的码子搞事情。原则上分支主人不能干涉他人的使用和编译行为，但我仍希望你不要故意到处搞破坏。请你至少考虑维护AU的生态环境。
 This project is for Educational Use only. We do not condone this software being used to gain an advantage against other people. I made this project for my university project to show how cheating software works and how it is possible to block these manipulations in the future.
 
 ## Compile (Configurations)

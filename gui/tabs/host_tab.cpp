@@ -42,15 +42,31 @@ namespace HostTab {
 						State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
 						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
 						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
+						State.crewmates_amount = (int)GetRoleCount(RoleType::Crewmate);
+
 						if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
 						{
 							if(State.assignedRoles[index] == RoleType::Shapeshifter)
-								State.assignedRoles[index] = RoleType::Engineer;
+								State.assignedRoles[index] = RoleType::Random; //Set to random to avoid bugs.
 							else if(State.assignedRoles[index] == RoleType::Impostor)
 								State.assignedRoles[index] = RoleType::Random;
-							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
-							State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
 						}
+
+						if (State.assignedRoles[index] == RoleType::Engineer || State.assignedRoles[index] == RoleType::Scientist || State.assignedRoles[index] == RoleType::Crewmate) {			
+							if (State.engineers_amount + State.scientists_amount + State.crewmates_amount >= (int)playerAmount)
+								State.assignedRoles[index] = RoleType::Random;
+						} //Some may set all players to non imps. This hangs the game on beginning. Leave space to Random so we have imps.
+
+						if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+						{
+							if (State.assignedRoles[index] == RoleType::Shapeshifter)
+								State.assignedRoles[index] = RoleType::Random;
+							else if (State.assignedRoles[index] == RoleType::Scientist)
+								State.assignedRoles[index] = RoleType::Engineer;
+							else if (State.assignedRoles[index] == RoleType::Crewmate)
+								State.assignedRoles[index] = RoleType::Engineer;
+						} //Assign other roles in hidenseek causes game bug.
+						//These are organized. Do not change the order unless you find it necessary.
 
 						if (!IsInGame()) {
 							SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);

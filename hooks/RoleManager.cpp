@@ -13,11 +13,19 @@ void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	auto roleRates = RoleRates(options, (int)allPlayers.size());
 
 	AssignPreChosenRoles(roleRates, assignedPlayers);
-	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+
+	if (options.GetGameMode() != GameModes__Enum::HideNSeek) {
+		AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+	} //Assign normal roles
+	else {
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers); //In case we do not assign everyone.
+	}//Assign hidenseek roles
 }
 
 /*void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
@@ -47,11 +55,28 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 
 void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2cpp::List<List_1_PlayerControl_>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
+	GameOptions options;
 	auto roleCount = roleRates.GetRoleCount(role);
+	auto playerAmount = allPlayers.size();
+	auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
+
+	//if (role == RoleTypes__Enum::Shapeshifter || role == RoleTypes__Enum::Impostor) {
+	//	if (State.shapeshifters_amount + State.impostors_amount >= maxImposterAmount)
+	//		return; //Skip assigns when pre assigned enough imps.
+	//}
+
+	if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
+		if (role == RoleTypes__Enum::Impostor)
+			roleCount = 1; //Sometime the game would accidently make imp amount > 1.
+		if (role == RoleTypes__Enum::Engineer)
+			roleCount = playerAmount - 1; //For unknown reason Game simply set engineer amount in hidenseek to 0.
+	}
+
+	if (role == RoleTypes__Enum::Shapeshifter && roleCount >= maxImposterAmount)
+		roleCount = maxImposterAmount; //In previous version, aum would assign more imps than MaxImposterAmount based on shapeshifter amount.
+
 	if (roleCount < 1)
 		return;
-
-	auto playerAmount = allPlayers.size();
 
 	for (auto i = 0; i < roleCount; i++)
 	{
