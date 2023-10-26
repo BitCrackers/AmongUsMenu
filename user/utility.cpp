@@ -300,7 +300,7 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	return nullptr;
 }
 
-il2cpp::Array<PlainDoor__Array> GetAllPlainDoors() {
+il2cpp::Array<OpenableDoor__Array> GetAllPlainDoors() {
 	return (*Game::pShipStatus)->fields.AllDoors;
 }
 
