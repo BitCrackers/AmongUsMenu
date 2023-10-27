@@ -221,3 +221,4 @@ AbstractChatInputField__Fields
 FreeChatInputField__Fields
 FreeChatInputField
 MurderResultFlags__Enum
+FungleShipStatus

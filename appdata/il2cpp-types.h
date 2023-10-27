@@ -8362,6 +8362,23 @@ namespace app
     };
 #pragma endregion
 
+#pragma region FungleShipStatus
+    struct FungleShipStatus__Fields {
+        struct ShipStatus__Fields _;
+        void* sporeMushrooms;
+        void* specialSabotage;
+        void* startAMBSounds;
+        void* _Zipline_k__BackingField;
+        struct Vector2 _LastBinocularPos_k__BackingField;
+    };
+
+    struct FungleShipStatus {
+        Il2CppClass* klass;
+        MonitorData* monitor;
+        struct FungleShipStatus__Fields fields;
+    };
+#pragma endregion
+
 #pragma region DoorBreakerGame
     struct DoorBreakerGame__Fields {
         struct Minigame__Fields _;

@@ -313,6 +313,9 @@
     <ClCompile Include="rpc\CmdCheckMurder.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
+    <ClCompile Include="hooks\FungleShipStatus.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="appdata\il2cpp-api-functions.h">

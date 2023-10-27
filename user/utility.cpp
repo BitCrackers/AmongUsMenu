@@ -422,7 +422,12 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 		"Buy Beverage", "Process Data", "Run Diagnostics", "Water Plants", "Monitor Oxygen", "Store Artifacts", "Fill Canisters", "Activate Weather Nodes", "Insert Keys",
 		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi",
 		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
-		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning"};
+		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning", "None",
+		// 2023.10.24 added
+		"Build Sandcastle", "Catch Fish","Collect Shells", "Lift Weights", "Roast Marshmallow", "Throw Frisbee", "Collect Samples", "Collect Vegetables",
+		"Hoist Supplies", "Mine Ores", "Polish Gem", "Replace Parts", "Help Critter", "Crank Generator", "Fix Antenna", "Find Signal", "Mushroom Mixup Sabotage", 
+		"Extract Fuel", "Monitor Mushroom", "Play Video Game",
+	};
 	return TASK_TRANSLATIONS.at(static_cast<size_t>(taskType));
 }
 
@@ -431,7 +436,10 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck",
 		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical",
-		"Decontamination" };
+		"Decontamination",
+		// 2023.10.24 added
+		"Zipline", "Mining Pit", "Fishing Dock", "Rec Room", "Lookout", "Beach", "Highlands", "Jungle", "Sleeping Quarters", "Mushroom Mixup Sabotage", "Heli Sabotage",
+	};
 	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 

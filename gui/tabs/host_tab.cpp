@@ -85,7 +85,7 @@ namespace HostTab {
 
 				// AU v2022.8.24 has been able to change maps in lobby.
 				State.mapHostChoice = options.GetByte(app::ByteOptionNames__Enum::MapId);
-				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
+				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, (int)MAP_NAMES.size()-1);
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {

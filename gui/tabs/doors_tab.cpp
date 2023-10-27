@@ -13,9 +13,12 @@ namespace DoorsTab {
 			if (ImGui::BeginTabItem("Doors")) {
 				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true);
 				bool shouldEndListBox = ImGui::ListBoxHeader("###doors#list", ImVec2(200, 150) * State.dpiScale);
-				for (size_t i = 0; i < State.mapDoors.size(); i++) {
-					auto systemType = State.mapDoors[i];
-					if (systemType == SystemTypes__Enum::Decontamination || systemType == SystemTypes__Enum::Decontamination2) continue;
+				for (auto systemType : State.mapDoors) {
+					if (systemType == SystemTypes__Enum::Decontamination
+						|| systemType == SystemTypes__Enum::Decontamination2
+						|| systemType == SystemTypes__Enum::Decontamination3) {
+						continue;
+					}
 					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
@@ -71,7 +74,9 @@ namespace DoorsTab {
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							if(door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
+							if(door != SystemTypes__Enum::Decontamination
+								&& door != SystemTypes__Enum::Decontamination2
+								&& door != SystemTypes__Enum::Decontamination3)
 								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}

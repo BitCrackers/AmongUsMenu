@@ -73,3 +73,4 @@ bool dPlayerPurchasesData_GetPurchase(PlayerPurchasesData* __this, String* itemK
 void dGameOptionsManager_set_CurrentGameOptions(GameOptionsManager* __this, IGameOptions* value, MethodInfo* method);
 void dExileController_ReEnableGameplay(ExileController* __this, MethodInfo* method);
 void dSabotageSystemType_SetInitialSabotageCooldown(SabotageSystemType* __this, MethodInfo* method);
+void dFungleShipStatus_OnEnable(FungleShipStatus* __this, MethodInfo* method);

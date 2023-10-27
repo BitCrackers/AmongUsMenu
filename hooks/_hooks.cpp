@@ -156,6 +156,7 @@ void DetourInitilization() {
 	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	HOOKFUNC(ExileController_ReEnableGameplay);
 	HOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
+	HOOKFUNC(FungleShipStatus_OnEnable);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -237,6 +238,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
 	UNHOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
+	UNHOOKFUNC(FungleShipStatus_OnEnable);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 
