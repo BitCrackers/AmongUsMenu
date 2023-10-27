@@ -128,7 +128,7 @@ void DetourInitilization() {
 	HOOKFUNC(InnerNetClient_Update);
 	HOOKFUNC(AmongUsClient_OnPlayerLeft);
 	HOOKFUNC(CustomNetworkTransform_SnapTo);
-	HOOKFUNC(Constants_ShouldFlipSkeld);
+	//HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
 	//HOOKFUNC(NoShadowBehaviour_LateUpdate);
@@ -215,7 +215,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(InnerNetClient_Update);
 	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
-	UNHOOKFUNC(Constants_ShouldFlipSkeld);
+	//UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	//UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
 	UNHOOKFUNC(FollowerCamera_Update);

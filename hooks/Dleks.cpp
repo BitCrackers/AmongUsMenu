@@ -2,6 +2,7 @@
 #include "_hooks.h"
 #include "state.hpp"
 
+/*
 bool dConstants_ShouldFlipSkeld(MethodInfo* method) {
 	bool orig_return = Constants_ShouldFlipSkeld(method);
 	if (State.FlipSkeld) {
@@ -12,4 +13,4 @@ bool dConstants_ShouldFlipSkeld(MethodInfo* method) {
 		State.FlipSkeld = true;
 	}
 	return orig_return;
-}
+}*/

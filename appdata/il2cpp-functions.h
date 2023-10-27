@@ -145,7 +145,7 @@ DO_APP_FUNC(void, InnerNetClient_FinishRpcImmediately, (InnerNetClient* __this, 
 
 DO_APP_FUNC(void, MessageExtensions_WriteNetObject, (MessageWriter* self, InnerNetObject* obj, MethodInfo* method), "Assembly-CSharp, System.Void InnerNet.MessageExtensions::WriteNetObject(Hazel.MessageWriter, InnerNet.InnerNetObject)");
 
-DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
+//DO_APP_FUNC(bool, Constants_ShouldFlipSkeld, (MethodInfo* method), "Assembly-CSharp, System.Boolean Constants::ShouldFlipSkeld()");
 
 DO_APP_FUNC(void, LobbyBehaviour_Start, (LobbyBehaviour* __this, MethodInfo* method), "Assembly-CSharp, System.Void LobbyBehaviour::Start()");
 
