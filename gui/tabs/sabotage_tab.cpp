@@ -20,7 +20,12 @@ namespace SabotageTab {
                     State.Save();
                 }
                 ImGui::NewLine();
-                if (ImGui::Button("Sabotage Lights")) {
+                if (State.mapType == Settings::MapType::Fungle) {
+                    if (ImGui::Button("Sabotage Mushroom Mixup")) {
+                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::MushroomMixupSabotage));
+                    }
+                }
+                else if (ImGui::Button("Sabotage Lights")) {
                     State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::Electrical));
                 }
                 if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq
@@ -40,11 +45,6 @@ namespace SabotageTab {
                 if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
                     if (ImGui::Button("Sabotage Oxygen")) {
                         State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::LifeSupp));
-                    }
-                }
-                if (State.mapType == Settings::MapType::Fungle) {
-                    if (ImGui::Button("Sabotage Mushroom Mixup")) {
-                        State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::MushroomMixupSabotage));
                     }
                 }
                 if (ImGui::Button("Sabotage Comms")) {

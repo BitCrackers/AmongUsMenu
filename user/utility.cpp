@@ -7,6 +7,8 @@
 #include "profiler.h"
 #include <random>
 
+using namespace std::string_view_literals;
+
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 int randi(int lo, int hi) {
@@ -337,14 +339,16 @@ std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player) {
 	return normalPlayerTasks;
 }
 
-SabotageTask* GetSabotageTask(PlayerControl* player) {
+Object_1* GetSabotageTask(PlayerControl* player) {
 	static std::string sabotageTaskType = translate_type_name("SabotageTask");
 
 	auto playerTasks = GetPlayerTasks(player);
 
 	for (auto playerTask : playerTasks)
-		if (sabotageTaskType == playerTask->klass->_0.name || sabotageTaskType == playerTask->klass->_0.parent->name)
-			return (SabotageTask*)playerTask;
+		if (sabotageTaskType == playerTask->klass->_0.name
+			|| sabotageTaskType == playerTask->klass->_0.parent->name
+			|| "MushroomMixupSabotageTask"sv == playerTask->klass->_0.name)
+			return (Object_1*)playerTask;
 
 	return NULL;
 }
@@ -375,22 +379,18 @@ void RepairSabotage(PlayerControl* player) {
 			}
 		}
 	}
-
-	if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
+	else if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 16));
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 17));
 	}
-
-	if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
+	else if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 0));
 	}
-
-	if (noOxyTaskType == sabotageTask->klass->_0.name) {
+	else if (noOxyTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 64));
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 65));
 	}
-
-	if (reactorTaskType == sabotageTask->klass->_0.name) {
+	else if (reactorTaskType == sabotageTask->klass->_0.name) {
 		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 65));
@@ -404,6 +404,12 @@ void RepairSabotage(PlayerControl* player) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 16));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 17));
 		}
+	}
+	else if ("MushroomMixupSabotageTask"sv == sabotageTask->klass->_0.name) {
+		//State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::MushroomMixupSabotage, 0));
+	}
+	else {
+		STREAM_ERROR("Unknown Task:" << sabotageTask->klass->_0.name);
 	}
 }
 

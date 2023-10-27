@@ -155,7 +155,7 @@ il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies();
 il2cpp::List<List_1_PlayerTask_> GetPlayerTasks(PlayerControl* player);
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player);
-SabotageTask* GetSabotageTask(PlayerControl* player);
+Object_1* GetSabotageTask(PlayerControl* player);
 void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
