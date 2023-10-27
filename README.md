@@ -1,14 +1,7 @@
 ## Version 1.0: The Fungle Update
-# Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-=======
-## The menu is currently broken with the release of the Fungle map. Please be patient as the mod release will be around Sunday, October 29, 2023.
-## Version 1.0 will be fully released with the new release. The latest source code will be moved to a separate repository for issue support.
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-Note: I am not part of the BitCrackers team, these links are for BitCrackers only.
-=======
-# Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
+## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
 <p align="center">
    SickoModeAU is a Cheat Menu forked from AmongUsMenu for the popular Game Among Us.
 </p>
@@ -62,6 +55,7 @@ First you will need protontricks, you can install it with your packager of choic
 * The BitCrackers team for creating a great mod, which was easy to add features to
 * [KulaGGin](https://github.com/KulaGGin) (Helped with some ImGui code for replay system)
 * [tomsa000](https://github.com/tomsa000) (Helped with fixing memory leaks and smart pointers)
+* [cddjr](https://github.com/cddjr) (Helped in updating to the Fungle map, saved a lot of my time)
 * Everyone else who contributed to the code and I couldn't list here. Thank you!
 
 ## Contributing
@@ -71,10 +65,6 @@ First you will need protontricks, you can install it with your packager of choic
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
-
-## Broken Features (as of now)
-Exiting vent does not show up on replay (can be fixed by properly hooking Vent_ExitVent)
-Random crashes in the middle of nowhere (can be fixed by properly updating il2cpp_types.h)
 
 ## Added/Changed Features
 Settings Tab:
