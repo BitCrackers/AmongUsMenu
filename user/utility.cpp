@@ -712,6 +712,7 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 	switch (roleBehaviour->fields.Role) {
 	default:
 	case RoleTypes__Enum::Crewmate:
+	case RoleTypes__Enum::CrewmateGhost:
 		c = Palette__TypeInfo->static_fields->White;
 		break;
 	case RoleTypes__Enum::Engineer:
@@ -721,6 +722,7 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 		break;
 	case RoleTypes__Enum::Impostor:
 	case RoleTypes__Enum::Shapeshifter:
+	case RoleTypes__Enum::ImpostorGhost:
 		c = Palette__TypeInfo->static_fields->ImpostorRed;
 		break;
 	}
@@ -738,12 +740,14 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = fals
 		case RoleTypes__Enum::GuardianAngel:
 			return (abbreviated ? "GA" : "GuardianAngel");
 		case RoleTypes__Enum::Impostor:
+		case RoleTypes__Enum::ImpostorGhost:
 			return (abbreviated ? "Imp" : "Impostor");
 		case RoleTypes__Enum::Scientist:
 			return (abbreviated ? "Sci" : "Scientist");
 		case RoleTypes__Enum::Shapeshifter:
 			return (abbreviated ? "SH" : "Shapeshifter");
 		case RoleTypes__Enum::Crewmate:
+		case RoleTypes__Enum::CrewmateGhost:
 			return (abbreviated ? "Crew" : "Crewmate");
 		default:
 			return (abbreviated ? "Unk" : "Unknown");
