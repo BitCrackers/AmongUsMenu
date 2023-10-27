@@ -157,6 +157,8 @@ void DetourInitilization() {
 	HOOKFUNC(ExileController_ReEnableGameplay);
 	HOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 	HOOKFUNC(FungleShipStatus_OnEnable);
+	HOOKFUNC(MushroomWallDoor_SetDoorway);
+	HOOKFUNC(MushroomDoorSabotageMinigame_Begin);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -239,6 +241,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
 	UNHOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 	UNHOOKFUNC(FungleShipStatus_OnEnable);
+	UNHOOKFUNC(MushroomWallDoor_SetDoorway);
+	UNHOOKFUNC(MushroomDoorSabotageMinigame_Begin);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

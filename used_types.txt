@@ -222,3 +222,6 @@ FreeChatInputField__Fields
 FreeChatInputField
 MurderResultFlags__Enum
 FungleShipStatus
+OpenableDoor
+MushroomWallDoor
+MushroomDoorSabotageMinigame

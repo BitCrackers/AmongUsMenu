@@ -288,20 +288,19 @@ PlayerControl* GetPlayerControlById(Game::PlayerId id) {
 	return NULL;
 }
 
-PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
-	for (auto door : il2cpp::Array((*Game::pShipStatus)->fields.AllDoors))
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room) {
+	for (auto door : GetAllOpenableDoors())
 	{
 		if (door->fields.Room == room)
 		{
-			// TODO 231024
-			return (PlainDoor*)door;
+			return door;
 		}
 	}
 
 	return nullptr;
 }
 
-il2cpp::Array<OpenableDoor__Array> GetAllPlainDoors() {
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors() {
 	return (*Game::pShipStatus)->fields.AllDoors;
 }
 

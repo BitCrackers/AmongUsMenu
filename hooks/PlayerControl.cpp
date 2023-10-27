@@ -312,6 +312,11 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsB
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MurderResultFlags__Enum resultFlags, MethodInfo* method)
 {
+	if (static_cast<int32_t>(resultFlags) & static_cast<int32_t>(MurderResultFlags__Enum::FailedError)) {
+		app::PlayerControl_MurderPlayer(__this, target, resultFlags, method);
+		return;
+	}
+
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
 		synchronized(Replay::replayEventMutex) {
 			State.liveReplayEvents.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));

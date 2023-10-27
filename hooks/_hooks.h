@@ -74,3 +74,5 @@ void dGameOptionsManager_set_CurrentGameOptions(GameOptionsManager* __this, IGam
 void dExileController_ReEnableGameplay(ExileController* __this, MethodInfo* method);
 void dSabotageSystemType_SetInitialSabotageCooldown(SabotageSystemType* __this, MethodInfo* method);
 void dFungleShipStatus_OnEnable(FungleShipStatus* __this, MethodInfo* method);
+void dMushroomWallDoor_SetDoorway(MushroomWallDoor* __this, bool open, MethodInfo* method);
+void dMushroomDoorSabotageMinigame_Begin(MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method);

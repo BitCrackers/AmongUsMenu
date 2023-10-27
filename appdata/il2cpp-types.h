@@ -8419,6 +8419,27 @@ namespace app
     };
 #pragma endregion
 
+#pragma region MushroomDoorSabotageMinigame
+    struct MushroomDoorSabotageMinigame__Fields {
+        struct Minigame__Fields _;
+        void* mushroomInvisibleSeconds;
+        void* mushroomVisibleSeconds;
+        struct TextMeshPro* counterText;
+        void* spawnPoints;
+        void* mushroomVariants;
+        struct OpenableDoor* myDoor;
+        int32_t mushroomWhackCount;
+        void* spawnPointBag;
+        void* mushrooms;
+    };
+
+    struct MushroomDoorSabotageMinigame {
+        Il2CppClass* klass;
+        MonitorData* monitor;
+        struct MushroomDoorSabotageMinigame__Fields fields;
+    };
+#pragma endregion
+
 #pragma region SabotageTask
     struct SabotageTask__Fields
     {
@@ -9769,39 +9790,26 @@ namespace app
         float size;
     };
 
-    struct PlainDoor
-    {
-        struct PlainDoor__Class* klass;
-        void* monitor;
+    struct PlainDoor {
+        Il2CppClass* klass;
+        MonitorData* monitor;
         struct PlainDoor__Fields fields;
     };
 
-    struct PlainDoor__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData SetDoorway;
-        VirtualInvokeData get_IsOpen;
-        VirtualInvokeData Serialize;
-        VirtualInvokeData Deserialize;
-        VirtualInvokeData DoUpdate;
-        VirtualInvokeData Start;
+    struct MushroomWallDoor__Fields {
+        struct OpenableDoor__Fields _;
+        void* wallCollider;
+        struct Collider2D* shadowColl;
+        void* mushrooms;
+        void* openSound;
+        void* closeSound;
+        bool open;
     };
 
-    struct PlainDoor__StaticFields
-    {
-    };
-
-    struct PlainDoor__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct PlainDoor__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct PlainDoor__VTable vtable;
+    struct MushroomWallDoor {
+        Il2CppClass* klass;
+        MonitorData* monitor;
+        struct MushroomWallDoor__Fields fields;
     };
 #pragma endregion
 

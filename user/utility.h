@@ -147,8 +147,9 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
 PlayerControl* GetPlayerControlById(Game::PlayerId id);
-PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
-il2cpp::Array<OpenableDoor__Array> GetAllPlainDoors();
+// MushroomWallDoor or PlainDoor
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room);
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
 il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies();

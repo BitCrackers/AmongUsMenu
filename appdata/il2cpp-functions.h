@@ -243,3 +243,5 @@ DO_APP_FUNC(LogicOptions*, GameManager_get_LogicOptions, (GameManager* __this, M
 
 // 2023.10.24e
 DO_APP_FUNC(void, FungleShipStatus_OnEnable, (FungleShipStatus* __this, MethodInfo* method), "Assembly-CSharp, System.Void FungleShipStatus::OnEnable()");
+DO_APP_FUNC(void, MushroomWallDoor_SetDoorway, (MushroomWallDoor* __this, bool open, MethodInfo* method), "Assembly-CSharp, System.Void MushroomWallDoor::SetDoorway(System.Boolean)");
+DO_APP_FUNC(void, MushroomDoorSabotageMinigame_Begin, (MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method), "Assembly-CSharp, System.Void MushroomDoorSabotageMinigame::Begin(PlayerTask)");
