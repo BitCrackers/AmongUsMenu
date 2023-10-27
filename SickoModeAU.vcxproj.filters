@@ -142,7 +142,7 @@
     <ClCompile Include="rpc\RpcPlayAnimation.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
-    <ClCompile Include="rpc\RpcRepairSystem.cpp">
+    <ClCompile Include="rpc\RpcUpdateSystem.cpp">
       <Filter>rpc</Filter>
     </ClCompile>
     <ClCompile Include="rpc\RpcReportPlayer.cpp">
@@ -212,6 +212,9 @@
       <Filter>rpc</Filter>
     </ClCompile>
     <ClCompile Include="hooks\AirshipStatus.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+	<ClCompile Include="hooks\FungleShipStatus.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
     <ClCompile Include="hooks\PlainDoor.cpp">
@@ -512,6 +515,9 @@
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\airship.png">
+      <Filter>resources</Filter>
+    </Image>
+	<Image Include="resources\fungle.png">
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\vent_in.png">

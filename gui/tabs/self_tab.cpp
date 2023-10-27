@@ -144,6 +144,10 @@ namespace SelfTab {
             {
                 State.Save();
             }
+            ImGui::SameLine();
+            if ((IsHost() || !State.SafeMode) && ImGui::Checkbox("God Mode", &State.GodMode))
+                State.Save();
+
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();
             }
@@ -203,8 +207,16 @@ namespace SelfTab {
             if (ImGui::Checkbox("Kill Other Impostors", &State.KillImpostors)) {
                 State.Save();
             }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Kill Through Walls", &State.KillThroughWalls)) {
+                State.Save();
+            }
 
             ImGui::SameLine();
+            if (ImGui::Checkbox("Infinite Kill Range", &State.InfiniteKillRange)) {
+                State.Save();
+            }
+
             if (ImGui::Checkbox("Fake Alive", &State.FakeAlive)) {
                 State.Save();
             }

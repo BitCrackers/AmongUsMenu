@@ -10,6 +10,9 @@ RpcSetRole::RpcSetRole(PlayerControl* player, RoleTypes__Enum role)
 
 void RpcSetRole::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	PlayerControl_RpcSetRole(Player, Role, NULL);
 }
 

@@ -153,7 +153,7 @@ PlayerControl* GetPlayerControlById(Game::PlayerId id);
 bool IsColorAvailable(int colorId);
 std::string GenerateRandomString();
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
-il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
 il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies();

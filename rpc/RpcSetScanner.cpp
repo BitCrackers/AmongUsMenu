@@ -20,5 +20,8 @@ RpcForceScanner::RpcForceScanner(PlayerControl* Player, bool playAnimation)
 
 void RpcForceScanner::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	PlayerControl_RpcSetScanner(Player, playAnimation, NULL);
 }

@@ -3,12 +3,10 @@
 #include "state.hpp"
 #include "logger.h"
 #include "utility.h"
-#include "replay.hpp"
-#include "profiler.h"
 
-void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
+void dFungleShipStatus_OnEnable(FungleShipStatus* __this, MethodInfo* method)
 {
-	PolusShipStatus_OnEnable(__this, method);
+	FungleShipStatus_OnEnable(__this, method);
 
 	Replay::Reset();
 
@@ -28,5 +26,5 @@ void dPolusShipStatus_OnEnable(PolusShipStatus* __this, MethodInfo* method)
 
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
-	State.mapType = Settings::MapType::Pb;
+	State.mapType = Settings::MapType::Fungle;
 }

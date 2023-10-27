@@ -12,9 +12,12 @@ namespace DoorsTab {
 			if (ImGui::BeginTabItem("Doors")) {
 				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true);
 				bool shouldEndListBox = ImGui::ListBoxHeader("###doors#list", ImVec2(200, 150) * State.dpiScale);
-				for (size_t i = 0; i < State.mapDoors.size(); i++) {
-					auto systemType = State.mapDoors[i];
-					if (systemType == SystemTypes__Enum::Decontamination || systemType == SystemTypes__Enum::Decontamination2) continue;
+				for (auto systemType : State.mapDoors) {
+					if (systemType == SystemTypes__Enum::Decontamination
+						|| systemType == SystemTypes__Enum::Decontamination2
+						|| systemType == SystemTypes__Enum::Decontamination3) {
+						continue;
+					}
 					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
@@ -43,7 +46,12 @@ namespace DoorsTab {
 				ImGui::SameLine();
 				ImGui::BeginChild("doors#options", ImVec2(200, 0) * State.dpiScale);
 
-				if (!State.DisableSabotages && ImGui::Button("Close All Doors"))
+				if (State.DisableSabotages) {
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Sabotages have been disabled.");
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Nothing can be sabotaged.");
+				}
+
+				if (ImGui::Button("Close All Doors"))
 				{
 					for (auto door : State.mapDoors)
 					{
@@ -53,33 +61,33 @@ namespace DoorsTab {
 				if (State.ShowKeybinds)
 					ImGui::SameLine();
 
-				if (!State.DisableSabotages && State.ShowKeybinds && HotKey(State.KeyBinds.Close_All_Doors)) {
+				if (State.ShowKeybinds && HotKey(State.KeyBinds.Close_All_Doors)) {
 					State.Save();
 				}
 
-				if (!State.DisableSabotages && ImGui::Button("Close Room Door"))
+				if (ImGui::Button("Close Room Door"))
 				{
 					State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
 				}
 				if (State.ShowKeybinds)
 					ImGui::SameLine();
 
-				if (!State.DisableSabotages && State.ShowKeybinds && HotKey(State.KeyBinds.Close_Current_Room_Door)) {
+				if (State.ShowKeybinds && HotKey(State.KeyBinds.Close_Current_Room_Door)) {
 					State.Save();
 				}
 
-				if (!State.DisableSabotages && ImGui::Button("Pin All Doors"))
+				if (ImGui::Button("Pin All Doors"))
 				{
 					for (auto door : State.mapDoors)
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							if (door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
+							if (door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2 && door != SystemTypes__Enum::Decontamination3)
 								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}
 				}
-				if (!State.DisableSabotages && ImGui::Button("Unpin All Doors"))
+				if (ImGui::Button("Unpin All Doors"))
 				{
 					State.pinnedDoors.clear();
 				}
@@ -87,17 +95,17 @@ namespace DoorsTab {
 				if (State.selectedDoor != SystemTypes__Enum::Hallway) {
 					auto plainDoor = GetPlainDoorByRoom(State.selectedDoor);
 
-					if (!State.DisableSabotages && ImGui::Button("Close Door")) {
+					if (ImGui::Button("Close Door")) {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
 					}
 
 					if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor) == State.pinnedDoors.end()) {
-						if (!State.DisableSabotages && ImGui::Button("Pin Door")) {
+						if (ImGui::Button("Pin Door")) {
 							State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, true));
 						}
 					}
 					else {
-						if (!State.DisableSabotages && ImGui::Button("Unpin Door")) {
+						if (ImGui::Button("Unpin Door")) {
 							State.pinnedDoors.erase(std::remove(State.pinnedDoors.begin(), State.pinnedDoors.end(), State.selectedDoor), State.pinnedDoors.end());
 						}
 					}
@@ -105,7 +113,7 @@ namespace DoorsTab {
 				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
 				{
 					ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
-					if (!State.DisableSabotages && ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
+					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {
 						State.Save();
 					}
 				}

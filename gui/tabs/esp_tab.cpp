@@ -21,6 +21,13 @@ namespace EspTab {
 
 			changed |= ImGui::Checkbox("Role-based", &State.ShowEsp_RoleBased);
 
+			if (State.ShowEsp_RoleBased) {
+				ImGui::SameLine();
+				changed |= ImGui::Checkbox("Crewmates", &State.ShowEsp_Crew);
+				ImGui::SameLine();
+				changed |= ImGui::Checkbox("Impostors", &State.ShowEsp_Imp);
+			}
+
 			ImGui::EndTabItem();
 		}
 		if (changed) {

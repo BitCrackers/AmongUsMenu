@@ -20,5 +20,8 @@ RpcForceName::RpcForceName(PlayerControl* player, std::string_view name)
 
 void RpcForceName::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	PlayerControl_CmdCheckName(Player, convert_to_string(name), NULL);
 }

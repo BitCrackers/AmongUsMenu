@@ -32,12 +32,12 @@ public:
 	virtual void Process() override;
 };
 
-class RpcRepairSystem : public RPCInterface {
+class RpcUpdateSystem : public RPCInterface {
 	SystemTypes__Enum selectedSystem;
 	int32_t amount;
 public:
-	RpcRepairSystem(SystemTypes__Enum selectedSystem, SystemTypes__Enum amount);
-	RpcRepairSystem(SystemTypes__Enum selectedSystem, uint32_t amount);
+	RpcUpdateSystem(SystemTypes__Enum selectedSystem, SystemTypes__Enum amount);
+	RpcUpdateSystem(SystemTypes__Enum selectedSystem, uint32_t amount);
 	virtual void Process() override;
 };
 

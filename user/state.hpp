@@ -53,6 +53,7 @@ public:
     bool MaxVision = false;
     float PrevPlayerSpeed = 1.f;
     float PlayerSpeed = 1.f;
+    bool MultiplySpeed = false;
 	float PrevKillCooldown = 30.f;
 	float KillCooldown = 30.f;
     float PrevGACooldown = 60.f;
@@ -86,10 +87,13 @@ public:
     bool AbbreviatedRoleNames = false;
     bool PlayerColoredNames = false;
     bool ShowPlayerInfo = false;
-    int PrevKillDistance = 0;
-    int KillDistance = 0;
+    float PrevKillDistance = 0.f;
+    float KillDistance = 0.f;
+    float GameKillDistance = 0.f;
+    bool ModifyKillDistance = false;
     int PrevTaskBarUpdates = 0;
     int TaskBarUpdates = 0;
+    bool ModifyTaskBarUpdates = false;
 	bool PrevVisualTasks = true;
 	bool VisualTasks = true;
     bool PrevShowNames = false;
@@ -128,6 +132,8 @@ public:
     bool AnimationlessShapeshift = false;
     bool DisableKillAnimation = false;
     bool KillImpostors = false;
+    bool KillThroughWalls = false;
+    bool InfiniteKillRange = false;
     bool FakeAlive = false;
 
     PlayerSelection selectedPlayer;
@@ -149,6 +155,8 @@ public:
     bool ShowEsp_Distance = true;
     bool HideEsp_During_Meetings = false;
     bool ShowEsp_RoleBased = false;
+    bool ShowEsp_Crew = true;
+    bool ShowEsp_Imp = true;
 
     bool InMeeting = false;
     bool PlayMedbayScan = false;
@@ -209,6 +217,7 @@ public:
     int shapeshifters_amount = 0;
     int engineers_amount = 0;
     int scientists_amount = 0;
+    int crewmates_amount = 0;
 
     bool Wallhack = false;
     bool FreeCam = false;
@@ -219,6 +228,7 @@ public:
     bool EnableZoom = false;
 
     bool DisableHud = false;
+    bool GodMode = false;
 
     bool ActiveAttach = false;
     bool ActiveShapeshift = false;
@@ -260,6 +270,10 @@ public:
     Vector3 prevCamPos = { NULL, NULL, NULL };
 
     bool FlipSkeld = false;
+    bool CustomImpostorAmount = false;
+    int ImpostorCount = 1;
+    bool DisableCallId = false;
+    uint8_t ToDisableCallId = 0;
 
 	bool OcclusionCulling = false;
     bool ShowUnityLogs = true;
@@ -268,6 +282,7 @@ public:
     float ChatCooldown = 0.f;
     bool MessageSent = false;
     bool ChatFocused = false;
+    bool IsRevived = false;
 
     std::string chatMessage = "";
     std::string userName = "";
@@ -288,7 +303,8 @@ public:
         Ship = 0,
         Hq = 1,
         Pb = 2,
-        Airship = 3
+        Airship = 3,
+        Fungle = 4
     } mapType = MapType::Ship;
 
     bool AutoOpenDoors = false;

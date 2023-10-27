@@ -16,65 +16,73 @@ namespace HostTab {
 	}
 
 	void Render() {
-		if (IsHost() && IsInLobby()) {
+		if (IsHost()) {
 			if (ImGui::BeginTabItem("Host")) {
 				GameOptions options;
-				ImGui::Text("Select Roles:");
-				ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true);
-				bool shouldEndListBox = ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
-				auto allPlayers = GetAllPlayerData();
-				auto playerAmount = allPlayers.size();
-				auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
-				for (size_t index = 0; index < playerAmount; index++) {
-					auto playerData = allPlayers[index];
-					PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
+				if (IsInLobby())
+					ImGui::Text("Select Roles:");
+				if (IsInLobby()) {
+					ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true);
+					bool shouldEndListBox = ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
+					auto allPlayers = GetAllPlayerData();
+					auto playerAmount = allPlayers.size();
+					auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
+					for (size_t index = 0; index < playerAmount; index++) {
+						auto playerData = allPlayers[index];
+						PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
 
-					State.assignedRolesPlayer[index] = playerCtrl;
-					if (State.assignedRolesPlayer[index] == nullptr)
-						continue;
+						State.assignedRolesPlayer[index] = playerCtrl;
+						if (State.assignedRolesPlayer[index] == nullptr)
+							continue;
 
-					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
-					if (outfit == NULL) continue;
-					const std::string& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
-					if (CustomListBoxInt(playerName.c_str(), reinterpret_cast<int*>(&State.assignedRoles[index]), ROLE_NAMES, 80 * State.dpiScale))
-					{
-						State.engineers_amount = (int)GetRoleCount(RoleType::Engineer);
-						State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
-						State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
-						State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
-						// if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
-						// {
-						// 	if(State.assignedRoles[index] == RoleType::Shapeshifter)
-						// 		State.assignedRoles[index] = RoleType::Engineer;
-						// 	else if(State.assignedRoles[index] == RoleType::Impostor)
-						// 		State.assignedRoles[index] = RoleType::Random;
-						// 	State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
-						// 	State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
-						// }
-						// Remove these stupid limitations
+						app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+						if (outfit == NULL) continue;
+						const std::string& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+						if (CustomListBoxInt(playerName.c_str(), reinterpret_cast<int*>(&State.assignedRoles[index]), ROLE_NAMES, 80 * State.dpiScale))
+						{
+							State.engineers_amount = (int)GetRoleCount(RoleType::Engineer);
+							State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
+							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+							State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
+							if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
+							{
+								if (State.assignedRoles[index] == RoleType::Shapeshifter)
+									State.assignedRoles[index] = RoleType::Random;
+								else if (State.assignedRoles[index] == RoleType::Impostor)
+									State.assignedRoles[index] = RoleType::Random;
+								State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
+								State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
+								State.crewmates_amount = (int)GetRoleCount(RoleType::Crewmate);
+							}
 
-						if (!IsInGame()) {
-							if (options.GetGameMode() == GameModes__Enum::HideNSeek)
-								SetRoleAmount(RoleTypes__Enum::Engineer, 15);
-							else
-								SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
-							SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
-							SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
-							if(options.GetNumImpostors() <= State.impostors_amount + State.shapeshifters_amount)
-								options.SetInt(app::Int32OptionNames__Enum::NumImpostors, State.impostors_amount + State.shapeshifters_amount);
+							if (State.assignedRoles[index] == RoleType::Engineer || State.assignedRoles[index] == RoleType::Scientist || State.assignedRoles[index] == RoleType::Crewmate) {
+								if (State.engineers_amount + State.scientists_amount + State.crewmates_amount >= (int)playerAmount)
+									State.assignedRoles[index] = RoleType::Random;
+							} //Some may set all players to non imps. This hangs the game on beginning. Leave space to Random so we have imps.
+
+							if (!IsInGame()) {
+								if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+									SetRoleAmount(RoleTypes__Enum::Engineer, 15);
+								else
+									SetRoleAmount(RoleTypes__Enum::Engineer, State.engineers_amount);
+								SetRoleAmount(RoleTypes__Enum::Scientist, State.scientists_amount);
+								SetRoleAmount(RoleTypes__Enum::Shapeshifter, State.shapeshifters_amount);
+								if (options.GetNumImpostors() <= State.impostors_amount + State.shapeshifters_amount)
+									options.SetInt(app::Int32OptionNames__Enum::NumImpostors, State.impostors_amount + State.shapeshifters_amount);
+							}
 						}
 					}
+					if (shouldEndListBox)
+						ImGui::ListBoxFooter();
+					ImGui::EndChild();
+					ImGui::SameLine();
 				}
-				if (shouldEndListBox)
-					ImGui::ListBoxFooter();
-				ImGui::EndChild();
-				ImGui::SameLine();
 				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
 
 				// AU v2022.8.24 has been able to change maps in lobby.
 				State.mapHostChoice = options.GetByte(app::ByteOptionNames__Enum::MapId);
-				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
-				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
+				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, (int)MAP_NAMES.size() - 1);
+				if (IsInLobby() && CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
 						if (State.mapHostChoice == 3) {
 							options.SetByte(app::ByteOptionNames__Enum::MapId, 0);
@@ -86,11 +94,28 @@ namespace HostTab {
 						}
 					}
 				}
+				if (IsInLobby() && ImGui::Checkbox("Custom Impostor Amount", &State.CustomImpostorAmount))
+					State.Save();
+				if (IsInLobby() && CustomListBoxInt("Impostor Count", &State.ImpostorCount, IMPOSTOR_COUNTS, 75 * State.dpiScale))
+					State.Save();
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				if (IsInLobby() && ImGui::Button("Force Start of Game"))
 				{
 					app::InnerNetClient_SendStartGame((InnerNetClient*)(*Game::pAmongUsClient), NULL);
 				}
+				if (ImGui::Checkbox("Disable Meetings", &State.DisableMeetings))
+					State.Save();
+				if (ImGui::Checkbox("Disable Sabotages", &State.DisableSabotages))
+					State.Save();
+
+				if (ImGui::Checkbox("Disable Specific RPC Call ID", &State.DisableCallId))
+					State.Save();
+				int callId = State.ToDisableCallId;
+				if (ImGui::InputInt("ID to Disable", &callId)) {
+					State.ToDisableCallId = (uint8_t)callId;
+					State.Save();
+				}
+
 				ImGui::EndChild();
 				ImGui::EndTabItem();
 			}

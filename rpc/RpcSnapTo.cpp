@@ -20,5 +20,8 @@ RpcForceSnapTo::RpcForceSnapTo(PlayerControl* Player, Vector2 targetVector)
 
 void RpcForceSnapTo::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	CustomNetworkTransform_RpcSnapTo((Player)->fields.NetTransform, this->targetVector, NULL);
 }

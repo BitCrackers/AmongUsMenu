@@ -29,7 +29,7 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 	State.mapType = Settings::MapType::Airship;
 
 	if (State.DisableSabotages) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 7));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Electrical, 7));
 	}
 }
 

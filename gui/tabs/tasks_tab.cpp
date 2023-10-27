@@ -138,7 +138,7 @@ namespace TasksTab {
 
 				if (ImGui::Checkbox("Fake Cameras In Use", &State.FakeCameraUsage))
 				{
-					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Security, (State.FakeCameraUsage ? 1 : 0)));
+					State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Security, (State.FakeCameraUsage ? 1 : 0)));
 				}
 
 				if (IsInMultiplayerGame() && IsInGame()) {

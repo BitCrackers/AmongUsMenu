@@ -53,12 +53,14 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2cpp::List<List_1_PlayerControl_>& allPlayers, std::vector<uint8_t>& assignedPlayers)
 {
 	auto roleCount = roleRates.GetRoleCount(role);
+	auto playerAmount = allPlayers.size();
+	auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
 	if (GameOptions().GetGameMode() == GameModes__Enum::HideNSeek && role == RoleTypes__Enum::Engineer)
 		roleCount = allPlayers.size() - 1;
+	if (role == RoleTypes__Enum::Shapeshifter && roleCount >= maxImposterAmount)
+		roleCount = maxImposterAmount;
 	if (roleCount < 1)
 		return;
-
-	auto playerAmount = allPlayers.size();
 
 	for (auto i = 0; i < roleCount; i++)
 	{

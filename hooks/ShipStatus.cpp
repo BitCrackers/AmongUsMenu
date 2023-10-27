@@ -41,17 +41,13 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = (Settings::MapType)(__this->fields.Type);
-
-	if (State.DisableSabotages) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, 7));
-	}
 }
 
-void dShipStatus_RpcRepairSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method) {
+void dShipStatus_RpcUpdateSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method) {
 	if (State.DisableSabotages) {
 		return;
 	}
-	ShipStatus_RpcRepairSystem(__this, systemType, amount, method);
+	ShipStatus_RpcUpdateSystem(__this, systemType, amount, method);
 }
 
 void dShipStatus_RpcCloseDoorsOfType (ShipStatus* __this, SystemTypes__Enum type, MethodInfo* method) {

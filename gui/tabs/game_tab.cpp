@@ -11,23 +11,25 @@ namespace GameTab {
 		if (ImGui::BeginTabItem("Game")) {
 			GameOptions options;
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
-			if (SteppedSliderFloat("Player Speed", &State.PlayerSpeed, 0.f, 10.f, 0.05f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
-				if(IsInGame() || IsInLobby())
-					GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeed);
+			if (SteppedSliderFloat("Player Speed Multiplier", &State.PlayerSpeed, 0.f, 10.f, 0.05f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				State.PrevPlayerSpeed = State.PlayerSpeed;
 			}
-			if (CustomListBoxInt("Kill Distance", &State.KillDistance, KILL_DISTANCE, 225 * State.dpiScale)) {
-				if (IsInGame() || IsInLobby())
-					GameLogicOptions().SetInt(app::Int32OptionNames__Enum::KillDistance, State.KillDistance);
+			if (SteppedSliderFloat("Kill Distance", &State.KillDistance, 0.f, 20.f, 0.1f, "%.1f m", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				State.PrevKillDistance = State.KillDistance;
 			}
-			if (GameOptions().GetGameMode() == GameModes__Enum::Normal) {
-				if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale)) {
-					GameLogicOptions().SetInt(app::Int32OptionNames__Enum::TaskBarMode, State.TaskBarUpdates);
+			/*if (GameOptions().GetGameMode() == GameModes__Enum::Normal) {
+				if (CustomListBoxInt("Task Bar Updates", &State.TaskBarUpdates, TASKBARUPDATES, 225 * State.dpiScale))
 					State.PrevTaskBarUpdates = State.TaskBarUpdates;
-				}
-			}
+			}*/
 			if (ImGui::Checkbox("No Ability Cooldown", &State.NoAbilityCD)) {
+				State.Save();
+			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Multiply Speed", &State.MultiplySpeed)) {
+				State.Save();
+			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Modify Kill Distance", &State.ModifyKillDistance)) {
 				State.Save();
 			}
 

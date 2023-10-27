@@ -89,16 +89,17 @@ namespace PlayersTab {
 				ImGui::EndChild();
 				ImGui::SameLine();
 				ImGui::BeginChild("players#actions", ImVec2(200, 0) * State.dpiScale, true);
-
+				if (State.DisableSabotages)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Meetings have been disabled.");
 				GameOptions options;
 				if (IsInGame() && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) { //Player selection doesn't matter
 					if (!State.InMeeting) {
-						if (!State.DisableMeetings && ImGui::Button("Call Meeting")) {
+						if (ImGui::Button("Call Meeting")) {
 							State.rpcQueue.push(new RpcReportPlayer(PlayerSelection()));
 						}
 					}
 					else {
-						if (!State.DisableMeetings && ImGui::Button("Call Meeting")) {
+						if (ImGui::Button("Call Meeting")) {
 							State.rpcQueue.push(new RpcForceMeeting(*Game::pLocalPlayer, PlayerSelection()));
 						}
 					}
@@ -106,12 +107,12 @@ namespace PlayersTab {
 				if (selectedPlayer.has_value() && IsInGame() && !GetPlayerData(selectedPlayer.get_PlayerControl())->fields.IsDead && (IsHost() || !State.SafeMode)) { //Player selection doesn't matter
 					ImGui::SameLine();
 					if (!State.InMeeting) {
-						if (!State.DisableMeetings && ImGui::Button("Force Meeting By")) {
+						if (ImGui::Button("Force Meeting By")) {
 							State.rpcQueue.push(new RpcForceReportPlayer(selectedPlayer.get_PlayerControl(), PlayerSelection()));
 						}
 					}
 					else {
-						if (!State.DisableMeetings && ImGui::Button("Force Meeting By")) {
+						if (ImGui::Button("Force Meeting By")) {
 							State.rpcQueue.push(new RpcForceMeeting(selectedPlayer.get_PlayerControl(), PlayerSelection()));
 						}
 					}
@@ -146,12 +147,12 @@ namespace PlayersTab {
 					if (IsInGame()) {
 						ImGui::NewLine();
 						if (!State.InMeeting) {
-							if (!State.DisableMeetings && ImGui::Button("Report Body") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+							if (ImGui::Button("Report Body") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 								State.rpcQueue.push(new RpcReportPlayer(State.selectedPlayer));
 							}
 						}
 						else {
-							if (!State.DisableMeetings && ImGui::Button("Report Body") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+							if (ImGui::Button("Report Body") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 								State.rpcQueue.push(new RpcForceMeeting(*Game::pLocalPlayer, State.selectedPlayer));
 							}
 						}
@@ -159,12 +160,12 @@ namespace PlayersTab {
 					if (selectedPlayer.has_value() && IsInGame() && (IsHost() || !State.SafeMode)) {
 						ImGui::SameLine();
 						if (!State.InMeeting) {
-							if (!State.DisableMeetings && ImGui::Button("Self-Report") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+							if (ImGui::Button("Self-Report") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 								State.rpcQueue.push(new RpcForceReportPlayer(selectedPlayer.get_PlayerControl(), State.selectedPlayer));
 							}
 						}
 						else {
-							if (!State.DisableMeetings && ImGui::Button("Self-Report") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
+							if (ImGui::Button("Self-Report") && !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead) {
 								State.rpcQueue.push(new RpcForceMeeting(selectedPlayer.get_PlayerControl(), State.selectedPlayer));
 							}
 						}
@@ -241,7 +242,7 @@ namespace PlayersTab {
 						&& !selectedPlayer.get_PlayerControl()->fields.inVent
 						&& !selectedPlayer.get_PlayerControl()->fields.inMovingPlat
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f)
-						&& !selectedPlayer.get_PlayerControl()->fields.protectedByGuardian
+						&& selectedPlayer.get_PlayerControl()->fields.protectedByGuardianId < 0
 						&& !State.InMeeting)
 					{
 						if (ImGui::Button("Kill"))
@@ -265,7 +266,7 @@ namespace PlayersTab {
 						&& !selectedPlayer.get_PlayerControl()->fields.inVent
 						&& !selectedPlayer.get_PlayerControl()->fields.inMovingPlat
 						&& !GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ((*Game::pLocalPlayer)->fields.killTimer <= 0.0f)
-						&& !selectedPlayer.get_PlayerControl()->fields.protectedByGuardian
+						&& selectedPlayer.get_PlayerControl()->fields.protectedByGuardianId < 0
 						&& !State.InMeeting)
 					{
 						ImGui::SameLine();

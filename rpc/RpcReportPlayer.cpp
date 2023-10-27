@@ -20,6 +20,9 @@ RpcForceReportPlayer::RpcForceReportPlayer(PlayerControl* Player, const PlayerSe
 
 void RpcForceReportPlayer::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	PlayerControl_CmdReportDeadBody(Player, reportedPlayer.get_PlayerData().value_or(nullptr), nullptr);
 }
 
@@ -31,5 +34,8 @@ RpcForceMeeting::RpcForceMeeting(PlayerControl* Player, const PlayerSelection& t
 
 void RpcForceMeeting::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	PlayerControl_RpcStartMeeting(Player, reportedPlayer.get_PlayerData().value_or(nullptr), nullptr);
 }

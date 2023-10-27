@@ -43,11 +43,11 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 		ControlAppearance(true);
 }
 
-void dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
+void* dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo* method) {
 	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
 	synchronized(Replay::replayEventMutex) {
 		State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
 	}
-	Vent_ExitVent(__this, pc, method);
+	return Vent_ExitVent(__this, pc, method);
 }

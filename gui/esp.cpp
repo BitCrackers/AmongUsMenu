@@ -23,7 +23,7 @@ static void RenderText(std::string_view text, const ImVec2& pos, const ImVec4& c
 	{
 		CurrentWindow->DrawList->AddText(nullptr, 0.f,
 			ImScreen + 0.5f * State.dpiScale,
-			ImGui::GetColorU32(IM_COL32_BLACK), text.data(), text.data() + text.length());
+			ImGui::GetColorU32(ImVec4(0.f, 0.f, 0.f, 0.f)), text.data(), text.data() + text.length());
 	}
 
 	CurrentWindow->DrawList->AddText(nullptr, 0.f, ImScreen, ImGui::GetColorU32(color), text.data(), text.data() + text.length());
@@ -59,7 +59,7 @@ static void RenderBox(const ImVec2& top, const ImVec2& bottom, const float heigh
 	};
 
 	if (wantsShadow) {
-		const ImVec4& shadowColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(color) & IM_COL32_A_MASK);
+		const ImVec4& shadowColor = ImVec4(0.f, 0.f, 0.f, 0.f);
 		for (size_t i = 0; i < std::size(points); i += 2) {
 			RenderLine(points[i] + 0.5f * State.dpiScale, points[i + 1] + 0.5f * State.dpiScale, shadowColor, false);
 		}

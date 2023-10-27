@@ -65,6 +65,7 @@
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\EOSManager.cpp" />
     <ClCompile Include="hooks\ExileController.cpp" />
+	<ClCompile Include="hooks\FungleShipStatus.cpp" />
     <ClCompile Include="hooks\GameOptionsManager.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />
@@ -206,7 +207,7 @@
     <ClCompile Include="hooks\_hooks.cpp" />
     <ClCompile Include="rpc\RpcMurderPlayer.cpp" />
     <ClCompile Include="rpc\RpcPlayAnimation.cpp" />
-    <ClCompile Include="rpc\RpcRepairSystem.cpp" />
+    <ClCompile Include="rpc\RpcUpdateSystem.cpp" />
     <ClCompile Include="rpc\RpcReportPlayer.cpp" />
     <ClCompile Include="rpc\RpcSetScanner.cpp" />
     <ClCompile Include="rpc\RpcSnapTo.cpp" />
@@ -397,6 +398,7 @@
     <Image Include="resources\airship.png" />
     <Image Include="resources\cross.png" />
     <Image Include="resources\dead_body.png" />
+	<Image Include="resources\fungle.png" />
     <Image Include="resources\kill.png" />
     <Image Include="resources\mira_hq.png" />
     <Image Include="resources\pause.png" />

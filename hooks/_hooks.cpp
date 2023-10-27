@@ -94,7 +94,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(PlayerControl_Shapeshift);
 	HOOKFUNC(PlayerControl_RpcShapeshift);
-	HOOKFUNC(PlayerControl_RpcRevertShapeshift);
+	//HOOKFUNC(PlayerControl_RpcRevertShapeshift);
 	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(MeetingHud_PopulateResults);
@@ -103,9 +103,11 @@ void DetourInitilization() {
 	HOOKFUNC(ShipStatus_OnEnable);
 	HOOKFUNC(PolusShipStatus_OnEnable);
 	HOOKFUNC(AirshipStatus_OnEnable);
+	HOOKFUNC(FungleShipStatus_OnEnable);
+	HOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 	HOOKFUNC(Vent_CanUse);
 	HOOKFUNC(Vent_EnterVent);
-	HOOKFUNC(Vent_ExitVent);
+	//HOOKFUNC(Vent_ExitVent);
 	HOOKFUNC(StatsManager_get_AmBanned);
 	HOOKFUNC(StatsManager_get_BanMinutesLeft);
 	HOOKFUNC(StatsManager_get_BanPoints);
@@ -157,24 +159,28 @@ void DetourInitilization() {
 	HOOKFUNC(ChatController_Update);
 	HOOKFUNC(TextBoxTMP_IsCharAllowed);
 	HOOKFUNC(TextBoxTMP_SetText);
-	HOOKFUNC(ShipStatus_RpcRepairSystem);
+	HOOKFUNC(ShipStatus_RpcUpdateSystem);
 	HOOKFUNC(ShipStatus_RpcCloseDoorsOfType);
 	HOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	HOOKFUNC(GameManager_RpcEndGame);
 	HOOKFUNC(PlayerPhysics_FixedUpdate);
 	HOOKFUNC(PlayerPurchasesData_GetPurchase);
 	HOOKFUNC(PlayerControl_TurnOnProtection);
+	HOOKFUNC(PlayerControl_RemoveProtection);
 	HOOKFUNC(AmongUsClient_OnGameEnd);
 	HOOKFUNC(InnerNetClient_DisconnectInternal);
+	HOOKFUNC(LogicOptions_GetKillDistance);
+	//HOOKFUNC(LogicOptions_GetTaskBarMode);
 	HOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	HOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	HOOKFUNC(EOSManager_UpdatePermissionKeys);
 	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	HOOKFUNC(ExileController_ReEnableGameplay);
-	HOOKFUNC(SabotageSystemType_ForceSabTime);
+	//HOOKFUNC(SabotageSystemType_ForceSabTime);
 	HOOKFUNC(PingTracker_Update);
 	HOOKFUNC(KillOverlay_ShowKillAnimation_1);
 	//HOOKFUNC(EOSManager_set_FriendCode);
+	HOOKFUNC(KillButton_SetTarget);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -196,7 +202,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(PlayerControl_Shapeshift);
 	UNHOOKFUNC(PlayerControl_RpcShapeshift);
-	UNHOOKFUNC(PlayerControl_RpcRevertShapeshift);
+	//UNHOOKFUNC(PlayerControl_RpcRevertShapeshift);
 	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
 	UNHOOKFUNC(MeetingHud_PopulateResults);
@@ -205,9 +211,11 @@ void DetourUninitialization()
 	UNHOOKFUNC(ShipStatus_OnEnable);
 	UNHOOKFUNC(PolusShipStatus_OnEnable);
 	UNHOOKFUNC(AirshipStatus_OnEnable);
+	UNHOOKFUNC(FungleShipStatus_OnEnable);
+	UNHOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 	UNHOOKFUNC(Vent_CanUse);
 	UNHOOKFUNC(Vent_EnterVent);
-	UNHOOKFUNC(Vent_ExitVent);
+	//UNHOOKFUNC(Vent_ExitVent);
 	UNHOOKFUNC(StatsManager_get_AmBanned);
 	UNHOOKFUNC(StatsManager_get_BanMinutesLeft);
 	UNHOOKFUNC(StatsManager_get_BanPoints);
@@ -258,22 +266,26 @@ void DetourUninitialization()
 	UNHOOKFUNC(ChatController_Update);
 	UNHOOKFUNC(TextBoxTMP_IsCharAllowed);
 	HOOKFUNC(TextBoxTMP_SetText);
-	UNHOOKFUNC(ShipStatus_RpcRepairSystem);
+	UNHOOKFUNC(ShipStatus_RpcUpdateSystem);
 	UNHOOKFUNC(ShipStatus_RpcCloseDoorsOfType);
 	UNHOOKFUNC(InnerNetClient_EnqueueDisconnect);
 	UNHOOKFUNC(GameManager_RpcEndGame);
 	UNHOOKFUNC(PlayerControl_TurnOnProtection);
+	UNHOOKFUNC(PlayerControl_RemoveProtection);
 	UNHOOKFUNC(AmongUsClient_OnGameEnd);
 	UNHOOKFUNC(InnerNetClient_DisconnectInternal);
+	UNHOOKFUNC(LogicOptions_GetKillDistance);
+	//UNHOOKFUNC(LogicOptions_GetTaskBarMode);
 	UNHOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	UNHOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	UNHOOKFUNC(EOSManager_UpdatePermissionKeys);
 	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
-	UNHOOKFUNC(SabotageSystemType_ForceSabTime);
+	//UNHOOKFUNC(SabotageSystemType_ForceSabTime);
 	UNHOOKFUNC(PingTracker_Update);
 	UNHOOKFUNC(KillOverlay_ShowKillAnimation_1);
 	//UNHOOKFUNC(EOSManager_set_FriendCode);
+	UNHOOKFUNC(KillButton_SetTarget);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

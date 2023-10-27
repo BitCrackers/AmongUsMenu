@@ -21,9 +21,20 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 		__this->fields.Chat->fields.freeChatField->fields.textArea->fields.AllowPaste = State.ChatPaste;
 	}
 
+	bool DisableActivation = false; //so a ghost seek button doesn't show up
 
-	if (!State.InMeeting)
-		HudManager_SetHudActive(__this, !State.DisableHud, NULL);
+	if (State.InMeeting)
+		HudManager_SetHudActive(__this, false, NULL);
+	else {
+		if (State.DisableHud) {
+			HudManager_SetHudActive(__this, false, NULL);
+			DisableActivation = false;
+		}
+		else if (!DisableActivation) {
+			HudManager_SetHudActive(__this, true, NULL);
+			DisableActivation = true;
+		}
+	}
 
 	if ((IsInGame() || IsInLobby())) {
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
@@ -34,7 +45,7 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 		GameObject* shadowLayerObject = Component_get_gameObject((Component_1*)__this->fields.ShadowQuad, NULL);
 		if(IsInGame() || IsInLobby()) {
 			GameObject_SetActive(shadowLayerObject,
-				!(State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack || (State.MaxVision && IsInLobby())) && !localData->fields.IsDead,
+				!(State.IsRevived || State.FreeCam || State.EnableZoom || State.playerToFollow.has_value() || State.Wallhack || (State.MaxVision && IsInLobby())) && !localData->fields.IsDead,
 				NULL);
 		}
 
@@ -69,20 +80,21 @@ void dHudManager_Update(HudManager* __this, MethodInfo* method) {
 			{
 				app::GameObject_SetActive(ReportButton, true, nullptr);
 			}
+			if (IsInGame() || IsInLobby()) {
+				for (auto player : GetAllPlayerControl())
+				{
+					auto playerInfo = GetPlayerData(player);
+					if (!playerInfo) break; //This happens sometimes during loading
 
-			for (auto player : GetAllPlayerControl())
-			{
-				auto playerInfo = GetPlayerData(player);
-				if (!playerInfo) break; //This happens sometimes during loading
-
-				if (State.KillImpostors && !playerInfo->fields.IsDead && PlayerIsImpostor(localData))
-					playerInfo->fields.Role->fields.CanBeKilled = true;
-				else if (PlayerIsImpostor(playerInfo))
-					playerInfo->fields.Role->fields.CanBeKilled = false;
-			}
-			if (PlayerIsImpostor(localData)) {
-				auto selfInfo = GetPlayerData(*Game::pLocalPlayer);
-				selfInfo->fields.Role->fields.CanUseKillButton = true;
+					if (State.KillImpostors && !playerInfo->fields.IsDead && PlayerIsImpostor(localData))
+						playerInfo->fields.Role->fields.CanBeKilled = true;
+					else if (PlayerIsImpostor(playerInfo))
+						playerInfo->fields.Role->fields.CanBeKilled = false;
+				}
+				if (PlayerIsImpostor(localData)) {
+					auto selfInfo = GetPlayerData(*Game::pLocalPlayer);
+					selfInfo->fields.Role->fields.CanUseKillButton = true;
+				}
 			}
 		}
 	}

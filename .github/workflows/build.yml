@@ -1,13 +1,11 @@
 name: Build Project
 
 on:
-  push:
-    tags:
-      - v[0-9].[0-9]+.[0-9]+*
-  # pr's will trigger this action. i think the idea here is to verify that a build is passing before merging.
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+  release:
+    types: [published]
+#  push:
+#    branches: [ "main" ]
   
 jobs:
   Build_Release:
@@ -25,15 +23,13 @@ jobs:
         run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/MSBuild.exe" -property:Configuration=Release_Version'
         
       - name: Package Release Builds
-        if: ${{ github.event_name == 'push' }}
         shell: cmd
         run: |
-          move /y Release\SickoModeAU.dll SickoModeAU.dll
+          move /y Release\AmongUsMenu.dll AmongUsMenu.dll
           move /y Release_Version\version.dll version.dll
-          tar -caf Release.zip SickoModeAU.dll version.dll LICENSE
+          tar -caf Release.zip AmongUsMenu.dll version.dll LICENSE
         
       - name: Upload Release Artifact
-        if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Release
@@ -54,42 +50,39 @@ jobs:
         run: '"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/MSBuild.exe" -property:Configuration=Debug_Version'
         
       - name: Package Debug Builds
-        if: ${{ github.event_name == 'push' }}
         shell: cmd
         run: |
-          move /y Debug\SickoModeAU.dll SickoModeAU.dll
+          move /y Debug\AmongUsMenu.dll AmongUsMenu.dll
           move /y Debug_Version\version.dll version.dll
-          tar -caf Debug.zip SickoModeAU.dll version.dll LICENSE
+          tar -caf Debug.zip AmongUsMenu.dll version.dll LICENSE
         
       - name: Upload Debug Artifact
-        if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           name: Debug
           path: Debug.zip
           
   AutoRelease:
-    if: ${{ github.event_name == 'push' }}
     runs-on: windows-2022
     needs: [Build_Release, Build_Debug]
     steps:
-      - name: Parse tag semver
-        uses: booxmedialtd/ws-action-parse-semver@3576f3a20a39f8752fe0d8195f5ed384090285dc
-        id: semver_parser
-        with:
-          input_string: ${{ github.ref }}
-          version_extractor_regex: '\/v(.*)$'
+#      - name: Parse tag semver
+#        uses: booxmedialtd/ws-action-parse-semver@3576f3a20a39f8752fe0d8195f5ed384090285dc
+#        id: semver_parser
+#        with:
+#          input_string: ${{ github.ref }}
+#          version_extractor_regex: '\/v(.*)$'
           
       # please keep this for an adjustment period, will help diagnose any issues
-      - name: Debug semver
-        run: |
-            echo 'major: ${{ steps.semver_parser.outputs.major }}'
-            echo 'minor: ${{ steps.semver_parser.outputs.minor }}'
-            echo 'patch: ${{ steps.semver_parser.outputs.patch }}'
-            echo 'feature (is pre-release?): ${{ steps.semver_parser.outputs.prerelease }}'
-            echo 'feature ver: ${{ steps.semver_parser.outputs.build }}'
-            echo 'full: ${{ steps.semver_parser.outputs.fullversion }}'
-            echo 'is pre-release: ${{ steps.semver_parser.outputs.prerelease != 0 }}'
+#      - name: Debug semver
+#        run: |
+#            echo 'major: ${{ steps.semver_parser.outputs.major }}'
+#            echo 'minor: ${{ steps.semver_parser.outputs.minor }}'
+#            echo 'patch: ${{ steps.semver_parser.outputs.patch }}'
+#            echo 'feature (is pre-release?): ${{ steps.semver_parser.outputs.prerelease }}'
+#            echo 'feature ver: ${{ steps.semver_parser.outputs.build }}'
+#            echo 'full: ${{ steps.semver_parser.outputs.fullversion }}'
+#            echo 'is pre-release: ${{ steps.semver_parser.outputs.prerelease != 0 }}'
       
       - name: Download Release Artifact
         uses: actions/download-artifact@v2.0.9
@@ -102,12 +95,12 @@ jobs:
           name: Debug
       
       - name: Automatic Releases
-        if: ${{ github.event_name == 'push' }}
-        uses: marvinpinto/action-automatic-releases@526ce12c6675bbe6e0e9a4169c90d09a3f7ad3e2
+        uses: marvinpinto/action-automatic-releases@latest #maybe this fixed auto release versioning?
         id: "automatic_releases"
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: ${{ steps.semver_parser.outputs.prerelease != 0 }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}" #this is gonna give me a stroke
+          automatic_release_tag: "latest"
+          prerelease: false
           files: |
             Release.zip
             Debug.zip

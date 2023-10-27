@@ -94,9 +94,14 @@ void RoleRates::SubtractRole(RoleTypes__Enum role) {
 
 int GetMaxImposterAmount(int playerAmount)
 {
-	if(playerAmount >= 9)
+	GameOptions options;
+	if (State.CustomImpostorAmount)
+		return State.ImpostorCount + 1;
+	if (options.GetGameMode() == GameModes__Enum::HideNSeek)
+		return 1;
+	if (playerAmount >= 9)
 		return 3;
-	if(playerAmount >= 7)
+	if (playerAmount >= 7)
 		return 2;
 	return 1;
 }
@@ -346,14 +351,14 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	{
 		if (door->fields.Room == room)
 		{
-			return door;
+			return (PlainDoor*)door;
 		}
 	}
 
 	return nullptr;
 }
 
-il2cpp::Array<PlainDoor__Array> GetAllPlainDoors() {
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors() {
 	return (*Game::pShipStatus)->fields.AllDoors;
 }
 
@@ -424,38 +429,38 @@ void RepairSabotage(PlayerControl* player) {
 				auto switchMask = 1 << (i & 0x1F);
 
 				if ((actualSwitches & switchMask) != (expectedSwitches & switchMask))
-					State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Electrical, i));
+					State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Electrical, i));
 			}
 		}
 	}
 
 	if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 16));
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 17));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Comms, 16));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Comms, 17));
 	}
 
 	if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 0));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Comms, 0));
 	}
 
 	if (noOxyTaskType == sabotageTask->klass->_0.name) {
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 64));
-		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 65));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::LifeSupp, 64));
+		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::LifeSupp, 65));
 	}
 
 	if (reactorTaskType == sabotageTask->klass->_0.name) {
 		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 64));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 65));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Reactor, 64));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Reactor, 65));
 		}
 
 		if (State.mapType == Settings::MapType::Pb) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Laboratory, 64));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Laboratory, 65));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Laboratory, 64));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Laboratory, 65));
 		}
 		if (State.mapType == Settings::MapType::Airship) {
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 16));
-			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 17));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Reactor, 16));
+			State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Reactor, 17));
 		}
 	}
 }
@@ -474,7 +479,9 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 		"Buy Beverage", "Process Data", "Run Diagnostics", "Water Plants", "Monitor Oxygen", "Store Artifacts", "Fill Canisters", "Activate Weather Nodes", "Insert Keys",
 		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telescope", "Record Temperature", "Reboot Wifi",
 		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
-		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Clean Vent"};
+		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Clean Vent", "None", "Build Sandcastle", 
+		"Cook Fish", "Collect Shells", "Lift Weights", "Roast Marshmallow", "Throw Frisbee", "Collect Samples", "Prep Vegetables", "Hoist Supplies", "Mine Ores", "Polish Gem", "Replace Parts", "Help Critter", 
+		"Crank Generator", "Fix Antenna", "Find Signal", "Activate Mushroom Mixup", "Extract Fuel", "Monitor Mushroom", "Play Video Game" };
 	return TASK_TRANSLATIONS.at(static_cast<size_t>(taskType));
 }
 
@@ -483,7 +490,7 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck",
 		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records", "Lounge Room", "Gap Room", "Main Hall", "Medical",
-		"Decontamination" };
+		"Decontamination", "Zipline", "Mining Pit", "Dock", "Splash Zone", "Lookout", "Beach", "Highlands", "Jungle", "The Dorm", "Activate Mushroom Mixup", "Heli Sabotage" };
 	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 
@@ -1147,12 +1154,11 @@ void SaveGameOptions() {
 }
 
 void SaveGameOptions(const class GameOptions& gameOptions) {
-	State.PlayerSpeed = State.PrevPlayerSpeed = gameOptions.GetPlayerSpeedMod();
-	State.KillCooldown = State.PrevKillCooldown = gameOptions.GetKillCooldown();
+	/*State.PlayerSpeed = State.PrevPlayerSpeed = gameOptions.GetPlayerSpeedMod();
 	State.GACooldown = State.PrevGACooldown = gameOptions.GetGACooldown();
 	State.KillDistance = State.PrevKillDistance = gameOptions.GetInt(app::Int32OptionNames__Enum::KillDistance);
 	State.TaskBarUpdates = State.PrevTaskBarUpdates = gameOptions.GetInt(app::Int32OptionNames__Enum::TaskBarMode);
-	State.VisualTasks = State.PrevVisualTasks = gameOptions.GetBool(app::BoolOptionNames__Enum::VisualTasks);
+	State.VisualTasks = State.PrevVisualTasks = gameOptions.GetBool(app::BoolOptionNames__Enum::VisualTasks);*/
 	State.mapHostChoice = gameOptions.GetMapId();
 	State.impostors_amount = gameOptions.GetNumImpostors();
 }

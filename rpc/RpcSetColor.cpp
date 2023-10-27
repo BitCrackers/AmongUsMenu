@@ -25,6 +25,9 @@ RpcForceColor::RpcForceColor(PlayerControl* player, uint8_t bodyColor, bool forc
 
 void RpcForceColor::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+
 	if (forceColor)
 		PlayerControl_RpcSetColor(Player, bodyColor, NULL);
 	else

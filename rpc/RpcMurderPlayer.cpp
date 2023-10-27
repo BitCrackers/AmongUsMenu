@@ -10,7 +10,10 @@ RpcMurderPlayer::RpcMurderPlayer(PlayerControl* Player, PlayerControl* target)
 
 void RpcMurderPlayer::Process()
 {
-	PlayerControl_RpcMurderPlayer(Player, target, NULL);
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
+	PlayerControl_RpcMurderPlayer(Player, target, true, NULL);
 }
 
 //damn im too lazy to add new files
@@ -24,6 +27,9 @@ RpcShapeshift::RpcShapeshift(PlayerControl* Player, const PlayerSelection& targe
 
 void RpcShapeshift::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_RpcShapeshift(Player, target.get_PlayerControl().value_or(nullptr), animate,  NULL);
 }
 
@@ -35,6 +41,9 @@ RpcSendChat::RpcSendChat(PlayerControl* Player, std::string_view msg)
 
 void RpcSendChat::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_RpcSendChat(Player, convert_to_string(msg), NULL);
 }
 
@@ -47,6 +56,9 @@ RpcVotePlayer::RpcVotePlayer(PlayerControl* Player, PlayerControl* target, bool 
 
 void RpcVotePlayer::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	if (skip)
 		MeetingHud_CmdCastVote(MeetingHud__TypeInfo->static_fields->Instance, Player->fields.PlayerId, 253, NULL);
 	else
@@ -60,6 +72,9 @@ RpcVoteKick::RpcVoteKick(PlayerControl* target)
 
 void RpcVoteKick::Process()
 {
+	if (!PlayerSelection(target).has_value())
+		return;
+	
 	VoteBanSystem_CmdAddVote(VoteBanSystem__TypeInfo->static_fields->Instance, target->fields._.OwnerId, NULL);
 }
 
@@ -70,6 +85,9 @@ RpcClearVote::RpcClearVote(PlayerControl* Player)
 
 void RpcClearVote::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	MeetingHud_RpcClearVote(MeetingHud__TypeInfo->static_fields->Instance, Player->fields._.OwnerId, NULL);
 }
 
@@ -107,6 +125,9 @@ RpcRevive::RpcRevive(PlayerControl* Player)
 
 void RpcRevive::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_Revive(Player, NULL);
 }
 
@@ -119,6 +140,9 @@ RpcVent::RpcVent(PlayerControl* Player, int32_t ventId, bool exit)
 
 void RpcVent::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	if (exit)
 		PlayerPhysics_RpcExitVent(Player->fields.MyPhysics, ventId, NULL);
 	else
@@ -133,6 +157,9 @@ RpcSetLevel::RpcSetLevel(PlayerControl* Player, int level)
 
 void RpcSetLevel::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_RpcSetLevel(Player, level, NULL);
 }
 
@@ -155,6 +182,9 @@ RpcProtectPlayer::RpcProtectPlayer(PlayerControl* Player, PlayerSelection target
 
 void RpcProtectPlayer::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_RpcProtectPlayer(Player, target.get_PlayerControl().value_or(nullptr), color, NULL);
 }
 
@@ -166,5 +196,8 @@ CmdCheckProtect::CmdCheckProtect(PlayerControl* Player, PlayerSelection target)
 
 void CmdCheckProtect::Process()
 {
+	if (!PlayerSelection(Player).has_value())
+		return;
+	
 	PlayerControl_CmdCheckProtect(Player, target.get_PlayerControl().value_or(nullptr), NULL);
 }

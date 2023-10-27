@@ -6,7 +6,7 @@
 #include "utility.h"
 
 void HandleRpc(uint8_t callId, MessageReader* reader) {
-	switch (callId) {		
+	switch (callId) {
 		case (uint8_t)42069:
 		{
 			uint8_t playerid = MessageReader_ReadByte(reader, NULL);

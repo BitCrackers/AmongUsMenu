@@ -59,6 +59,9 @@ void Settings::Load() {
         JSON_TRYGET("CyclePet", this->RandomPet);
         JSON_TRYGET("CycleNamePlate", this->RandomNamePlate);
         JSON_TRYGET("PlayerSpeed", this->PlayerSpeed);
+        JSON_TRYGET("MultiplySpeed", this->MultiplySpeed);
+        JSON_TRYGET("ModifyKillDistance", this->ModifyKillDistance);
+        JSON_TRYGET("ModifyTaskBarUpdates", this->ModifyTaskBarUpdates);
         JSON_TRYGET("CameraHeight", this->CameraHeight);
         JSON_TRYGET("FreeCamSpeed", this->FreeCamSpeed);
         JSON_TRYGET("UserName", this->userName);
@@ -91,6 +94,8 @@ void Settings::Load() {
         JSON_TRYGET("ShowEsp_Distance", this->ShowEsp_Distance);
         JSON_TRYGET("HideEsp_During_Meetings", this->HideEsp_During_Meetings);
         JSON_TRYGET("ShowEsp_RoleBased", this->ShowEsp_RoleBased);
+        JSON_TRYGET("ShowEsp_Crew", this->ShowEsp_Crew);
+        JSON_TRYGET("ShowEsp_Imp", this->ShowEsp_Imp);
 
         JSON_TRYGET("MaxVision", this->MaxVision);
         JSON_TRYGET("Wallhack", this->Wallhack);
@@ -121,6 +126,8 @@ void Settings::Load() {
         JSON_TRYGET("AnimationlessShapeshift", this->AnimationlessShapeshift);
         JSON_TRYGET("DisableKillAnimation", this->DisableKillAnimation);
         JSON_TRYGET("KillImpostors", this->KillImpostors);
+        JSON_TRYGET("KillThroughWalls", this->KillThroughWalls);
+        JSON_TRYGET("InfiniteKillRange", this->InfiniteKillRange);
         JSON_TRYGET("FakeAlive", this->FakeAlive);
         JSON_TRYGET("NoClip", this->NoClip);
 
@@ -128,6 +135,9 @@ void Settings::Load() {
 
         JSON_TRYGET("RevealVotes", this->RevealVotes);
         JSON_TRYGET("ShowProtections", this->ShowProtections);
+
+        JSON_TRYGET("CustomImpostorAmount", this->CustomImpostorAmount);
+        JSON_TRYGET("ImpostorCount", this->ImpostorCount);
 
         JSON_TRYGET("ShowConsole", this->ShowConsole);
         JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
@@ -168,103 +178,113 @@ void Settings::Save() {
             {"ShowDebug", this->showDebugTab},
     #endif
             {"RgbTheme", this->RgbMenuTheme},
-            {"SetName", this->SetName},
-            {"MenuThemeColor_R", this->MenuThemeColor.x},
-            {"MenuThemeColor_G", this->MenuThemeColor.y},
-            {"MenuThemeColor_B", this->MenuThemeColor.z},
-            {"MenuThemeColor_A", this->MenuThemeColor.w},
-            {"UnlockCosmetics", this->UnlockCosmetics},
-            {"SetLevel", this->SetLevel},
-            {"FakeLevel", this->FakeLevel},
-            {"ShowKeybinds", this->ShowKeybinds},
-            {"HideFriendCode", this->HideFriendCode},
+            { "SetName", this->SetName },
+            { "MenuThemeColor_R", this->MenuThemeColor.x },
+            { "MenuThemeColor_G", this->MenuThemeColor.y },
+            { "MenuThemeColor_B", this->MenuThemeColor.z },
+            { "MenuThemeColor_A", this->MenuThemeColor.w },
+            { "UnlockCosmetics", this->UnlockCosmetics },
+            { "SetLevel", this->SetLevel },
+            { "FakeLevel", this->FakeLevel },
+            { "ShowKeybinds", this->ShowKeybinds },
+            { "HideFriendCode", this->HideFriendCode },
 
-            {"SelectedColorId", this->SelectedColorId},
-            {"SnipeColor", this->SnipeColor},
-            {"CycleInMeeting", this->CycleInMeeting},
-            {"CycleTimer", this->CycleTimer},
-            {"CyclerName1", this->userName1},
-            {"CyclerName2", this->userName2},
-            {"HostUsername", this->hostUserName},
-            {"ChatMessage", this->chatMessage},
-            {"CycleName", this->CycleName},
-            {"CycleColor", this->RandomColor},
-            {"CycleHat", this->RandomHat},
-            {"CycleVisor", this->RandomVisor},
-            {"CycleSkin", this->RandomSkin},
-            {"CyclePet", this->RandomPet},
-            {"CycleNamePlate", this->RandomNamePlate},
-            
-            {"PlayerSpeed", this->PlayerSpeed},
-            {"CameraHeight", this->CameraHeight},
-            {"FreeCamSpeed", this->FreeCamSpeed},
-            {"UserName", this->userName},
-            {"ShowGhosts", this->ShowGhosts},
-            {"ShowRadar", this->ShowRadar},
-            {"ShowRadar_DeadBodies", this->ShowRadar_DeadBodies},
-            {"ShowRadar_Ghosts", this->ShowRadar_Ghosts},
-            {"HideRadar_During_Meetings", this->HideRadar_During_Meetings},
-            {"LockRadar", this->LockRadar},
-            {"ShowRadar_RightClickTP", this->ShowRadar_RightClickTP},
-            {"RadarColor_R", this->SelectedColor.x},
-            {"RadarColor_G", this->SelectedColor.y},
-            {"RadarColor_B", this->SelectedColor.z},
-            {"RadarColor_A", this->SelectedColor.w},
-            {"RadarDrawIcons", this->RadarDrawIcons},
+            { "SelectedColorId", this->SelectedColorId },
+            { "SnipeColor", this->SnipeColor },
+            { "CycleInMeeting", this->CycleInMeeting },
+            { "CycleTimer", this->CycleTimer },
+            { "CyclerName1", this->userName1 },
+            { "CyclerName2", this->userName2 },
+            { "HostUsername", this->hostUserName },
+            { "ChatMessage", this->chatMessage },
+            { "CycleName", this->CycleName },
+            { "CycleColor", this->RandomColor },
+            { "CycleHat", this->RandomHat },
+            { "CycleVisor", this->RandomVisor },
+            { "CycleSkin", this->RandomSkin },
+            { "CyclePet", this->RandomPet },
+            { "CycleNamePlate", this->RandomNamePlate },
 
-            {"ShowReplay", this->ShowReplay},
-            {"ReplayColor_R", this->SelectedReplayMapColor.x},
-            {"ReplayColor_G", this->SelectedReplayMapColor.y},
-            {"ReplayColor_B", this->SelectedReplayMapColor.z},
-            {"ReplayColor_A", this->SelectedReplayMapColor.w},
-            {"ReplayShowOnlyLastSeconds", this->Replay_ShowOnlyLastSeconds},
-            {"ReplayLastSecondsValue", this->Replay_LastSecondsValue},
-            {"ReplayClearAfterMeeting", this->Replay_ClearAfterMeeting},
+            { "PlayerSpeed", this->PlayerSpeed },
+            { "MultiplySpeed", this->MultiplySpeed },
+            { "ModifyKillDistance", this->ModifyKillDistance },
+            { "ModifyTaskBarUpdates", this->ModifyTaskBarUpdates },
+            { "CameraHeight", this->CameraHeight },
+            { "FreeCamSpeed", this->FreeCamSpeed },
+            { "UserName", this->userName },
+            { "ShowGhosts", this->ShowGhosts },
+            { "ShowRadar", this->ShowRadar },
+            { "ShowRadar_DeadBodies", this->ShowRadar_DeadBodies },
+            { "ShowRadar_Ghosts", this->ShowRadar_Ghosts },
+            { "HideRadar_During_Meetings", this->HideRadar_During_Meetings },
+            { "LockRadar", this->LockRadar },
+            { "ShowRadar_RightClickTP", this->ShowRadar_RightClickTP },
+            { "RadarColor_R", this->SelectedColor.x },
+            { "RadarColor_G", this->SelectedColor.y },
+            { "RadarColor_B", this->SelectedColor.z },
+            { "RadarColor_A", this->SelectedColor.w },
+            { "RadarDrawIcons", this->RadarDrawIcons },
 
-            {"ShowEsp", this->ShowEsp},
-            {"ShowEsp_Ghosts", this->ShowEsp_Ghosts},
-            {"ShowEsp_Box", this->ShowEsp_Box},
-            {"ShowEsp_Tracers", this->ShowEsp_Tracers},
-            {"ShowEsp_Distance", this->ShowEsp_Distance},
-            {"HideEsp_During_Meetings", this->HideEsp_During_Meetings},
-            {"ShowEsp_RoleBased", this->ShowEsp_RoleBased},
+            { "ShowReplay", this->ShowReplay },
+            { "ReplayColor_R", this->SelectedReplayMapColor.x },
+            { "ReplayColor_G", this->SelectedReplayMapColor.y },
+            { "ReplayColor_B", this->SelectedReplayMapColor.z },
+            { "ReplayColor_A", this->SelectedReplayMapColor.w },
+            { "ReplayShowOnlyLastSeconds", this->Replay_ShowOnlyLastSeconds },
+            { "ReplayLastSecondsValue", this->Replay_LastSecondsValue },
+            { "ReplayClearAfterMeeting", this->Replay_ClearAfterMeeting },
 
-            {"MaxVision", this->MaxVision},
-            {"Wallhack", this->Wallhack},
-            {"FreeCamSpeed", this->FreeCamSpeed},
-            {"ZoomLevel", this->CameraHeight},
-            {"UnlockVents", this->UnlockVents},
-            {"ChatPaste", this->ChatPaste},
-            {"RevealRoles", this->RevealRoles},
-            {"AbbreviatedRoleNames", this->AbbreviatedRoleNames},
-            {"PlayerColoredNames", this->PlayerColoredNames},
-            {"ShowPlayerInfo", this->ShowPlayerInfo},
-            {"ChatAlwaysActive", this->ChatAlwaysActive},
-            {"ReadGhostMessages", this->ReadGhostMessages},
-            {"CustomName", this->CustomName},
-            {"RgbName", this->RgbName},
-            {"BoldName", this->BoldName},
-            {"ItalicName", this->ItalicName},
-            {"UnderlineName", this->UnderlineName},
-            {"StrikethroughName", this->StrikethroughName},
-            {"ColoredName", this->ColoredName},
-            {"NameColor_R", this->NameColor.x},
-            {"NameColor_G", this->NameColor.y},
-            {"NameColor_B", this->NameColor.z},
-            {"NameColor_A", this->NameColor.w},
-            {"AutoOpenDoors", this->AutoOpenDoors},
-            {"MoveInVent", this->MoveInVent},
-            {"AlwaysMove", this->AlwaysMove},
-            {"AnimationlessShapeshift", this->AnimationlessShapeshift},
-            {"DisableKillAnimation", this->DisableKillAnimation},
-            {"KillImpostors", this->KillImpostors},
-            {"FakeAlive", this->FakeAlive},
-            {"NoClip", this->NoClip},
+            { "ShowEsp", this->ShowEsp },
+            { "ShowEsp_Ghosts", this->ShowEsp_Ghosts },
+            { "ShowEsp_Box", this->ShowEsp_Box },
+            { "ShowEsp_Tracers", this->ShowEsp_Tracers },
+            { "ShowEsp_Distance", this->ShowEsp_Distance },
+            { "HideEsp_During_Meetings", this->HideEsp_During_Meetings },
+            { "ShowEsp_RoleBased", this->ShowEsp_RoleBased },
+            { "ShowEsp_Crew", this->ShowEsp_Crew },
+            { "ShowEsp_Imp", this->ShowEsp_Imp },
 
-            {"RevealVotes", this->RevealVotes},
-            {"RevealAnonymousVotes", this->RevealAnonymousVotes},
-            {"AdjustByDPI", this->AdjustByDPI},
-            {"ShowProtections", this->ShowProtections},
+            { "MaxVision", this->MaxVision },
+            { "Wallhack", this->Wallhack },
+            { "FreeCamSpeed", this->FreeCamSpeed },
+            { "ZoomLevel", this->CameraHeight },
+            { "UnlockVents", this->UnlockVents },
+            { "ChatPaste", this->ChatPaste },
+            { "RevealRoles", this->RevealRoles },
+            { "AbbreviatedRoleNames", this->AbbreviatedRoleNames },
+            { "PlayerColoredNames", this->PlayerColoredNames },
+            { "ShowPlayerInfo", this->ShowPlayerInfo },
+            { "ChatAlwaysActive", this->ChatAlwaysActive },
+            { "ReadGhostMessages", this->ReadGhostMessages },
+            { "CustomName", this->CustomName },
+            { "RgbName", this->RgbName },
+            { "BoldName", this->BoldName },
+            { "ItalicName", this->ItalicName },
+            { "UnderlineName", this->UnderlineName },
+            { "StrikethroughName", this->StrikethroughName },
+            { "ColoredName", this->ColoredName },
+            { "NameColor_R", this->NameColor.x },
+            { "NameColor_G", this->NameColor.y },
+            { "NameColor_B", this->NameColor.z },
+            { "NameColor_A", this->NameColor.w },
+            { "AutoOpenDoors", this->AutoOpenDoors },
+            { "MoveInVent", this->MoveInVent },
+            { "AlwaysMove", this->AlwaysMove },
+            { "AnimationlessShapeshift", this->AnimationlessShapeshift },
+            { "DisableKillAnimation", this->DisableKillAnimation },
+            { "KillImpostors", this->KillImpostors },
+            { "KillThroughWalls", this->KillThroughWalls },
+            { "InfiniteKillRange", this->InfiniteKillRange },
+            { "FakeAlive", this->FakeAlive },
+            { "NoClip", this->NoClip },
+
+            { "RevealVotes", this->RevealVotes },
+            { "RevealAnonymousVotes", this->RevealAnonymousVotes },
+            { "AdjustByDPI", this->AdjustByDPI },
+            { "ShowProtections", this->ShowProtections },
+
+            { "CustomImpostorAmount", this->CustomImpostorAmount },
+            { "ImpostorCount", this->ImpostorCount },
 
             {"ShowConsole", this->ShowConsole},
             {"ShowUnityLogs", this->ShowUnityLogs},
