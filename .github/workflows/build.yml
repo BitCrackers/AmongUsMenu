@@ -25,9 +25,9 @@ jobs:
       - name: Package Release Builds
         shell: cmd
         run: |
-          move /y Release\AmongUsMenu.dll AmongUsMenu.dll
+          move /y Release\SickoModeAU.dll SickoModeAU.dll
           move /y Release_Version\version.dll version.dll
-          tar -caf Release.zip AmongUsMenu.dll version.dll LICENSE
+          tar -caf Release.zip SickoModeAU.dll version.dll LICENSE
         
       - name: Upload Release Artifact
         uses: actions/upload-artifact@v2.2.3
@@ -52,9 +52,9 @@ jobs:
       - name: Package Debug Builds
         shell: cmd
         run: |
-          move /y Debug\AmongUsMenu.dll AmongUsMenu.dll
+          move /y Debug\SickoModeAU.dll SickoModeAU.dll
           move /y Debug_Version\version.dll version.dll
-          tar -caf Debug.zip AmongUsMenu.dll version.dll LICENSE
+          tar -caf Debug.zip SickoModeAU.dll version.dll LICENSE
         
       - name: Upload Debug Artifact
         uses: actions/upload-artifact@v2.2.3
