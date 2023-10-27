@@ -95,7 +95,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 		// SeeProtect
 		do {
-			if (!__this->fields.protectedByGuardian)
+			if (__this->fields.protectedByGuardianId <= -1)
 				break;
 			if (localData->fields.IsDead)
 				break;
@@ -121,7 +121,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			float _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
 			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, _Duration);
 			if (_Duration > 0.f)
-				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, nullptr);
+				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, __this->fields.protectedByGuardianId, nullptr);
 			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
 		} while (0);
 
@@ -310,7 +310,7 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsB
 	PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
 }
 
-void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
+void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MurderResultFlags__Enum resultFlags, MethodInfo* method)
 {
 	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
 		synchronized(Replay::replayEventMutex) {
@@ -324,7 +324,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 	// ESP: Reset Kill Cooldown
 	if (__this->fields._.OwnerId != (*Game::pAmongUsClient)->fields._.ClientId) {
-		if (!target || target->fields.protectedByGuardian == false)
+		if (!target || target->fields.protectedByGuardianId <= -1)
 			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown(), 0.f);
 		else
 			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown() * 0.5f, 0.f);
@@ -333,7 +333,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 	do {
 		if (!State.ShowProtections) break;
-		if (!target || target->fields.protectedByGuardian == false)
+		if (!target || target->fields.protectedByGuardianId <= -1)
 			break;
 		if (__this->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId)
 			break; // AmKiller
@@ -341,10 +341,11 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 			!localData || !localData->fields.Role
 			|| localData->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel)
 			break; // AmAngel
+		int prev = target->fields.protectedByGuardianId;
 		PlayerControl_ShowFailedMurder(target, nullptr);
-		target->fields.protectedByGuardian = true;
+		target->fields.protectedByGuardianId = prev;
 	} while (false);
-	PlayerControl_MurderPlayer(__this, target, method);
+	PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 }
 
 void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
@@ -426,8 +427,8 @@ void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, 
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }
 
-void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method) {
-	app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, method);
+void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, int32_t guardianPlayerId, MethodInfo* method) {
+	app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, guardianPlayerId, method);
 	std::pair pair { colorId, app::Time_get_time(nullptr) };
 	synchronized(State.protectMutex) {
 		State.protectMonitor[__this->fields.PlayerId] = pair;

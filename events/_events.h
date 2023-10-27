@@ -75,7 +75,7 @@ struct EVENT_PLAYER {
 		isAngel = (playerInfo->fields.Role) ? playerInfo->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel : false;
 		
 		if (auto object = GameData_PlayerInfo_get_Object(playerInfo, nullptr))
-			isProtected = object->fields.protectedByGuardian;
+			isProtected = object->fields.protectedByGuardianId >= 0;
 		else
 			isProtected = false;
 	}

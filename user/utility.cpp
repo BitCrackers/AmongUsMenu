@@ -293,7 +293,8 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	{
 		if (door->fields.Room == room)
 		{
-			return door;
+			// TODO 231024
+			return (PlainDoor*)door;
 		}
 	}
 

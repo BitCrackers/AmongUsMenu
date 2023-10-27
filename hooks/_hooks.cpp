@@ -155,7 +155,7 @@ void DetourInitilization() {
 	HOOKFUNC(EOSManager_UpdatePermissionKeys);
 	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	HOOKFUNC(ExileController_ReEnableGameplay);
-	HOOKFUNC(SabotageSystemType_ForceSabTime);
+	HOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
@@ -236,7 +236,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(EOSManager_UpdatePermissionKeys);
 	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
-	UNHOOKFUNC(SabotageSystemType_ForceSabTime);
+	UNHOOKFUNC(SabotageSystemType_SetInitialSabotageCooldown);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

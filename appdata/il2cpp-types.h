@@ -4396,6 +4396,28 @@ namespace app
 #endif
 #pragma endregion
 
+#pragma region MurderResultFlags__Enum
+#if defined(_CPLUSPLUS_)
+    enum class MurderResultFlags__Enum : int32_t {
+        NULL_1 = 0x00000000,
+        Succeeded = 0x00000001,
+        FailedError = 0x00000002,
+        FailedProtected = 0x00000004,
+        DecisionByHost = 0x00000008,
+    };
+
+#else
+    enum MurderResultFlags__Enum {
+        MurderResultFlags__Enum_NULL_1 = 0x00000000,
+        MurderResultFlags__Enum_Succeeded = 0x00000001,
+        MurderResultFlags__Enum_FailedError = 0x00000002,
+        MurderResultFlags__Enum_FailedProtected = 0x00000004,
+        MurderResultFlags__Enum_DecisionByHost = 0x00000008,
+};
+
+#endif
+#pragma endregion
+
 #pragma region AccountTab
     struct AccountTab__Fields
     {
@@ -9712,7 +9734,7 @@ namespace app
     };
 
     struct OpenableDoor {
-        void* klass;
+        Il2CppClass* klass;
         MonitorData* monitor;
         struct OpenableDoor__Fields fields;
     };

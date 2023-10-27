@@ -16,5 +16,5 @@ RpcRepairSystem::RpcRepairSystem(SystemTypes__Enum selectedSystem, uint32_t amou
 
 void RpcRepairSystem::Process()
 {
-	ShipStatus_RpcRepairSystem(*Game::pShipStatus, this->selectedSystem, this->amount, NULL);
+	ShipStatus_RpcUpdateSystem(*Game::pShipStatus, this->selectedSystem, this->amount, NULL);
 }
