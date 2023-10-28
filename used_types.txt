@@ -60,7 +60,7 @@ EOSManager
 FullAccount
 SpawnFlags__Enum
 InnerNetObject
-PlainDoor__Array
+OpenableDoor__Array
 PlayerVoteArea
 PlayerVoteArea__Array
 SystemTypes__Enum
@@ -68,7 +68,6 @@ PlainShipRoom
 PlainShipRoom__Array
 ShipStatus_MapType__Enum
 ShipStatus
-StringNames__Enum
 SwitchSystem
 ISystemType
 Dictionary_2_TKey_TValue_Entry_SystemTypes_ISystemType_
@@ -221,3 +220,8 @@ UpdateState__Enum
 AbstractChatInputField__Fields
 FreeChatInputField__Fields
 FreeChatInputField
+MurderResultFlags__Enum
+FungleShipStatus
+OpenableDoor
+MushroomWallDoor
+MushroomDoorSabotageMinigame

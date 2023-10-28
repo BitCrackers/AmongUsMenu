@@ -9,5 +9,6 @@ RpcMurderPlayer::RpcMurderPlayer(const PlayerSelection& target)
 
 void RpcMurderPlayer::Process()
 {
-	PlayerControl_RpcMurderPlayer(*Game::pLocalPlayer, target.get_PlayerControl().value_or(nullptr), NULL);
+	(*Game::pLocalPlayer)->fields.isKilling = true;
+	PlayerControl_RpcMurderPlayer(*Game::pLocalPlayer, target.get_PlayerControl().value_or(nullptr), true, NULL);
 }

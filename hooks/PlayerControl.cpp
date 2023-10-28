@@ -10,14 +10,15 @@
 #include <optional>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
-	std::optional<TaskTypes__Enum> taskType = std::nullopt;
+	if (auto player = GetEventPlayerControl(__this)) {
+		std::optional<TaskTypes__Enum> taskType = std::nullopt;
+		auto normalPlayerTasks = GetNormalPlayerTasks(__this);
+		for (auto normalPlayerTask : normalPlayerTasks)
+			if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	auto normalPlayerTasks = GetNormalPlayerTasks(__this);
-	for (auto normalPlayerTask : normalPlayerTasks)
-		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
-
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<TaskCompletedEvent>(player.value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+		}
 	}
 	PlayerControl_CompleteTask(__this, idx, method);
 }
@@ -95,7 +96,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 
 		// SeeProtect
 		do {
-			if (!__this->fields.protectedByGuardian)
+			if (__this->fields.protectedByGuardianId <= -1)
 				break;
 			if (localData->fields.IsDead)
 				break;
@@ -121,7 +122,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 			float _Duration = ProtectionDurationSeconds - (app::Time_get_time(nullptr) - pair.second);
 			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, _Duration);
 			if (_Duration > 0.f)
-				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, nullptr);
+				app::PlayerControl_TurnOnProtection(__this, State.ShowProtections, pair.first, __this->fields.protectedByGuardianId, nullptr);
 			options.SetFloat(app::FloatOptionNames__Enum::ProtectionDurationSeconds, ProtectionDurationSeconds);
 		} while (0);
 
@@ -310,21 +311,30 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsB
 	PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
 }
 
-void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
+void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MurderResultFlags__Enum resultFlags, MethodInfo* method)
 {
-	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
-		synchronized(Replay::replayEventMutex) {
-			State.liveReplayEvents.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
-		}
+	if (static_cast<int32_t>(resultFlags) & static_cast<int32_t>(MurderResultFlags__Enum::FailedError)) {
+		app::PlayerControl_MurderPlayer(__this, target, resultFlags, method);
+		return;
 	}
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-		State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
+
+	auto killer = GetEventPlayerControl(__this);
+	auto victim = GetEventPlayerControl(target);
+	if (killer && victim) {
+		if(PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
+			synchronized(Replay::replayEventMutex) {
+				State.liveReplayEvents.emplace_back(std::make_unique<CheatDetectedEvent>(killer.value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+			}
+		}
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<KillEvent>(killer.value(), victim.value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+			State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
+		}
 	}
 
 	// ESP: Reset Kill Cooldown
 	if (__this->fields._.OwnerId != (*Game::pAmongUsClient)->fields._.ClientId) {
-		if (!target || target->fields.protectedByGuardian == false)
+		if (!target || target->fields.protectedByGuardianId <= -1)
 			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown(), 0.f);
 		else
 			__this->fields.killTimer = (std::max)(GameOptions().GetKillCooldown() * 0.5f, 0.f);
@@ -333,7 +343,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 	do {
 		if (!State.ShowProtections) break;
-		if (!target || target->fields.protectedByGuardian == false)
+		if (!target || target->fields.protectedByGuardianId <= -1)
 			break;
 		if (__this->fields._.OwnerId == (*Game::pAmongUsClient)->fields._.ClientId)
 			break; // AmKiller
@@ -341,16 +351,20 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 			!localData || !localData->fields.Role
 			|| localData->fields.Role->fields.Role == RoleTypes__Enum::GuardianAngel)
 			break; // AmAngel
+		int prev = target->fields.protectedByGuardianId;
 		PlayerControl_ShowFailedMurder(target, nullptr);
-		target->fields.protectedByGuardian = true;
+		target->fields.protectedByGuardianId = prev;
 	} while (false);
-	PlayerControl_MurderPlayer(__this, target, method);
+	PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 }
 
 void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	if (auto player = GetEventPlayerControl(__this);
+		player && target) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(player.value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+		}
 	}
 	app::PlayerControl_StartMeeting(__this, target, method);
 }
@@ -413,21 +427,29 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	auto source_player = GetEventPlayerControl(__this);
+	auto target_player = GetEventPlayerControl(target);
+	if (source_player && target_player) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ShapeShiftEvent>(source_player.value(), target_player.value()));
+		}
 	}
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	auto source_player = GetEventPlayerControl(__this);
+	auto target_player = GetEventPlayerControl(target);
+	if (source_player && target_player) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(source_player.value(), target_player.value()));
+		}
 	}
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }
 
-void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, MethodInfo* method) {
-	app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, method);
+void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, int32_t guardianPlayerId, MethodInfo* method) {
+	app::PlayerControl_TurnOnProtection(__this, visible || State.ShowProtections, colorId, guardianPlayerId, method);
 	std::pair pair { colorId, app::Time_get_time(nullptr) };
 	synchronized(State.protectMutex) {
 		State.protectMonitor[__this->fields.PlayerId] = pair;

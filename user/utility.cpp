@@ -7,6 +7,8 @@
 #include "profiler.h"
 #include <random>
 
+using namespace std::string_view_literals;
+
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 int randi(int lo, int hi) {
@@ -122,8 +124,7 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 #pragma region PlayerSelection
 PlayerSelection::PlayerSelection() noexcept
 {
-	this->clientId = Game::NoClientId;
-	this->playerId = Game::NoPlayerId;
+	this->reset();
 }
 
 PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
@@ -132,12 +133,16 @@ PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
 		this->playerId = playerControl->fields.PlayerId;
 	}
 	else {
-		new (this)PlayerSelection();
+		this->reset();
 	}
 }
 
 PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
 	new (this)PlayerSelection(app::GameData_PlayerInfo_get_Object(playerData, nullptr));
+}
+
+PlayerSelection::PlayerSelection(const PlayerSelection::Result& result) {
+	new (this)PlayerSelection(result.has_value() ? result.get_PlayerControl() : nullptr);
 }
 
 PlayerSelection::Result PlayerSelection::validate() {
@@ -148,15 +153,25 @@ PlayerSelection::Result PlayerSelection::validate() {
 			return { (*playerControl), playerData };
 		}
 	}
-	this->clientId = Game::NoClientId;
-	this->playerId = Game::NoPlayerId;
+	this->reset();
 	return {};
 }
 
 bool PlayerSelection::equals(const PlayerSelection& selectedPlayer) const
 {
+	if (this == &selectedPlayer) return true;
 	if (!this->has_value() || !selectedPlayer.has_value()) return false;
 	return std::tie(clientId,  playerId) == std::tie(selectedPlayer.clientId, selectedPlayer.playerId);
+}
+
+bool PlayerSelection::equals(const PlayerSelection::Result& selectedPlayer) const {
+	if (!this->has_value() || !selectedPlayer.has_value()) return false;
+	if (clientId == Game::HostInherit) {
+		return playerId == selectedPlayer.get_PlayerControl()->fields.PlayerId;
+	}
+	return std::tie(clientId, playerId) ==
+		std::tie(selectedPlayer.get_PlayerControl()->fields._.OwnerId,
+			selectedPlayer.get_PlayerControl()->fields.PlayerId);
 }
 
 std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
@@ -201,27 +216,6 @@ std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
 		return data;
 	}
 	return std::nullopt;
-}
-
-Game::PlayerId PlayerSelection::get_PlayerId() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->playerId;
-}
-
-Game::ClientId PlayerSelection::get_ClientId() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->clientId;
-}
-
-bool PlayerSelection::is_LocalPlayer() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }
 #pragma endregion
 
@@ -288,8 +282,8 @@ PlayerControl* GetPlayerControlById(Game::PlayerId id) {
 	return NULL;
 }
 
-PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
-	for (auto door : il2cpp::Array((*Game::pShipStatus)->fields.AllDoors))
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room) {
+	for (auto door : GetAllOpenableDoors())
 	{
 		if (door->fields.Room == room)
 		{
@@ -300,7 +294,7 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	return nullptr;
 }
 
-il2cpp::Array<PlainDoor__Array> GetAllPlainDoors() {
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors() {
 	return (*Game::pShipStatus)->fields.AllDoors;
 }
 
@@ -337,14 +331,16 @@ std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player) {
 	return normalPlayerTasks;
 }
 
-SabotageTask* GetSabotageTask(PlayerControl* player) {
+Object_1* GetSabotageTask(PlayerControl* player) {
 	static std::string sabotageTaskType = translate_type_name("SabotageTask");
 
 	auto playerTasks = GetPlayerTasks(player);
 
 	for (auto playerTask : playerTasks)
-		if (sabotageTaskType == playerTask->klass->_0.name || sabotageTaskType == playerTask->klass->_0.parent->name)
-			return (SabotageTask*)playerTask;
+		if (sabotageTaskType == playerTask->klass->_0.name
+			|| sabotageTaskType == playerTask->klass->_0.parent->name
+			|| "MushroomMixupSabotageTask"sv == playerTask->klass->_0.name)
+			return (Object_1*)playerTask;
 
 	return NULL;
 }
@@ -375,22 +371,18 @@ void RepairSabotage(PlayerControl* player) {
 			}
 		}
 	}
-
-	if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
+	else if (hqHudOverrideTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 16));
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 17));
 	}
-
-	if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
+	else if (hudOverrideTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Comms, 0));
 	}
-
-	if (noOxyTaskType == sabotageTask->klass->_0.name) {
+	else if (noOxyTaskType == sabotageTask->klass->_0.name) {
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 64));
 		State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::LifeSupp, 65));
 	}
-
-	if (reactorTaskType == sabotageTask->klass->_0.name) {
+	else if (reactorTaskType == sabotageTask->klass->_0.name) {
 		if (State.mapType == Settings::MapType::Ship || State.mapType == Settings::MapType::Hq) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 64));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 65));
@@ -404,6 +396,12 @@ void RepairSabotage(PlayerControl* player) {
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 16));
 			State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::Reactor, 17));
 		}
+	}
+	else if ("MushroomMixupSabotageTask"sv == sabotageTask->klass->_0.name) {
+		//State.rpcQueue.push(new RpcRepairSystem(SystemTypes__Enum::MushroomMixupSabotage, 0));
+	}
+	else {
+		STREAM_ERROR("Unknown Task:" << sabotageTask->klass->_0.name);
 	}
 }
 
@@ -421,7 +419,12 @@ const char* TranslateTaskTypes(TaskTypes__Enum taskType) {
 		"Buy Beverage", "Process Data", "Run Diagnostics", "Water Plants", "Monitor Oxygen", "Store Artifacts", "Fill Canisters", "Activate Weather Nodes", "Insert Keys",
 		"Reset Seismic Stabilizers", "Scan Boarding Pass", "Open Waterways", "Replace Water Jug", "Repair Drill", "Align Telecopse", "Record Temperature", "Reboot Wifi",
 		"Polish Ruby", "Reset Breakers", "Decontaminate", "Make Burger", "Unlock Safe", "Sort Records", "Put Away Pistols", "Fix Shower", "Clean Toilet", "Dress Mannequin",
-		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning"};
+		"Pick Up Towels", "Rewind Tapes", "Start Fans", "Develop Photos", "Get Biggol Sword", "Put Away Rifles", "Stop Charles", "Vent Cleaning", "None",
+		// 2023.10.24 added
+		"Build Sandcastle", "Catch Fish","Collect Shells", "Lift Weights", "Roast Marshmallow", "Throw Frisbee", "Collect Samples", "Collect Vegetables",
+		"Hoist Supplies", "Mine Ores", "Polish Gem", "Replace Parts", "Help Critter", "Crank Generator", "Fix Antenna", "Find Signal", "Mushroom Mixup Sabotage", 
+		"Extract Fuel", "Monitor Mushroom", "Play Video Game",
+	};
 	return TASK_TRANSLATIONS.at(static_cast<size_t>(taskType));
 }
 
@@ -430,7 +433,10 @@ const char* TranslateSystemTypes(SystemTypes__Enum systemType) {
 		"MedBay", "Security", "Weapons", "Lower Engine", "Communications", "Ship Tasks", "Doors", "Sabotage", "Decontamination", "Launchpad", "Locker Room", "Laboratory",
 		"Balcony", "Office", "Greenhouse", "Dropship", "Decontamination", "Outside", "Specimen Room", "Boiler Room", "Vault Room", "Cockpit", "Armory", "Kitchen", "Viewing Deck",
 		"Hall Of Portraits", "Cargo Bay", "Ventilation", "Showers", "Engine Room", "The Brig", "Meeting Room", "Records Room", "Lounge Room", "Gap Room", "Main Hall", "Medical",
-		"Decontamination" };
+		"Decontamination",
+		// 2023.10.24 added
+		"Zipline", "Mining Pit", "Fishing Dock", "Rec Room", "Lookout", "Beach", "Highlands", "Jungle", "Sleeping Quarters", "Mushroom Mixup Sabotage", "Heli Sabotage",
+	};
 	return SYSTEM_TRANSLATIONS.at(static_cast<size_t>(systemType));
 }
 
@@ -594,10 +600,10 @@ std::string GetGitBranch()
 	return "unavailable";
 }
 
-void ImpersonateName(PlayerSelection& _player)
+void ImpersonateName(__maybenull GameData_PlayerInfo* data)
 {
-	auto player = _player.validate(); if (!player.has_value()) return;
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	if (!data) return;
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(data);
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
 	const auto& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 	if (playerName.length() < 10) {
@@ -704,6 +710,7 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 	switch (roleBehaviour->fields.Role) {
 	default:
 	case RoleTypes__Enum::Crewmate:
+	case RoleTypes__Enum::CrewmateGhost:
 		c = Palette__TypeInfo->static_fields->White;
 		break;
 	case RoleTypes__Enum::Engineer:
@@ -713,6 +720,7 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 		break;
 	case RoleTypes__Enum::Impostor:
 	case RoleTypes__Enum::Shapeshifter:
+	case RoleTypes__Enum::ImpostorGhost:
 		c = Palette__TypeInfo->static_fields->ImpostorRed;
 		break;
 	}
@@ -730,12 +738,14 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = fals
 		case RoleTypes__Enum::GuardianAngel:
 			return (abbreviated ? "GA" : "GuardianAngel");
 		case RoleTypes__Enum::Impostor:
+		case RoleTypes__Enum::ImpostorGhost:
 			return (abbreviated ? "Imp" : "Impostor");
 		case RoleTypes__Enum::Scientist:
 			return (abbreviated ? "Sci" : "Scientist");
 		case RoleTypes__Enum::Shapeshifter:
 			return (abbreviated ? "SH" : "Shapeshifter");
 		case RoleTypes__Enum::Crewmate:
+		case RoleTypes__Enum::CrewmateGhost:
 			return (abbreviated ? "Crew" : "Crewmate");
 		default:
 			return (abbreviated ? "Unk" : "Unknown");
@@ -838,7 +848,10 @@ std::string GetPlayerName() {
 	LOG_ASSERT(field != nullptr);
 	auto customization = il2cpp_field_get_value_object(field, player);
 	LOG_ASSERT(customization != nullptr);
-	return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
+	static FieldInfo* field2 = il2cpp_class_get_field_from_name(customization->Il2CppClass.klass, "name");
+	auto name = il2cpp_field_get_value_object(field2, customization);
+	LOG_ASSERT(name != nullptr);
+	return convert_from_string(reinterpret_cast<String*>(name));
 }
 
 void SetPlayerName(std::string_view name) {

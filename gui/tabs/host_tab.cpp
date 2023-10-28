@@ -85,17 +85,23 @@ namespace HostTab {
 
 				// AU v2022.8.24 has been able to change maps in lobby.
 				State.mapHostChoice = options.GetByte(app::ByteOptionNames__Enum::MapId);
-				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, 4);
+				if (State.mapHostChoice > 3)
+					State.mapHostChoice--;
+				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, (int)MAP_NAMES.size()-1);
 				if (CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
-						if (State.mapHostChoice == 3) {
+						// disable flip
+						/*if (State.mapHostChoice == 3) {
 							options.SetByte(app::ByteOptionNames__Enum::MapId, 0);
 							State.FlipSkeld = true;
 						}
 						else {
 							options.SetByte(app::ByteOptionNames__Enum::MapId, State.mapHostChoice);
 							State.FlipSkeld = false;
-						}
+						}*/
+						auto id = State.mapHostChoice;
+						if (id >= 3) id++;
+						options.SetByte(app::ByteOptionNames__Enum::MapId, id);
 					}
 				}
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);

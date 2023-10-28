@@ -181,7 +181,8 @@ public:
         Ship = 0,
         Hq = 1,
         Pb = 2,
-        Airship = 3
+        Airship = 3,
+        Fungle = 4,
     } mapType = MapType::Ship;
 
     bool AutoOpenDoors = false;

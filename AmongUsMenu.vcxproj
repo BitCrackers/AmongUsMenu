@@ -64,6 +64,7 @@
     <ClCompile Include="hooks\Dleks.cpp" />
     <ClCompile Include="hooks\EOSManager.cpp" />
     <ClCompile Include="hooks\ExileController.cpp" />
+    <ClCompile Include="hooks\FungleShipStatus.cpp" />
     <ClCompile Include="hooks\GameOptionsManager.cpp" />
     <ClCompile Include="hooks\HudManager.cpp" />
     <ClCompile Include="hooks\InnerNetClient.cpp" />

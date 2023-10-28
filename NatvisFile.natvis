@@ -99,7 +99,7 @@
   <Type Name="app::Object_1__Array">
     <AlternativeType Name="app::PlayerVoteArea__Array"/>
     <AlternativeType Name="app::PlainShipRoom__Array"/>
-    <AlternativeType Name="app::PlainDoor__Array"/>
+    <AlternativeType Name="app::OpenableDoor__Array"/>
     <AlternativeType Name="app::PlayerTask__Array"/>
     <AlternativeType Name="app::PlayerControl__Array"/>
     <AlternativeType Name="app::ClientData__Array"/>

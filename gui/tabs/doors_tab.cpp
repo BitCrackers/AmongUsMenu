@@ -6,6 +6,8 @@
 #include "state.hpp"
 #include "utility.h"
 
+using namespace std::string_view_literals;
+
 namespace DoorsTab {
 	void Render() {
 		GameOptions options;
@@ -13,10 +15,23 @@ namespace DoorsTab {
 			if (ImGui::BeginTabItem("Doors")) {
 				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true);
 				bool shouldEndListBox = ImGui::ListBoxHeader("###doors#list", ImVec2(200, 150) * State.dpiScale);
-				for (size_t i = 0; i < State.mapDoors.size(); i++) {
-					auto systemType = State.mapDoors[i];
-					if (systemType == SystemTypes__Enum::Decontamination || systemType == SystemTypes__Enum::Decontamination2) continue;
-					auto plainDoor = GetPlainDoorByRoom(systemType);
+				for (auto systemType : State.mapDoors) {
+					if (systemType == SystemTypes__Enum::Decontamination
+						|| systemType == SystemTypes__Enum::Decontamination2
+						|| systemType == SystemTypes__Enum::Decontamination3) {
+						continue;
+					}
+					bool isOpen;
+					auto openableDoor = GetOpenableDoorByRoom(systemType);
+					if ("PlainDoor"sv == openableDoor->klass->parent->name
+						|| "PlainDoor"sv == openableDoor->klass->name) {
+						isOpen = reinterpret_cast<PlainDoor*>(openableDoor)->fields.Open;
+					} else if ("MushroomWallDoor"sv == openableDoor->klass->name) {
+						isOpen = reinterpret_cast<MushroomWallDoor*>(openableDoor)->fields.open;
+					}
+					else {
+						continue;
+					}
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, { 0.9f, 0.1f, 0.25f, 1.f });
@@ -24,7 +39,7 @@ namespace DoorsTab {
 							State.selectedDoor = systemType;
 						ImGui::PopStyleColor(1);
 					}
-					else if (!plainDoor->fields.Open)
+					else if (!isOpen)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, { 0.85f, 0.2f, 0.5f, 1.f });
 						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
@@ -71,7 +86,9 @@ namespace DoorsTab {
 					{
 						if (std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), door) == State.pinnedDoors.end())
 						{
-							if(door != SystemTypes__Enum::Decontamination && door != SystemTypes__Enum::Decontamination2)
+							if(door != SystemTypes__Enum::Decontamination
+								&& door != SystemTypes__Enum::Decontamination2
+								&& door != SystemTypes__Enum::Decontamination3)
 								State.rpcQueue.push(new RpcCloseDoorsOfType(door, true));
 						}
 					}
@@ -82,8 +99,6 @@ namespace DoorsTab {
 				}
 				ImGui::NewLine();
 				if (State.selectedDoor != SystemTypes__Enum::Hallway) {
-					auto plainDoor = GetPlainDoorByRoom(State.selectedDoor);
-
 					if (ImGui::Button("Close Door")) {
 						State.rpcQueue.push(new RpcCloseDoorsOfType(State.selectedDoor, false));
 					}
@@ -99,7 +114,8 @@ namespace DoorsTab {
 						}
 					}
 				}
-				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
+				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship
+					|| State.mapType == Settings::MapType::Fungle)
 				{
 					ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {

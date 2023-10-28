@@ -3,8 +3,8 @@
 #include "utility.h"
 #include "logger.h"
 
-void dSabotageSystemType_ForceSabTime(SabotageSystemType* __this, float t, MethodInfo* method) {
-    app::SabotageSystemType_ForceSabTime(__this, t, method);
+void dSabotageSystemType_SetInitialSabotageCooldown(SabotageSystemType* __this, MethodInfo* method) {
+    app::SabotageSystemType_SetInitialSabotageCooldown(__this, method);
 
 	// ESP: Initialize Kill Cooldown
 	for (auto pc : GetAllPlayerControl()) {

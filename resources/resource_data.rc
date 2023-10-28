@@ -78,6 +78,8 @@ IDB_PNG13               PNG                     "play.png"
 
 IDB_PNG14               PNG                     "pause.png"
 
+IDB_PNG15               PNG                     "the_fungle.png"
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

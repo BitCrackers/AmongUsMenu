@@ -84,13 +84,14 @@ class PlayerSelection {
 #endif
 			return _playerData->fields.Disconnected;
 		}
-		constexpr bool equals(_Maybenull_ const PlayerControl* playerControl) const {
-			return _playerControl == playerControl;
+		constexpr bool equals(const Result& _Right) const noexcept {
+			if (!this->has_value() || !_Right.has_value()) return false;
+			return _playerControl == _Right._playerControl;
 		}
-		constexpr bool equals(_Maybenull_ const GameData_PlayerInfo* playerData) const {
-			return _playerData == playerData;
+		constexpr bool has_value() const noexcept {
+			return _has_value;
 		}
-		constexpr bool has_value() const {
+		constexpr operator bool() const noexcept {
 			return _has_value;
 		}
 	private:
@@ -116,13 +117,24 @@ public:
 	PlayerSelection() noexcept;
 	explicit PlayerSelection(const  PlayerControl* playerControl);
 	explicit PlayerSelection(GameData_PlayerInfo* playerData);
+	PlayerSelection(const PlayerSelection::Result& result);
 
 	PlayerSelection::Result validate();
 
 	bool equals(const PlayerSelection& selectedPlayer) const;
-	Game::PlayerId get_PlayerId() const noexcept;
-	Game::ClientId get_ClientId() const noexcept;
-	bool is_LocalPlayer() const noexcept;
+	bool equals(const PlayerSelection::Result& selectedPlayer) const;
+	Game::PlayerId get_PlayerId() const noexcept {
+		return this->playerId;
+	}
+	Game::ClientId get_ClientId() const noexcept {
+		return this->clientId;
+	}
+
+	constexpr void reset() noexcept {
+		this->clientId = Game::NoClientId;
+		this->playerId = Game::NoPlayerId;
+	}
+
 	bool has_value() const noexcept {
 		return (this->clientId != Game::NoClientId || this->playerId != Game::NoPlayerId);
 	}
@@ -147,14 +159,15 @@ GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
 PlayerControl* GetPlayerControlById(Game::PlayerId id);
-PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
-il2cpp::Array<PlainDoor__Array> GetAllPlainDoors();
+// MushroomWallDoor or PlainDoor
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room);
+il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
 il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies();
 il2cpp::List<List_1_PlayerTask_> GetPlayerTasks(PlayerControl* player);
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player);
-SabotageTask* GetSabotageTask(PlayerControl* player);
+Object_1* GetSabotageTask(PlayerControl* player);
 void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
@@ -180,7 +193,7 @@ std::string ToString(__maybenull PlayerControl* player);
 std::string ToString(__maybenull GameData_PlayerInfo* data);
 std::string GetGitCommit();
 std::string GetGitBranch();
-void ImpersonateName(PlayerSelection& player);
+void ImpersonateName(__maybenull GameData_PlayerInfo* data);
 Game::ColorId GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
