@@ -42,10 +42,10 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
             }
             else
                 app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(*Game::pLocalPlayer), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
-            for (auto player : GetAllPlayerControl()) {
+            /*for (auto player : GetAllPlayerControl()) {
                 if (player != *Game::pLocalPlayer)
                     app::GameObject_set_layer(app::Component_get_gameObject((Component_1*)(player), NULL), app::LayerMask_NameToLayer(convert_to_string("Ghost"), NULL), NULL);
-            }
+            }*/ //unintentionally prevents admin from working, workaround can be found later
         }
 
         if (!IsInGame()) {
