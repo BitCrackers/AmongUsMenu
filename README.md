@@ -1,4 +1,4 @@
-## Version 1.0: The Fungle Update
+## Version 1.1: The Doors and Patches Update
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
 ## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
@@ -105,6 +105,8 @@ Self Tab:
 11. Coordinate-based Teleport (input x and y coordinates)
 12. Move in Meeting (self-explanatory)
 13. Fake Role (adds a client-sided role such as impostor)
+14. Kill Through Walls (self-explanatory)
+15. Infinite Kill Range (allows "infinite" kill distance)
 
 Radar Tab / Radar:
 1. Changed the crewmate icon
