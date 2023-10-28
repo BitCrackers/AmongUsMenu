@@ -124,8 +124,7 @@ Vector2 GetTrueAdjustedPosition(PlayerControl* playerControl)
 #pragma region PlayerSelection
 PlayerSelection::PlayerSelection() noexcept
 {
-	this->clientId = Game::NoClientId;
-	this->playerId = Game::NoPlayerId;
+	this->reset();
 }
 
 PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
@@ -134,12 +133,16 @@ PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
 		this->playerId = playerControl->fields.PlayerId;
 	}
 	else {
-		new (this)PlayerSelection();
+		this->reset();
 	}
 }
 
 PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
 	new (this)PlayerSelection(app::GameData_PlayerInfo_get_Object(playerData, nullptr));
+}
+
+PlayerSelection::PlayerSelection(const PlayerSelection::Result& result) {
+	new (this)PlayerSelection(result.has_value() ? result.get_PlayerControl() : nullptr);
 }
 
 PlayerSelection::Result PlayerSelection::validate() {
@@ -150,15 +153,25 @@ PlayerSelection::Result PlayerSelection::validate() {
 			return { (*playerControl), playerData };
 		}
 	}
-	this->clientId = Game::NoClientId;
-	this->playerId = Game::NoPlayerId;
+	this->reset();
 	return {};
 }
 
 bool PlayerSelection::equals(const PlayerSelection& selectedPlayer) const
 {
+	if (this == &selectedPlayer) return true;
 	if (!this->has_value() || !selectedPlayer.has_value()) return false;
 	return std::tie(clientId,  playerId) == std::tie(selectedPlayer.clientId, selectedPlayer.playerId);
+}
+
+bool PlayerSelection::equals(const PlayerSelection::Result& selectedPlayer) const {
+	if (!this->has_value() || !selectedPlayer.has_value()) return false;
+	if (clientId == Game::HostInherit) {
+		return playerId == selectedPlayer.get_PlayerControl()->fields.PlayerId;
+	}
+	return std::tie(clientId, playerId) ==
+		std::tie(selectedPlayer.get_PlayerControl()->fields._.OwnerId,
+			selectedPlayer.get_PlayerControl()->fields.PlayerId);
 }
 
 std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
@@ -203,27 +216,6 @@ std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
 		return data;
 	}
 	return std::nullopt;
-}
-
-Game::PlayerId PlayerSelection::get_PlayerId() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->playerId;
-}
-
-Game::ClientId PlayerSelection::get_ClientId() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->clientId;
-}
-
-bool PlayerSelection::is_LocalPlayer() const noexcept {
-#if 0//_DEBUG
-	LOG_ASSERT(this->has_value());
-#endif
-	return this->clientId == (*Game::pAmongUsClient)->fields._.ClientId;
 }
 #pragma endregion
 
@@ -608,10 +600,10 @@ std::string GetGitBranch()
 	return "unavailable";
 }
 
-void ImpersonateName(PlayerSelection& _player)
+void ImpersonateName(__maybenull GameData_PlayerInfo* data)
 {
-	auto player = _player.validate(); if (!player.has_value()) return;
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(player.get_PlayerData());
+	if (!data) return;
+	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(data);
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
 	const auto& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
 	if (playerName.length() < 10) {

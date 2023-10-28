@@ -133,7 +133,11 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 		response = false;
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		for (auto playerData : GetAllPlayerData()) {
-			if (playerData->fields.Disconnected) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
+			auto playerSelection = PlayerSelection(playerData);
+			const auto& player = playerSelection.validate();
+			if (!player.has_value())
+				continue;
+			if (player.is_Disconnected()) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
 				continue;
 
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
@@ -149,7 +153,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 				{
 					if (const auto& result = item.first.validate();
 						!result.has_value() || result.is_Disconnected())
-						item.first = PlayerSelection(playerData);
+						item.first = playerSelection;
 				}
 				response = true;
 			}
@@ -171,7 +175,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 			}
 			else if (PlayerIsImpostor(localData) && PlayerIsImpostor(playerData))
 				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->ImpostorRed);
-			else if (PlayerSelection(playerData).is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
+			else if (player.is_LocalPlayer() || std::count(State.aumUsers.begin(), State.aumUsers.end(), playerData->fields.PlayerId))
 				nameColor = AmongUsColorToImVec4(Palette__TypeInfo->static_fields->Orange);
 
 			if (playerData->fields.IsDead)

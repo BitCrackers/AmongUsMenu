@@ -84,13 +84,14 @@ class PlayerSelection {
 #endif
 			return _playerData->fields.Disconnected;
 		}
-		constexpr bool equals(_Maybenull_ const PlayerControl* playerControl) const {
-			return _playerControl == playerControl;
+		constexpr bool equals(const Result& _Right) const noexcept {
+			if (!this->has_value() || !_Right.has_value()) return false;
+			return _playerControl == _Right._playerControl;
 		}
-		constexpr bool equals(_Maybenull_ const GameData_PlayerInfo* playerData) const {
-			return _playerData == playerData;
+		constexpr bool has_value() const noexcept {
+			return _has_value;
 		}
-		constexpr bool has_value() const {
+		constexpr operator bool() const noexcept {
 			return _has_value;
 		}
 	private:
@@ -116,13 +117,24 @@ public:
 	PlayerSelection() noexcept;
 	explicit PlayerSelection(const  PlayerControl* playerControl);
 	explicit PlayerSelection(GameData_PlayerInfo* playerData);
+	PlayerSelection(const PlayerSelection::Result& result);
 
 	PlayerSelection::Result validate();
 
 	bool equals(const PlayerSelection& selectedPlayer) const;
-	Game::PlayerId get_PlayerId() const noexcept;
-	Game::ClientId get_ClientId() const noexcept;
-	bool is_LocalPlayer() const noexcept;
+	bool equals(const PlayerSelection::Result& selectedPlayer) const;
+	Game::PlayerId get_PlayerId() const noexcept {
+		return this->playerId;
+	}
+	Game::ClientId get_ClientId() const noexcept {
+		return this->clientId;
+	}
+
+	constexpr void reset() noexcept {
+		this->clientId = Game::NoClientId;
+		this->playerId = Game::NoPlayerId;
+	}
+
 	bool has_value() const noexcept {
 		return (this->clientId != Game::NoClientId || this->playerId != Game::NoPlayerId);
 	}
@@ -181,7 +193,7 @@ std::string ToString(__maybenull PlayerControl* player);
 std::string ToString(__maybenull GameData_PlayerInfo* data);
 std::string GetGitCommit();
 std::string GetGitBranch();
-void ImpersonateName(PlayerSelection& player);
+void ImpersonateName(__maybenull GameData_PlayerInfo* data);
 Game::ColorId GetRandomColorId();
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
