@@ -147,6 +147,7 @@ public:
     bool ShowRadar_RightClickTP = false;
     bool LockRadar = false;
     bool RadarDrawIcons = true;
+    bool RadarBorder = false;
 
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;

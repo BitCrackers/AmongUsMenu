@@ -181,6 +181,7 @@ void DetourInitilization() {
 	HOOKFUNC(KillOverlay_ShowKillAnimation_1);
 	//HOOKFUNC(EOSManager_set_FriendCode);
 	HOOKFUNC(KillButton_SetTarget);
+	HOOKFUNC(MushroomDoorSabotageMinigame_Begin);
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -286,6 +287,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(KillOverlay_ShowKillAnimation_1);
 	//UNHOOKFUNC(EOSManager_set_FriendCode);
 	UNHOOKFUNC(KillButton_SetTarget);
+	UNHOOKFUNC(MushroomDoorSabotageMinigame_Begin);
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

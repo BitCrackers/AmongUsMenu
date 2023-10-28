@@ -25,7 +25,8 @@ enum class MapType {
 	MAP_SKELD = 0,
 	MAP_MIRAHQ = 1,
 	MAP_POLUS = 2,
-	MAP_AIRSHIP = 3
+	MAP_AIRSHIP = 3,
+	MAP_FUNGLE = 4
 };
 
 enum class RoleType
@@ -153,6 +154,7 @@ PlayerControl* GetPlayerControlById(Game::PlayerId id);
 bool IsColorAvailable(int colorId);
 std::string GenerateRandomString();
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors();
 il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl();
 il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();

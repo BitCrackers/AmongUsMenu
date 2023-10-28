@@ -12,7 +12,6 @@ void dDoorBreakerGame_Start(DoorBreakerGame* __this, MethodInfo* method) {
             Minigame_Close((Minigame*)__this, NULL);
             return;
         }
-        // TODO 231024
     }
     DoorBreakerGame_Start(__this, method);
 }
@@ -27,7 +26,17 @@ void dDoorCardSwipeGame_Begin(DoorCardSwipeGame* __this, PlayerTask* playerTask,
             Minigame_Close((Minigame*)__this, NULL);
             return;
         }
-        // TODO 231024
     }
     DoorCardSwipeGame_Begin(__this, playerTask, method);
+}
+
+void dMushroomDoorSabotageMinigame_Begin(MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method) {
+    if (State.AutoOpenDoors) {
+        __this->fields.mushroomWhackCount = 6; //six mushrooms are to be whacked
+        State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Doors, __this->fields.myDoor->fields.Id | 64));
+        MushroomDoorSabotageMinigame_SetDoor(__this, (OpenableDoor*)__this->fields.myDoor->fields.Open, NULL);
+        Minigame_Close((Minigame*)__this, NULL);
+        return;
+    }
+    MushroomDoorSabotageMinigame_Begin(__this, task, method);
 }

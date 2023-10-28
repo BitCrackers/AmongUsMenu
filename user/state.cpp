@@ -77,6 +77,7 @@ void Settings::Load() {
         JSON_TRYGET("RadarColor_B", this->SelectedColor.z);
         JSON_TRYGET("RadarColor_A", this->SelectedColor.w);
         JSON_TRYGET("RadarDrawIcons", this->RadarDrawIcons);
+        JSON_TRYGET("RadarBorder", this->RadarBorder);
 
         JSON_TRYGET("ShowReplay", this->ShowReplay);
         JSON_TRYGET("ReplayColor_R", this->SelectedReplayMapColor.x);
@@ -224,6 +225,7 @@ void Settings::Save() {
             { "RadarColor_B", this->SelectedColor.z },
             { "RadarColor_A", this->SelectedColor.w },
             { "RadarDrawIcons", this->RadarDrawIcons },
+            { "RadarBorder", this->RadarBorder },
 
             { "ShowReplay", this->ShowReplay },
             { "ReplayColor_R", this->SelectedReplayMapColor.x },

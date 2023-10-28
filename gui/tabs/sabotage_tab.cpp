@@ -46,7 +46,7 @@ namespace SabotageTab {
                         State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::LifeSupp, 128));
 
                     if (State.mapType == Settings::MapType::Fungle)
-                        State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::MushroomMixupSabotage, 128));
+                        State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::MushroomMixupSabotage));
 
                     State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Comms, 128));
                 }
@@ -77,7 +77,7 @@ namespace SabotageTab {
                 }
                 if (State.mapType == Settings::MapType::Fungle) {
                     if (ImGui::Button("Activate Mushroom Mixup")) {
-                        State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::MushroomMixupSabotage, 128));
+                        State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Sabotage, SystemTypes__Enum::MushroomMixupSabotage));
                     }
                 }
                 if (ImGui::Button("Sabotage Comms")) {

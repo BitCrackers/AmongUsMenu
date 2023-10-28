@@ -28,7 +28,7 @@ namespace Radar {
 	}
 
 	void OnClick() {
-		if (!(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
+		if (!(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsMouseDown(ImGuiMouseButton_Right))) {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
@@ -91,28 +91,36 @@ namespace Radar {
 			Radar::Init();
 
 		const auto& map = maps[(size_t)State.mapType];
-		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * (0.5F + 10.F), (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5F + 10.F, (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
 
-		if(State.LockRadar)
-			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-		else
-			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
+		if (State.RadarBorder) {
+			if (State.LockRadar)
+				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoMove);
+			else
+				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_AlwaysUseWindowPadding);
+		}
+		else {
+			if (State.LockRadar)
+				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+			else
+				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
+		}
 
 		ImVec2 winpos = ImGui::GetWindowPos();
 
 		ImVec4 RadarColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
 		if (State.RgbMenuTheme)
-			RadarColor = {State.RgbColor.x, State.RgbColor.y, State.RgbColor.z, State.SelectedColor.w};
+			RadarColor = { State.RgbColor.x, State.RgbColor.y, State.RgbColor.z, State.SelectedColor.w };
 		else
 			RadarColor = State.SelectedColor;
 		
 		GameOptions options;
 
 		ImGui::Image((void*)map.mapImage.shaderResourceView,
-			ImVec2((float)map.mapImage.imageWidth * (options.GetByte(app::ByteOptionNames__Enum::MapId) == 3 ? (-0.5F) : 0.5F), (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
+			ImVec2((float)map.mapImage.imageWidth * 0.5F, (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
 			ImVec2(0.0f, 0.0f),
-			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
-			(/*options.GetByte(app::ByteOptionNames__Enum::MapId) == 3*/false) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
+			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			RadarColor);
 
 		for (auto player : GetAllPlayerControl()) {

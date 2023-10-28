@@ -1,14 +1,7 @@
 ## Version 1.0: The Fungle Update
-# Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-=======
-## The menu is currently broken with the release of the Fungle map. Please be patient as the mod release will be around Sunday, October 29, 2023.
-## Version 1.0 will be fully released with the new release. The latest source code will be moved to a separate repository for issue support.
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-Note: I am not part of the BitCrackers team, these links are for BitCrackers only.
-=======
-# Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
+## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
 <p align="center">
    SickoModeAU is a Cheat Menu forked from AmongUsMenu for the popular Game Among Us.
 </p>

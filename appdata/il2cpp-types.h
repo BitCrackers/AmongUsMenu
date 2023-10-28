@@ -3812,6 +3812,44 @@ namespace app
 
 #endif
 #pragma region TMP_Text
+    struct ProfilerCategory__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct ProfilerCategory__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ProfilerCategory__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ProfilerCategory__VTable vtable;
+    };
+
+    struct ProfilerMarker {
+        void* m_Ptr;
+    };
+
+    struct ProfilerMarker__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+    };
+
+    struct ProfilerMarker__StaticFields {
+    };
+
+    struct ProfilerMarker__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ProfilerMarker__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ProfilerMarker__VTable vtable;
+    };
     struct TMP_Text__Fields {
         struct MaskableGraphic__Fields _;
         struct String* m_text;
@@ -4170,7 +4208,29 @@ namespace app
     };
 
     struct TMP_Text__StaticFields {
-        // ...
+        struct MaterialReference__Array* m_materialReferences;
+        struct Dictionary_2_System_Int32_System_Int32_* m_materialReferenceIndexLookup;
+        struct TMP_TextProcessingStack_1_MaterialReference_ m_materialReferenceStack;
+        struct Color32 s_colorWhite;
+        struct Func_3_Int32_String_TMPro_TMP_FontAsset_* OnFontAssetRequest;
+        struct Func_3_Int32_String_TMPro_TMP_SpriteAsset_* OnSpriteAssetRequest;
+        struct Char__Array* m_htmlTag;
+        struct RichTextTagAttribute__Array* m_xmlAttribute;
+        struct Single__Array* m_attributeParameterValues;
+        struct WordWrapState m_SavedWordWrapState;
+        struct WordWrapState m_SavedLineState;
+        struct WordWrapState m_SavedEllipsisState;
+        struct WordWrapState m_SavedLastValidState;
+        struct WordWrapState m_SavedSoftLineBreakState;
+        struct TMP_TextProcessingStack_1_WordWrapState_ m_EllipsisInsertionCandidateStack;
+        struct ProfilerMarker k_ParseTextMarker;
+        struct ProfilerMarker k_InsertNewLineMarker;
+        struct Vector2 k_LargePositiveVector2;
+        struct Vector2 k_LargeNegativeVector2;
+        float k_LargePositiveFloat;
+        float k_LargeNegativeFloat;
+        int32_t k_LargePositiveInt;
+        int32_t k_LargeNegativeInt;
     };
 
     struct TMP_Text__Class
@@ -4553,11 +4613,67 @@ namespace app
     };
 
 #pragma region EOSManager
+    struct DestroyableSingleton_1_EOSManager___Fields {
+        struct MonoBehaviour__Fields _;
+        bool DontDestroy;
+    };
+
+    struct EOSManager__Fields {
+        struct DestroyableSingleton_1_EOSManager___Fields _;
+        struct CallResult_1_EncryptedAppTicketResponse_t_* OnEncryptedAppTicketResponseCallResult;
+        struct OnLoginCallback* successCallback;
+        struct Action* onLoginFailedCallback;
+        struct String* productName;
+        struct String* productVersion;
+        struct String* productId;
+        struct String* sandboxId;
+        struct String* deploymentId;
+        struct String* clientId;
+        struct String* clientSecret;
+        struct String* friendCode;
+        bool hasRunLoginFlow;
+        float platformTickTimer;
+        bool platformInitialized;
+        bool loginFlowFinished;
+        bool tryingToLogin;
+        bool stopTimeOutCheck;
+        struct GameObject* TimeOutPopup;
+        float TimeOutTime;
+        bool FinishedAssets;
+        struct PlatformInterface* platformInterface;
+        struct ProductUserId* userId;
+        struct ProductUserId* deviceIDuserID;
+        bool announcementsVisible;
+        bool attemptAuthAgain;
+        uint32_t numLinkedAccounts;
+        struct List_1_Epic_OnlineServices_Connect_ExternalAccountInfo_* linkedExternalAccounts;
+        struct EditAccountUsername* editAccountUsername;
+        struct AskToMergeGuest* askToMergeAccount;
+        struct String* freeChatKey;
+        struct String* customNameKey;
+        struct String* friendsListKey;
+        struct String* accountLinkKey;
+        struct List_1_TMPro_TextMeshProUGUI_* watermark;
+        struct GameObject* watermarkCanvas;
+        struct Logger_2* logger;
+        int32_t ageOfConsent;
+        struct String* kwsUserId;
+        bool isKWSMinor;
+        struct ContinuanceToken* continuanceToken;
+        struct String* exchangeToken;
+        struct String* platformAuthToken;
+        bool authExpiredCallbackTriggered;
+        bool silentLoginFailed;
+        struct CompletionToken_1_PurchaseStates_* validateOldDLC;
+        bool isRedeemingDLC;
+        struct PlatformInterface* s_eosPlatformInterface;
+    };
+
     struct EOSManager
     {
         struct EOSManager__Class* klass;
         void* monitor;
-        //struct EOSManager__Fields fields;
+        struct EOSManager__Fields fields;
     };
 
     struct EOSManager__VTable
@@ -9939,10 +10055,20 @@ struct VoteBanSystem__Fields {
 #pragma endregion
 
 #pragma region LogicOptions
+    struct __declspec(align(4)) GameLogicComponent__Fields {
+        struct GameManager* Manager;
+        bool _IsDirty_k__BackingField;
+    };
+
+    struct LogicOptions__Fields {
+        struct GameLogicComponent__Fields _;
+        struct GameOptionsFactory* gameOptionsFactory;
+    };
+
     struct LogicOptions {
         struct LogicOptions__Class* klass;
         MonitorData* monitor;
-        //struct LogicOptions__Fields fields;
+        struct LogicOptions__Fields fields;
     };
 
     struct LogicOptions__VTable {
@@ -11456,10 +11582,35 @@ struct VoteBanSystem__Fields {
         struct Dictionary_2_TKey_TValue_Entry_System_String_List_1_AmongUs_GameOptions_GameModes_ vector[32];
     };
 
+    struct DestroyableSingleton_1_AchievementManager___Fields {
+        struct MonoBehaviour__Fields _;
+        bool DontDestroy;
+    };
+
+    struct AchievementManager_1__Fields {
+        struct DestroyableSingleton_1_AchievementManager___Fields _;
+        struct Logger_2* logger;
+        bool gameStarted;
+#if defined(_CPLUSPLUS_)
+        RoleTypes__Enum myRole;
+#else
+        uint16_t myRole;
+#endif
+        int32_t cardSwipesThisMatch;
+        int32_t ventsUsedThisMatch;
+        bool meetingCalledThisMatch;
+        int32_t killsThisMatch;
+        bool sabotageCalledLocally;
+        int32_t timesVoted;
+        int32_t timesVotedForImp;
+        int32_t winMap;
+        struct Dictionary_2_System_String_List_1_AchievementManager_AchievementProgressValue_* statName2AchievementProgressValues;
+    };
+
     struct AchievementManager_1 {
         struct AchievementManager_1__Class* klass;
         MonitorData* monitor;
-        //struct AchievementManager_1__Fields fields;
+        struct AchievementManager_1__Fields fields;
     };
 
     struct AchievementManager_1__VTable {
@@ -11486,6 +11637,52 @@ struct VoteBanSystem__Fields {
     };
 #pragma endregion
 
+#pragma region MushroomDoorSabotageMinigame
+    struct MushroomDoorSabotageMinigame__Fields {
+        struct Minigame__Fields _;
+        struct FloatRange* mushroomInvisibleSeconds;
+        struct FloatRange* mushroomVisibleSeconds;
+        struct TextMeshPro* counterText;
+        struct Transform__Array* spawnPoints;
+        struct MushroomDoorSabotageMinigameMushroom__Array* mushroomVariants;
+        struct OpenableDoor* myDoor;
+        int32_t mushroomWhackCount;
+        struct List_1_UnityEngine_Transform_* spawnPointBag;
+        struct List_1_MushroomDoorSabotageMinigameMushroom_* mushrooms;
+    };
+
+    struct MushroomDoorSabotageMinigame {
+        struct MushroomDoorSabotageMinigame__Class* klass;
+        MonitorData* monitor;
+        struct MushroomDoorSabotageMinigame__Fields fields;
+    };
+
+    struct MushroomDoorSabotageMinigame__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_SkipMultistageOverlayMenuSetup;
+        VirtualInvokeData Begin;
+        VirtualInvokeData Close;
+        VirtualInvokeData CoAnimateOpen;
+        VirtualInvokeData CoDestroySelf;
+        VirtualInvokeData SetDoor;
+    };
+
+    struct MushroomDoorSabotageMinigame__StaticFields {
+    };
+
+    struct MushroomDoorSabotageMinigame__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct MushroomDoorSabotageMinigame__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct MushroomDoorSabotageMinigame__VTable vtable;
+    };
+#pragma endregion
+
     typedef Il2CppReflectionMethod MonoMethod;
 
     typedef Il2CppObject PlayerData;
@@ -11494,7 +11691,6 @@ struct VoteBanSystem__Fields {
     typedef Il2CppObject ExileController;
     typedef Il2CppObject SabotageSystemType;
     typedef Il2CppObject GameOptionsManager;
-    typedef Il2CppObject GameOptionsFactory;
     typedef Il2CppObject SettingsData;
     typedef Il2CppObject GameplaySettingsData;
     typedef Il2CppObject AccessibilitySettingsData;

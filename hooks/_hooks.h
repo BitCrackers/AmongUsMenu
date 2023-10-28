@@ -98,3 +98,4 @@ void dPingTracker_Update(PingTracker* __this, MethodInfo* method);
 void dKillOverlay_ShowKillAnimation_1(KillOverlay* __this, GameData_PlayerInfo* killer, GameData_PlayerInfo* victim, MethodInfo* method);
 //void dEOSManager_set_FriendCode(EOSManager* __this, String* value, MethodInfo* method);
 void dKillButton_SetTarget(KillButton* __this, PlayerControl* target, MethodInfo* method);
+void dMushroomDoorSabotageMinigame_Begin(MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method);

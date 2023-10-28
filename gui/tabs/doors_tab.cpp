@@ -21,14 +21,14 @@ namespace DoorsTab {
 					auto plainDoor = GetPlainDoorByRoom(systemType);
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
-						ImGui::PushStyleColor(ImGuiCol_Text, { 0.9f, 0.1f, 0.25f, 1.f });
+						ImGui::PushStyleColor(ImGuiCol_Text, { 1.f, 0.f, 0.f, 1.f });
 						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
 							State.selectedDoor = systemType;
 						ImGui::PopStyleColor(1);
 					}
 					else if (!plainDoor->fields.Open)
 					{
-						ImGui::PushStyleColor(ImGuiCol_Text, { 0.85f, 0.2f, 0.5f, 1.f });
+						ImGui::PushStyleColor(ImGuiCol_Text, State.RgbMenuTheme ? State.RgbColor : State.MenuThemeColor);
 						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
 							State.selectedDoor = systemType;
 						ImGui::PopStyleColor(1);
@@ -110,7 +110,7 @@ namespace DoorsTab {
 						}
 					}
 				}
-				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship)
+				if (State.mapType == Settings::MapType::Pb || State.mapType == Settings::MapType::Airship || State.mapType == Settings::MapType::Fungle)
 				{
 					ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 					if (ImGui::Checkbox("Auto Open Doors", &State.AutoOpenDoors)) {

@@ -358,6 +358,18 @@ PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room) {
 	return nullptr;
 }
 
+OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room) {
+	for (auto door : il2cpp::Array((*Game::pShipStatus)->fields.AllDoors))
+	{
+		if (door->fields.Room == room)
+		{
+			return (OpenableDoor*)door;
+		}
+	}
+
+	return nullptr;
+}
+
 il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors() {
 	return (*Game::pShipStatus)->fields.AllDoors;
 }
@@ -523,7 +535,7 @@ SystemTypes__Enum GetSystemTypes(const Vector2& vector) {
 			if (room->fields.roomArea != nullptr && app::Collider2D_OverlapPoint(room->fields.roomArea, vector, NULL)) 
 				return room->fields.RoomId;
 	}
-	return SystemTypes__Enum::Outside;
+	return State.mapType == Settings::MapType::Fungle ? SystemTypes__Enum::Beach : SystemTypes__Enum::Outside;
 }
 
 std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)

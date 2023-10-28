@@ -141,7 +141,7 @@ namespace SettingsTab {
 			}
 
 			ImGui::Text("Keep safe mode on in official servers (NA, Europe, Asia) to prevent anticheat detection!");
-			ImGui::Text("SickoModeAU v1.0_pr2 | Original menu: Bitcrackers/AmongUsMenu | Modded by @goatwo (YT)");
+			ImGui::Text("SickoModeAU v1.1 | Original menu: Bitcrackers/AmongUsMenu | Modded by @goatwo (YT)");
 
 			ImGui::EndTabItem();
 		}

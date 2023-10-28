@@ -176,19 +176,35 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         }
 
         if ((IsInGame() || IsInLobby()) && GameOptions().GetGameMode() == GameModes__Enum::Normal) {
+            auto localData = GetPlayerData(*Game::pLocalPlayer);
+            app::RoleBehaviour* playerRole = localData->fields.Role;
+            app::RoleTypes__Enum role = playerRole != nullptr ? (playerRole)->fields.Role : app::RoleTypes__Enum::Crewmate;
             if (State.NoAbilityCD) {
-                GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, 0);
-                GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::ScientistCooldown, 0);
-                GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, 0);
-                GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime, 0);
-                GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::ScientistBatteryCharge, 69420);
+                if (role == RoleTypes__Enum::Engineer)
+                {
+                    app::EngineerRole* engineerRole = (app::EngineerRole*)playerRole;
+                    if (engineerRole->fields.cooldownSecondsRemaining > 0.0f)
+                        engineerRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
+                    engineerRole->fields.inVentTimeRemaining = 30.0f; //Can be anything as it will always be written
+                }
+                else if (role == RoleTypes__Enum::Scientist) {
+                    app::ScientistRole* scientistRole = (app::ScientistRole*)playerRole;
+                    if (scientistRole->fields.currentCooldown > 0.0f)
+                        scientistRole->fields.currentCooldown = 0.01f; //This will be deducted below zero on the next FixedUpdate call
+                    scientistRole->fields.currentCharge = 69420.0f; //Can be anything as it will always be written
+                }
                 if (GameLogicOptions().GetKillCooldown() > 0)
                     (*Game::pLocalPlayer)->fields.killTimer = 0;
                 else
-                    GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::KillCooldown, 0.0042069f);
+                    GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::KillCooldown, 0.0042069f); //force cooldown > 0 as ur unable to kill otherwise
                 if (IsHost() || !State.SafeMode) {
-                    GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, 0);
+                    GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, 0); //force set cooldown, otherwise u get kicked
                     GameLogicOptions().SetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration, 0);
+                    if (role == RoleTypes__Enum::GuardianAngel) {
+                        app::GuardianAngelRole* guardianAngelRole = (app::GuardianAngelRole*)playerRole;
+                        if (guardianAngelRole->fields.cooldownSecondsRemaining > 0.0f)
+                            guardianAngelRole->fields.cooldownSecondsRemaining = 0.01f; //This will be deducted below zero on the next FixedUpdate call
+                    }
                 }
             }
         }
@@ -575,11 +591,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
                 (*Game::pLocalPlayer)->fields.MyPhysics->fields.Speed = State.MultiplySpeed ? (float)(2.5 * State.PlayerSpeed) : 2.5f;
             (*Game::pLocalPlayer)->fields.MyPhysics->fields.GhostSpeed = State.MultiplySpeed ? (float)(2.5 * State.PlayerSpeed) : 2.5f;
         }
-
-        bool isDead = false;
         if (IsInGame() || IsInLobby()) {
             if (!GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && (GetPlayerData(*Game::pLocalPlayer)->fields.RoleType == RoleTypes__Enum::GuardianAngel || GetPlayerData(*Game::pLocalPlayer)->fields.RoleType == RoleTypes__Enum::CrewmateGhost || GetPlayerData(*Game::pLocalPlayer)->fields.RoleType == RoleTypes__Enum::ImpostorGhost))
                 State.IsRevived = true;
+            else
+                State.IsRevived = false;
         }
         InnerNetClient_Update(__this, method);
     }
