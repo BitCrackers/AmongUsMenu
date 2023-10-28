@@ -55,6 +55,7 @@ First you will need protontricks, you can install it with your packager of choic
 * The BitCrackers team for creating a great mod, which was easy to add features to
 * [KulaGGin](https://github.com/KulaGGin) (Helped with some ImGui code for replay system)
 * [tomsa000](https://github.com/tomsa000) (Helped with fixing memory leaks and smart pointers)
+* [cddjr](https://github.com/cddjr) (Helped in updating to the Fungle map, saved a lot of my time)
 * Everyone else who contributed to the code and I couldn't list here. Thank you!
 
 ## Contributing
@@ -64,10 +65,6 @@ First you will need protontricks, you can install it with your packager of choic
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
-
-## Broken Features (as of now)
-Exiting vent does not show up on replay (can be fixed by properly hooking Vent_ExitVent)
-Random crashes in the middle of nowhere (can be fixed by properly updating il2cpp_types.h)
 
 ## Added/Changed Features
 Settings Tab:
