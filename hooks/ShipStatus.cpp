@@ -40,7 +40,7 @@ void dShipStatus_OnEnable(ShipStatus* __this, MethodInfo* method) {
 
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
-	State.mapType = (Settings::MapType)(__this->fields.Type);
+	State.mapType = State.mapDoors.empty() ? Settings::MapType::Hq : Settings::MapType::Ship; //exploit the fact that MiraHQ has no doors and all other maps have their own shipstatus
 }
 
 void dShipStatus_RpcUpdateSystem(ShipStatus* __this, SystemTypes__Enum systemType, int32_t amount, MethodInfo* method) {

@@ -93,18 +93,10 @@ namespace Radar {
 		const auto& map = maps[(size_t)State.mapType];
 		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5F + 10.F, (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
 
-		if (State.RadarBorder) {
-			if (State.LockRadar)
-				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoMove);
-			else
-				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_AlwaysUseWindowPadding);
-		}
-		else {
-			if (State.LockRadar)
-				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-			else
-				ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
-		}
+		if (State.LockRadar)
+			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+		else
+			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
 
 		ImVec2 winpos = ImGui::GetWindowPos();
 
