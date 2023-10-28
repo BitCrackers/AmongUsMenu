@@ -62,6 +62,9 @@ namespace SettingsTab {
 					State.userName = std::string(*nameBuffer);
 				}
 			}
+			if (State.userName.empty()) {
+				State.userName = GetPlayerName();
+			}
 			
 			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();

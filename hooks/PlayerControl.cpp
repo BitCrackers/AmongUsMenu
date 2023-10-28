@@ -10,14 +10,15 @@
 #include <optional>
 
 void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo* method) {
-	std::optional<TaskTypes__Enum> taskType = std::nullopt;
+	if (auto player = GetEventPlayerControl(__this)) {
+		std::optional<TaskTypes__Enum> taskType = std::nullopt;
+		auto normalPlayerTasks = GetNormalPlayerTasks(__this);
+		for (auto normalPlayerTask : normalPlayerTasks)
+			if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
 
-	auto normalPlayerTasks = GetNormalPlayerTasks(__this);
-	for (auto normalPlayerTask : normalPlayerTasks)
-		if (normalPlayerTask->fields._._Id_k__BackingField == idx) taskType = normalPlayerTask->fields._.TaskType;
-
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<TaskCompletedEvent>(player.value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
+		}
 	}
 	PlayerControl_CompleteTask(__this, idx, method);
 }
@@ -317,14 +318,18 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 		return;
 	}
 
-	if (PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
-		synchronized(Replay::replayEventMutex) {
-			State.liveReplayEvents.emplace_back(std::make_unique<CheatDetectedEvent>(GetEventPlayerControl(__this).value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+	auto killer = GetEventPlayerControl(__this);
+	auto victim = GetEventPlayerControl(target);
+	if (killer && victim) {
+		if(PlayerIsImpostor(GetPlayerData(__this)) && PlayerIsImpostor(GetPlayerData(target))) {
+			synchronized(Replay::replayEventMutex) {
+				State.liveReplayEvents.emplace_back(std::make_unique<CheatDetectedEvent>(killer.value(), CHEAT_ACTIONS::CHEAT_KILL_IMPOSTOR));
+			}
 		}
-	}
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<KillEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
-		State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<KillEvent>(killer.value(), victim.value(), PlayerControl_GetTruePosition(__this, NULL), PlayerControl_GetTruePosition(target, NULL)));
+			State.replayDeathTimePerPlayer[target->fields.PlayerId] = std::chrono::system_clock::now();
+		}
 	}
 
 	// ESP: Reset Kill Cooldown
@@ -355,8 +360,11 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 
 void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
 {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+	if (auto player = GetEventPlayerControl(__this);
+		player && target) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(player.value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
+		}
 	}
 	app::PlayerControl_StartMeeting(__this, target, method);
 }
@@ -419,15 +427,23 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	auto source_player = GetEventPlayerControl(__this);
+	auto target_player = GetEventPlayerControl(target);
+	if (source_player && target_player) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ShapeShiftEvent>(source_player.value(), target_player.value()));
+		}
 	}
 	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
+	auto source_player = GetEventPlayerControl(__this);
+	auto target_player = GetEventPlayerControl(target);
+	if (source_player && target_player) {
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<ProtectPlayerEvent>(source_player.value(), target_player.value()));
+		}
 	}
 	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }

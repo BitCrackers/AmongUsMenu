@@ -856,7 +856,10 @@ std::string GetPlayerName() {
 	LOG_ASSERT(field != nullptr);
 	auto customization = il2cpp_field_get_value_object(field, player);
 	LOG_ASSERT(customization != nullptr);
-	return convert_from_string(app::PlayerCustomizationData_get_Name(customization, nullptr));
+	static FieldInfo* field2 = il2cpp_class_get_field_from_name(customization->Il2CppClass.klass, "name");
+	auto name = il2cpp_field_get_value_object(field2, customization);
+	LOG_ASSERT(name != nullptr);
+	return convert_from_string(reinterpret_cast<String*>(name));
 }
 
 void SetPlayerName(std::string_view name) {
