@@ -144,9 +144,11 @@ namespace SelfTab {
             {
                 State.Save();
             }
-            ImGui::SameLine();
-            if ((IsHost() || !State.SafeMode) && ImGui::Checkbox("God Mode", &State.GodMode))
-                State.Save();
+            if (IsHost() || !State.SafeMode) {
+                ImGui::SameLine();
+                if (ImGui::Checkbox("God Mode", &State.GodMode))
+                    State.Save();
+            }
 
             if (ImGui::Checkbox("Reveal Votes", &State.RevealVotes)) {
                 State.Save();

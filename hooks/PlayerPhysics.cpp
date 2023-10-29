@@ -10,6 +10,7 @@ void dPlayerPhysics_FixedUpdate(PlayerPhysics* __this, MethodInfo* method)
 		(*Game::pLocalPlayer)->fields.inVent = false;
 		app::PlayerPhysics_FixedUpdate(__this, method);
 		(*Game::pLocalPlayer)->fields.inVent = true;
-	} else
+	}
+	else
 		app::PlayerPhysics_FixedUpdate(__this, method);
 }
