@@ -439,7 +439,7 @@ namespace PlayersTab {
 					app::RoleBehaviour* playerRole = localData->fields.Role;
 					app::RoleTypes__Enum role = playerRole != nullptr ? playerRole->fields.Role : app::RoleTypes__Enum::Crewmate;
 
-					if (role == RoleTypes__Enum::Shapeshifter || !State.SafeMode)
+					if (!State.SafeMode)
 					{
 						if (ImGui::Button("Shift"))
 						{
@@ -447,6 +447,16 @@ namespace PlayersTab {
 								State.rpcQueue.push(new RpcShapeshift(*Game::pLocalPlayer, State.selectedPlayer, !State.AnimationlessShapeshift));
 							else if (IsInLobby())
 								State.lobbyRpcQueue.push(new RpcShapeshift(*Game::pLocalPlayer, State.selectedPlayer, !State.AnimationlessShapeshift));
+						}
+					}
+					else if (role == RoleTypes__Enum::Shapeshifter) {
+						app::ShapeshifterRole* shapeshifterRole = (app::ShapeshifterRole*)playerRole;
+						if (shapeshifterRole->fields.cooldownSecondsRemaining <= 0 && ImGui::Button("Shift"))
+						{
+							if (IsInGame())
+								State.rpcQueue.push(new CmdCheckShapeshift(*Game::pLocalPlayer, State.selectedPlayer, !State.AnimationlessShapeshift));
+							else if (IsInLobby())
+								State.lobbyRpcQueue.push(new CmdCheckShapeshift(*Game::pLocalPlayer, State.selectedPlayer, !State.AnimationlessShapeshift));
 						}
 					}
 
@@ -477,9 +487,9 @@ namespace PlayersTab {
 						}
 					}
 
-					if ((role == RoleTypes__Enum::GuardianAngel || (IsHost() || !State.SafeMode)) && ImGui::Button("Protect Player"))
+					if (IsHost() || !State.SafeMode)
 					{
-						if (IsHost() || !State.SafeMode) {
+						if (ImGui::Button("Protect Player")) {
 							app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 							auto colorId = outfit->fields.ColorId;
 							if (IsInGame())
@@ -487,7 +497,10 @@ namespace PlayersTab {
 							else if (IsInLobby())
 								State.lobbyRpcQueue.push(new RpcProtectPlayer(*Game::pLocalPlayer, State.selectedPlayer, colorId));
 						}
-						else {
+					}
+					else if (role == RoleTypes__Enum::GuardianAngel) {
+						app::GuardianAngelRole* guardianAngelRole = (app::GuardianAngelRole*)playerRole;
+						if (guardianAngelRole->fields.cooldownSecondsRemaining <= 0 && ImGui::Button("Protect Player")) {
 							if (IsInGame())
 								State.rpcQueue.push(new CmdCheckProtect(*Game::pLocalPlayer, State.selectedPlayer));
 							else if (IsInLobby())

@@ -173,6 +173,15 @@ public:
 	virtual void Process() override;
 };
 
+class CmdCheckShapeshift : public RPCInterface {
+	PlayerControl* Player;
+	PlayerSelection target;
+	bool animate;
+public:
+	CmdCheckShapeshift(PlayerControl* Player, const PlayerSelection& target, bool animate);
+	virtual void Process() override;
+};
+
 class RpcSendChat : public RPCInterface {
 	PlayerControl* Player;
 	std::string msg;

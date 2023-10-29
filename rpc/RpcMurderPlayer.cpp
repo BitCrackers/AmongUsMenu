@@ -33,6 +33,21 @@ void RpcShapeshift::Process()
 	PlayerControl_RpcShapeshift(Player, target.get_PlayerControl().value_or(nullptr), animate,  NULL);
 }
 
+CmdCheckShapeshift::CmdCheckShapeshift(PlayerControl* Player, const PlayerSelection& target, bool animate)
+{
+	this->Player = Player;
+	this->target = target;
+	this->animate = animate;
+}
+
+void CmdCheckShapeshift::Process()
+{
+	if (!PlayerSelection(Player).has_value())
+		return;
+
+	PlayerControl_CmdCheckShapeshift(Player, target.get_PlayerControl().value_or(nullptr), animate, NULL);
+}
+
 RpcSendChat::RpcSendChat(PlayerControl* Player, std::string_view msg)
 {
 	this->Player = Player;
