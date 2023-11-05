@@ -1,4 +1,5 @@
 ## Version 1.1: The Doors and Patches Update
+## Version 2.0 has been postponed for the time being due to unforeseen circumstances.
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
 ## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
