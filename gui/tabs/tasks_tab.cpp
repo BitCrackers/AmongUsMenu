@@ -7,7 +7,6 @@
 
 namespace TasksTab {
 	void Render() {
-		if (IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.Tasks != NULL) {
 			if (ImGui::BeginTabItem("Tasks")) {
 				ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 				if (!PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer))) {
@@ -74,6 +73,5 @@ namespace TasksTab {
 
 				ImGui::EndTabItem();
 			}
-		}
 	}
 }

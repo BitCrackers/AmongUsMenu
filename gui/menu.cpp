@@ -12,9 +12,7 @@
 #include "tabs/self_tab.h"
 #include "tabs/settings_tab.h"
 #include "tabs/tasks_tab.h"
-#ifdef _DEBUG
 #include "tabs/debug_tab.h"
-#endif
 #include "state.hpp"
 #include "gui-helpers.hpp"
 
@@ -45,6 +43,7 @@ namespace Menu {
 		SabotageTab::Render();
 		DoorsTab::Render();
 		HostTab::Render();
+		DebugTab::Render();
 #ifdef _DEBUG
 		if (State.showDebugTab)
 			DebugTab::Render();
