@@ -4,7 +4,6 @@ void DetourInitilization();
 void DetourUninitialization();
 
 bool dAutoOpenDoor_DoUpdate(AutoOpenDoor* __this, float dt, MethodInfo* method);
-bool dConstants_ShouldFlipSkeld(MethodInfo* method);
 void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method);
 void dAmongUsClient_OnGameJoined(AmongUsClient* __this, String* gameIdString, MethodInfo* method);
 void dPlayerControl_OnGameStart(PlayerControl* __this, MethodInfo* method);
@@ -40,8 +39,8 @@ void dPlayerControl_RpcSendChat(PlayerControl* __this, String* chatText, MethodI
 void dPlayerControl_RpcStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method);
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method);
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method);
-void dPlayerControl_RpcShapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method);
-//void dPlayerControl_RpcRevertShapeshift(PlayerControl* __this, bool animate, MethodInfo* method);
+void dPlayerControl_CmdCheckShapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method);
+void dPlayerControl_CmdCheckRevertShapeshift(PlayerControl* __this, bool animate, MethodInfo* method);
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method);
 void dRenderer_set_enabled(Renderer * __this, bool value, MethodInfo * method);
 void dSceneManager_Internal_ActiveSceneChanged(Scene previousActiveScene, Scene newActiveScene, MethodInfo* method);
@@ -96,6 +95,11 @@ void dExileController_ReEnableGameplay(ExileController* __this, MethodInfo* meth
 //void dSabotageSystemType_ForceSabTime(SabotageSystemType* __this, float t, MethodInfo* method);
 void dPingTracker_Update(PingTracker* __this, MethodInfo* method);
 void dKillOverlay_ShowKillAnimation_1(KillOverlay* __this, GameData_PlayerInfo* killer, GameData_PlayerInfo* victim, MethodInfo* method);
-//void dEOSManager_set_FriendCode(EOSManager* __this, String* value, MethodInfo* method);
 void dKillButton_SetTarget(KillButton* __this, PlayerControl* target, MethodInfo* method);
 void dMushroomDoorSabotageMinigame_Begin(MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method);
+//void* dAmongUsClient_CoStartGameHost(AmongUsClient* __this, MethodInfo* method);
+float dConsole_1_CanUse(Console_1* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method);
+void dLadder_SetDestinationCooldown(Ladder* __this, MethodInfo* method);
+void dZiplineConsole_SetDestinationCooldown(ZiplineConsole* __this, MethodInfo* method);
+void dMushroomWallDoor_SetDoorway(MushroomWallDoor* __this, bool open, MethodInfo* method);
+void dVoteBanSystem_AddVote(VoteBanSystem* __this, int32_t srcClient, int32_t clientId, MethodInfo* method);

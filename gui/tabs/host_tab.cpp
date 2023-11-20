@@ -22,11 +22,11 @@ namespace HostTab {
 				if (IsInLobby())
 					ImGui::Text("Select Roles:");
 				if (IsInLobby()) {
-					ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true);
+					ImGui::BeginChild("host#list", ImVec2(200, 0) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 					bool shouldEndListBox = ImGui::ListBoxHeader("Choose Roles", ImVec2(200, 150) * State.dpiScale);
 					auto allPlayers = GetAllPlayerData();
 					auto playerAmount = allPlayers.size();
-					auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
+					auto maxImpostorAmount = GetMaxImpostorAmount((int)playerAmount);
 					for (size_t index = 0; index < playerAmount; index++) {
 						auto playerData = allPlayers[index];
 						PlayerControl* playerCtrl = GetPlayerControlById(playerData->fields.PlayerId);
@@ -44,7 +44,7 @@ namespace HostTab {
 							State.scientists_amount = (int)GetRoleCount(RoleType::Scientist);
 							State.shapeshifters_amount = (int)GetRoleCount(RoleType::Shapeshifter);
 							State.impostors_amount = (int)GetRoleCount(RoleType::Impostor);
-							if (State.impostors_amount + State.shapeshifters_amount > maxImposterAmount)
+							if (State.impostors_amount + State.shapeshifters_amount > maxImpostorAmount)
 							{
 								if (State.assignedRoles[index] == RoleType::Shapeshifter)
 									State.assignedRoles[index] = RoleType::Random;
@@ -77,27 +77,41 @@ namespace HostTab {
 					ImGui::EndChild();
 					ImGui::SameLine();
 				}
-				ImGui::BeginChild("host#actions", ImVec2(200, 0) * State.dpiScale, true);
+				ImGui::BeginChild("host#actions", ImVec2(300, 0) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 
 				// AU v2022.8.24 has been able to change maps in lobby.
 				State.mapHostChoice = options.GetByte(app::ByteOptionNames__Enum::MapId);
+				if (State.mapHostChoice > 3)
+					State.mapHostChoice--;
 				State.mapHostChoice = std::clamp(State.mapHostChoice, 0, (int)MAP_NAMES.size() - 1);
 				if (IsInLobby() && CustomListBoxInt("Map", &State.mapHostChoice, MAP_NAMES, 75 * State.dpiScale)) {
 					if (!IsInGame()) {
-						if (State.mapHostChoice == 3) {
+						// disable flip
+						/*if (State.mapHostChoice == 3) {
 							options.SetByte(app::ByteOptionNames__Enum::MapId, 0);
 							State.FlipSkeld = true;
 						}
 						else {
 							options.SetByte(app::ByteOptionNames__Enum::MapId, State.mapHostChoice);
 							State.FlipSkeld = false;
-						}
+						}*/
+						auto id = State.mapHostChoice;
+						if (id >= 3) id++;
+						options.SetByte(app::ByteOptionNames__Enum::MapId, id);
 					}
 				}
 				if (IsInLobby() && ImGui::Checkbox("Custom Impostor Amount", &State.CustomImpostorAmount))
 					State.Save();
-				if (IsInLobby() && CustomListBoxInt("Impostor Count", &State.ImpostorCount, IMPOSTOR_COUNTS, 75 * State.dpiScale))
+				State.ImpostorCount = std::clamp(State.ImpostorCount, 0, int(Game::MAX_PLAYERS));
+				if (IsInLobby() && ImGui::InputInt("Impostor Count", &State.ImpostorCount))
 					State.Save();
+				/*int32_t maxPlayers = options.GetMaxPlayers();
+				maxPlayers = std::clamp(maxPlayers, 0, int(Game::MAX_PLAYERS));
+				if (IsInLobby() && ImGui::InputInt("Max Players", &maxPlayers))
+					GameOptions().SetInt(app::Int32OptionNames__Enum::MaxPlayers, maxPlayers);*/ //support for more than 15 players
+
+				/*if (IsInLobby() && ImGui::Checkbox("Flip Skeld", &State.FlipSkeld))
+					State.Save();*/ //to be fixed later
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				if (IsInLobby() && ImGui::Button("Force Start of Game"))
 				{
@@ -108,13 +122,67 @@ namespace HostTab {
 				if (ImGui::Checkbox("Disable Sabotages", &State.DisableSabotages))
 					State.Save();
 
-				if (ImGui::Checkbox("Disable Specific RPC Call ID", &State.DisableCallId))
+				/*if (ImGui::Checkbox("Disable Specific RPC Call ID", &State.DisableCallId))
 					State.Save();
 				int callId = State.ToDisableCallId;
 				if (ImGui::InputInt("ID to Disable", &callId)) {
 					State.ToDisableCallId = (uint8_t)callId;
 					State.Save();
+				}*/
+
+				if ((State.mapType == Settings::MapType::Airship) && IsInGame() && ImGui::Button("Switch Moving Platform Side"))
+				{
+					State.rpcQueue.push(new RpcUsePlatform());
 				}
+
+				if (State.InMeeting && ImGui::Button("End Meeting")) {
+					State.rpcQueue.push(new RpcEndMeeting());
+					State.InMeeting = false;
+				}
+
+				if (IsInMultiplayerGame() || IsInLobby()) { //lobby isn't possible in freeplay
+					if (ImGui::Checkbox("Disable Game Ending", &State.NoGameEnd)) {
+						State.Save();
+					}
+
+					if (IsInGame()) {
+						CustomListBoxInt("Reason", &State.SelectedGameEndReasonId, GAMEENDREASON, 120.0f * State.dpiScale);
+
+						ImGui::SameLine();
+
+						if (ImGui::Button("End Game")) {
+								State.rpcQueue.push(new RpcEndGame(GameOverReason__Enum(std::clamp(State.SelectedGameEndReasonId, 0, 8))));
+						}
+					}
+				}
+
+				CustomListBoxInt(" ­", &State.HostSelectedColorId, HOSTCOLORS, 85.0f * State.dpiScale);
+
+				if (ImGui::Checkbox("Force Color for Everyone", &State.ForceColorForEveryone)) {
+					State.Save();
+				}
+
+
+				static int framesPassed = -1;
+
+				if (IsHost() && IsInGame() && GetPlayerData(*Game::pLocalPlayer)->fields.IsDead && ImGui::Button("Revive Yourself"))
+				{
+					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
+					State.rpcQueue.push(new RpcRevive(*Game::pLocalPlayer));
+					State.rpcQueue.push(new RpcForceColor(*Game::pLocalPlayer, outfit->fields.ColorId, true));
+					framesPassed = 40;
+				}
+
+				if (framesPassed == 20)
+				{
+					State.rpcQueue.push(new RpcVent(*Game::pLocalPlayer, 1, false));
+					framesPassed--;
+				}
+				else if (framesPassed <= 0 && (*Game::pLocalPlayer)->fields.inVent) {
+					State.rpcQueue.push(new RpcVent(*Game::pLocalPlayer, 1, true)); //for showing you as alive to ALL players
+					framesPassed = -1;
+				}
+				else framesPassed--;
 
 				ImGui::EndChild();
 				ImGui::EndTabItem();

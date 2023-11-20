@@ -23,14 +23,13 @@ namespace ChatGui
 
 	void Init() {
 		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_None);
-		ImGui::SetNextWindowBgAlpha(1.F);
+		ImGui::SetNextWindowBgAlpha(State.MenuThemeColor.w);
 	}
 
 	void Render() {
 		ChatGui::Init();
-
 		ImGui::Begin("Chat", &State.ShowChat, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::BeginChild("chat#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("chat#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoBackground);
 
 		size_t i = 0;
 		for (auto it = State.chatMessages.begin(); it != State.chatMessages.end(); ++it, ++i) {
@@ -55,7 +54,7 @@ namespace ChatGui
 
 		ImGui::Dummy(ImVec2(1.0f, 2.0f) * State.dpiScale);
 
-		ImGui::BeginChild("chat#input", ImVec2(520, 20) * State.dpiScale, true);
+		ImGui::BeginChild("chat#input", ImVec2(520, 20) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 
 		if (ImGui::InputText("", inputBuffer, IM_ARRAYSIZE(inputBuffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
 			SendChatMessage(std::string(inputBuffer));

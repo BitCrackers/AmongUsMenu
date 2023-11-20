@@ -5,7 +5,7 @@
 #include "state.hpp"
 
 void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer, String* chatText, bool censor, MethodInfo* method) {
-	if (State.ReadGhostMessages) {
+	if (!State.DisableSMAU && State.ReadGhostMessages) {
 		bool wasDead = false;
 		GameData_PlayerInfo* player = GetPlayerData(sourcePlayer);
 		GameData_PlayerInfo* local = GetPlayerData(*Game::pLocalPlayer);
@@ -43,14 +43,16 @@ void dChatController_AddChat(ChatController* __this, PlayerControl* sourcePlayer
 
 void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo* method) {
 	State.ChatActiveOriginalState = visible;
-	if ( (State.ChatAlwaysActive || (IsInLobby() || State.InMeeting || GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) && !State.RefreshChatButton )
+	if (((State.ChatAlwaysActive) || (IsInLobby() || State.InMeeting || GetPlayerData(*Game::pLocalPlayer)->fields.IsDead)) && !State.RefreshChatButton)
+		ChatController_SetVisible(__this, true, method);
+	else if (State.DisableSMAU && (IsInLobby() || State.InMeeting || GetPlayerData(*Game::pLocalPlayer)->fields.IsDead))
 		ChatController_SetVisible(__this, true, method);
 	else
 		ChatController_SetVisible(__this, false, method);
 }
 
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
-	if (IsInGame()) {
+	if (!State.DisableSMAU && (IsInGame() || IsInLobby())) {
 		for (auto playerData : GetAllPlayerData()) {
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) continue;
@@ -59,9 +61,40 @@ void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bo
 					color = GetRoleColor(playerData->fields.Role);
 				else
 					color = Palette__TypeInfo->static_fields->White;
+
+				if (State.PlayerColoredDots) {
+					Color32&& nameColor = GetPlayerColor(outfit->fields.ColorId);
+					std::string dot = std::format("<#{:02x}{:02x}{:02x}{:02x}>●</color>",
+						nameColor.r, nameColor.g, nameColor.b,
+						nameColor.a);
+
+					if (playerData != GetPlayerData(*Game::pLocalPlayer))
+						playerName = convert_to_string(convert_from_string(playerName) + " " + dot);
+					else
+						playerName = convert_to_string(dot + " " + convert_from_string(playerName));
+				}
+				if (State.CustomName && !State.ServerSideCustomName && playerData == GetPlayerData(*Game::pLocalPlayer)) {
+					if (State.ColoredName && !State.RgbName) {
+						playerName = convert_to_string(GetGradientUsername(convert_from_string(playerName)));
+					}
+					//we don't want to hide our own chat messages
+					/*if (State.ResizeName)
+						playerName = convert_to_string(std::format("<size={}>", State.NameSize) + convert_from_string(playerName) + "</size>");*/
+					if (State.ItalicName)
+						playerName = convert_to_string("<i>" + convert_from_string(playerName) + "</i>");
+					if (State.UnderlineName && (!State.ColoredName || State.RgbName))
+						playerName = convert_to_string("<u>" + convert_from_string(playerName) + "</u>");
+					if (State.StrikethroughName && (!State.ColoredName || State.RgbName))
+						playerName = convert_to_string("<s>" + convert_from_string(playerName) + "</s>");
+					//rgb color doesn't change
+					/*if (State.RgbName) {
+						playerName = convert_to_string(State.rgbCode + convert_from_string(playerName) + "</color>");
+					}*/
+				}
 			}
 		}
 	}
+	
 	ChatBubble_SetName(__this, playerName, isDead, voted, color, method);
 }
 
@@ -86,7 +119,8 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 
 bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
 {
-	return (unicode_char != 0x08 && unicode_char != 0x0D);
+	//0x08 is backspace, 0x0D is carriage return, 0x3C is <, 0x3E is >
+	return (unicode_char != 0x08 && unicode_char != 0x0D && ((State.SafeMode && unicode_char != 0x3C && unicode_char != 0x3E) || !State.SafeMode));
 }
 
 void dTextBoxTMP_SetText(TextBoxTMP* __this, String* input, String* inputCompo, MethodInfo* method)
@@ -102,7 +136,7 @@ void dTextBoxTMP_SetText(TextBoxTMP* __this, String* input, String* inputCompo, 
 
 void dPlayerControl_RpcSendChat(PlayerControl* __this, String* chatText, MethodInfo* method)
 {
-	if (__this == *Game::pLocalPlayer && !State.SafeMode && State.activeChatSpoof && State.playerToChatAs.has_value())
+	if (!State.DisableSMAU && __this == *Game::pLocalPlayer && !State.SafeMode && State.activeChatSpoof && State.playerToChatAs.has_value())
 		PlayerControl_RpcSendChat(GetPlayerControlById(State.playerToChatAs.get_PlayerId()), chatText, NULL);
 	else
 		PlayerControl_RpcSendChat(__this, chatText, NULL);

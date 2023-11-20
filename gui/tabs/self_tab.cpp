@@ -88,13 +88,13 @@ namespace SelfTab {
             if ((IsHost() || !State.SafeMode))
                 ImGui::SameLine();
 
-            if ((IsHost() || !State.SafeMode) && ImGui::Checkbox("Server-sided", &State.ServerSideCustomName)) {
+            if ((IsHost() || !State.SafeMode) && State.CustomName && ImGui::Checkbox("Server-sided", &State.ServerSideCustomName)) {
                 State.Save();
             }
 
             if (State.CustomName && ImGui::CollapsingHeader("Custom Name Options"))
             {
-                if (ImGui::Checkbox("Bold", &State.BoldName)) {
+                if (ImGui::Checkbox("Size", &State.ResizeName)) {
                     State.Save();
                 }
                 ImGui::SameLine();
@@ -110,15 +110,23 @@ namespace SelfTab {
                     State.Save();
                 }
 
-                if (ImGui::ColorEdit4("Name Color", (float*)&State.NameColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
+                if (ImGui::ColorEdit4("Starting Gradient Color", (float*)&State.NameColor1, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
+                    State.Save();
+                }
+                ImGui::SameLine();
+                if (ImGui::ColorEdit4("Ending Gradient Color", (float*)&State.NameColor2, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
                     State.Save();
                 }
                 ImGui::SameLine();
                 if (ImGui::Checkbox("Colored", &State.ColoredName)) {
                     State.Save();
                 }
-                ImGui::SameLine();
+                
                 if (ImGui::Checkbox("RGB", &State.RgbName)) {
+                    State.Save();
+                }
+                ImGui::SameLine();
+                if (ImGui::InputFloat("Name Size", &State.NameSize)) {
                     State.Save();
                 }
             }
@@ -136,7 +144,7 @@ namespace SelfTab {
                 State.Save();
             }
             ImGui::SameLine(240.0f * State.dpiScale);
-            if (ImGui::Checkbox("Player Colored Names", &State.PlayerColoredNames))
+            if (ImGui::Checkbox("Player Colored Dots Next To Names", &State.PlayerColoredDots))
             {
                 State.Save();
             }
@@ -210,16 +218,28 @@ namespace SelfTab {
                 State.Save();
             }
             ImGui::SameLine();
-            if (ImGui::Checkbox("Kill Through Walls", &State.KillThroughWalls)) {
+            if (ImGui::Checkbox("Kill/Protect Through Walls", &State.KillThroughWalls)) {
                 State.Save();
             }
 
             ImGui::SameLine();
-            if (ImGui::Checkbox("Infinite Kill Range", &State.InfiniteKillRange)) {
+            if (ImGui::Checkbox("Infinite Kill/Protect Range", &State.InfiniteKillRange)) {
                 State.Save();
             }
 
+            if (ImGui::Checkbox("Do Tasks as Impostor", &State.DoTasksAsImpostor)) {
+                State.Save();
+            }
+            ImGui::SameLine();
             if (ImGui::Checkbox("Fake Alive", &State.FakeAlive)) {
+                State.Save();
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Show Host", &State.ShowHost)) {
+                State.Save();
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Show Vote Kicks", &State.ShowVoteKicks)) {
                 State.Save();
             }
 
@@ -234,7 +254,7 @@ namespace SelfTab {
                 State.Save();
             }
             ImGui::SameLine();
-            if (!State.SafeMode && ImGui::Checkbox("Server-sided", &State.RotateServerSide)) {
+            if (!State.SafeMode && State.RotateEveryone && ImGui::Checkbox("Server-sided", &State.RotateServerSide)) {
                 State.Save();
             }
             if (ImGui::InputFloat("Radius", &State.RotateRadius, 0.0f, 0.0f, "%.2f m")) {
@@ -293,7 +313,7 @@ namespace SelfTab {
             if (CustomListBoxInt("Select Role", &State.FakeRole, FAKEROLES, 100.0f * State.dpiScale))
                 State.Save();
             ImGui::SameLine();
-            if (!State.SafeMode && (IsInGame() || IsInLobby()) && ImGui::Button("Set Role")) {
+            if ((IsHost() || !State.SafeMode) && (IsInGame() || IsInLobby()) && ImGui::Button("Set Role")) {
                 auto fakeRole = RoleTypes__Enum::Crewmate;
                 if (State.FakeRole == 0)
                     fakeRole = RoleTypes__Enum::Crewmate;
@@ -344,8 +364,79 @@ namespace SelfTab {
                         State.lobbyRpcQueue.push(new RpcSetRole(player, fakeRole));
                 }
             }
-            if (ImGui::Checkbox("Fake Role", &State.FakeRoleToggle)) {
-                State.Save();
+            if ((IsInGame() || IsInLobby()) && ImGui::Button("Set Fake Role")) {
+                auto localData = GetPlayerData(*Game::pLocalPlayer);
+                if (State.FakeRole == 0) {
+                    localData->fields.RoleType = RoleTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.CanUseKillButton = false;
+                }
+                else if (State.FakeRole == 1) {
+                    localData->fields.RoleType = RoleTypes__Enum::Scientist;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::Scientist;
+                    localData->fields.Role->fields.CanUseKillButton = false;
+                }
+                else if (State.FakeRole == 2) {
+                    localData->fields.RoleType = RoleTypes__Enum::Engineer;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::Engineer;
+                    localData->fields.Role->fields.CanUseKillButton = false;
+                }
+                else if (State.FakeRole == 3) {
+                    localData->fields.RoleType = RoleTypes__Enum::Impostor;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Impostor;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::Impostor;
+                    localData->fields.Role->fields.CanUseKillButton = true;
+                }
+                else if (State.FakeRole == 4) {
+                    localData->fields.RoleType = RoleTypes__Enum::Shapeshifter;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Impostor;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::Shapeshifter;
+                    localData->fields.Role->fields.CanUseKillButton = true;
+                }
+                else if (State.FakeRole == 5) {
+                    localData->fields.RoleType = RoleTypes__Enum::CrewmateGhost;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::CrewmateGhost;
+                    localData->fields.Role->fields.TasksCountTowardProgress = (GameOptions().GetGameMode() != GameModes__Enum::HideNSeek);
+                    localData->fields.Role->fields.CanUseKillButton = false;
+                }
+                else if (State.FakeRole == 6) {
+                    localData->fields.RoleType = RoleTypes__Enum::CrewmateGhost;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Crewmate;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::CrewmateGhost;
+                    localData->fields.Role->fields.TasksCountTowardProgress = (GameOptions().GetGameMode() != GameModes__Enum::HideNSeek);
+                    localData->fields.Role->fields.CanUseKillButton = false;
+                }
+                else if (State.FakeRole == 7) {
+                    localData->fields.RoleType = RoleTypes__Enum::ImpostorGhost;
+                    localData->fields.Role->fields.TeamType = RoleTeamTypes__Enum::Impostor;
+                    localData->fields.Role->fields.Role = RoleTypes__Enum::ImpostorGhost;
+                    localData->fields.Role->fields.CanUseKillButton = true;
+                }
+                auto fakeRole = RoleTypes__Enum::Crewmate;
+                if (State.FakeRole == 0)
+                    fakeRole = RoleTypes__Enum::Crewmate;
+                else if (State.FakeRole == 1)
+                    fakeRole = RoleTypes__Enum::Scientist;
+                else if (State.FakeRole == 2)
+                    fakeRole = RoleTypes__Enum::Engineer;
+                else if (State.FakeRole == 3)
+                    fakeRole = RoleTypes__Enum::Impostor;
+                else if (State.FakeRole == 4)
+                    fakeRole = RoleTypes__Enum::Shapeshifter;
+                else if (State.FakeRole == 5)
+                    fakeRole = RoleTypes__Enum::CrewmateGhost;
+                else if (State.FakeRole == 6)
+                    fakeRole = RoleTypes__Enum::GuardianAngel;
+                else if (State.FakeRole == 7)
+                    fakeRole = RoleTypes__Enum::ImpostorGhost;
+                if (IsInGame())
+                    State.rpcQueue.push(new SetRole(fakeRole));
+                else if (IsInLobby())
+                    State.lobbyRpcQueue.push(new SetRole(fakeRole));
             }
 
             ImGui::EndTabItem();

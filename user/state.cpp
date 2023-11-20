@@ -45,10 +45,10 @@ void Settings::Load() {
 
         JSON_TRYGET("SelectedColorId", this->SelectedColorId);
         JSON_TRYGET("SnipeColor", this->SnipeColor);
+        JSON_TRYGET("CycleBetweenPlayers", this->CycleBetweenPlayers);
         JSON_TRYGET("CycleInMeeting", this->CycleInMeeting);
         JSON_TRYGET("CycleTimer", this->CycleTimer);
-        JSON_TRYGET("CyclerName1", this->userName1);
-        JSON_TRYGET("CyclerName2", this->userName2);
+        JSON_TRYGET("CyclerUserNames", this->cyclerUserNames);
         JSON_TRYGET("HostUsername", this->hostUserName);
         JSON_TRYGET("ChatMessage", this->chatMessage);
         JSON_TRYGET("CycleName", this->CycleName);
@@ -60,10 +60,9 @@ void Settings::Load() {
         JSON_TRYGET("CycleNamePlate", this->RandomNamePlate);
         JSON_TRYGET("PlayerSpeed", this->PlayerSpeed);
         JSON_TRYGET("MultiplySpeed", this->MultiplySpeed);
+        JSON_TRYGET("KillDistance", this->KillDistance);
         JSON_TRYGET("ModifyKillDistance", this->ModifyKillDistance);
         JSON_TRYGET("ModifyTaskBarUpdates", this->ModifyTaskBarUpdates);
-        JSON_TRYGET("CameraHeight", this->CameraHeight);
-        JSON_TRYGET("FreeCamSpeed", this->FreeCamSpeed);
         JSON_TRYGET("UserName", this->userName);
         JSON_TRYGET("ShowGhosts", this->ShowGhosts);
         JSON_TRYGET("ShowRadar", this->ShowRadar);
@@ -77,7 +76,10 @@ void Settings::Load() {
         JSON_TRYGET("RadarColor_B", this->SelectedColor.z);
         JSON_TRYGET("RadarColor_A", this->SelectedColor.w);
         JSON_TRYGET("RadarDrawIcons", this->RadarDrawIcons);
+        JSON_TRYGET("RadarVisorRoleColor", this->RadarVisorRoleColor);
         JSON_TRYGET("RadarBorder", this->RadarBorder);
+        JSON_TRYGET("RadarExtraWidth", this->RadarExtraWidth);
+        JSON_TRYGET("RadarExtraHeight", this->RadarExtraHeight);
 
         JSON_TRYGET("ShowReplay", this->ShowReplay);
         JSON_TRYGET("ReplayColor_R", this->SelectedReplayMapColor.x);
@@ -106,21 +108,25 @@ void Settings::Load() {
         JSON_TRYGET("ChatPaste", this->ChatPaste);
         JSON_TRYGET("RevealRoles", this->RevealRoles);
         JSON_TRYGET("AbbreviatedRoleNames", this->AbbreviatedRoleNames);
-        JSON_TRYGET("PlayerColoredNames", this->PlayerColoredNames);
+        JSON_TRYGET("PlayerColoredDots", this->PlayerColoredDots);
         JSON_TRYGET("ShowPlayerInfo", this->ShowPlayerInfo);
         JSON_TRYGET("ChatAlwaysActive", this->ChatAlwaysActive);
         JSON_TRYGET("ReadGhostMessages", this->ReadGhostMessages);
         JSON_TRYGET("CustomName", this->CustomName);
         JSON_TRYGET("RgbName", this->RgbName);
-        JSON_TRYGET("BoldName", this->BoldName);
+        JSON_TRYGET("ResizeName", this->ResizeName);
         JSON_TRYGET("ItalicName", this->ItalicName);
         JSON_TRYGET("UnderlineName", this->UnderlineName);
         JSON_TRYGET("StrikethroughName", this->StrikethroughName);
         JSON_TRYGET("ColoredName", this->ColoredName);
-        JSON_TRYGET("NameColor_R", this->NameColor.x);
-        JSON_TRYGET("NameColor_G", this->NameColor.y);
-        JSON_TRYGET("NameColor_B", this->NameColor.z);
-        JSON_TRYGET("NameColor_A", this->NameColor.w);
+        JSON_TRYGET("NameColor1_R", this->NameColor1.x);
+        JSON_TRYGET("NameColor1_G", this->NameColor1.y);
+        JSON_TRYGET("NameColor1_B", this->NameColor1.z);
+        JSON_TRYGET("NameColor1_A", this->NameColor1.w);
+        JSON_TRYGET("NameColor2_R", this->NameColor2.x);
+        JSON_TRYGET("NameColor2_G", this->NameColor2.y);
+        JSON_TRYGET("NameColor2_B", this->NameColor2.z);
+        JSON_TRYGET("NameColor2_A", this->NameColor2.w);
         JSON_TRYGET("AutoOpenDoors", this->AutoOpenDoors);
         JSON_TRYGET("MoveInVent", this->MoveInVent);
         JSON_TRYGET("AlwaysMove", this->AlwaysMove);
@@ -130,6 +136,9 @@ void Settings::Load() {
         JSON_TRYGET("KillThroughWalls", this->KillThroughWalls);
         JSON_TRYGET("InfiniteKillRange", this->InfiniteKillRange);
         JSON_TRYGET("FakeAlive", this->FakeAlive);
+        JSON_TRYGET("ShowHost", this->ShowHost);
+        JSON_TRYGET("ShowVoteKicks", this->ShowVoteKicks);
+        JSON_TRYGET("DoTasksAsImpostor", this->DoTasksAsImpostor);
         JSON_TRYGET("NoClip", this->NoClip);
 
         JSON_TRYGET("AdjustByDPI", this->AdjustByDPI);
@@ -157,6 +166,9 @@ void Settings::Load() {
         JSON_TRYGET("ConfuseOnVent", this->confuseOnVent);
         JSON_TRYGET("ConfuseOnMeeting", this->confuseOnMeeting);
 
+        JSON_TRYGET("CyclerNameGeneration", this->cyclerNameGeneration);
+        JSON_TRYGET("ConfuserNameGeneration", this->confuserNameGeneration);
+
         JSON_TRYGET("CustomCode", this->customCode);
         JSON_TRYGET("HideCode", this->HideCode);
         JSON_TRYGET("RgbLobbyCode", this->RgbLobbyCode);
@@ -173,12 +185,12 @@ void Settings::Save() {
 
     try {
         nlohmann::ordered_json j = nlohmann::ordered_json {
-            {"ShowMenu", this->ShowMenu},
-            {"KeyBinds", this->KeyBinds},
+            { "ShowMenu", this->ShowMenu },
+            { "KeyBinds", this->KeyBinds },
     #ifdef _DEBUG
-            {"ShowDebug", this->showDebugTab},
+            { "ShowDebug", this->showDebugTab },
     #endif
-            {"RgbTheme", this->RgbMenuTheme},
+            { "RgbTheme", this->RgbMenuTheme },
             { "SetName", this->SetName },
             { "MenuThemeColor_R", this->MenuThemeColor.x },
             { "MenuThemeColor_G", this->MenuThemeColor.y },
@@ -192,10 +204,10 @@ void Settings::Save() {
 
             { "SelectedColorId", this->SelectedColorId },
             { "SnipeColor", this->SnipeColor },
+            { "CycleBetweenPlayers", this->CycleBetweenPlayers },
             { "CycleInMeeting", this->CycleInMeeting },
             { "CycleTimer", this->CycleTimer },
-            { "CyclerName1", this->userName1 },
-            { "CyclerName2", this->userName2 },
+            { "CyclerUserNames", this->cyclerUserNames },
             { "HostUsername", this->hostUserName },
             { "ChatMessage", this->chatMessage },
             { "CycleName", this->CycleName },
@@ -208,10 +220,9 @@ void Settings::Save() {
 
             { "PlayerSpeed", this->PlayerSpeed },
             { "MultiplySpeed", this->MultiplySpeed },
+            { "KillDistance", this->KillDistance },
             { "ModifyKillDistance", this->ModifyKillDistance },
             { "ModifyTaskBarUpdates", this->ModifyTaskBarUpdates },
-            { "CameraHeight", this->CameraHeight },
-            { "FreeCamSpeed", this->FreeCamSpeed },
             { "UserName", this->userName },
             { "ShowGhosts", this->ShowGhosts },
             { "ShowRadar", this->ShowRadar },
@@ -225,7 +236,10 @@ void Settings::Save() {
             { "RadarColor_B", this->SelectedColor.z },
             { "RadarColor_A", this->SelectedColor.w },
             { "RadarDrawIcons", this->RadarDrawIcons },
+            { "RadarVisorRoleColor", this->RadarVisorRoleColor },
             { "RadarBorder", this->RadarBorder },
+            { "RadarExtraWidth", this->RadarExtraWidth },
+            { "RadarExtraHeight", this->RadarExtraHeight },
 
             { "ShowReplay", this->ShowReplay },
             { "ReplayColor_R", this->SelectedReplayMapColor.x },
@@ -254,21 +268,25 @@ void Settings::Save() {
             { "ChatPaste", this->ChatPaste },
             { "RevealRoles", this->RevealRoles },
             { "AbbreviatedRoleNames", this->AbbreviatedRoleNames },
-            { "PlayerColoredNames", this->PlayerColoredNames },
+            { "PlayerColoredDots", this->PlayerColoredDots },
             { "ShowPlayerInfo", this->ShowPlayerInfo },
             { "ChatAlwaysActive", this->ChatAlwaysActive },
             { "ReadGhostMessages", this->ReadGhostMessages },
             { "CustomName", this->CustomName },
             { "RgbName", this->RgbName },
-            { "BoldName", this->BoldName },
+            { "ResizeName", this->ResizeName },
             { "ItalicName", this->ItalicName },
             { "UnderlineName", this->UnderlineName },
             { "StrikethroughName", this->StrikethroughName },
             { "ColoredName", this->ColoredName },
-            { "NameColor_R", this->NameColor.x },
-            { "NameColor_G", this->NameColor.y },
-            { "NameColor_B", this->NameColor.z },
-            { "NameColor_A", this->NameColor.w },
+            { "NameColor1_R", this->NameColor1.x },
+            { "NameColor1_G", this->NameColor1.y },
+            { "NameColor1_B", this->NameColor1.z },
+            { "NameColor1_A", this->NameColor1.w },
+            { "NameColor2_R", this->NameColor2.x },
+            { "NameColor2_G", this->NameColor2.y },
+            { "NameColor2_B", this->NameColor2.z },
+            { "NameColor2_A", this->NameColor2.w },
             { "AutoOpenDoors", this->AutoOpenDoors },
             { "MoveInVent", this->MoveInVent },
             { "AlwaysMove", this->AlwaysMove },
@@ -278,6 +296,9 @@ void Settings::Save() {
             { "KillThroughWalls", this->KillThroughWalls },
             { "InfiniteKillRange", this->InfiniteKillRange },
             { "FakeAlive", this->FakeAlive },
+            { "ShowHost", this->ShowHost },
+            { "ShowVoteKicks", this->ShowVoteKicks },
+            { "DoTasksAsImpostor", this->DoTasksAsImpostor },
             { "NoClip", this->NoClip },
 
             { "RevealVotes", this->RevealVotes },
@@ -288,24 +309,27 @@ void Settings::Save() {
             { "CustomImpostorAmount", this->CustomImpostorAmount },
             { "ImpostorCount", this->ImpostorCount },
 
-            {"ShowConsole", this->ShowConsole},
-            {"ShowUnityLogs", this->ShowUnityLogs},
-            {"ShowChat", this->ShowChat},
+            { "ShowConsole", this->ShowConsole },
+            { "ShowUnityLogs", this->ShowUnityLogs },
+            { "ShowChat", this->ShowChat },
 
-            {"ShiftRightClickTP", this->ShiftRightClickTP},
-            {"RotateRadius", this->RotateRadius},
-            {"ShowKillCD", this->ShowKillCD},
+            { "ShiftRightClickTP", this->ShiftRightClickTP },
+            { "RotateRadius", this->RotateRadius },
+            { "ShowKillCD", this->ShowKillCD },
 
-            {"Confuser", this->confuser},
-            {"ConfuseOnJoin", this->confuseOnJoin},
-            {"ConfuseOnStart", this->confuseOnStart},
-            {"ConfuseOnKill", this->confuseOnKill},
-            {"ConfuseOnVent", this->confuseOnVent},
-            {"ConfuseOnMeeting", this->confuseOnMeeting},
+            { "Confuser", this->confuser },
+            { "ConfuseOnJoin", this->confuseOnJoin },
+            { "ConfuseOnStart", this->confuseOnStart },
+            { "ConfuseOnKill", this->confuseOnKill },
+            { "ConfuseOnVent", this->confuseOnVent },
+            { "ConfuseOnMeeting", this->confuseOnMeeting },
 
-            {"CustomCode", this->customCode},
-            {"HideCode", this->HideCode},
-            {"RgbLobbyCode", this->RgbLobbyCode},
+            { "CyclerNameGeneration", this->cyclerNameGeneration },
+            { "ConfuserNameGeneration", this->confuserNameGeneration },
+
+            { "CustomCode", this->customCode },
+            { "HideCode", this->HideCode },
+            { "RgbLobbyCode", this->RgbLobbyCode },
         };
 
         std::ofstream outSettings(settingsPath);

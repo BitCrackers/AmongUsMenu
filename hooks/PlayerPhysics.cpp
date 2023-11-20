@@ -5,7 +5,7 @@
 
 void dPlayerPhysics_FixedUpdate(PlayerPhysics* __this, MethodInfo* method)
 {
-	if (((*Game::pLocalPlayer) != NULL) && (*Game::pLocalPlayer)->fields.inVent && State.MoveInVent)
+	if (!State.DisableSMAU && ((*Game::pLocalPlayer) != NULL) && (*Game::pLocalPlayer)->fields.inVent && State.MoveInVent)
 	{
 		(*Game::pLocalPlayer)->fields.inVent = false;
 		app::PlayerPhysics_FixedUpdate(__this, method);

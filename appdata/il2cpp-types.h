@@ -4815,6 +4815,27 @@ namespace app
 #pragma endregion
 
 #if defined(_CPLUSPLUS_)
+    enum class VentilationSystem_Operation__Enum : int32_t {
+        StartCleaning = 0x00000000,
+        StopCleaning = 0x00000001,
+        Enter = 0x00000002,
+        Exit = 0x00000003,
+        Move = 0x00000004,
+        BootImpostors = 0x00000005,
+    };
+
+#else
+    enum VentilationSystem_Operation__Enum {
+        VentilationSystem_Operation__Enum_StartCleaning = 0x00000000,
+        VentilationSystem_Operation__Enum_StopCleaning = 0x00000001,
+        VentilationSystem_Operation__Enum_Enter = 0x00000002,
+        VentilationSystem_Operation__Enum_Exit = 0x00000003,
+        VentilationSystem_Operation__Enum_Move = 0x00000004,
+        VentilationSystem_Operation__Enum_BootImpostors = 0x00000005,
+    };
+#endif
+
+#if defined(_CPLUSPLUS_)
     enum class GameOverReason__Enum : int32_t {
         HumansByVote = 0x00000000,
         HumansByTask = 0x00000001,
@@ -5280,7 +5301,7 @@ namespace app
         void* AllCameras;
         struct OpenableDoor__Array* AllDoors;
         void* AllConsoles;
-        void* Ladders;
+        struct Ladder__Array* Ladders;
         struct Dictionary_2_SystemTypes_ISystemType_* Systems;
         void* SystemNames;
         void* ExtraTaskNames;
@@ -7579,6 +7600,79 @@ namespace app
         bool DontDestroy;
     };
 
+    struct ActionButton__Fields {
+        struct MonoBehaviour__Fields _;
+        struct SpriteRenderer* graphic;
+        struct SpriteRenderer* usesRemainingSprite;
+        struct TextMeshPro* usesRemainingText;
+        struct TextMeshPro* buttonLabelText;
+        struct TextMeshPro* cooldownTimerText;
+        struct ActionMapGlyphDisplay* glyph;
+        bool isCoolingDown;
+        struct Logger_2* logger;
+        bool canInteract;
+        struct Vector3 position;
+    };
+
+    struct ActionButton {
+        struct ActionButton__Class* klass;
+        MonitorData* monitor;
+        struct ActionButton__Fields fields;
+    };
+
+    struct ActionButton__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData __unknown;
+    };
+
+    struct ActionButton__StaticFields {
+    };
+
+    struct ActionButton__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ActionButton__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ActionButton__VTable vtable;
+    };
+
+    struct UseButton__Fields {
+        struct ActionButton__Fields _;
+        struct UseButtonSettings__Array* UseSettings;
+        struct Dictionary_2_ImageNames_UseButtonSettings_* fastUseSettings;
+        struct IUsable* currentTarget;
+    };
+
+    struct UseButton {
+        struct UseButton__Class* klass;
+        MonitorData* monitor;
+        struct UseButton__Fields fields;
+    };
+
+    struct UseButton__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData DoClick;
+    };
+
+    struct UseButton__StaticFields {
+    };
+
+    struct UseButton__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct UseButton__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct UseButton__VTable vtable;
+    };
+
     struct HudManager__Fields {
         struct DestroyableSingleton_1_HudManager___Fields _;
         struct FollowerCamera* PlayerCam;
@@ -7588,7 +7682,7 @@ namespace app
         void* AdminButton;
         void* SabotageButton;
         void* ImpostorVentButton;
-        void* UseButton;
+        struct UseButton* UseButton;
         void* PetButton;
         void* AbilityButton;
         void* ReportButton;
@@ -8726,46 +8820,6 @@ struct VoteBanSystem__Fields {
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct VoteBanSystem__VTable vtable;
-    };
-
-    struct ActionButton__Fields {
-        struct MonoBehaviour__Fields _;
-        struct SpriteRenderer* graphic;
-        struct SpriteRenderer* usesRemainingSprite;
-        struct TextMeshPro* usesRemainingText;
-        struct TextMeshPro* buttonLabelText;
-        struct TextMeshPro* cooldownTimerText;
-        struct ActionMapGlyphDisplay* glyph;
-        bool isCoolingDown;
-        struct Logger_2* logger;
-        bool canInteract;
-        struct Vector3 position;
-    };
-
-    struct ActionButton {
-        struct ActionButton__Class* klass;
-        MonitorData* monitor;
-        struct ActionButton__Fields fields;
-    };
-
-    struct ActionButton__VTable {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData __unknown;
-    };
-
-    struct ActionButton__StaticFields {
-    };
-
-    struct ActionButton__Class {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct ActionButton__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct ActionButton__VTable vtable;
     };
 
     struct KillButton__Fields {
@@ -11319,6 +11373,124 @@ struct VoteBanSystem__Fields {
     };
 #pragma endregion
 
+#pragma region Ladder
+    struct Ladder__Fields {
+        struct MonoBehaviour__Fields _;
+        uint8_t Id;
+        struct SpriteRenderer* SpotArea;
+        bool IsTop;
+        struct Ladder* Destination;
+        struct AudioClip* UseSound;
+        struct SpriteRenderer* Image;
+        float _CoolDown_k__BackingField;
+    };
+
+    struct Ladder {
+        struct Ladder__Class* klass;
+        MonitorData* monitor;
+        struct Ladder__Fields fields;
+    };
+
+    struct Ladder__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_CoolDown;
+        VirtualInvokeData set_CoolDown;
+        VirtualInvokeData get_MaxCoolDown;
+        VirtualInvokeData IsCoolingDown;
+        VirtualInvokeData get_UsableDistance;
+        VirtualInvokeData get_PercentCool;
+        VirtualInvokeData get_UseIcon;
+        VirtualInvokeData SetOutline;
+        VirtualInvokeData CanUse;
+        VirtualInvokeData Use;
+    };
+
+    struct Ladder__StaticFields {
+    };
+
+    struct Ladder__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Ladder__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Ladder__VTable vtable;
+    };
+
+    struct Ladder__Array {
+        struct Ladder__Array__Class* klass;
+        MonitorData* monitor;
+        Il2CppArrayBounds* bounds;
+        il2cpp_array_size_t max_length;
+        struct Ladder* vector[32];
+    };
+
+    struct Ladder__Array__VTable {
+    };
+
+    struct Ladder__Array__StaticFields {
+    };
+
+    struct Ladder__Array__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Ladder__Array__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Ladder__Array__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region ZiplineConsole
+    struct ZiplineConsole__Fields {
+        struct MonoBehaviour__Fields _;
+        float usableDistance;
+        struct SpriteRenderer* image;
+        struct ZiplineBehaviour* zipline;
+        bool atTop;
+        struct ZiplineConsole* destination;
+        float _CoolDown_k__BackingField;
+    };
+
+    struct ZiplineConsole {
+        struct ZiplineConsole__Class* klass;
+        MonitorData* monitor;
+        struct ZiplineConsole__Fields fields;
+    };
+
+    struct ZiplineConsole__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_CoolDown;
+        VirtualInvokeData set_CoolDown;
+        VirtualInvokeData get_MaxCoolDown;
+        VirtualInvokeData IsCoolingDown;
+        VirtualInvokeData get_UsableDistance;
+        VirtualInvokeData get_PercentCool;
+        VirtualInvokeData get_UseIcon;
+        VirtualInvokeData SetOutline;
+        VirtualInvokeData CanUse;
+        VirtualInvokeData Use;
+    };
+
+    struct ZiplineConsole__StaticFields {
+    };
+
+    struct ZiplineConsole__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct ZiplineConsole__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct ZiplineConsole__VTable vtable;
+    };
+#pragma endregion
+
 #pragma region RoleManager
     struct RoleManager__Fields
     {
@@ -11680,6 +11852,123 @@ struct VoteBanSystem__Fields {
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct MushroomDoorSabotageMinigame__VTable vtable;
+    };
+
+    struct MushroomWallDoor__Fields {
+        struct OpenableDoor__Fields _;
+        VirtualInvokeData Equals;
+        void* wallCollider;
+        VirtualInvokeData Finalize;
+        struct Collider2D* shadowColl;
+        VirtualInvokeData GetHashCode;
+        void* mushrooms;
+        VirtualInvokeData ToString;
+        void* openSound;
+        VirtualInvokeData SetDoorway;
+        void* closeSound;
+        VirtualInvokeData Serialize;
+        bool open;
+    };
+
+    struct MushroomWallDoor {
+        Il2CppClass* klass;
+        Il2CppClass_0 _0;
+        MonitorData* monitor;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct MushroomWallDoor__Fields fields;
+    };
+#pragma endregion
+
+#pragma region Console_1
+    struct Console_1__Fields {
+        struct MonoBehaviour__Fields _;
+        float usableDistance;
+        int32_t ConsoleId;
+        bool onlyFromBelow;
+        bool onlySameRoom;
+        bool checkWalls;
+        bool GhostsIgnored;
+        bool AllowImpostor;
+#if defined(_CPLUSPLUS_)
+        SystemTypes__Enum Room;
+#else
+        uint8_t Room;
+#endif
+        struct TaskTypes__Enum__Array* TaskTypes;
+        struct TaskSet__Array* ValidTasks;
+        struct SpriteRenderer* Image;
+    };
+
+    struct Console_1 {
+        struct Console_1__Class* klass;
+        MonitorData* monitor;
+        struct Console_1__Fields fields;
+    };
+
+    struct Console_1__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData get_UsableDistance;
+        VirtualInvokeData get_PercentCool;
+        VirtualInvokeData get_UseIcon;
+        VirtualInvokeData SetOutline;
+        VirtualInvokeData CanUse;
+        VirtualInvokeData Use;
+        VirtualInvokeData Use_1;
+    };
+
+    struct Console_1__StaticFields {
+    };
+
+    struct Console_1__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct Console_1__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct Console_1__VTable vtable;
+    };
+#pragma endregion
+
+#pragma region AmongUsClient_CoStartGameHost_d_30
+    struct __declspec(align(4)) AmongUsClient_CoStartGameHost_d_30__Fields {
+        int32_t __1__state;
+        struct Object* __2__current;
+        struct AmongUsClient* __4__this;
+        float _timer_5__2;
+        bool _stopWaiting_5__3;
+    };
+
+    struct AmongUsClient_CoStartGameHost_d_30 {
+        struct AmongUsClient_CoStartGameHost_d_30__Class* klass;
+        MonitorData* monitor;
+        struct AmongUsClient_CoStartGameHost_d_30__Fields fields;
+    };
+
+    struct AmongUsClient_CoStartGameHost_d_30__VTable {
+        VirtualInvokeData Equals;
+        VirtualInvokeData Finalize;
+        VirtualInvokeData GetHashCode;
+        VirtualInvokeData ToString;
+        VirtualInvokeData System_Collections_Generic_IEnumerator_System_Object__get_Current;
+        VirtualInvokeData System_IDisposable_Dispose;
+        VirtualInvokeData MoveNext;
+        VirtualInvokeData System_Collections_IEnumerator_get_Current;
+        VirtualInvokeData System_Collections_IEnumerator_Reset;
+    };
+
+    struct AmongUsClient_CoStartGameHost_d_30__StaticFields {
+    };
+
+    struct AmongUsClient_CoStartGameHost_d_30__Class {
+        Il2CppClass_0 _0;
+        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
+        struct AmongUsClient_CoStartGameHost_d_30__StaticFields* static_fields;
+        const Il2CppRGCTXData* rgctx_data;
+        Il2CppClass_1 _1;
+        struct AmongUsClient_CoStartGameHost_d_30__VTable vtable;
     };
 #pragma endregion
 

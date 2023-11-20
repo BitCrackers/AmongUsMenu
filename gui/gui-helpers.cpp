@@ -133,7 +133,11 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 		response = false;
 		auto localData = GetPlayerData(*Game::pLocalPlayer);
 		for (auto playerData : GetAllPlayerData()) {
-			if (playerData->fields.Disconnected) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
+			auto playerSelection = PlayerSelection(playerData);
+			const auto& player = playerSelection.validate();
+			if (!player.has_value())
+				continue;
+			if (player.is_Disconnected()) // maybe make that an option for replays ? (parameter based on "state.showDisconnected" related data)
 				continue;
 
 			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
@@ -149,7 +153,7 @@ bool CustomListBoxPlayerSelectionMultiple(const char* label, std::array<std::pai
 				{
 					if (const auto& result = item.first.validate();
 						!result.has_value() || result.is_Disconnected())
-						item.first = PlayerSelection(playerData);
+						item.first = playerSelection;
 				}
 				response = true;
 			}
@@ -349,8 +353,8 @@ void drawPlayerDot(PlayerControl* player, const ImVec2& winPos, ImU32 color, ImU
 	Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
 	const auto& map = maps[(size_t)State.mapType];
-	float xOffset = getMapXOffsetSkeld(map.x_offset);
-	float yOffset = map.y_offset;
+	float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+	float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 	float radX = xOffset + (playerPos.x * map.scale);
 	float radY = yOffset - (playerPos.y * map.scale);
@@ -367,10 +371,11 @@ void drawPlayerIcon(PlayerControl* player, const ImVec2& winPos, ImU32 color)
 	Vector2 playerPos = app::PlayerControl_GetTruePosition(player, NULL);
 
 	const auto& map = maps[(size_t)State.mapType];
-	float xOffset = getMapXOffsetSkeld(map.x_offset);
-	float yOffset = map.y_offset;
+	float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+	float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 	IconTexture icon = icons.at(ICON_TYPES::PLAYER);
+	IconTexture visor = icons.at(ICON_TYPES::PLAYERVISOR);
 	float halfImageWidth = icon.iconImage.imageWidth * icon.scale * 0.5f, halfImageHeight = icon.iconImage.imageHeight * icon.scale * 0.5f;
 	float radX = xOffset + (playerPos.x - halfImageWidth) * map.scale;
 	float radY = yOffset - (playerPos.y - halfImageHeight) * map.scale;
@@ -386,6 +391,14 @@ void drawPlayerIcon(PlayerControl* player, const ImVec2& winPos, ImU32 color)
 		ImVec2(1.0f, 0.0f),
 		color);
 
+	drawList->AddImage((void*)visor.iconImage.shaderResourceView,
+		p_min, p_max,
+		ImVec2(0.0f, 1.0f),
+		ImVec2(1.0f, 0.0f),
+		(State.RadarVisorRoleColor && State.RevealRoles) ? 
+		ImGui::GetColorU32(AmongUsColorToImVec4(GetRoleColor(GetPlayerData(player)->fields.Role))) : 
+		ImGui::GetColorU32(AmongUsColorToImVec4(Palette__TypeInfo->static_fields->VisorColor)));
+
 	if (GetPlayerData(player)->fields.IsDead)
 		drawList->AddImage((void*)icons.at(ICON_TYPES::CROSS).iconImage.shaderResourceView, 
 			p_min, p_max,
@@ -399,8 +412,8 @@ void drawDeadPlayerDot(DeadBody* deadBody, const ImVec2& winPos, ImU32 color)
 	Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
 	const auto& map = maps[(size_t)State.mapType];
-	float xOffset = getMapXOffsetSkeld(map.x_offset);
-	float yOffset = map.y_offset;
+	float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+	float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 	float radX = xOffset + (bodyPos.x * map.scale);
 	float radY = yOffset - (bodyPos.y * map.scale);
@@ -416,8 +429,8 @@ void drawDeadPlayerIcon(DeadBody* deadBody, const ImVec2& winPos, ImU32 color)
 	Vector2 bodyPos = app::DeadBody_get_TruePosition(deadBody, NULL);
 
 	const auto& map = maps[(size_t)State.mapType];
-	float xOffset = getMapXOffsetSkeld(map.x_offset);
-	float yOffset = map.y_offset;
+	float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+	float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 	IconTexture icon = icons.at(ICON_TYPES::DEAD);
 	float radX = xOffset + (bodyPos.x - (icon.iconImage.imageWidth * icon.scale * 0.5f)) * map.scale;

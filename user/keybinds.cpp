@@ -35,8 +35,11 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x37, "7"},
     {0x38, "8"},
     {0x39, "9"},
+    {0x41, "A"},
     {0x42, "B"},
     {0x43, "C"},
+    {0x44, "D"},
+    {0x45, "E"},
     {0x46, "F"},
     {0x47, "G"},
     {0x48, "H"},
@@ -48,9 +51,13 @@ static const std::map<uint8_t, const char*> KeyMap = {
     {0x4E, "N"},
     {0x4F, "O"},
     {0x50, "P"},
+    {0x51, "Q"},
+    {0x52, "R"},
+    {0x53, "S"},
     {0x54, "T"},
     {0x55, "U"},
     {0x56, "V"},
+    {0x57, "W"},
     {0x58, "X"},
     {0x59, "Y"},
     {0x5A, "Z"},
@@ -198,6 +205,7 @@ void KeyBinds::to_json(nlohmann::ordered_json& j, KeyBinds::Config value)
         {"Randomize_Appearance", value.Randomize_Appearance},
         {"Complete_Tasks", value.Complete_Tasks},
         {"Toggle_Chat", value.Toggle_Chat},
+        {"Toggle_SMAU", value.Toggle_SMAU},
     };
 }
 
@@ -219,4 +227,5 @@ void KeyBinds::from_json(const nlohmann::ordered_json& j, KeyBinds::Config& valu
     j.at("Randomize_Appearance").get_to(value.Randomize_Appearance);
     j.at("Complete_Tasks").get_to(value.Complete_Tasks);
     j.at("Toggle_Chat").get_to(value.Toggle_Chat);
+    j.at("Toggle_SMAU").get_to(value.Toggle_SMAU);
 }

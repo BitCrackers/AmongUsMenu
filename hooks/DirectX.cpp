@@ -63,23 +63,23 @@ ImVec2 DirectX::GetWindowSize()
 
 static bool CanDrawEsp()
 {
-	return (IsInGame() || IsInLobby()) && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
+	return (!State.DisableSMAU && IsInGame() || IsInLobby()) && State.ShowEsp && (!State.InMeeting || !State.HideEsp_During_Meetings);
 }
 
 static bool CanDrawRadar()
 {
-	return IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
+	return !State.DisableSMAU && IsInGame() && State.ShowRadar && (!State.InMeeting || !State.HideRadar_During_Meetings);
 }
 
 
 static bool CanDrawChat()
 {
-    return (IsInGame() || IsInLobby()) && State.ShowChat;
+    return !State.DisableSMAU && (IsInGame() || IsInLobby()) && State.ShowChat;
 }
 
 static bool CanDrawReplay()
 {
-    return IsInGame() && State.ShowReplay;
+    return !State.DisableSMAU && IsInGame() && State.ShowReplay;
 }
 
 LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -108,28 +108,39 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
     KeyBinds::WndProc(uMsg, wParam, lParam);
 
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Noclip) && (IsInGame() || IsInLobby())) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Zoom) && (IsInGame() || IsInLobby())) State.EnableZoom = !State.EnableZoom;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Freecam) && (IsInGame() || IsInLobby())) State.FreeCam = !State.FreeCam;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Replay)) State.ShowReplay = !State.ShowReplay;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Chat)) State.ShowChat = !State.ShowChat;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Hud) && (IsInGame() || IsInLobby())) State.DisableHud = !State.DisableHud;
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Reset_Appearance) && (IsInGame() || IsInLobby())) ControlAppearance(false);
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Save_Appearance) && (IsInGame() || IsInLobby())) SaveOriginalAppearance();
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Randomize_Appearance)) ControlAppearance(true);
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Complete_Tasks) && IsInGame()) {
-        auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
-        for (auto task : tasks) {
-            if (task->fields.taskStep != task->fields.MaxStep)
-                State.rpcQueue.push(new RpcCompleteTask(task->fields._._Id_k__BackingField));
+    if (!State.DisableSMAU && !State.ChatFocused /*disable keybinds when chatting*/) {
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Repair_Sabotage) && IsInGame()) RepairSabotage(*Game::pLocalPlayer);
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Noclip) && (IsInGame() || IsInLobby())) { State.NoClip = !State.NoClip; State.HotkeyNoClip = true; }
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_All_Doors) && IsInGame()) State.CloseAllDoors = true;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Zoom) && (IsInGame() || IsInLobby())) State.EnableZoom = !State.EnableZoom;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Freecam) && (IsInGame() || IsInLobby())) State.FreeCam = !State.FreeCam;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Close_Current_Room_Door) && IsInGame()) State.rpcQueue.push(new RpcCloseDoorsOfType(GetSystemTypes(GetTrueAdjustedPosition(*Game::pLocalPlayer)), false));
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Replay)) State.ShowReplay = !State.ShowReplay;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Chat)) State.ShowChat = !State.ShowChat;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Hud) && (IsInGame() || IsInLobby())) State.DisableHud = !State.DisableHud;
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Reset_Appearance) && (IsInGame() || IsInLobby())) ControlAppearance(false);
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Save_Appearance) && (IsInGame() || IsInLobby())) SaveOriginalAppearance();
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Randomize_Appearance)) ControlAppearance(true);
+        if (KeyBinds::IsKeyPressed(State.KeyBinds.Complete_Tasks) && IsInGame()) {
+            auto tasks = GetNormalPlayerTasks(*Game::pLocalPlayer);
+            for (auto task : tasks) {
+                if (task->fields.taskStep != task->fields.MaxStep)
+                    State.rpcQueue.push(new RpcCompleteTask(task->fields._._Id_k__BackingField));
+            }
+        }
+        if ((ImGui::IsKeyDown(0x11) || ImGui::IsKeyDown(0xA2) || ImGui::IsKeyDown(0xA3)) && State.EnableZoom && (IsInGame() || IsInLobby())) {
+            if (ImGui::GetIO().MouseWheel < 0.f)  State.CameraHeight += 0.1f;
+            if (ImGui::GetIO().MouseWheel > 0.f && State.CameraHeight - 0.1f >= 0.5f) State.CameraHeight -= 0.1f;
+        }
+        if (State.FreeCam && (IsInGame() || IsInLobby())) {
+            if (ImGui::GetIO().MouseWheel < 0.f ) State.FreeCamSpeed += 0.05f;
+            if (ImGui::GetIO().MouseWheel > 0.f && State.CameraHeight - 0.05f >= 0.05f) State.FreeCamSpeed -= 0.05f;
         }
     }
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_SMAU) && !State.ChatFocused) State.DisableSMAU = !State.DisableSMAU;
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -165,7 +176,7 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         maps.push_back({ D3D11Image(Resource(IDB_PNG2), pDevice), 115.F, 240.F, 9.25F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG3), pDevice), 8.F, 21.F, 10.F });
         maps.push_back({ D3D11Image(Resource(IDB_PNG4), pDevice), 162.F, 107.F, 6.F });
-        maps.push_back({ D3D11Image(Resource(IDB_PNG15), pDevice), 240.F, 140.F, 9.F });
+        maps.push_back({ D3D11Image(Resource(IDB_PNG15), pDevice), 237.F, 140.F, 8.5F });
 
         icons.insert({ ICON_TYPES::VENT_IN, { D3D11Image(Resource(IDB_PNG5), pDevice), 0.02f }});
         icons.insert({ ICON_TYPES::VENT_OUT, { D3D11Image(Resource(IDB_PNG6), pDevice), 0.02f }});
@@ -177,6 +188,7 @@ bool ImGuiInitialization(IDXGISwapChain* pSwapChain) {
         icons.insert({ ICON_TYPES::DEAD, { D3D11Image(Resource(IDB_PNG12), pDevice), 0.02f } });
         icons.insert({ ICON_TYPES::PLAY, { D3D11Image(Resource(IDB_PNG13), pDevice), 0.55f } });
         icons.insert({ ICON_TYPES::PAUSE, { D3D11Image(Resource(IDB_PNG14), pDevice), 0.55f } });
+        icons.insert({ ICON_TYPES::PLAYERVISOR, { D3D11Image(Resource(IDB_PNG16), pDevice), 0.02f } });
 
         DirectX::hRenderSemaphore = CreateSemaphore(
             NULL,                                 // default security attributes
@@ -320,12 +332,12 @@ HRESULT __stdcall dPresent(IDXGISwapChain* __this, UINT SyncInterval, UINT Flags
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    if (State.ShowMenu)
+    if (!State.DisableSMAU && State.ShowMenu)
     {
         ImGuiRenderer::Submit([]() { Menu::Render(); });
     }
 
-    if (State.ShowConsole)
+    if (!State.DisableSMAU && State.ShowConsole)
     {
         ImGuiRenderer::Submit([]() { ConsoleGui::Render(); });
     }

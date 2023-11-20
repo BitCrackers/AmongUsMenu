@@ -7,22 +7,25 @@
 #include "game.h"
 
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
-	std::vector<uint8_t> assignedPlayers;
-	GameOptions options;
-	auto allPlayers = GetAllPlayerControl();
-	auto roleRates = RoleRates(options, (int)allPlayers.size());
+	if (!State.DisableSMAU) {
+		std::vector<uint8_t> assignedPlayers;
+		GameOptions options;
+		auto allPlayers = GetAllPlayerControl();
+		auto roleRates = RoleRates(options, (int)allPlayers.size());
 
-	AssignPreChosenRoles(roleRates, assignedPlayers);
-	AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
-	AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
-	if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
-		AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+		AssignPreChosenRoles(roleRates, assignedPlayers);
+		AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+		AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
+		if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
+			AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+		}
+		else {
+			AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+			AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+		}
 	}
-	else {
-		AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
-		AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
-	}
+	RoleManager_SelectRoles(__this, method);
 }
 
 /*void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
@@ -54,11 +57,11 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2
 {
 	auto roleCount = roleRates.GetRoleCount(role);
 	auto playerAmount = allPlayers.size();
-	auto maxImposterAmount = GetMaxImposterAmount((int)playerAmount);
+	auto maxImpostorAmount = GetMaxImpostorAmount((int)playerAmount);
 	if (GameOptions().GetGameMode() == GameModes__Enum::HideNSeek && role == RoleTypes__Enum::Engineer)
 		roleCount = allPlayers.size() - 1;
-	if (role == RoleTypes__Enum::Shapeshifter && roleCount >= maxImposterAmount)
-		roleCount = maxImposterAmount;
+	if (role == RoleTypes__Enum::Shapeshifter && roleCount >= maxImpostorAmount)
+		roleCount = maxImpostorAmount;
 	if (roleCount < 1)
 		return;
 

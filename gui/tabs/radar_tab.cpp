@@ -42,12 +42,19 @@ namespace RadarTab {
 			if (ImGui::Checkbox("Draw Player Icons", &State.RadarDrawIcons)) {
 				State.Save();
 			}
+			if (State.RadarDrawIcons && State.RevealRoles) {
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Show Role Color on Visor", &State.RadarVisorRoleColor)) {
+					State.Save();
+				}
+			}
+
 			if (ImGui::Checkbox("Lock Radar Position", &State.LockRadar)) {
 				State.Save();
 			}
-			/*if (ImGui::Checkbox("Show Borders", &State.RadarBorder)) {
+			if (ImGui::Checkbox("Show Border", &State.RadarBorder)) {
 				State.Save();
-			}*/
+			}
 			if (ImGui::ColorEdit4("Radar Color",
 				(float*)&State.SelectedColor,
 				ImGuiColorEditFlags__OptionsDefault
@@ -56,6 +63,10 @@ namespace RadarTab {
 				| ImGuiColorEditFlags_AlphaPreview)) {
 				State.Save();
 			}
+			if (ImGui::InputInt("Extra Width", &State.RadarExtraWidth))
+				State.Save();
+			if (ImGui::InputInt("Extra Height", &State.RadarExtraHeight))
+				State.Save();
 
 			ImGui::EndTabItem();
 		}

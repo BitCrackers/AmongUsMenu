@@ -19,7 +19,7 @@ namespace ConsoleGui
 	bool init = false;
 	void Init() {
 		ImGui::SetNextWindowSize(ImVec2(520, 320) * State.dpiScale, ImGuiCond_None);
-		ImGui::SetNextWindowBgAlpha(1.F);
+		ImGui::SetNextWindowBgAlpha(State.MenuThemeColor.w);
 
 		if (!init)
 		{
@@ -38,9 +38,8 @@ namespace ConsoleGui
 
 	void Render() {
 		ConsoleGui::Init();
-
 		ImGui::Begin("Console", &State.ShowConsole, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-		ImGui::BeginChild("console#filter", ImVec2(520, 20) * State.dpiScale, true);
+		ImGui::BeginChild("console#filter", ImVec2(520, 20) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &ConsoleGui::event_filter, 100.f * State.dpiScale);
@@ -52,7 +51,7 @@ namespace ConsoleGui
 		}
 		ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild("console#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("console#scroll", ImVec2(511, 270) * State.dpiScale, true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoBackground);
 
 		// pre-processing of filters
 		bool isUsingEventFilter = false, isUsingPlayerFilter = false;

@@ -6,11 +6,13 @@
 #include "state.hpp"
 #include "utility.h"
 
+using namespace std::string_view_literals;
+
 namespace DoorsTab {
 	void Render() {
 		if (IsInGame() && !State.mapDoors.empty()) {
 			if (ImGui::BeginTabItem("Doors")) {
-				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true);
+				ImGui::BeginChild("doors#list", ImVec2(200, 0) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 				bool shouldEndListBox = ImGui::ListBoxHeader("###doors#list", ImVec2(200, 150) * State.dpiScale);
 				for (auto systemType : State.mapDoors) {
 					if (systemType == SystemTypes__Enum::Decontamination
@@ -18,7 +20,18 @@ namespace DoorsTab {
 						|| systemType == SystemTypes__Enum::Decontamination3) {
 						continue;
 					}
-					auto plainDoor = GetPlainDoorByRoom(systemType);
+					bool isOpen;
+					auto openableDoor = GetOpenableDoorByRoom(systemType);
+					if ("PlainDoor"sv == openableDoor->klass->parent->name
+						|| "PlainDoor"sv == openableDoor->klass->name) {
+						isOpen = reinterpret_cast<PlainDoor*>(openableDoor)->fields.Open;
+					}
+					else if ("MushroomWallDoor"sv == openableDoor->klass->name) {
+						isOpen = reinterpret_cast<MushroomWallDoor*>(openableDoor)->fields.open;
+					}
+					else {
+						continue;
+					}
 					if (!(std::find(State.pinnedDoors.begin(), State.pinnedDoors.end(), systemType) == State.pinnedDoors.end()))
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, { 1.f, 0.f, 0.f, 1.f });
@@ -26,7 +39,7 @@ namespace DoorsTab {
 							State.selectedDoor = systemType;
 						ImGui::PopStyleColor(1);
 					}
-					else if (!plainDoor->fields.Open)
+					else if (!isOpen)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, State.RgbMenuTheme ? State.RgbColor : State.MenuThemeColor);
 						if (ImGui::Selectable(TranslateSystemTypes(systemType), State.selectedDoor == systemType))
@@ -44,7 +57,7 @@ namespace DoorsTab {
 				ImGui::EndChild();
 
 				ImGui::SameLine();
-				ImGui::BeginChild("doors#options", ImVec2(200, 0) * State.dpiScale);
+				ImGui::BeginChild("doors#options", ImVec2(200, 0) * State.dpiScale, false, ImGuiWindowFlags_NoBackground);
 
 				if (State.DisableSabotages) {
 					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Sabotages have been disabled.");

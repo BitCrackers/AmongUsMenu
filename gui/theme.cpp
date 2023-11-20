@@ -9,7 +9,7 @@ ImVec4 HI(float v) {
 		vec = State.RgbColor;
 	else
 		vec = State.MenuThemeColor;
-	return ImVec4(vec.x, vec.y, vec.z, v);
+	return ImVec4(vec.x, vec.y, vec.z, v * State.MenuThemeColor.w);
 }
 
 ImVec4 MED(float v) {
@@ -18,7 +18,7 @@ ImVec4 MED(float v) {
 		vec = State.RgbColor;
 	else
 		vec = State.MenuThemeColor;
-	return ImVec4((float)(vec.x / 1.25), (float)(vec.y / 1.25), (float)(vec.z / 1.25), v);
+	return ImVec4((float)(vec.x / 1.25), (float)(vec.y / 1.25), (float)(vec.z / 1.25), v * State.MenuThemeColor.w);
 }
 
 ImVec4 LOW(float v) {
@@ -27,11 +27,11 @@ ImVec4 LOW(float v) {
 		vec = State.RgbColor;
 	else
 		vec = State.MenuThemeColor;
-	return ImVec4((float)(vec.x / 1.5625), (float)(vec.y / 1.5625), (float)(vec.z / 1.5625), v);
+	return ImVec4((float)(vec.x / 1.5625), (float)(vec.y / 1.5625), (float)(vec.z / 1.5625), v * State.MenuThemeColor.w);
 }
 
-#define BG(v)   ImVec4(0.230f, 0.230f, 0.230f, v)
-#define IMGUI_TEXT(v) ImVec4(1.f, 1.f, 1.f, v)
+#define BG(v)   ImVec4(0.230f, 0.230f, 0.230f, v * State.MenuThemeColor.w)
+#define IMGUI_TEXT(v) ImVec4(1.f, 1.f, 1.f, v * State.MenuThemeColor.w)
 
 void ApplyTheme()
 {

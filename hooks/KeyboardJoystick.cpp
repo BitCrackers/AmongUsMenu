@@ -3,7 +3,7 @@
 #include "state.hpp"
 
 void dKeyboardJoystick_Update(KeyboardJoystick* __this, MethodInfo* method) {
-    if (!State.FreeCam && !State.playerToAttach.has_value()) {
+    if ((!State.FreeCam && !State.playerToAttach.has_value()) || State.DisableSMAU) {
         app::KeyboardJoystick_Update(__this, method);
     }
     else
@@ -13,7 +13,7 @@ void dKeyboardJoystick_Update(KeyboardJoystick* __this, MethodInfo* method) {
 void dScreenJoystick_FixedUpdate(ScreenJoystick* __this, MethodInfo* method)
 {
     static int countdown;
-    if (!State.FreeCam && !State.playerToAttach.has_value()) {
+    if ((!State.FreeCam && !State.playerToAttach.has_value()) || State.DisableSMAU) {
         app::ScreenJoystick_FixedUpdate(__this, method);
         countdown = 3; //This is necessary for mouseup to zero out the delta movement
     }

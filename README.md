@@ -1,13 +1,14 @@
-## Version 1.1: The Doors and Patches Update
+## Version 2.0: The Customization Update
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
-## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only.
+## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only. Please don't harass the BitCrackers team regarding this fork.
 <p align="center">
    SickoModeAU is a Cheat Menu forked from AmongUsMenu for the popular Game Among Us.
 </p>
 
 ## Disclaimer
 This project is for Educational Use only. We do not condone this software being used to gain an advantage against other people. This project is aimed to make Innersloth's anticheat better.
+Use at your own risk. If you get banned from playing entirely or from a lobby, I (g0aty) am not responsible.
 
 ## Compile (Configurations)
 You can compile two different versions of the menu. Normal or Version Proxy. Steps to compile can be found here: https://docs.google.com/document/d/16Tnqk7LIqyQlw74TuV34Wsy9JDqIfVy7DgUndwIL3uw/edit?usp=sharing
@@ -45,6 +46,7 @@ First you will need protontricks, you can install it with your packager of choic
 - Show Console - HOME
 - Show Replay - END
 - Repair Sabotage - PAGE DOWN (PgDn)
+- Panic / Disable SMAU - PAUSE BREAK (Break)
 
 ## Screenshot
 <p align="center">
@@ -58,7 +60,7 @@ First you will need protontricks, you can install it with your packager of choic
 * [cddjr](https://github.com/cddjr) (Helped in updating to the Fungle map, saved a lot of my time)
 * Everyone else who contributed to the code and I couldn't list here. Thank you!
 
-## Contributing
+## Contributing (AUM, not here)
 
 1. Fork it (<https://github.com/BitCrackers/AmongUsMenu/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
@@ -69,31 +71,32 @@ First you will need protontricks, you can install it with your packager of choic
 ## Added/Changed Features
 Settings Tab:
 1. Hide Keybinds (so u don't accidentally change any keybind when opening menu)
-2. Menu Size (More control over size with slider)
+2. Menu Size (More control over size)
 3. Colored / RGB menu theme (more customization - also applies to radar/replay)
-4. Automatically set name / Set name button (more control over ign)
-5. Custom Streamer Mode lobby code (changes ****** to custom text - defaults to GOATYY)
-6. Level Spoofer (changes ur pointless amogus level to a cool number)
-7. Cosmetic Unlocker (added toggle for when u wanna unlock stuff legit)
-8. Safe Mode (when toggled off, adds more features that were originally detected by anticheat - meant to be used in servers w/ no anticheat)
+4. Menu Transparency (makes the menu see-through)
+5. Automatically set name / Set name button (more control over ign)
+6. Custom Streamer Mode lobby code (changes ****** to custom text - defaults to GOATYY)
+7. Level Spoofer (changes ur pointless amogus level to a cool number)
+8. Cosmetic Unlocker (added toggle for when u wanna unlock stuff legit)
+9. Safe Mode (when toggled off, adds more features that were originally detected by anticheat - meant to be used in servers w/ no anticheat)
+10. Hide Friend Code (so no one catches you with the same friend code)
 
 Game Tab:
 1. No Ability Cooldown (removes cooldown for venting/vitals/killing/shapeshifting (in certain cases)/protecting)
-2. Fortegreen in the list of available colors (accessible w/ host)
-3. Color Sniper (when a player with ur color leaves, change to that color immediately)
-4. Chat message sending (add newlines and stuff, spam when not in safe mode)
-5. Cycler (change ur cosmetics/name randomly)
-6. Confuser (randomize appearance at will to avoid being detected)
-7. Revive (only as host, self-explanatory)
-8. Spam Report (keeps on reporting dead bodies even while in a meeting)
-9. Disable Game Ending (only as host)
-10. End Game (host only, select a reason and end the game at ur own will)
-11. Force name/color for everyone (host only)
-12. Added hide and seek game options
+2. Speed Multiplier (self-explanatory)
+3. Kill Distance Modifier (self-explanatory)
+4. Fortegreen in the list of available colors (accessible w/ host)
+5. Color Sniper (when a player with ur color leaves, change to that color immediately)
+6. Chat message sending (add newlines and stuff, spam when not in safe mode)
+7. Cycler (change ur cosmetics/name randomly)
+8. Confuser (randomize appearance at will to avoid being detected)
+9. Spam Report (keeps on reporting dead bodies even while in a meeting)
+10. Added hide and seek game options
+11. Added cycle between players (impersonates random players on a fixed timer)
 
 Self Tab:
 1. Disable HUD (self-explanatory)
-2. Freecam/Zoom (now works in the lobby, ik it's pointless)
+2. Freecam/Zoom (now works in the lobby, change speed with scroll wheel, and zoom with ctrl-scroll)
 3. Custom Name (adds a custom client-sided (server sided option when hosting) name with color and formatting)
 4. Show Player Info in Lobby (shows player level, friendcode)
 5. Player Colored Names (self-explanatory)
@@ -107,10 +110,15 @@ Self Tab:
 13. Fake Role (adds a client-sided role such as impostor)
 14. Kill Through Walls (self-explanatory)
 15. Infinite Kill Range (allows "infinite" kill distance)
+16. Do Tasks as Impostor (self-explanatory)
+17. Show Vote Kicks (shows if anyone votekicked you below ping)
 
 Radar Tab / Radar:
 1. Changed the crewmate icon
-2. Added a border to the radar
+2. Added a border toggle to the radar
+3. Changed visor color to the actual visor color
+4. Added role display on visor
+5. Changed role-based to selectively show crew/imp
 
 Replay Tab:
 None
@@ -138,6 +146,7 @@ Note: The cooldown is not set, meaning you will get kicked for shifting during t
 16. Set Scanner (only when not in safe mode)
 17. Force name/color (host-only)
 18. Chat spoofing (only when not in safe mode)
+19. Cosmetics Stealer (allows stealing individual cosmetics from player)
 
 Tasks Tab:
 1. Keybind for complete all tasks
@@ -156,14 +165,24 @@ None
 Debug Tab:
 1. Clear RPC Queues (when too many packets are in queue to send to server)
 
+Host Tab:
+1. Disable Game Ending
+2. End Game (host only, select a reason and end the game at ur own will)
+3. Force name/color for everyone
+4. Disable Meetings/Sabotages
+5. Revive Yourself
+6. Custom Impostor Count (forces the number of impostors to be the value you set)
+
 Miscellaneous:
-1. Allow all characters in chat and extend char limit (in special cases)
+1. Allow all unblocked characters in chat and extend char limit (in special cases)
 2. Kill packets changed from CmdCheckMurder to RpcMurderPlayer (allows killing in certain cases)
 3. Added mod version and shows when freecam/noclip is turned on
 4. Disable freecam moving when chat text is focused
+5. Check for invalid names detected by anticheat
 
 ## Removed Features
 1. Removed custom RPC and AUM chat (prevents detection by other mod users)
+2. Removed changing taskbar updates (doesn't work client-side)
 
 ## Notes
 1. If you get crashes, make sure you upload your "smau-log.txt" (in your Among Us directory) and mark the issue on the repo.

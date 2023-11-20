@@ -29,7 +29,15 @@ namespace SettingsTab {
 					State.Save();
 				}
 			}
-
+			if (ImGui::Checkbox("Panic (Disable SMAU)", &State.DisableSMAU)) {
+				State.Save();
+			}
+			if (State.ShowKeybinds) {
+				ImGui::SameLine();
+				if (HotKey(State.KeyBinds.Toggle_SMAU)) {
+					State.Save();
+				}
+			}
 			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
@@ -44,18 +52,25 @@ namespace SettingsTab {
 				State.Save();
 			}
 
-			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
-			if (SteppedSliderFloat("Menu Size", &State.dpiScale, 0.5f, 3.f, 0.05f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
-				State.Save();
+			static const std::vector<const char*> DPI_SCALING_LEVEL = { "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "105%", "110%", "115%", "120%", "125%", "130%", "135%", "140%", "145%", "150%", "155%", "160%", "165%", "170%", "175%", "180%", "185%", "190%", "195%", "200%", "205%", "210%", "215%", "220%", "225%", "230%", "235%", "240%", "245%", "250%", "255%", "260%", "265%", "270%", "275%", "280%", "285%", "290%", "295%", "300%" };
+			ImGui::SameLine();
+			int scaleIndex = (int(std::clamp(State.dpiScale, 0.5f, 3.0f) * 100.0f) - 50) / 5;
+			if (CustomListBoxInt("Scaling Level", &scaleIndex, DPI_SCALING_LEVEL, 100 * State.dpiScale)) {
+				State.dpiScale = (scaleIndex * 5 + 50) / 100.0f;
+				State.dpiChanged = true;
 			}
 
-			if (ImGui::ColorEdit4("Menu Theme Color", (float*)&State.MenuThemeColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
+			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
+
+			if (ImGui::ColorEdit3("Menu Theme Color", (float*)&State.MenuThemeColor, ImGuiColorEditFlags__OptionsDefault | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview)) {
 				State.Save();
 			}
 
 			if (ImGui::Checkbox("RGB Menu Theme", &State.RgbMenuTheme)) {
 				State.Save();
 			}
+			ImGui::SameLine();
+			SteppedSliderFloat("Opacity", (float*)&State.MenuThemeColor.w, 0.1f, 1.f, 0.01f, "%.2f", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput);
 
 			if (ImGui::Button("Reset Menu Theme Color"))
 			{
@@ -68,23 +83,19 @@ namespace SettingsTab {
 			}
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 #endif
-			//Change this to in game only once account is overridden
-			{
-				if (IsHost() || State.SafeMode == false) {
-					char* nameBufferHost[255]{ const_cast<char*>(State.userName.c_str()) };
-					if (ImGui::InputText("Username", *nameBufferHost, IM_ARRAYSIZE(nameBufferHost))) {
-						State.userName = std::string(*nameBufferHost);
-					}
-				}
-				else {
-					char* nameBuffer[13]{ const_cast<char*>(State.userName.c_str()) };
-					if (ImGui::InputText("Username", *nameBuffer, IM_ARRAYSIZE(nameBuffer))) {
-						State.userName = std::string(*nameBuffer);
-					}
-				}
+			char* nameBufferHost[255]{ const_cast<char*>(State.userName.c_str()) };
+			if (ImGui::InputText("Username", *nameBufferHost, IM_ARRAYSIZE(nameBufferHost))) {
+				State.userName = std::string(*nameBufferHost);
+			}
+
+			if (!(IsHost() || !State.SafeMode)) {
+				if (State.userName.length() >= (size_t)13)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Username is too long, gets detected by anticheat. This name will be ignored.");
+				else if (!IsNameValid(State.userName))
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Username contains characters blocked by anticheat. This name will be ignored.");
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Set Name")) {
+			if (ImGui::Button("Set Name") && (!IsNameValid(State.userName) || (IsHost() || !State.SafeMode))) {
 				SetPlayerName(State.userName);
 				LOG_INFO("Successfully set name to \"" + State.userName + "\"");
 				if (IsInGame())
@@ -132,16 +143,26 @@ namespace SettingsTab {
 				State.Save();
 			}
 
-			if (ImGui::Checkbox("Hide Friend Code", &State.HideFriendCode)) {
+			if (ImGui::Checkbox("Hide Friend Code (restart game to apply)", &State.HideFriendCode)) {
 				State.Save();
 			}
-			ImGui::SameLine();
+			ImGui::SameLine();/*
+			if (ImGui::Checkbox("Spoof Friend Code", &State.SpoofFriendCode)) {
+				State.Save();
+			}
+			char* fcBuffer[14]{ const_cast<char*>(State.FakeFriendCode.c_str()) };
+			if (ImGui::InputText("Fake Friend Code", *fcBuffer, IM_ARRAYSIZE(fcBuffer))) {
+				State.userName = std::string(*fcBuffer);
+			}
+			ImGui::SameLine();*/
 			if (ImGui::Checkbox("Safe Mode", &State.SafeMode)) {
 				State.Save();
 			}
 
 			ImGui::Text("Keep safe mode on in official servers (NA, Europe, Asia) to prevent anticheat detection!");
-			ImGui::Text("SickoModeAU v1.1 | Original menu: Bitcrackers/AmongUsMenu | Modded by @goatwo (YT)");
+			ImGui::Separator();
+			ImGui::Text("SickoModeAU v2.0 | Original menu: https://github.com/Bitcrackers/AmongUsMenu");
+			ImGui::Text("Modded by g0aty (GitHub) / @goatwo (YT)");
 
 			ImGui::EndTabItem();
 		}

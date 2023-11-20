@@ -164,6 +164,16 @@ void RpcVent::Process()
 		PlayerPhysics_RpcEnterVent(Player->fields.MyPhysics, ventId, NULL);
 }
 
+RpcBootFromVent::RpcBootFromVent(int32_t ventId)
+{
+	this->ventId = ventId;
+}
+
+void RpcBootFromVent::Process()
+{	
+	VentilationSystem_Update(VentilationSystem_Operation__Enum::BootImpostors, ventId, NULL);
+}
+
 RpcSetLevel::RpcSetLevel(PlayerControl* Player, int level)
 {
 	this->Player = Player;

@@ -31,25 +31,20 @@ bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method)
 
 bool dEOSManager_IsFriendsListAllowed(EOSManager* __this, MethodInfo* method)
 {
-	if (State.HideFriendCode)
+	if (!State.DisableSMAU && State.HideFriendCode)
 		return false;
 	return app::EOSManager_IsFriendsListAllowed(__this, method);
 }
 
 void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, MethodInfo* method) {
-	// Compatible with Steam and Epic
-	Il2CppClass* klass = get_class("Assembly-CSharp, EOSManager");
-	LOG_ASSERT(klass);
-	FieldInfo* field = il2cpp_class_get_field_from_name(klass, "isKWSMinor");
-	LOG_ASSERT(field);
-	bool value = false;
-	il2cpp_field_set_value((Il2CppObject*)__this, field, &value);
+	if (!State.DisableSMAU) {// Compatible with Steam and Epic
+		Il2CppClass* klass = get_class("Assembly-CSharp, EOSManager");
+		LOG_ASSERT(klass);
+		FieldInfo* field = il2cpp_class_get_field_from_name(klass, "isKWSMinor");
+		LOG_ASSERT(field);
+		bool value = false;
+		il2cpp_field_set_value((Il2CppObject*)__this, field, &value);
+	}
 
 	app::EOSManager_UpdatePermissionKeys(__this, callback, method);
 }
-
-/*void dEOSManager_set_FriendCode(EOSManager* __this, String* value, MethodInfo* method) {
-	if (State.SpoofFriendCode && State.FakeFriendCode != "")
-		return EOSManager_set_FriendCode(__this, convert_to_string(State.FakeFriendCode), method);
-	return EOSManager_set_FriendCode(__this, value, method);
-}*/

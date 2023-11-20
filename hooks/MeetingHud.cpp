@@ -14,10 +14,9 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 
 		static std::string strVoteSpreaderType = translate_type_name("VoteSpreader, Assembly-CSharp");
 		voteSpreaderType = app::Type_GetType(convert_to_string(strVoteSpreaderType), nullptr);
-
-		MeetingHud_Awake(__this, method);
-		if (State.confuser && State.confuseOnMeeting)
+		if (State.confuser && State.confuseOnMeeting && !State.DisableSMAU)
 			ControlAppearance(true);
+		MeetingHud_Awake(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_Awake (MeetingHud)");
@@ -32,7 +31,6 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 		{
 			Replay::Reset(false);
 		}
-
 		MeetingHud_Close(__this, method);
 	}
 	catch (...) {
@@ -119,8 +117,8 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 		const auto prevAnonymousVotes = options.GetBool(app::BoolOptionNames__Enum::AnonymousVotes);
 		if (prevAnonymousVotes && State.RevealAnonymousVotes)
 			options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
-		MeetingHud_PopulateResults(__this, states, method);
 		options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
+		MeetingHud_PopulateResults(__this, states, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_PopulateResults (MeetingHud)");
@@ -128,10 +126,10 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 }
 
 void RevealAnonymousVotes() {
-	if (!State.InMeeting
+	if (State.DisableSMAU || (!State.InMeeting
 		|| !app::MeetingHud__TypeInfo
 		|| !app::MeetingHud__TypeInfo->static_fields->Instance
-		|| !GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes))
+		|| !GameOptions().GetBool(app::BoolOptionNames__Enum::AnonymousVotes)))
 		return;
 	auto meetingHud = app::MeetingHud__TypeInfo->static_fields->Instance;
 	for (auto votedForArea : il2cpp::Array(meetingHud->fields.playerStates)) {
@@ -147,163 +145,165 @@ void RevealAnonymousVotes() {
 
 void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 	try {
-		const bool isBeforeResultsState = __this->fields.state < app::MeetingHud_VoteStates__Enum::Results;
-		il2cpp::Array playerStates(__this->fields.playerStates);
-		for (auto playerVoteArea : playerStates) {
-			if (!playerVoteArea) {
-				// oops: game bug
-				continue;
-			}
-			auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
-			auto localData = GetPlayerData(*Game::pLocalPlayer);
-			auto playerControl = GetPlayerControlById(playerVoteArea->fields.TargetPlayerId);
-			auto playerNameTMP = playerVoteArea->fields.NameText;
-			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
-			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
-			if (playerData == GetPlayerData(*Game::pLocalPlayer) && State.CustomName && (!State.ServerSideCustomName || State.ServerSideCustomName && (!IsHost() || State.SafeMode)) && !State.userName.empty()) {
-				if (State.CustomName && !State.ServerSideCustomName) {
-					if (State.BoldName)
-						playerName = "<b>" + playerName + "</b>";
-					if (State.ItalicName)
-						playerName = "<i>" + playerName + "</i>";
-					if (State.UnderlineName)
-						playerName = "<u>" + playerName + "</u>";
-					if (State.StrikethroughName)
-						playerName = "<s>" + playerName + "</s>";
-					if (State.ColoredName && !State.RgbName) {
-						std::string colorCode = std::format("<#{:02x}{:02x}{:02x}{:02x}>", int(State.NameColor.x * 255), int(State.NameColor.y * 255), int(State.NameColor.z * 255), int(State.NameColor.w * 255));
-						playerName = colorCode + "" + playerName + "</color>";
-					}
-					if (State.RgbName) {
-						playerName = State.rgbCode + playerName + "</color>";
-					}
-				}
-			}
-
-			if (playerData && localData && outfit) {
-				if (State.PlayerColoredNames)
-				{
-					playerName = playerName + "</color>";
-					Color32&& nameColor = GetPlayerColor(outfit->fields.ColorId);
-
-					playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
-						nameColor.r, nameColor.g, nameColor.b,
-						nameColor.a, playerName);
-				}
-				if (State.RevealRoles)
-				{
-					std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
-					if (!playerData->fields.Disconnected) {
-						int completedTasks = 0;
-						int totalTasks = 0;
-						auto tasks = GetNormalPlayerTasks(playerControl);
-						for (auto task : tasks)
-						{
-							if (task->fields.taskStep == task->fields.MaxStep) {
-								completedTasks++;
-								totalTasks++;
-							}
-							else
-								totalTasks++;
-						}
-						std::string tasksText = std::format("({}/{})", completedTasks, totalTasks);
-						if (totalTasks == 0 || PlayerIsImpostor(playerData))
-							playerName = "<size=1.2>" + roleName + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
-						else
-							playerName = "<size=1.2>" + roleName + " " + tasksText + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
-					}
-					else
-						playerName = "<size=1.2>" + roleName + " (D/C)\n</size>" + playerName + "\n<size=1.2><#0000>0";
-					Color32&& roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
-
-					playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
-						roleColor.r, roleColor.g, roleColor.b,
-						roleColor.a, playerName);
-				}
-
-				String* playerNameStr = convert_to_string(playerName);
-				app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
-			}
-
-			if (playerData)
-			{
-				bool didVote = (playerVoteArea->fields.VotedFor != Game::HasNotVoted);
-				// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
-				// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
-				if (didVote && playerVoteArea->fields.VotedFor != Game::MissedVote
-					&& playerVoteArea->fields.VotedFor != Game::DeadVote
-					&& State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
-				{
-					synchronized(Replay::replayEventMutex) {
-						State.liveReplayEvents.emplace_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
-					}
-					State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
-					STREAM_DEBUG(ToString(playerData) << " voted for " << ToString(playerVoteArea->fields.VotedFor));
-
-					// avoid duplicate votes
-					if (isBeforeResultsState) {
-						GameOptions options;
-						const auto prevAnonymousVotes = options.GetBool(app::BoolOptionNames__Enum::AnonymousVotes);
-						if (prevAnonymousVotes && State.RevealAnonymousVotes)
-							options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
-						if (playerVoteArea->fields.VotedFor != Game::SkippedVote) {
-							for (auto votedForArea : playerStates) {
-								if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
-									auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-									MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
-									break;
-								}
-							}
-						}
-						else if (__this->fields.SkippedVoting) {
-							auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
-							MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
-						}
-						options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
-					}
-				}
-				else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())
-				{
-					auto it = State.voteMonitor.find(playerData->fields.PlayerId);
-					auto dcPlayer = it->second;
-					State.voteMonitor.erase(it); //Likely disconnected player
-
-					// Remove all votes for disconnected player 
-					for (auto votedForArea : playerStates) {
-						if (votedForArea->fields.TargetPlayerId == dcPlayer) {
-							auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-							Transform_RemoveVotes(transform, 1); // remove a vote
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		if (isBeforeResultsState) {
-			for (auto votedForArea : playerStates) {
-				if (!votedForArea) {
+		if (!State.DisableSMAU) {
+			const bool isBeforeResultsState = __this->fields.state < app::MeetingHud_VoteStates__Enum::Results;
+			il2cpp::Array playerStates(__this->fields.playerStates);
+			for (auto playerVoteArea : playerStates) {
+				if (!playerVoteArea) {
 					// oops: game bug
 					continue;
 				}
-				auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
-				auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
-				if (!voteSpreader) continue;
-				for (auto spriteRenderer : il2cpp::List(voteSpreader->fields.Votes)) {
-					auto gameObject = app::Component_get_gameObject((app::Component_1*)spriteRenderer, nullptr);
-					app::GameObject_SetActive(gameObject, State.RevealVotes, nullptr);
+				auto playerData = GetPlayerDataById(playerVoteArea->fields.TargetPlayerId);
+				auto localData = GetPlayerData(*Game::pLocalPlayer);
+				auto playerControl = GetPlayerControlById(playerVoteArea->fields.TargetPlayerId);
+				auto playerNameTMP = playerVoteArea->fields.NameText;
+				app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+				std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+				if (playerData == GetPlayerData(*Game::pLocalPlayer) && State.CustomName && (!State.ServerSideCustomName || State.ServerSideCustomName && (!IsHost() || State.SafeMode)) && !State.userName.empty()) {
+					if (State.CustomName && !State.ServerSideCustomName) {
+						if (State.ColoredName && !State.RgbName) {
+							playerName = GetGradientUsername(playerName);
+						}
+						//we don't want a big name hiding everything in the meeting
+						/*if (State.ResizeName)
+							playerName = std::format("<size={}>", State.NameSize) + playerName + "</size>";*/
+						if (State.ItalicName)
+							playerName = "<i>" + playerName + "</i>";
+						if (State.UnderlineName && (!State.ColoredName || State.RgbName))
+							playerName = "<u>" + playerName + "</u>";
+						if (State.StrikethroughName && (!State.ColoredName || State.RgbName))
+							playerName = "<s>" + playerName + "</s>";
+						if (State.RgbName) {
+							playerName = State.rgbCode + playerName + "</color>";
+						}
+					}
+				}
+
+				if (playerData && localData && outfit) {
+					if (State.PlayerColoredDots)
+					{
+						Color32&& nameColor = GetPlayerColor(outfit->fields.ColorId);
+						std::string dot = std::format("<#{:02x}{:02x}{:02x}{:02x}> ●</color>",
+							nameColor.r, nameColor.g, nameColor.b,
+							nameColor.a);
+
+						playerName = "<#0000>● </color>" + playerName + dot;
+					}
+					if (State.RevealRoles)
+					{
+						std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);
+						if (!playerData->fields.Disconnected) {
+							int completedTasks = 0;
+							int totalTasks = 0;
+							auto tasks = GetNormalPlayerTasks(playerControl);
+							for (auto task : tasks)
+							{
+								if (task->fields.taskStep == task->fields.MaxStep) {
+									completedTasks++;
+									totalTasks++;
+								}
+								else
+									totalTasks++;
+							}
+							std::string tasksText = std::format("({}/{})", completedTasks, totalTasks);
+							if (totalTasks == 0 || PlayerIsImpostor(playerData))
+								playerName = "<size=1.2>" + roleName + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
+							else
+								playerName = "<size=1.2>" + roleName + " " + tasksText + "\n</size>" + playerName + "\n<size=1.2><#0000>0";
+						}
+						else
+							playerName = "<size=1.2>" + roleName + " (D/C)\n</size>" + playerName + "\n<size=1.2><#0000>0";
+						Color32&& roleColor = app::Color32_op_Implicit(GetRoleColor(playerData->fields.Role), NULL);
+
+						playerName = std::format("<color=#{:02x}{:02x}{:02x}{:02x}>{}",
+							roleColor.r, roleColor.g, roleColor.b,
+							roleColor.a, playerName);
+					}
+
+					String* playerNameStr = convert_to_string(playerName);
+					app::TMP_Text_set_text((app::TMP_Text*)playerNameTMP, playerNameStr, NULL);
+				}
+
+				if (playerData)
+				{
+					bool didVote = (playerVoteArea->fields.VotedFor != Game::HasNotVoted);
+					// We are goign to check to see if they voted, then we are going to check to see who they voted for, finally we are going to check to see if we already recorded a vote for them
+					// votedFor will either contain the id of the person they voted for, 254 if they missed, or 255 if they didn't vote. We don't want to record people who didn't vote
+					if (didVote && playerVoteArea->fields.VotedFor != Game::MissedVote
+						&& playerVoteArea->fields.VotedFor != Game::DeadVote
+						&& State.voteMonitor.find(playerData->fields.PlayerId) == State.voteMonitor.end())
+					{
+						synchronized(Replay::replayEventMutex) {
+							State.liveReplayEvents.emplace_back(std::make_unique<CastVoteEvent>(GetEventPlayer(playerData).value(), GetEventPlayer(GetPlayerDataById(playerVoteArea->fields.VotedFor))));
+						}
+						State.voteMonitor[playerData->fields.PlayerId] = playerVoteArea->fields.VotedFor;
+						STREAM_DEBUG(ToString(playerData) << " voted for " << ToString(playerVoteArea->fields.VotedFor));
+
+						// avoid duplicate votes
+						if (isBeforeResultsState) {
+							GameOptions options;
+							const auto prevAnonymousVotes = options.GetBool(app::BoolOptionNames__Enum::AnonymousVotes);
+							if (prevAnonymousVotes && State.RevealAnonymousVotes)
+								options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
+							if (playerVoteArea->fields.VotedFor != Game::SkippedVote) {
+								for (auto votedForArea : playerStates) {
+									if (votedForArea->fields.TargetPlayerId == playerVoteArea->fields.VotedFor) {
+										auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+										MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
+										break;
+									}
+								}
+							}
+							else if (__this->fields.SkippedVoting) {
+								auto transform = app::GameObject_get_transform(__this->fields.SkippedVoting, nullptr);
+								MeetingHud_BloopAVoteIcon(__this, playerData, 0, transform, nullptr);
+							}
+							options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
+						}
+					}
+					else if (!didVote && State.voteMonitor.find(playerData->fields.PlayerId) != State.voteMonitor.end())
+					{
+						auto it = State.voteMonitor.find(playerData->fields.PlayerId);
+						auto dcPlayer = it->second;
+						State.voteMonitor.erase(it); //Likely disconnected player
+
+						// Remove all votes for disconnected player 
+						for (auto votedForArea : playerStates) {
+							if (votedForArea->fields.TargetPlayerId == dcPlayer) {
+								auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+								Transform_RemoveVotes(transform, 1); // remove a vote
+								break;
+							}
+						}
+					}
 				}
 			}
 
-			if (__this->fields.SkippedVoting) {
-				bool showSkipped = false;
-				for (const auto& pair : State.voteMonitor) {
-					if (pair.second == Game::SkippedVote) {
-						showSkipped = State.RevealVotes;
-						break;
+			if (isBeforeResultsState) {
+				for (auto votedForArea : playerStates) {
+					if (!votedForArea) {
+						// oops: game bug
+						continue;
+					}
+					auto transform = app::Component_get_transform((app::Component_1*)votedForArea, nullptr);
+					auto voteSpreader = (VoteSpreader*)app::Component_GetComponent((app::Component_1*)transform, voteSpreaderType, nullptr);
+					if (!voteSpreader) continue;
+					for (auto spriteRenderer : il2cpp::List(voteSpreader->fields.Votes)) {
+						auto gameObject = app::Component_get_gameObject((app::Component_1*)spriteRenderer, nullptr);
+						app::GameObject_SetActive(gameObject, State.RevealVotes, nullptr);
 					}
 				}
-				app::GameObject_SetActive(__this->fields.SkippedVoting, showSkipped, nullptr);
+
+				if (__this->fields.SkippedVoting) {
+					bool showSkipped = false;
+					for (const auto& pair : State.voteMonitor) {
+						if (pair.second == Game::SkippedVote) {
+							showSkipped = State.RevealVotes;
+							break;
+						}
+					}
+					app::GameObject_SetActive(__this->fields.SkippedVoting, showSkipped, nullptr);
+				}
 			}
 		}
 		app::MeetingHud_Update(__this, method);

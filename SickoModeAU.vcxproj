@@ -404,9 +404,10 @@
     <Image Include="resources\pause.png" />
     <Image Include="resources\play.png" />
     <Image Include="resources\player.png" />
+	<Image Include="resources\player_visor.png" />
     <Image Include="resources\polus.png" />
     <Image Include="resources\report.png" />
-    <Image Include="resources\the_skald.png" />
+    <Image Include="resources\skeld.png" />
     <Image Include="resources\tick.png" />
     <Image Include="resources\vent_in.png" />
     <Image Include="resources\vent_out.png" />

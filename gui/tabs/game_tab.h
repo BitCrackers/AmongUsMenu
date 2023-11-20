@@ -7,5 +7,6 @@ namespace GameTab {
 	const std::vector<const char*> COLORS = { "Red", "Blue", "Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral" };
 	const std::vector<const char*> HOSTCOLORS = { "Red", "Blue", "Green", "Pink", "Orange", "Yellow", "Black", "White", "Purple", "Brown", "Cyan", "Lime", "Maroon", "Rose", "Banana", "Gray", "Tan", "Coral", "Fortegreen"};
 	const std::vector<const char*> GAMEENDREASON = { "Crewmates (Votes)", "Crewmates (Tasks)", "Impostors (Votes)", "Impostors (Kill)", "Impostors (Sabotage)", "D/C (Imp)", "D/C (Crew)", "Timer (HNS)", "Kill (HNS)" };
+	const std::vector<const char*> NAMEGENERATION = { "Word Combo", "Random String", "Cycler Names" };
 	void Render();
 }

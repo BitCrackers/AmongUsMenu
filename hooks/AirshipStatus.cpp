@@ -27,16 +27,11 @@ void dAirshipStatus_OnEnable(AirshipStatus* __this, MethodInfo* method)
 	std::sort(State.mapDoors.begin(), State.mapDoors.end());
 
 	State.mapType = Settings::MapType::Airship;
-
-	if (State.DisableSabotages) {
-		State.rpcQueue.push(new RpcUpdateSystem(SystemTypes__Enum::Electrical, 7));
-	}
 }
 
 float dAirshipStatus_CalculateLightRadius(AirshipStatus* __this, GameData_PlayerInfo* player, MethodInfo* method)
 {
-	if (State.MaxVision || State.EnableZoom || State.FreeCam)
+	if (!State.DisableSMAU && State.MaxVision)
 		return 420.F;
-	else
-		return AirshipStatus_CalculateLightRadius(__this, player, method);
+	return AirshipStatus_CalculateLightRadius(__this, player, method);
 }

@@ -511,7 +511,7 @@
     <Image Include="resources\polus.png">
       <Filter>resources</Filter>
     </Image>
-    <Image Include="resources\the_skald.png">
+    <Image Include="resources\skeld.png">
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\airship.png">
@@ -536,6 +536,9 @@
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\player.png">
+      <Filter>resources</Filter>
+    </Image>
+	<Image Include="resources\player_visor.png">
       <Filter>resources</Filter>
     </Image>
     <Image Include="resources\cross.png">

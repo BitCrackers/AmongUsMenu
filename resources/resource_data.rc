@@ -50,7 +50,7 @@ END
 // PNG
 //
 
-IDB_PNG1                PNG                     "the_skald.png"
+IDB_PNG1                PNG                     "skeld.png"
 
 IDB_PNG2                PNG                     "mira_hq.png"
 
@@ -79,6 +79,8 @@ IDB_PNG13               PNG                     "play.png"
 IDB_PNG14               PNG                     "pause.png"
 
 IDB_PNG15               PNG                     "fungle.png"
+
+IDB_PNG16               PNG                     "player_visor.png"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

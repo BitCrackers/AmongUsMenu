@@ -39,7 +39,7 @@ namespace Replay
 	void Init()
 	{
 		ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, FLT_MAX), SquareConstraint);
-		ImGui::SetNextWindowBgAlpha(1.F);
+		ImGui::SetNextWindowBgAlpha(State.MenuThemeColor.w);
 
 		if (!init)
 		{
@@ -463,10 +463,9 @@ namespace Replay
 
 		const auto& map = maps[(size_t)State.mapType];
 		ImGui::SetNextWindowSize(ImVec2((map.mapImage.imageWidth * 0.5f) + 50.0f, (map.mapImage.imageHeight * 0.5f) + 90.f) * State.dpiScale, ImGuiCond_None);
-
 		ImGui::Begin("Replay", &State.ShowReplay, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
-
-		ImGui::BeginChild("replay#filter", ImVec2(0, 20) * State.dpiScale, true);
+		
+		ImGui::BeginChild("replay#filter", ImVec2(0, 20) * State.dpiScale, true, ImGuiWindowFlags_NoBackground);
 		ImGui::Text("Event Filter: ");
 		ImGui::SameLine();
 		CustomListBoxIntMultiple("Event Types", &Replay::event_filter, 100.f * State.dpiScale);
@@ -479,7 +478,7 @@ namespace Replay
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		ImGui::BeginChild("replay#map", ImVec2((map.mapImage.imageWidth * 0.5f) + 50.f, (map.mapImage.imageHeight * 0.5f) + 15.f) * State.dpiScale);
+		ImGui::BeginChild("replay#map", ImVec2((map.mapImage.imageWidth * 0.5f) + 50.f, (map.mapImage.imageHeight * 0.5f) + 15.f) * State.dpiScale, false, ImGuiWindowFlags_NoBackground);
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 		ImVec2 winSize = ImGui::GetWindowSize();
 		ImVec2 winPos = ImGui::GetWindowPos();
@@ -547,7 +546,7 @@ namespace Replay
 		ImGui::Separator();
 		ImGui::Dummy(ImVec2(1.0f, 5.0f) * State.dpiScale);
 
-		ImGui::BeginChild("replay#control");
+		ImGui::BeginChild("replay#control", ImVec2(0,0), false, ImGuiWindowFlags_NoBackground);
 		
 		SliderChrono("##replay_slider", &State.MatchCurrent, &State.MatchStart, &State.MatchLive, fmt, ImGuiSliderFlags_None);
 		

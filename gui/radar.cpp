@@ -28,7 +28,7 @@ namespace Radar {
 	}
 
 	void OnClick() {
-		if (!(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsMouseDown(ImGuiMouseButton_Right))) {
+		if (!(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsMouseClicked(ImGuiMouseButton_Right) || ImGui::IsMouseDown(ImGuiMouseButton_Right))) {
 			ImVec2 mouse = ImGui::GetMousePos();
 			ImVec2 winpos = ImGui::GetWindowPos();
 			ImVec2 winsize = ImGui::GetWindowSize();
@@ -40,8 +40,8 @@ namespace Radar {
 				return;
 
 			const auto& map = maps[(size_t)State.mapType];
-			float xOffset = getMapXOffsetSkeld(map.x_offset);
-			float yOffset = map.y_offset;
+			float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+			float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 			Vector2 target = {
 				((mouse.x - winpos.x) / State.dpiScale - xOffset) / map.scale,
@@ -49,10 +49,6 @@ namespace Radar {
 			};
 
 			State.rpcQueue.push(new RpcSnapTo(target));
-
-			/* Workaround for https://github.com/BitCrackers/AmongUsMenu/issues/546 */
-			ImGui::GetIO().MouseDown[ImGuiMouseButton_Right] = false;
-			ImGui::GetIO().MouseDownDuration[ImGuiMouseButton_Right] = -1.0f;
 		}
 		if (State.TeleportEveryone && !(ImGui::IsKeyPressed(VK_SHIFT) || ImGui::IsKeyDown(VK_SHIFT)) && (ImGui::IsKeyPressed(0x12) || ImGui::IsKeyDown(0x12)) && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
 			ImVec2 mouse = ImGui::GetMousePos();
@@ -66,8 +62,8 @@ namespace Radar {
 				return;
 
 			const auto& map = maps[(size_t)State.mapType];
-			float xOffset = getMapXOffsetSkeld(map.x_offset);
-			float yOffset = map.y_offset;
+			float xOffset = getMapXOffsetSkeld(map.x_offset) + (float)State.RadarExtraWidth;
+			float yOffset = map.y_offset + (float)State.RadarExtraHeight;
 
 			Vector2 target = {
 				((mouse.x - winpos.x) / State.dpiScale - xOffset) / map.scale,
@@ -91,7 +87,7 @@ namespace Radar {
 			Radar::Init();
 
 		const auto& map = maps[(size_t)State.mapType];
-		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5F + 10.F, (float)map.mapImage.imageHeight * 0.5f + 10.f) * State.dpiScale, ImGuiCond_None);
+		ImGui::SetNextWindowSize(ImVec2((float)map.mapImage.imageWidth * 0.5F + 10.F + 2.f * State.RadarExtraWidth, (float)map.mapImage.imageHeight * 0.5f + 10.f + 2.f * State.RadarExtraHeight) * State.dpiScale, ImGuiCond_None);
 
 		if (State.LockRadar)
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
@@ -99,6 +95,13 @@ namespace Radar {
 			ImGui::Begin("Radar", &State.ShowRadar, ImGuiWindowFlags_NoDecoration);
 
 		ImVec2 winpos = ImGui::GetWindowPos();
+
+		if (State.RadarBorder) {
+			const ImVec2 points[] = { {winpos.x + 3.f * State.dpiScale, winpos.y + 1.f * State.dpiScale}, {winpos.x - 5.f * State.dpiScale + ImGui::GetWindowWidth(), winpos.y + 1.f * State.dpiScale}, {winpos.x - 5.f * State.dpiScale + ImGui::GetWindowWidth(), winpos.y + ImGui::GetWindowHeight() - 4.f * State.dpiScale}, {winpos.x + 3.f * State.dpiScale, winpos.y + ImGui::GetWindowHeight() - 4.f * State.dpiScale}, {winpos.x + 3.f * State.dpiScale, winpos.y + 1.f * State.dpiScale}};
+			for (size_t i = 0; i < std::size(points); i++) {
+				ImGui::GetCurrentWindow()->DrawList->AddLine(points[i], points[i + 1], State.RgbMenuTheme ? ImGui::GetColorU32(ImVec4(State.RgbColor.x, State.RgbColor.y, State.RgbColor.z, State.SelectedColor.w)) : ImGui::GetColorU32(State.SelectedColor), 2.f);
+			}
+		}
 
 		ImVec4 RadarColor = ImVec4(1.f, 1.f, 1.f, 0.75f);
 		if (State.RgbMenuTheme)
@@ -110,7 +113,7 @@ namespace Radar {
 
 		ImGui::Image((void*)map.mapImage.shaderResourceView,
 			ImVec2((float)map.mapImage.imageWidth * 0.5F, (float)map.mapImage.imageHeight * 0.5F) * State.dpiScale,
-			ImVec2(0.0f, 0.0f),
+			ImVec2((float)State.RadarExtraWidth * State.dpiScale, (float)State.RadarExtraHeight * State.dpiScale),
 			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(1.0f, 0.0f) : ImVec2(0.0f, 0.0f),
 			(State.FlipSkeld && State.mapType == Settings::MapType::Ship) ? ImVec2(0.0f, 1.0f) : ImVec2(1.0f, 1.0f),
 			RadarColor);

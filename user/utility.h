@@ -41,7 +41,7 @@ enum class RoleType
 
 class RoleRates {
 public:
-	int ImposterCount = 0;
+	int ImpostorCount = 0;
 	int ShapeshifterCount = 0;
 	int ShapeshifterChance = 0;
 	int ScientistCount = 0;
@@ -85,13 +85,14 @@ class PlayerSelection {
 #endif
 			return _playerData->fields.Disconnected;
 		}
-		constexpr bool equals(_Maybenull_ const PlayerControl* playerControl) const {
-			return _playerControl == playerControl;
+		constexpr bool equals(const Result& _Right) const noexcept {
+			if (!this->has_value() || !_Right.has_value()) return false;
+			return _playerControl == _Right._playerControl;
 		}
-		constexpr bool equals(_Maybenull_ const GameData_PlayerInfo* playerData) const {
-			return _playerData == playerData;
+		constexpr bool has_value() const noexcept {
+			return _has_value;
 		}
-		constexpr bool has_value() const {
+		constexpr operator bool() const noexcept {
 			return _has_value;
 		}
 	private:
@@ -117,13 +118,24 @@ public:
 	PlayerSelection() noexcept;
 	explicit PlayerSelection(const  PlayerControl* playerControl);
 	explicit PlayerSelection(GameData_PlayerInfo* playerData);
+	PlayerSelection(const PlayerSelection::Result& result);
 
 	PlayerSelection::Result validate();
 
 	bool equals(const PlayerSelection& selectedPlayer) const;
-	Game::PlayerId get_PlayerId() const noexcept;
-	Game::ClientId get_ClientId() const noexcept;
-	bool is_LocalPlayer() const noexcept;
+	bool equals(const PlayerSelection::Result& selectedPlayer) const;
+	Game::PlayerId get_PlayerId() const noexcept {
+		return this->playerId;
+	}
+	Game::ClientId get_ClientId() const noexcept {
+		return this->clientId;
+	}
+
+	constexpr void reset() noexcept {
+		this->clientId = Game::NoClientId;
+		this->playerId = Game::NoPlayerId;
+	}
+
 	bool has_value() const noexcept {
 		return (this->clientId != Game::NoClientId || this->playerId != Game::NoPlayerId);
 	}
@@ -143,16 +155,17 @@ bool IsInGame();
 bool IsInMultiplayerGame();
 bool IsColorBlindMode();
 bool IsStreamerMode();
-std::string GetHostUsername();
+std::string GetHostUsername(bool colored = false);
 std::string RemoveHtmlTags(std::string html_str);
-int GetMaxImposterAmount(int playerAmount);
+bool IsNameValid(std::string str);
+int GetMaxImpostorAmount(int playerAmount);
 int GenerateRandomNumber(int min, int max);
 GameData_PlayerInfo* GetPlayerData(PlayerControl* player);
 Vector2 GetTrueAdjustedPosition(PlayerControl* player);
 GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id);
 PlayerControl* GetPlayerControlById(Game::PlayerId id);
 bool IsColorAvailable(int colorId);
-std::string GenerateRandomString();
+std::string GenerateRandomString(bool completelyRandom = false);
 PlainDoor* GetPlainDoorByRoom(SystemTypes__Enum room);
 OpenableDoor* GetOpenableDoorByRoom(SystemTypes__Enum room);
 il2cpp::Array<OpenableDoor__Array> GetAllOpenableDoors();
@@ -161,7 +174,7 @@ il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData();
 il2cpp::Array<DeadBody__Array> GetAllDeadBodies();
 il2cpp::List<List_1_PlayerTask_> GetPlayerTasks(PlayerControl* player);
 std::vector<NormalPlayerTask*> GetNormalPlayerTasks(PlayerControl* player);
-SabotageTask* GetSabotageTask(PlayerControl* player);
+Object_1* GetSabotageTask(PlayerControl* player);
 void RepairSabotage(PlayerControl* player);
 void CompleteTask(NormalPlayerTask* playerTask);
 const char* TranslateTaskTypes(TaskTypes__Enum taskType);
@@ -187,8 +200,10 @@ std::string ToString(__maybenull PlayerControl* player);
 std::string ToString(__maybenull GameData_PlayerInfo* data);
 std::string GetGitCommit();
 std::string GetGitBranch();
-void ImpersonateName(PlayerSelection& player);
+void ImpersonateName(__maybenull GameData_PlayerInfo* data);
+void ImpersonateOutfit(GameData_PlayerOutfit* outfit);
 Game::ColorId GetRandomColorId();
+std::string GetGradientUsername(std::string str);
 void SaveOriginalAppearance();
 void ResetOriginalAppearance();
 void ControlAppearance(bool randomize);

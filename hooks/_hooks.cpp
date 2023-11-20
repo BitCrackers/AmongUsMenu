@@ -93,8 +93,8 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_get_CanMove);
 	HOOKFUNC(PlayerControl_RpcSyncSettings);
 	HOOKFUNC(PlayerControl_Shapeshift);
-	HOOKFUNC(PlayerControl_RpcShapeshift);
-	//HOOKFUNC(PlayerControl_RpcRevertShapeshift);
+	HOOKFUNC(PlayerControl_CmdCheckShapeshift);
+	HOOKFUNC(PlayerControl_CmdCheckRevertShapeshift);
 	HOOKFUNC(PlayerControl_ProtectPlayer);
 	HOOKFUNC(MeetingHud_Update);
 	HOOKFUNC(MeetingHud_PopulateResults);
@@ -140,7 +140,6 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_OnGameStart);
 	HOOKFUNC(AmongUsClient_OnPlayerLeft);
 	HOOKFUNC(CustomNetworkTransform_SnapTo);
-	HOOKFUNC(Constants_ShouldFlipSkeld);
 	HOOKFUNC(LobbyBehaviour_Start);
 	HOOKFUNC(GameObject_SetActive);
 	//HOOKFUNC(NoShadowBehaviour_LateUpdate);
@@ -179,9 +178,14 @@ void DetourInitilization() {
 	//HOOKFUNC(SabotageSystemType_ForceSabTime);
 	HOOKFUNC(PingTracker_Update);
 	HOOKFUNC(KillOverlay_ShowKillAnimation_1);
-	//HOOKFUNC(EOSManager_set_FriendCode);
 	HOOKFUNC(KillButton_SetTarget);
 	HOOKFUNC(MushroomDoorSabotageMinigame_Begin);
+	//HOOKFUNC(AmongUsClient_CoStartGameHost);
+	HOOKFUNC(Console_1_CanUse);
+	HOOKFUNC(Ladder_SetDestinationCooldown);
+	HOOKFUNC(ZiplineConsole_SetDestinationCooldown);
+	HOOKFUNC(MushroomWallDoor_SetDoorway);
+	HOOKFUNC(VoteBanSystem_AddVote)
 
 	if (!HookFunction(&(PVOID&)oPresent, dPresent, "D3D_PRESENT_FUNCTION")) return;
 
@@ -202,8 +206,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_get_CanMove);
 	UNHOOKFUNC(PlayerControl_RpcSyncSettings);
 	UNHOOKFUNC(PlayerControl_Shapeshift);
-	UNHOOKFUNC(PlayerControl_RpcShapeshift);
-	//UNHOOKFUNC(PlayerControl_RpcRevertShapeshift);
+	UNHOOKFUNC(PlayerControl_CmdCheckShapeshift);
+	UNHOOKFUNC(PlayerControl_CmdCheckRevertShapeshift);
 	UNHOOKFUNC(PlayerControl_ProtectPlayer);
 	UNHOOKFUNC(MeetingHud_Update);
 	UNHOOKFUNC(MeetingHud_PopulateResults);
@@ -249,7 +253,6 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_OnGameStart);
 	UNHOOKFUNC(AmongUsClient_OnPlayerLeft);
 	UNHOOKFUNC(CustomNetworkTransform_SnapTo);
-	UNHOOKFUNC(Constants_ShouldFlipSkeld);
 	UNHOOKFUNC(LobbyBehaviour_Start);
 	//UNHOOKFUNC(NoShadowBehaviour_LateUpdate);
 	UNHOOKFUNC(FollowerCamera_Update);
@@ -285,9 +288,14 @@ void DetourUninitialization()
 	//UNHOOKFUNC(SabotageSystemType_ForceSabTime);
 	UNHOOKFUNC(PingTracker_Update);
 	UNHOOKFUNC(KillOverlay_ShowKillAnimation_1);
-	//UNHOOKFUNC(EOSManager_set_FriendCode);
 	UNHOOKFUNC(KillButton_SetTarget);
 	UNHOOKFUNC(MushroomDoorSabotageMinigame_Begin);
+	//UNHOOKFUNC(AmongUsClient_CoStartGameHost);
+	UNHOOKFUNC(Console_1_CanUse);
+	UNHOOKFUNC(Ladder_SetDestinationCooldown);
+	UNHOOKFUNC(ZiplineConsole_SetDestinationCooldown);
+	UNHOOKFUNC(MushroomWallDoor_SetDoorway);
+	UNHOOKFUNC(VoteBanSystem_AddVote)
 
 	if (DetourDetach(&(PVOID&)oPresent, dPresent) != 0) return;
 

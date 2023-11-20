@@ -22,6 +22,7 @@ namespace KeyBinds {
         uint8_t Randomize_Appearance;
         uint8_t Complete_Tasks;
         uint8_t Toggle_Chat;
+        uint8_t Toggle_SMAU;
     };
 
     void WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

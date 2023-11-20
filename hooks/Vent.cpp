@@ -5,7 +5,7 @@
 #include <memory>
 
 float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
-	if (State.UnlockVents || (*Game::pLocalPlayer)->fields.inVent) {
+	if (!State.DisableSMAU && (State.UnlockVents || (*Game::pLocalPlayer)->fields.inVent)) {
 		auto object = GameData_PlayerInfo_get_Object(pc, nullptr);
 		if (!object) {
 			LOG_ERROR(ToString(pc) + " _object is null");
@@ -33,21 +33,25 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 };
 
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
-	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
-	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
+	if (State.DisableSMAU) {
+		auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
+		app::Vector2 ventVector2D = { ventVector.x, ventVector.y };
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_ENTER));
+		}
+		if (State.confuser && State.confuseOnVent && pc == *Game::pLocalPlayer)
+			ControlAppearance(true);
 	}
 	Vent_EnterVent(__this, pc, method);
-	if (State.confuser && State.confuseOnVent && pc == *Game::pLocalPlayer)
-		ControlAppearance(true);
 }
 
 void* dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo* method) {
-	auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
-	app::Vector2 ventVector2D = {ventVector.x, ventVector.y};
-	synchronized(Replay::replayEventMutex) {
-		State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
+	if (State.DisableSMAU) {
+		auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
+		app::Vector2 ventVector2D = { ventVector.x, ventVector.y };
+		synchronized(Replay::replayEventMutex) {
+			State.liveReplayEvents.emplace_back(std::make_unique<VentEvent>(GetEventPlayerControl(pc).value(), ventVector2D, VENT_ACTIONS::VENT_EXIT));
+		}
 	}
 	return Vent_ExitVent(__this, pc, method);
 }

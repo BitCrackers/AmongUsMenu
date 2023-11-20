@@ -51,9 +51,16 @@ public:
 class RpcVent : public RPCInterface {
 	PlayerControl* Player;
 	int32_t ventId;
-	bool exit; //Uses RpcSetColor, only can use as host
+	bool exit;
 public:
 	RpcVent(PlayerControl* Player, int32_t ventId, bool exit);
+	virtual void Process() override;
+};
+
+class RpcBootFromVent : public RPCInterface {
+	int32_t ventId;
+public:
+	RpcBootFromVent(int32_t ventId);
 	virtual void Process() override;
 };
 

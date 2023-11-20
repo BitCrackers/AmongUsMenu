@@ -26,7 +26,8 @@ public:
         0x00, //save appearance
         0x00, //randomize appearance
         0x00, //complete tasks
-        0x00 //toggle chat
+        0x00, //toggle chat
+        VK_PAUSE //toggle SMAU
     };
 
     bool ImGuiInitialized = false;
@@ -43,6 +44,8 @@ public:
     int FakeLevel = 1;
     bool ShowKeybinds = true;
     bool HideFriendCode = false;
+    bool SpoofFriendCode = false;
+    std::string FakeFriendCode = "goaty#0001";
 
     bool AdjustByDPI = true;
     float dpiScale = 1.f;
@@ -85,7 +88,7 @@ public:
     bool ChatPaste = false;
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
-    bool PlayerColoredNames = false;
+    bool PlayerColoredDots = false;
     bool ShowPlayerInfo = false;
     float PrevKillDistance = 0.f;
     float KillDistance = 0.f;
@@ -111,16 +114,19 @@ public:
     bool ForceColorForEveryone = false;
     bool CustomName = false;
     bool RgbName = false;
-    bool BoldName = false;
+    bool ResizeName = false;
+    float NameSize = 2.3f; //for some reason among us defaults to 2.3, what a weird number
     bool ItalicName = false;
     bool UnderlineName = false;
     bool StrikethroughName = false;
     bool ColoredName = false;
-    ImVec4 NameColor = ImVec4(1.f, 1.f, 1.f, 1.f);
+    ImVec4 NameColor1 = ImVec4(1.f, 1.f, 1.f, 1.f);
+    ImVec4 NameColor2 = ImVec4(1.f, 1.f, 1.f, 1.f);
     float RgbNameColor = 0.f;
     bool ServerSideCustomName = false;
     bool NoAbilityCD = false;
     bool CycleInMeeting = true;
+    bool CycleBetweenPlayers = false;
 
     bool NoClip = false;
     bool HotkeyNoClip = false;
@@ -132,9 +138,13 @@ public:
     bool AnimationlessShapeshift = false;
     bool DisableKillAnimation = false;
     bool KillImpostors = false;
+    bool OnlyProtectCrewmates = false;
     bool KillThroughWalls = false;
     bool InfiniteKillRange = false;
     bool FakeAlive = false;
+    bool ShowHost = false;
+    bool ShowVoteKicks = false;
+    bool DoTasksAsImpostor = false;
 
     PlayerSelection selectedPlayer;
     std::queue<RPCInterface*> rpcQueue;
@@ -147,7 +157,10 @@ public:
     bool ShowRadar_RightClickTP = false;
     bool LockRadar = false;
     bool RadarDrawIcons = true;
+    bool RadarVisorRoleColor = false;
     bool RadarBorder = false;
+    int RadarExtraWidth = 0;
+    int RadarExtraHeight = 0;
 
     bool ShowEsp = false;
     bool ShowEsp_Ghosts = true;
@@ -275,6 +288,7 @@ public:
     int ImpostorCount = 1;
     bool DisableCallId = false;
     uint8_t ToDisableCallId = 0;
+    uint8_t VoteKicks = 0;
 
 	bool OcclusionCulling = false;
     bool ShowUnityLogs = true;
@@ -287,8 +301,9 @@ public:
 
     std::string chatMessage = "";
     std::string userName = "";
-    std::string userName1 = "";
-    std::string userName2 = "";
+    std::vector<std::string> cyclerUserNames = {};
+    int cyclerNameGeneration = 0;
+    int confuserNameGeneration = 0;
     std::string rgbCode = "";
     std::string hostUserName = "";
     std::string customCode = "GOATYY";
@@ -298,6 +313,8 @@ public:
     bool ShowChat = false;
     bool newChatMessage = false;
     std::vector<std::unique_ptr<RpcChatMessage>> chatMessages;
+
+    bool DisableSMAU = false;
 
     enum class MapType : uint8_t
     {
