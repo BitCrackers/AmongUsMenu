@@ -307,7 +307,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 					else spamDelay--;
 				}
 
-				if (State.SafeMode && State.ChatSpam && (IsInGame() || IsInLobby()) && State.ChatCooldown <= 0) {
+				if (State.SafeMode && State.ChatSpam && (IsInGame() || IsInLobby()) && State.ChatCooldown >= 3.f) {
 					if (IsInGame()) State.rpcQueue.push(new RpcSendChat(*Game::pLocalPlayer, State.chatMessage));
 					else if (IsInLobby()) State.lobbyRpcQueue.push(new RpcSendChat(*Game::pLocalPlayer, State.chatMessage));
 				}
