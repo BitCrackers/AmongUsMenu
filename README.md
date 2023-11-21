@@ -87,7 +87,7 @@ Game Tab:
 3. Kill Distance Modifier (self-explanatory)
 4. Fortegreen in the list of available colors (accessible w/ host)
 5. Color Sniper (when a player with ur color leaves, change to that color immediately)
-6. Chat message sending (add newlines and stuff, spam when not in safe mode)
+6. Chat message sending (add newlines and stuff, spam)
 7. Cycler (change ur cosmetics/name randomly)
 8. Confuser (randomize appearance at will to avoid being detected)
 9. Spam Report (keeps on reporting dead bodies even while in a meeting)
