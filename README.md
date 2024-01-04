@@ -1,4 +1,4 @@
-## Version 2.0: The Customization Update
+## Version 2.1: The Spoof Update
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
 ## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only. Please don't harass the BitCrackers team regarding this fork.
@@ -76,7 +76,7 @@ Settings Tab:
 4. Menu Transparency (makes the menu see-through)
 5. Automatically set name / Set name button (more control over ign)
 6. Custom Streamer Mode lobby code (changes ****** to custom text - defaults to GOATYY)
-7. Level Spoofer (changes ur pointless amogus level to a cool number)
+7. Spoofers (changes level, friendcode, product user id)
 8. Cosmetic Unlocker (added toggle for when u wanna unlock stuff legit)
 9. Safe Mode (when toggled off, adds more features that were originally detected by anticheat - meant to be used in servers w/ no anticheat)
 10. Hide Friend Code (so no one catches you with the same friend code)
