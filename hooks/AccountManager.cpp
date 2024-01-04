@@ -8,10 +8,7 @@ void dAccountManager_UpdateKidAccountDisplay(AccountManager* __this, MethodInfo*
     if (!State.DisableSMAU) {
         __this->fields.freeChatAllowed = KWSPermissionStatus__Enum::Granted;
         __this->fields.customDisplayName = KWSPermissionStatus__Enum::Granted;
-        if (State.HideFriendCode)
-            __this->fields.friendsListAllowed = KWSPermissionStatus__Enum::Rejected;
-        else
-            __this->fields.friendsListAllowed = KWSPermissionStatus__Enum::Granted;
+        __this->fields.friendsListAllowed = KWSPermissionStatus__Enum::Granted;
     }
     app::AccountManager_UpdateKidAccountDisplay(__this, method);
 }

@@ -31,6 +31,7 @@ public:
     };
 
     bool ImGuiInitialized = false;
+    bool ShowMenuOnStartup = true;
     bool ShowMenu = false;
 
 #ifdef _DEBUG
@@ -39,13 +40,15 @@ public:
     bool RgbMenuTheme = false;
     bool SetName = false;
     bool SafeMode = true;
-    bool UnlockCosmetics = false;
-    bool SetLevel = false;
+    bool UnlockCosmetics = true;
+    bool SpoofLevel = false;
     int FakeLevel = 1;
     bool ShowKeybinds = true;
-    bool HideFriendCode = false;
+    bool KeybindsWhileChatting = true;
     bool SpoofFriendCode = false;
-    std::string FakeFriendCode = "goaty#0001";
+    std::string FakeFriendCode = "";
+    bool SpoofPuid = false;
+    std::string FakePuid = "";
 
     bool AdjustByDPI = true;
     float dpiScale = 1.f;
@@ -331,6 +334,8 @@ public:
     {
         Replay::Reset();
     }
+
+    std::string SickoVersion = "v2.1";
 
     void Load();
     void Save();

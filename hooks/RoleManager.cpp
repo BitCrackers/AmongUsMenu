@@ -7,23 +7,28 @@
 #include "game.h"
 
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
-	if (!State.DisableSMAU) {
-		std::vector<uint8_t> assignedPlayers;
-		GameOptions options;
-		auto allPlayers = GetAllPlayerControl();
-		auto roleRates = RoleRates(options, (int)allPlayers.size());
+	try {
+		if (!State.DisableSMAU) {
+			std::vector<uint8_t> assignedPlayers;
+			GameOptions options;
+			auto allPlayers = GetAllPlayerControl();
+			auto roleRates = RoleRates(options, (int)allPlayers.size());
 
-		AssignPreChosenRoles(roleRates, assignedPlayers);
-		AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
-		AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
-		AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
-		if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
-			AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+			AssignPreChosenRoles(roleRates, assignedPlayers);
+			AssignRoles(roleRates, roleRates.ShapeshifterChance, RoleTypes__Enum::Shapeshifter, allPlayers, assignedPlayers);
+			AssignRoles(roleRates, 100, RoleTypes__Enum::Impostor, allPlayers, assignedPlayers);
+			AssignRoles(roleRates, roleRates.ScientistChance, RoleTypes__Enum::Scientist, allPlayers, assignedPlayers);
+			if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
+				AssignRoles(roleRates, 100, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+			}
+			else {
+				AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
+				AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
+			}
 		}
-		else {
-			AssignRoles(roleRates, roleRates.EngineerChance, RoleTypes__Enum::Engineer, allPlayers, assignedPlayers);
-			AssignRoles(roleRates, 100, RoleTypes__Enum::Crewmate, allPlayers, assignedPlayers);
-		}
+	}
+	catch (...) {
+		LOG_DEBUG("Exception occurred in RoleManager_SelectRoles (RoleManager)");
 	}
 	RoleManager_SelectRoles(__this, method);
 }

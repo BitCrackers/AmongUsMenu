@@ -173,6 +173,8 @@ void DetourInitilization() {
 	HOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	HOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	HOOKFUNC(EOSManager_UpdatePermissionKeys);
+	HOOKFUNC(EOSManager_Update);
+	HOOKFUNC(EOSManager_get_ProductUserId);
 	HOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	HOOKFUNC(ExileController_ReEnableGameplay);
 	//HOOKFUNC(SabotageSystemType_ForceSabTime);
@@ -283,6 +285,8 @@ void DetourUninitialization()
 	UNHOOKFUNC(AccountManager_UpdateKidAccountDisplay);
 	UNHOOKFUNC(PlayerStorageManager_OnReadPlayerPrefsComplete);
 	UNHOOKFUNC(EOSManager_UpdatePermissionKeys);
+	UNHOOKFUNC(EOSManager_Update);
+	UNHOOKFUNC(EOSManager_get_ProductUserId);
 	UNHOOKFUNC(GameOptionsManager_set_CurrentGameOptions);
 	UNHOOKFUNC(ExileController_ReEnableGameplay);
 	//UNHOOKFUNC(SabotageSystemType_ForceSabTime);

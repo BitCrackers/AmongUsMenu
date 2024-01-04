@@ -16,6 +16,10 @@ namespace SettingsTab {
 			if (ImGui::Checkbox("Show Keybinds", &State.ShowKeybinds)) {
 				State.Save();
 			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Allow Activating Keybinds while Chatting", &State.KeybindsWhileChatting)) {
+				State.Save();
+			}
 			if (State.ShowKeybinds) {
 				ImGui::Text("Show/Hide Menu Keybind:");
 				ImGui::SameLine();
@@ -28,6 +32,9 @@ namespace SettingsTab {
 				if (HotKey(State.KeyBinds.Toggle_Console)) {
 					State.Save();
 				}
+			}
+			if (ImGui::Checkbox("Always Show Menu on Startup", &State.ShowMenuOnStartup)) {
+				State.Save();
 			}
 			if (ImGui::Checkbox("Panic (Disable SMAU)", &State.DisableSMAU)) {
 				State.Save();
@@ -119,12 +126,29 @@ namespace SettingsTab {
 				State.Save();
 			}
 
-			if (ImGui::Checkbox("Spoof Level", &State.SetLevel)) {
-				State.Save();
-			}
-			ImGui::SameLine();
-			if (ImGui::InputInt("Level", &State.FakeLevel, 0, 1)) {
-				State.Save();
+			if (ImGui::CollapsingHeader("Spoof Account Info")) {
+				if (ImGui::Checkbox("Spoof Level", &State.SpoofLevel)) {
+					State.Save();
+				}
+				ImGui::SameLine();
+				if (ImGui::InputInt("Level", &State.FakeLevel, 0, 1)) {
+					State.Save();
+				}
+				ImGui::Text("Restart the game to apply changes to friend code and product user ID!");
+				if (ImGui::Checkbox("Spoof Friend Code", &State.SpoofFriendCode)) {
+					State.Save();
+				}
+				char* fcBuffer[14]{ const_cast<char*>(State.FakeFriendCode.c_str()) };
+				if (ImGui::InputText("Fake Friend Code", *fcBuffer, IM_ARRAYSIZE(fcBuffer))) {
+					State.FakeFriendCode = std::string(*fcBuffer);
+				}
+				if (ImGui::Checkbox("Spoof Product User ID", &State.SpoofPuid)) {
+					State.Save();
+				}
+				char* puidBuffer[25]{ const_cast<char*>(State.FakePuid.c_str()) };
+				if (ImGui::InputText("Fake Product User ID", *puidBuffer, IM_ARRAYSIZE(puidBuffer))) {
+					State.FakePuid = std::string(*puidBuffer);
+				}
 			}
 
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
@@ -142,26 +166,14 @@ namespace SettingsTab {
 			if (ImGui::Checkbox("Unlock Cosmetics", &State.UnlockCosmetics)) {
 				State.Save();
 			}
-
-			if (ImGui::Checkbox("Hide Friend Code (restart game to apply)", &State.HideFriendCode)) {
-				State.Save();
-			}
-			ImGui::SameLine();/*
-			if (ImGui::Checkbox("Spoof Friend Code", &State.SpoofFriendCode)) {
-				State.Save();
-			}
-			char* fcBuffer[14]{ const_cast<char*>(State.FakeFriendCode.c_str()) };
-			if (ImGui::InputText("Fake Friend Code", *fcBuffer, IM_ARRAYSIZE(fcBuffer))) {
-				State.userName = std::string(*fcBuffer);
-			}
-			ImGui::SameLine();*/
+			ImGui::SameLine();
 			if (ImGui::Checkbox("Safe Mode", &State.SafeMode)) {
 				State.Save();
 			}
 
 			ImGui::Text("Keep safe mode on in official servers (NA, Europe, Asia) to prevent anticheat detection!");
 			ImGui::Separator();
-			ImGui::Text("SickoModeAU v2.0 | Original menu: https://github.com/Bitcrackers/AmongUsMenu");
+			ImGui::Text("Original menu: https://github.com/Bitcrackers/AmongUsMenu");
 			ImGui::Text("Modded by g0aty (GitHub) / @goatwo (YT)");
 
 			ImGui::EndTabItem();

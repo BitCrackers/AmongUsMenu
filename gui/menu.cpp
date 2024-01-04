@@ -29,7 +29,8 @@ namespace Menu {
 	void Render() {
 		if (!init)
 			Menu::Init();
-		ImGui::Begin("SickoModeAU", &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		std::string modText = "SickoModeAU " + State.SickoVersion;
+		ImGui::Begin(const_cast<char*>(modText.c_str()), &State.ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 		ImGui::BeginTabBar("AmongUs#TopBar", ImGuiTabBarFlags_NoTabListScrollingButtons);
 
 		if(!firstRender)

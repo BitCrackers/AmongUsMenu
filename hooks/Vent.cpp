@@ -33,7 +33,7 @@ float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* co
 };
 
 void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
-	if (State.DisableSMAU) {
+	if (!State.DisableSMAU) {
 		auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 		app::Vector2 ventVector2D = { ventVector.x, ventVector.y };
 		synchronized(Replay::replayEventMutex) {
@@ -46,7 +46,7 @@ void dVent_EnterVent(Vent* __this, PlayerControl* pc, MethodInfo * method) {
 }
 
 void* dVent_ExitVent(Vent* __this, PlayerControl* pc, MethodInfo* method) {
-	if (State.DisableSMAU) {
+	if (!State.DisableSMAU) {
 		auto ventVector = app::Transform_get_position(app::Component_get_transform((Component_1*)__this, NULL), NULL);
 		app::Vector2 ventVector2D = { ventVector.x, ventVector.y };
 		synchronized(Replay::replayEventMutex) {

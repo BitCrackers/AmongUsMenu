@@ -89,7 +89,7 @@ void Run(LPVOID lpParam) {
 		ss << "\n\tSickoModeAU - " << __DATE__ << " - " << __TIME__ << std::endl; // Log SickoModeAU info
 		/*ss << "\tBuild: " << _CONFIGURATION_NAME << std::endl;
 		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info*/
-		ss << "\tVersion: 2.0" << std::endl;
+		ss << "\tVersion: " << State.SickoVersion << std::endl;
 		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
 		LOG_INFO(ss.str());
 	}

@@ -26,7 +26,9 @@ void Settings::Load() {
             Log.Info(e.what()); \
         }
 
-        JSON_TRYGET("ShowMenu", this->ShowMenu);
+        JSON_TRYGET("ShowMenuOnStartup", this->ShowMenuOnStartup);
+        if (this->ShowMenuOnStartup)
+            JSON_TRYGET("ShowMenu", this->ShowMenu);
         JSON_TRYGET("KeyBinds", this->KeyBinds);
 #ifdef _DEBUG
         JSON_TRYGET("ShowDebug", this->showDebugTab);
@@ -38,10 +40,13 @@ void Settings::Load() {
         JSON_TRYGET("MenuThemeColor_B", this->MenuThemeColor.z);
         JSON_TRYGET("MenuThemeColor_A", this->MenuThemeColor.w);
         JSON_TRYGET("UnlockCosmetics", this->UnlockCosmetics);
-        JSON_TRYGET("SetLevel", this->SetLevel);
-        JSON_TRYGET("FakeLevel", this->FakeLevel);
         JSON_TRYGET("ShowKeybinds", this->ShowKeybinds);
-        JSON_TRYGET("HideFriendCode", this->HideFriendCode);
+        JSON_TRYGET("SpoofLevel", this->SpoofLevel);
+        JSON_TRYGET("FakeLevel", this->FakeLevel);
+        JSON_TRYGET("SpoofFriendCode", this->SpoofFriendCode);
+        JSON_TRYGET("FakeFriendCode", this->FakeFriendCode);
+        JSON_TRYGET("SpoofPuid", this->SpoofPuid);
+        JSON_TRYGET("FakePuid", this->FakePuid);
 
         JSON_TRYGET("SelectedColorId", this->SelectedColorId);
         JSON_TRYGET("SnipeColor", this->SnipeColor);
@@ -81,7 +86,8 @@ void Settings::Load() {
         JSON_TRYGET("RadarExtraWidth", this->RadarExtraWidth);
         JSON_TRYGET("RadarExtraHeight", this->RadarExtraHeight);
 
-        JSON_TRYGET("ShowReplay", this->ShowReplay);
+        if (this->ShowMenuOnStartup)
+            JSON_TRYGET("ShowReplay", this->ShowReplay);
         JSON_TRYGET("ReplayColor_R", this->SelectedReplayMapColor.x);
         JSON_TRYGET("ReplayColor_G", this->SelectedReplayMapColor.y);
         JSON_TRYGET("ReplayColor_B", this->SelectedReplayMapColor.z);
@@ -149,9 +155,11 @@ void Settings::Load() {
         JSON_TRYGET("CustomImpostorAmount", this->CustomImpostorAmount);
         JSON_TRYGET("ImpostorCount", this->ImpostorCount);
 
-        JSON_TRYGET("ShowConsole", this->ShowConsole);
+        if (this->ShowMenuOnStartup)
+            JSON_TRYGET("ShowConsole", this->ShowConsole);
         JSON_TRYGET("ShowUnityLogs", this->ShowUnityLogs);
-        JSON_TRYGET("ShowChat", this->ShowChat);
+        if (this->ShowMenuOnStartup)
+            JSON_TRYGET("ShowChat", this->ShowChat);
 
         JSON_TRYGET("RevealAnonymousVotes", this->RevealAnonymousVotes);
 
@@ -197,10 +205,13 @@ void Settings::Save() {
             { "MenuThemeColor_B", this->MenuThemeColor.z },
             { "MenuThemeColor_A", this->MenuThemeColor.w },
             { "UnlockCosmetics", this->UnlockCosmetics },
-            { "SetLevel", this->SetLevel },
-            { "FakeLevel", this->FakeLevel },
             { "ShowKeybinds", this->ShowKeybinds },
-            { "HideFriendCode", this->HideFriendCode },
+            { "SpoofLevel", this->SpoofLevel },
+            { "FakeLevel", this->FakeLevel },
+            { "SpoofFriendCode", this->SpoofFriendCode },
+            { "FakeFriendCode", this->FakeFriendCode },
+            { "SpoofPuid", this->SpoofPuid },
+            { "FakePuid", this->FakePuid },
 
             { "SelectedColorId", this->SelectedColorId },
             { "SnipeColor", this->SnipeColor },

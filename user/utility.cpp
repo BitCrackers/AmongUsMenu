@@ -719,7 +719,7 @@ void ImpersonateName(__maybenull GameData_PlayerInfo* data)
 	std::vector<std::string> allNames = {};
 	for (auto p : GetAllPlayerData()) allNames.push_back(convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(p), nullptr)));
 	std::sort(allNames.begin(), allNames.end(), compareStrings);
-	for (auto n : allNames) {
+	for (std::string n : allNames) {
 		if (n == playerName + (std::string("­") * size_t(fillers))) fillers++;
 	}
 
@@ -804,19 +804,43 @@ Game::ColorId GetRandomColorId()
 std::string GetGradientUsername(std::string str) {
 	std::vector<int> color1 = { int(State.NameColor1.x * 255), int(State.NameColor1.y * 255), int(State.NameColor1.z * 255), int(State.NameColor1.w * 255) };
 	std::vector<int> color2 = { int(State.NameColor2.x * 255), int(State.NameColor2.y * 255), int(State.NameColor2.z * 255), int(State.NameColor2.w * 255) };
+	if (color1 == color2) //if user doesn't want gradients, don't cause extra lag
+		return std::format("<#{:02x}{:02x}{:02x}{:02x}>{}</color>", color1[0], color1[1], color1[2], color1[3], str);
 	int nameLength = int(str.length());
-	float stepR = float((color2[0] - color1[0]) / (nameLength - 1));
-	float stepG = float((color2[1] - color1[1]) / (nameLength - 1));
-	float stepB = float((color2[2] - color1[2]) / (nameLength - 1));
-	float stepA = float((color2[3] - color1[3]) / (nameLength - 1));
-	std::string gradientText = "";
-	for (int i = 0; i < nameLength; i++)
-	{
-		int r = int(color1[0] + std::round(stepR * i));
-		int g = int(color1[1] + std::round(stepG * i));
-		int b = int(color1[2] + std::round(stepB * i));
-		int a = int(color1[3] + std::round(stepA * i));
-		//names look ugly af with white strikethrough
+	if (nameLength > 1) { //fix division by zero
+		float stepR = float((color2[0] - color1[0]) / (nameLength - 1));
+		float stepG = float((color2[1] - color1[1]) / (nameLength - 1));
+		float stepB = float((color2[2] - color1[2]) / (nameLength - 1));
+		float stepA = float((color2[3] - color1[3]) / (nameLength - 1));
+		std::string gradientText = "";
+		for (int i = 0; i < nameLength; i++)
+		{
+			int r = int(color1[0] + std::round(stepR * i));
+			int g = int(color1[1] + std::round(stepG * i));
+			int b = int(color1[2] + std::round(stepB * i));
+			int a = int(color1[3] + std::round(stepA * i));
+			//names look ugly af with white strikethrough
+			std::string opener = "";
+			if (State.UnderlineName) opener += "<u>";
+			if (State.StrikethroughName) opener += "<s>";
+
+			std::string closer = "";
+			if (State.StrikethroughName) closer += "</s>";
+			if (State.UnderlineName) closer += "</u>";
+
+			std::string colorCode = std::format("<#{:02x}{:02x}{:02x}{:02x}>", r, g, b, a);
+			gradientText += colorCode + opener + str[i] + closer + "</color>";
+		}
+
+		return gradientText;
+	}
+	else {
+		int r = int((color1[0] + color2[0]) / 2);
+		int g = int((color1[1] + color2[1]) / 2);
+		int b = int((color1[2] + color2[2]) / 2);
+		int a = int((color1[3] + color2[3]) / 2);
+		std::string colorCode = std::format("<#{:02x}{:02x}{:02x}{:02x}>", r, g, b, a);
+
 		std::string opener = "";
 		if (State.UnderlineName) opener += "<u>";
 		if (State.StrikethroughName) opener += "<s>";
@@ -825,11 +849,9 @@ std::string GetGradientUsername(std::string str) {
 		if (State.StrikethroughName) closer += "</s>";
 		if (State.UnderlineName) closer += "</u>";
 
-		std::string colorCode = std::format("<#{:02x}{:02x}{:02x}{:02x}>", r, g, b, a);
-		gradientText += colorCode + opener + str[i] + closer + "</color>";
+		std::string gradientText = colorCode + opener + str + closer + "</color>";
+		return gradientText;
 	}
-
-	return gradientText;
 }
 
 void SaveOriginalAppearance()

@@ -74,22 +74,64 @@ namespace PlayersTab {
 						if (friendCode != "") {
 							ImGui::Text(const_cast<char*>(friendCodeText.c_str()));
 						}
+						std::string puid = convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid);
+						std::string puidText = std::format("PUID: {}", (!IsStreamerMode()) ? puid : ((puid != "") ? puid.substr(0, 1) + "..." : ""));
+						if (puid != "") {
+							ImGui::Text(const_cast<char*>(puidText.c_str()));
+						}
 						uint32_t playerLevel = selectedPlayer.get_PlayerData()->fields.PlayerLevel + 1;
 						std::string levelText = std::format("Level: {}", playerLevel);
 						ImGui::Text(const_cast<char*>(levelText.c_str()));
 						std::string platform = "";
 						for (auto client : GetAllClients()) {
 							if (GetPlayerControlById(selectedPlayer.get_PlayerData()->fields.PlayerId)->fields._.OwnerId == client->fields.Id) {
-								platform = convert_from_string(client->fields.PlatformData->fields.PlatformName);
+								switch (client->fields.PlatformData->fields.Platform) {
+								case Platforms__Enum::StandaloneEpicPC:
+									platform = "Epic Games (PC)";
+									break;
+								case Platforms__Enum::StandaloneSteamPC:
+									platform = "Steam (PC)";
+									break;
+								case Platforms__Enum::StandaloneMac:
+									platform = "Mac";
+									break;
+								case Platforms__Enum::StandaloneWin10:
+									platform = "Microsoft Store (PC)";
+									break;
+								case Platforms__Enum::StandaloneItch:
+									platform = "itch.io (PC)";
+									break;
+								case Platforms__Enum::IPhone:
+									platform = "iOS";
+									break;
+								case Platforms__Enum::Android:
+									platform = "Android";
+									break;
+								case Platforms__Enum::Switch:
+									platform = "Nintendo Switch";
+									break;
+								case Platforms__Enum::Xbox:
+									platform = "Xbox";
+									break;
+								default:
+									platform = "Unknown";
+									break;
+								}
 								break;
 							}
 						}
-						std::string platformText = std::format("Platform:{}", platform);
+						std::string platformText = std::format("Platform: {}", platform);
 						ImGui::Text(const_cast<char*>(platformText.c_str()));
-						if (!IsStreamerMode()) {
-							std::string puidText = std::format("Product User ID:\n{}", convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid));
-							ImGui::Text(const_cast<char*>(puidText.c_str()));
+						if (convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode) != "" && ImGui::Button("Copy Friend Code")) {
+							State.FakeFriendCode = convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode);
+							State.Save();
 						}
+						if (convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid) != "" && ImGui::Button("Copy Product User ID")) {
+							State.FakePuid = convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid);
+							State.Save();
+						}
+						if (convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode) != "" || convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid) != "")
+							ImGui::Text("These friend codes and product\nuser ID's will only be applied\nafter restarting the game.");
 					}
 
 					ImGui::EndChild();

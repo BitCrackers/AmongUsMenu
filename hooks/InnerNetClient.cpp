@@ -133,7 +133,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
                 }
             }
 
-            if (State.SetLevel && (IsInGame() || IsInLobby()) && !State.activeImpersonation) {
+            if (State.SpoofLevel && (IsInGame() || IsInLobby()) && !State.activeImpersonation) {
                 if (IsInGame() && (GetPlayerData(*Game::pLocalPlayer)->fields.PlayerLevel + 1) != State.FakeLevel)
                     State.rpcQueue.push(new RpcSetLevel(*Game::pLocalPlayer, (State.FakeLevel - 1)));
                 else if (IsInLobby() && (GetPlayerData(*Game::pLocalPlayer)->fields.PlayerLevel + 1) != State.FakeLevel)
@@ -631,11 +631,11 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
                     State.IsRevived = false;
             }
         }
-        InnerNetClient_Update(__this, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in InnerNetClient_Update (InnerNetClient)");
     }
+    InnerNetClient_Update(__this, method);
 }
 
 void dAmongUsClient_OnGameJoined(AmongUsClient* __this, String* gameIdString, MethodInfo* method) {
@@ -643,11 +643,11 @@ void dAmongUsClient_OnGameJoined(AmongUsClient* __this, String* gameIdString, Me
         if (!State.DisableSMAU) {
             Log.Debug("Joined lobby " + convert_from_string(gameIdString));
         }
-        AmongUsClient_OnGameJoined(__this, gameIdString, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in AmongUsClient_OnGameJoined (InnerNetClient)");
     }
+    AmongUsClient_OnGameJoined(__this, gameIdString, method);
 }
 
 void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, DisconnectReasons__Enum reason, MethodInfo* method) {
@@ -682,11 +682,11 @@ void dAmongUsClient_OnPlayerLeft(AmongUsClient* __this, ClientData* data, Discon
                 //Log.Info(std::format("Client {} has left the game.", data->fields.Id));
             }
         }
-        AmongUsClient_OnPlayerLeft(__this, data, reason, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in AmongUsClient_OnPlayerLeft (InnerNetClient)");
     }
+    AmongUsClient_OnPlayerLeft(__this, data, reason, method);
 }
 
 bool bogusTransformSnap(PlayerSelection& _player, Vector2 newPosition)
@@ -742,11 +742,11 @@ void dCustomNetworkTransform_SnapTo(CustomNetworkTransform* __this, Vector2 posi
                 }
             }
         }
-        CustomNetworkTransform_SnapTo(__this, position, minSid, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in CustomNetworkTransform_SnapTo (InnerNetClient)");
     }
+    CustomNetworkTransform_SnapTo(__this, position, minSid, method);
 }
 
 static void onGameEnd() {
@@ -783,11 +783,11 @@ static void onGameEnd() {
 void dAmongUsClient_OnGameEnd(AmongUsClient* __this, Object* endGameResult, MethodInfo* method) {
     try {
         onGameEnd();
-        AmongUsClient_OnGameEnd(__this, endGameResult, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in AmongUsClient_OnGameEnd (InnerNetClient)");
     }
+    AmongUsClient_OnGameEnd(__this, endGameResult, method);
 }
 
 void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
@@ -798,44 +798,44 @@ void dInnerNetClient_DisconnectInternal(InnerNetClient* __this, DisconnectReason
             || __this->fields.NetworkMode == NetworkModes__Enum::FreePlay) {
             onGameEnd();
         }
-        InnerNetClient_DisconnectInternal(__this, reason, stringReason, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in InnerNetClient_DisconnectInternal (InnerNetClient)");
     }
+    InnerNetClient_DisconnectInternal(__this, reason, stringReason, method);
 }
 
 void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons__Enum reason, String* stringReason, MethodInfo* method) {
     try {
         State.FollowerCam = nullptr;
         onGameEnd(); //removed antiban cuz it glitches the game
-        return InnerNetClient_EnqueueDisconnect(__this, reason, stringReason, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in InnerNetClient_EnqueueDisconnect (InnerNetClient)");
     }
+    return InnerNetClient_EnqueueDisconnect(__this, reason, stringReason, method);
 }
 
 void dGameManager_RpcEndGame(GameManager* __this, GameOverReason__Enum endReason, bool showAd, MethodInfo* method) {
     try {
         if (!State.DisableSMAU && IsHost() && State.NoGameEnd)
             return;
-        return GameManager_RpcEndGame(__this, endReason, showAd, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in GameManager_RpcEndGame (InnerNetClient)");
     }
+    return GameManager_RpcEndGame(__this, endReason, showAd, method);
 }
 
 void dKillOverlay_ShowKillAnimation_1(KillOverlay* __this, GameData_PlayerInfo* killer, GameData_PlayerInfo* victim, MethodInfo* method) {
     try {
         if (!State.DisableSMAU && State.DisableKillAnimation)
             return;
-        return KillOverlay_ShowKillAnimation_1(__this, killer, victim, method);
     }
     catch (...) {
-        LOG_DEBUG("Exception occurred in KillOverlay_ShowKillAnimation_1 (InnerNetClient)");
+        Log.Debug("Exception occurred in KillOverlay_ShowKillAnimation_1 (InnerNetClient)");
     }
+    return KillOverlay_ShowKillAnimation_1(__this, killer, victim, method);
 }
 
 float dLogicOptions_GetKillDistance(LogicOptions* __this, MethodInfo* method) {
@@ -847,42 +847,56 @@ float dLogicOptions_GetKillDistance(LogicOptions* __this, MethodInfo* method) {
             if (State.ModifyKillDistance)
                 return State.KillDistance;
         }
-        return LogicOptions_GetKillDistance(__this, method);
     }
     catch (...) {
         LOG_DEBUG("Exception occurred in LogicOptions_GetKillDistance (InnerNetClient)");
-        return 0.f;
     }
+    return LogicOptions_GetKillDistance(__this, method);
 }
 
 void dLadder_SetDestinationCooldown(Ladder* __this, MethodInfo* method) {
-    if (!State.DisableSMAU && State.NoAbilityCD) {
-        __this->fields._CoolDown_k__BackingField = 0.f;
-        return;
+    try {
+        if (!State.DisableSMAU && State.NoAbilityCD) {
+            __this->fields._CoolDown_k__BackingField = 0.f;
+            return;
+        }
+    }
+    catch (...) {
+        Log.Debug("Exception occurred in Ladder_SetDestinationCooldown (InnerNetClient)");
     }
     return Ladder_SetDestinationCooldown(__this, method);
 }
 
 void dZiplineConsole_SetDestinationCooldown(ZiplineConsole* __this, MethodInfo* method) {
-    if (!State.DisableSMAU && State.NoAbilityCD) {
-        __this->fields._CoolDown_k__BackingField = 0.f;
-        return;
+    try {
+        if (!State.DisableSMAU && State.NoAbilityCD) {
+            __this->fields._CoolDown_k__BackingField = 0.f;
+            return;
+        }
+    }
+    catch (...) {
+        Log.Debug("Exception occurred in ZiplineConsole_SetDestinationCooldown (InnerNetClient)");
     }
     return ZiplineConsole_SetDestinationCooldown(__this, method);
 }
 
 void dVoteBanSystem_AddVote(VoteBanSystem* __this, int32_t srcClient, int32_t clientId, MethodInfo* method) {
-    if (clientId == (*Game::pLocalPlayer)->fields._.OwnerId)
-        State.VoteKicks++;
-    PlayerControl* sourcePlayer = *Game::pLocalPlayer;
-    PlayerControl* affectedPlayer = *Game::pLocalPlayer;
-    for (auto p : GetAllPlayerControl()) {
-        if (p->fields._.OwnerId == srcClient) sourcePlayer = p;
-        if (p->fields._.OwnerId == clientId) affectedPlayer = p;
+    try {
+        if (clientId == (*Game::pLocalPlayer)->fields._.OwnerId)
+            State.VoteKicks++;
+        PlayerControl* sourcePlayer = *Game::pLocalPlayer;
+        PlayerControl* affectedPlayer = *Game::pLocalPlayer;
+        for (auto p : GetAllPlayerControl()) {
+            if (p->fields._.OwnerId == srcClient) sourcePlayer = p;
+            if (p->fields._.OwnerId == clientId) affectedPlayer = p;
+        }
+        std::string sourceplayerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(GetPlayerData(sourcePlayer)), nullptr));
+        std::string affectedplayerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(GetPlayerData(affectedPlayer)), nullptr));
+        LOG_DEBUG(sourceplayerName + " attempted to votekick " + affectedplayerName);
     }
-    std::string sourceplayerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(GetPlayerData(sourcePlayer)), nullptr));
-    std::string affectedplayerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(GetPlayerOutfit(GetPlayerData(affectedPlayer)), nullptr));
-    LOG_DEBUG(sourceplayerName + " voted to kick " + affectedplayerName);
+    catch (...) {
+        LOG_DEBUG("Exception occurred in VoteBanSystem_AddVote (InnerNetClient)");
+    }
     return VoteBanSystem_AddVote(__this, srcClient, clientId, method);
 }
 

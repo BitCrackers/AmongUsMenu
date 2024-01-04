@@ -21,11 +21,11 @@ void dPlayerControl_CompleteTask(PlayerControl* __this, uint32_t idx, MethodInfo
 		synchronized(Replay::replayEventMutex) {
 			State.liveReplayEvents.emplace_back(std::make_unique<TaskCompletedEvent>(GetEventPlayerControl(__this).value(), taskType, PlayerControl_GetTruePosition(__this, NULL)));
 		}
-		PlayerControl_CompleteTask(__this, idx, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_CompleteTask (PlayerControl)");
 	}
+	PlayerControl_CompleteTask(__this, idx, method);
 }
 
 static Color32 GetKillCooldownColor(float killTimer) {
@@ -129,23 +129,57 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				uint32_t playerLevel = playerData->fields.PlayerLevel + 1;
 				uint8_t playerId = GetPlayerControlById(playerData->fields.PlayerId)->fields._.OwnerId;
 				uint8_t hostId = InnerNetClient_GetHost((InnerNetClient*)(*Game::pAmongUsClient), NULL)->fields.Id;
-				std::string levelText = std::format("Level <#0f0>{}</color>", playerLevel);
+				std::string platform = "";
+				for (auto client : GetAllClients()) {
+					if (GetPlayerControlById(GetPlayerData(__this)->fields.PlayerId)->fields._.OwnerId == client->fields.Id) {
+						switch (client->fields.PlatformData->fields.Platform) {
+						case Platforms__Enum::StandaloneEpicPC:
+							platform = "Epic Games - PC";
+							break;
+						case Platforms__Enum::StandaloneSteamPC:
+							platform = "Steam - PC";
+							break;
+						case Platforms__Enum::StandaloneMac:
+							platform = "Mac";
+							break;
+						case Platforms__Enum::StandaloneWin10:
+							platform = "Microsoft Store - PC";
+							break;
+						case Platforms__Enum::StandaloneItch:
+							platform = "itch.io - PC";
+							break;
+						case Platforms__Enum::IPhone:
+							platform = "iOS - Mobile";
+							break;
+						case Platforms__Enum::Android:
+							platform = "Android - Mobile";
+							break;
+						case Platforms__Enum::Switch:
+							platform = "Nintendo Switch - Console";
+							break;
+						case Platforms__Enum::Xbox:
+							platform = "Xbox - Console";
+							break;
+						default:
+							platform = "Unknown Platform";
+							break;
+						}
+						break;
+					}
+				}
+				std::string levelText = std::format("<#9ef>Level <#0f0>{}</color> ({})</color>", playerLevel, platform);
 				std::string friendCode = convert_from_string(playerData->fields.FriendCode);
 				if (IsStreamerMode() && friendCode != "")
 					friendCode = (convert_from_string(playerData->fields.FriendCode)).substr(0, 1) + "...";
 				std::string hostFriendCode = convert_from_string(InnerNetClient_GetHost((InnerNetClient*)(*Game::pAmongUsClient), NULL)->fields.FriendCode);
 				if (playerId == hostId) {
-					if (friendCode == "goatfated#8066")
-						playerName = "<size=1.4><#0f0>[HOST]</color> " + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
-					else if (friendCode == "" && !IsStreamerMode())
+					if (friendCode == "" && !IsStreamerMode())
 						playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>";
 					else
 						playerName = "<size=1.4><#0f0>[HOST]</color> " + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
 				}
 				else {
-					if (friendCode == "goatfated#8066")
-						playerName = "<size=1.4>" + State.rgbCode + "[SickoModeAU_Dev] </color><#fff>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
-					else if (friendCode == "" && !IsStreamerMode())
+					if (friendCode == "" && !IsStreamerMode())
 						playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>No Friend Code</color><#0000>0</color>";
 					else
 						playerName = "<size=1.4>" + levelText + "</size></color>\n" + playerName + "</color>\n<size=1.4><#0000>0</color><#9ef>" + friendCode + "</color><#0000>0</color>";
@@ -645,22 +679,21 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				instance.m_Players[playerData->fields.PlayerId] = espPlayerData;
 			}
 		}
-		app::PlayerControl_FixedUpdate(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_FixedUpdate (PlayerControl)");
 	}
+	PlayerControl_FixedUpdate(__this, method);
 }
 
 void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsByteArray, MethodInfo* method) {
 	try {
 		SaveGameOptions();
-
-		PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in RpcSyncSettings (PlayerControl)");
 	}
+	PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
 }
 
 bool dPlayerControl_get_CanMove(PlayerControl* __this, MethodInfo* method) {
@@ -669,26 +702,21 @@ bool dPlayerControl_get_CanMove(PlayerControl* __this, MethodInfo* method) {
 			if (((State.AlwaysMove) || (State.MoveInVent && (((*Game::pLocalPlayer)->fields.inVent) || ((*Game::pLocalPlayer)->fields.shapeshifting)))) && !State.ChatFocused && !((*Game::pLocalPlayer)->fields.petting))
 				return true;
 		}
-		return PlayerControl_get_CanMove(__this, method);
 	}
 	catch (...) {
-		LOG_DEBUG("Exception occurred in PlayerControl_get_CanMove (PlayerControl)");
-		return false;
+		Log.Debug("Exception occurred in PlayerControl_get_CanMove (PlayerControl)");
 	}
+	return PlayerControl_get_CanMove(__this, method);
 }
 
 void dPlayerControl_OnGameStart(PlayerControl* __this,  MethodInfo* method) {
 	try {
 		SaveGameOptions();
-		if (!State.DisableSMAU) {
-			if (__this == *Game::pLocalPlayer && State.confuser && State.confuseOnStart)
-				ControlAppearance(true);
-		}
-		PlayerControl_OnGameStart(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_OnGameStart (PlayerControl)");
 	}
+	PlayerControl_OnGameStart(__this, method);
 }
 
 void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, MurderResultFlags__Enum resultFlags, MethodInfo* method)
@@ -731,11 +759,11 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 			if (__this == *Game::pLocalPlayer && State.confuser && State.confuseOnKill)
 				ControlAppearance(true);
 		}
-		PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_MurderPlayer (PlayerControl)");
 	}
+	PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 }
 
 void dPlayerControl_CmdCheckMurder(PlayerControl* __this, PlayerControl* target, MethodInfo* method)
@@ -748,6 +776,7 @@ void dPlayerControl_CmdCheckMurder(PlayerControl* __this, PlayerControl* target,
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_CmdCheckMurder (PlayerControl)");
+		PlayerControl_CmdCheckMurder(__this, target, method);
 	}
 }
 
@@ -758,6 +787,7 @@ void dPlayerControl_RpcShapeshift(PlayerControl* __this, PlayerControl* target, 
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_RpcShapeshift (PlayerControl)");
+		PlayerControl_RpcShapeshift(__this, target, animate, method);
 	}
 }
 
@@ -768,6 +798,7 @@ void dPlayerControl_CmdCheckShapeshift(PlayerControl* __this, PlayerControl* tar
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_RpcShapeshift (PlayerControl)");
+		PlayerControl_CmdCheckShapeshift(__this, target, animate, method);
 	}
 }
 
@@ -778,6 +809,7 @@ void dPlayerControl_CmdCheckRevertShapeshift(PlayerControl* __this, bool animate
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_RpcShapeshift (PlayerControl)");
+		PlayerControl_CmdCheckRevertShapeshift(__this, animate, method);
 	}
 }
 
@@ -806,12 +838,12 @@ void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* tar
 			synchronized(Replay::replayEventMutex) {
 				State.liveReplayEvents.emplace_back(std::make_unique<ReportDeadBodyEvent>(GetEventPlayerControl(__this).value(), GetEventPlayer(target), PlayerControl_GetTruePosition(__this, NULL), GetTargetPosition(target)));
 			}
-			app::PlayerControl_StartMeeting(__this, target, method);
 		}
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_StartMeeting (PlayerControl)");
 	}
+	PlayerControl_StartMeeting(__this, target, method);
 }
 
 void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageReader* reader, MethodInfo* method) {
@@ -823,11 +855,11 @@ void dPlayerControl_HandleRpc(PlayerControl* __this, uint8_t callId, MessageRead
 			if (State.DisableCallId && callId == State.ToDisableCallId)
 				return;
 		}
-		PlayerControl_HandleRpc(__this, callId, reader, NULL);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_HandleRpc (PlayerControl)");
 	}
+	PlayerControl_HandleRpc(__this, callId, reader, NULL);
 }
 
 void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
@@ -862,11 +894,11 @@ void dRenderer_set_enabled(Renderer* __this, bool value, MethodInfo* method)
 				}
 			}
 		}
-		Renderer_set_enabled(__this, value, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in Renderer_set_enabled (PlayerControl)");
 	}
+	Renderer_set_enabled(__this, value, method);
 }
 
 void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
@@ -895,11 +927,11 @@ void dGameObject_SetActive(GameObject* __this, bool value, MethodInfo* method)
 				}
 			}
 		}
-		GameObject_SetActive(__this, value, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in GameObject_SetActive (PlayerControl)");
 	}
+	GameObject_SetActive(__this, value, method);
 }
 
 void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method) {
@@ -907,13 +939,11 @@ void dPlayerControl_CmdReportDeadBody(PlayerControl* __this, GameData_PlayerInfo
 		if (!State.DisableSMAU && State.DisableMeetings) {
 			return;
 		}
-		else {
-			PlayerControl_CmdReportDeadBody(__this, target, method);
-		}
 	}
 	catch (...) {
-		LOG_DEBUG("Exception occurred in CmdReportDeadBody (PlayerControl)");
+		Log.Debug("Exception occurred in CmdReportDeadBody (PlayerControl)");
 	}
+	PlayerControl_CmdReportDeadBody(__this, target, method);
 }
 
 void dPlayerControl_RpcStartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method) {
@@ -921,13 +951,11 @@ void dPlayerControl_RpcStartMeeting(PlayerControl* __this, GameData_PlayerInfo* 
 		if (State.DisableMeetings) {
 			return;
 		}
-		else {
-			PlayerControl_RpcStartMeeting(__this, target, method);
-		}
 	}
 	catch (...) {
-		LOG_DEBUG("Exception occurred in PlayerControl_RpcStartMeeting (PlayerControl)");
+		Log.Debug("Exception occurred in PlayerControl_RpcStartMeeting (PlayerControl)");
 	}
+	PlayerControl_RpcStartMeeting(__this, target, method);
 }
 
 void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, bool animate, MethodInfo* method) {
@@ -935,11 +963,11 @@ void dPlayerControl_Shapeshift(PlayerControl* __this, PlayerControl* target, boo
 		synchronized(Replay::replayEventMutex) {
 			State.liveReplayEvents.emplace_back(std::make_unique<ShapeShiftEvent>(GetEventPlayerControl(__this).value(), GetEventPlayerControl(target).value()));
 		}
-		PlayerControl_Shapeshift(__this, target, animate, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_Shapeshift (PlayerControl)");
 	}
+	PlayerControl_Shapeshift(__this, target, animate, method);
 }
 
 void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, int32_t colorId, MethodInfo* method) {
@@ -950,11 +978,11 @@ void dPlayerControl_ProtectPlayer(PlayerControl* __this, PlayerControl* target, 
 		else {
 			LOG_ERROR("target is null"); // TownOfHost
 		}
-		PlayerControl_ProtectPlayer(__this, target, colorId, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_ProtectPlayer (PlayerControl)");
 	}
+	PlayerControl_ProtectPlayer(__this, target, colorId, method);
 }
 
 void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_t colorId, int32_t guardianPlayerId, MethodInfo* method) {
@@ -967,17 +995,18 @@ void dPlayerControl_TurnOnProtection(PlayerControl* __this, bool visible, int32_
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in PlayerControl_TurnOnProtection (PlayerControl)");
+		app::PlayerControl_TurnOnProtection(__this, visible, colorId, guardianPlayerId, method);
 	}
 }
 
 void dPlayerControl_RemoveProtection(PlayerControl* __this, MethodInfo* method) {
 	try {
-		app::PlayerControl_RemoveProtection(__this, method);
 		State.protectMonitor.erase(__this->fields.PlayerId);
 	}
 	catch (...) {
-		LOG_DEBUG("Exception occurred in PlayerControl_RemoveProtection (PlayerControl)");
+		Log.Debug("Exception occurred in PlayerControl_RemoveProtection (PlayerControl)");
 	}
+	PlayerControl_RemoveProtection(__this, method);
 }
 
 void dKillButton_SetTarget(KillButton* __this, PlayerControl* target, MethodInfo* method) {
@@ -1030,19 +1059,25 @@ void dKillButton_SetTarget(KillButton* __this, PlayerControl* target, MethodInfo
 				return KillButton_SetTarget(__this, closestPlayer, method);
 			}
 		}
-		return KillButton_SetTarget(__this, target, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in KillButton_SetTarget (PlayerControl)");
 	}
+	return KillButton_SetTarget(__this, target, method);
 }
 
 float dConsole_1_CanUse(Console_1* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
-	if (!State.DisableSMAU) {
-		if (State.DoTasksAsImpostor || !PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)))
-			__this->fields.AllowImpostor = true;
-		else
-			__this->fields.AllowImpostor = false;
+	try {
+		if (!State.DisableSMAU) {
+			std::vector<int> sabotageTaskIds = { 16, 17, 19, 20, 30, 35, 59 }; //don't prevent impostor from fixing sabotages
+			if (State.DoTasksAsImpostor || !PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer)))
+				__this->fields.AllowImpostor = true;
+			else if (std::find(sabotageTaskIds.begin(), sabotageTaskIds.end(), __this->fields.ConsoleId) == sabotageTaskIds.end())
+				__this->fields.AllowImpostor = false;
+		}
+	}
+	catch (...) {
+		LOG_DEBUG("Exception occurred in Console_1_CanUse (PlayerControl)");
 	}
 	return Console_1_CanUse(__this, pc, canUse, couldUse, method);
 }

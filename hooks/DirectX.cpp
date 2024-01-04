@@ -108,7 +108,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
     KeyBinds::WndProc(uMsg, wParam, lParam);
 
-    if (!State.DisableSMAU && !State.ChatFocused /*disable keybinds when chatting*/) {
+    if (!State.DisableSMAU && (!State.ChatFocused || State.KeybindsWhileChatting) /*disable keybinds when chatting*/) {
         if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Menu)) State.ShowMenu = !State.ShowMenu;
         if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Radar)) State.ShowRadar = !State.ShowRadar;
         if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_Console)) State.ShowConsole = !State.ShowConsole;
@@ -140,7 +140,7 @@ LRESULT __stdcall dWndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             if (ImGui::GetIO().MouseWheel > 0.f && State.CameraHeight - 0.05f >= 0.05f) State.FreeCamSpeed -= 0.05f;
         }
     }
-    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_SMAU) && !State.ChatFocused) State.DisableSMAU = !State.DisableSMAU;
+    if (KeyBinds::IsKeyPressed(State.KeyBinds.Toggle_SMAU)) State.DisableSMAU = !State.DisableSMAU;
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }

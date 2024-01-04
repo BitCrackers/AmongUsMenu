@@ -16,11 +16,11 @@ void dMeetingHud_Awake(MeetingHud* __this, MethodInfo* method) {
 		voteSpreaderType = app::Type_GetType(convert_to_string(strVoteSpreaderType), nullptr);
 		if (State.confuser && State.confuseOnMeeting && !State.DisableSMAU)
 			ControlAppearance(true);
-		MeetingHud_Awake(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_Awake (MeetingHud)");
 	}
+	MeetingHud_Awake(__this, method);
 }
 
 void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
@@ -31,11 +31,11 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
 		{
 			Replay::Reset(false);
 		}
-		MeetingHud_Close(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_Close (MeetingHud)");
 	}
+	MeetingHud_Close(__this, method);
 }
 
 static void Transform_RemoveVotes(app::Transform* transform, size_t count) {
@@ -118,11 +118,11 @@ void dMeetingHud_PopulateResults(MeetingHud* __this, Il2CppArraySize* states, Me
 		if (prevAnonymousVotes && State.RevealAnonymousVotes)
 			options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, false);
 		options.SetBool(app::BoolOptionNames__Enum::AnonymousVotes, prevAnonymousVotes);
-		MeetingHud_PopulateResults(__this, states, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_PopulateResults (MeetingHud)");
 	}
+	MeetingHud_PopulateResults(__this, states, method);
 }
 
 void RevealAnonymousVotes() {
@@ -306,9 +306,9 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 				}
 			}
 		}
-		app::MeetingHud_Update(__this, method);
 	}
 	catch (...) {
 		LOG_DEBUG("Exception occurred in MeetingHud_Update (MeetingHud)");
 	}
+	app::MeetingHud_Update(__this, method);
 }

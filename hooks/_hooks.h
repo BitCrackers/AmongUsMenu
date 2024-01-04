@@ -71,6 +71,8 @@ void dEOSManager_InitializePlatformInterface(EOSManager* __this, MethodInfo* met
 bool dEOSManager_IsFreechatAllowed(EOSManager* __this, MethodInfo* method);
 bool dEOSManager_IsFriendsListAllowed(EOSManager* __this, MethodInfo* method);
 void dEOSManager_UpdatePermissionKeys(EOSManager* __this, void* callback, MethodInfo* method);
+void dEOSManager_Update(EOSManager* __this, MethodInfo* method);
+String* dEOSManager_get_ProductUserId(EOSManager* __this, MethodInfo* method);
 void dChatController_Update(ChatController* __this, MethodInfo* method);
 bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t i, MethodInfo* method);
 void dTextBoxTMP_SetText(TextBoxTMP* __this, String* input, String* inputCompo, MethodInfo* method);
