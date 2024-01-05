@@ -24,4 +24,5 @@ SetRole::SetRole(RoleTypes__Enum role)
 void SetRole::Process()
 {
 	PlayerControl_SetRole(*Game::pLocalPlayer, Role, NULL);
+	RoleManager_SetRole(Game::RoleManager.GetInstance(), *Game::pLocalPlayer, Role, NULL);
 }
