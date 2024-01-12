@@ -121,7 +121,7 @@ jobs:
         # credit: mcraiha via [https://github.community/t/how-to-get-just-the-tag-name/16241/17]
         id: get_tag
         shell: bash
-        run: echo ::set-output name=THIS_TAG::${GITHUB_REF/refs\/tags\//}
+        run: echo "THIS_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
         
       - name: Debug tag parsing
         run: echo '${{ steps.get_tag.outputs.THIS_TAG }}'
