@@ -193,6 +193,7 @@ void Settings::Save() {
 
     try {
         nlohmann::ordered_json j = nlohmann::ordered_json {
+            { "ShowMenuOnStartup", this->ShowMenuOnStartup },
             { "ShowMenu", this->ShowMenu },
             { "KeyBinds", this->KeyBinds },
     #ifdef _DEBUG

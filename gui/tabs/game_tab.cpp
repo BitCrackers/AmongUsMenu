@@ -10,7 +10,6 @@
 namespace GameTab {
 	void Render() {
 		if (ImGui::BeginTabItem("Game")) {
-			GameOptions options;
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 			if (SteppedSliderFloat("Player Speed Multiplier", &State.PlayerSpeed, 0.f, 10.f, 0.05f, "%.2fx", ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoInput)) {
 				State.PrevPlayerSpeed = State.PlayerSpeed;
@@ -470,7 +469,7 @@ namespace GameTab {
 				State.hostUserName = std::string(*nameBufferHost);
 			}
 
-			if (IsInGame() || IsInLobby())
+			if ((IsInGame() || IsInLobby()) && GameOptions().HasOptions())
 			{
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();
@@ -478,6 +477,8 @@ namespace GameTab {
 
 				std::string hostText = std::format("Host: {}", RemoveHtmlTags(GetHostUsername()));
 				ImGui::Text(const_cast<char*>(hostText.c_str()));
+
+				GameOptions options;
 
 				if (options.GetGameMode() == GameModes__Enum::Normal)
 				{
