@@ -126,14 +126,16 @@ namespace SettingsTab {
 				State.Save();
 			}
 
-			if (ImGui::CollapsingHeader("Spoof Account Info")) {
-				if (ImGui::Checkbox("Spoof Level", &State.SpoofLevel)) {
-					State.Save();
-				}
-				ImGui::SameLine();
-				if (ImGui::InputInt("Level", &State.FakeLevel, 0, 1)) {
-					State.Save();
-				}
+			if (ImGui::Checkbox("Spoof Level", &State.SpoofLevel)) {
+				State.Save();
+			}
+			ImGui::SameLine();
+			if (ImGui::InputInt("Level", &State.FakeLevel, 0, 1)) {
+				State.Save();
+			}
+			
+			//these got patched
+			/*if (ImGui::CollapsingHeader("Spoof Account Info")) {
 				ImGui::Text("Restart the game to apply changes to friend code and product user ID!");
 				if (ImGui::Checkbox("Spoof Friend Code", &State.SpoofFriendCode)) {
 					State.Save();
@@ -149,7 +151,7 @@ namespace SettingsTab {
 				if (ImGui::InputText("Fake Product User ID", *puidBuffer, IM_ARRAYSIZE(puidBuffer))) {
 					State.FakePuid = std::string(*puidBuffer);
 				}
-			}
+			}*/
 
 			ImGui::Dummy(ImVec2(4, 4) * State.dpiScale);
 			

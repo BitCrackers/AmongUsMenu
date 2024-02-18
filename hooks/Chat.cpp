@@ -118,8 +118,10 @@ void dChatController_Update(ChatController* __this, MethodInfo* method)
 
 bool dTextBoxTMP_IsCharAllowed(TextBoxTMP* __this, uint16_t unicode_char, MethodInfo* method)
 {
-	//0x08 is backspace, 0x0D is carriage return, 0x3C is <, 0x3E is >
-	return (unicode_char != 0x08 && unicode_char != 0x0D && ((State.SafeMode && unicode_char != 0x3C && unicode_char != 0x3E) || !State.SafeMode));
+	//0x08 is backspace, 0x0D is carriage return, 0x7F is delete character, 0x3C is <, 0x3E is >
+	//lobby codes force uppercase, and we don't change that to fix joining a lobby with code not working
+	if (!__this->fields.ForceUppercase) return (unicode_char != 0x08 && unicode_char != 0x0D && unicode_char != 0x7F && ((State.SafeMode && unicode_char != 0x3C && unicode_char != 0x3E) || !State.SafeMode));
+	return TextBoxTMP_IsCharAllowed(__this, unicode_char, method);
 }
 
 void dTextBoxTMP_SetText(TextBoxTMP* __this, String* input, String* inputCompo, MethodInfo* method)

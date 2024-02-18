@@ -122,7 +122,7 @@ namespace PlayersTab {
 						}
 						std::string platformText = std::format("Platform: {}", platform);
 						ImGui::Text(const_cast<char*>(platformText.c_str()));
-						if (convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode) != "" && ImGui::Button("Copy Friend Code")) {
+						/*if (convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode) != "" && ImGui::Button("Copy Friend Code")) {
 							State.FakeFriendCode = convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode);
 							State.Save();
 						}
@@ -131,7 +131,7 @@ namespace PlayersTab {
 							State.Save();
 						}
 						if (convert_from_string(selectedPlayer.get_PlayerData()->fields.FriendCode) != "" || convert_from_string(selectedPlayer.get_PlayerData()->fields.Puid) != "")
-							ImGui::Text("These friend codes and product\nuser ID's will only be applied\nafter restarting the game.");
+							ImGui::Text("These friend codes and product\nuser ID's will only be applied\nafter restarting the game.");*/
 					}
 
 					ImGui::EndChild();

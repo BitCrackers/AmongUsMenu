@@ -43,10 +43,10 @@ void Settings::Load() {
         JSON_TRYGET("ShowKeybinds", this->ShowKeybinds);
         JSON_TRYGET("SpoofLevel", this->SpoofLevel);
         JSON_TRYGET("FakeLevel", this->FakeLevel);
-        JSON_TRYGET("SpoofFriendCode", this->SpoofFriendCode);
-        JSON_TRYGET("FakeFriendCode", this->FakeFriendCode);
-        JSON_TRYGET("SpoofPuid", this->SpoofPuid);
-        JSON_TRYGET("FakePuid", this->FakePuid);
+        //JSON_TRYGET("SpoofFriendCode", this->SpoofFriendCode);
+        //JSON_TRYGET("FakeFriendCode", this->FakeFriendCode);
+        //JSON_TRYGET("SpoofPuid", this->SpoofPuid);
+        //JSON_TRYGET("FakePuid", this->FakePuid);
 
         JSON_TRYGET("SelectedColorId", this->SelectedColorId);
         JSON_TRYGET("SnipeColor", this->SnipeColor);
