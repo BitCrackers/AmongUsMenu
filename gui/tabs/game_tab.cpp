@@ -263,8 +263,6 @@ namespace GameTab {
 					State.Save();
 				}
 
-
-
 				if (IsHost() || !State.SafeMode) {
 					ImGui::SameLine(140.0f * State.dpiScale);
 					if (ImGui::Checkbox("Cycle for Everyone (name & color only)", &State.CycleForEveryone)) {
@@ -469,7 +467,7 @@ namespace GameTab {
 				State.hostUserName = std::string(*nameBufferHost);
 			}
 
-			if ((IsInGame() || IsInLobby()) && GameOptions().HasOptions())
+			/*if ((IsInGame() || IsInLobby()) && GameOptions().HasOptions())
 			{
 				ImGui::Dummy(ImVec2(7, 7) * State.dpiScale);
 				ImGui::Separator();
@@ -561,7 +559,7 @@ namespace GameTab {
 					ImGui::Text("Final Hiding Time: %.2f s", options.GetFloat(app::FloatOptionNames__Enum::FinalEscapeTime, 1.0F));
 					ImGui::Text("Final Impostor Speed: %.2f s", options.GetFloat(app::FloatOptionNames__Enum::SeekerFinalSpeed, 1.0F));
 				}
-			}
+			}*/
 			ImGui::EndTabItem();
 		}
 	}

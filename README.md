@@ -1,5 +1,5 @@
-## Version 2.2.1: Prepare for SickoMenu v3.0!!!
-SickoModeAU will be moving to a new repository by the end of February for better issue support!
+## Version 2.2.2: Prepare for SickoMenu v3.0!!!
+SickoModeAU will be moving to a new repository by the end of February for better issue support and more!
 
 # Original AmongUsMenu (BitCrackers) [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?logo=Discord&style=flat-square)](https://discord.gg/AUpXd3VUh8) [![Paypal](https://img.shields.io/badge/PayPal-Donate-Green.svg?logo=Paypal&style=flat-square)](https://www.paypal.com/donate/?hosted_button_id=TYMU92FD9D9UW)
 ## Note: I am not associated with/part of the BitCrackers team, these links are for BitCrackers only. Please don't harass the BitCrackers team regarding this fork.
