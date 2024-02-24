@@ -103,7 +103,7 @@ namespace SettingsTab {
 			}
 			ImGui::SameLine();
 			if ((IsNameValid(State.userName) || (IsHost() || !State.SafeMode)) && ImGui::Button("Set Name")) {
-				if ((IsNameValid(State.userName)) SetPlayerName(State.userName);
+				if (IsNameValid(State.userName)) SetPlayerName(State.userName);
 				LOG_INFO("Successfully set name to \"" + State.userName + "\"");
 				if (IsInGame())
 					State.rpcQueue.push(new RpcSetName(State.userName));
