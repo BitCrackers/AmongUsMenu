@@ -102,8 +102,8 @@ namespace SettingsTab {
 					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Username contains characters blocked by anticheat. This name will be ignored.");
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Set Name") && (!IsNameValid(State.userName) || (IsHost() || !State.SafeMode))) {
-				SetPlayerName(State.userName);
+			if ((IsNameValid(State.userName) || (IsHost() || !State.SafeMode)) && ImGui::Button("Set Name")) {
+				if ((IsNameValid(State.userName)) SetPlayerName(State.userName);
 				LOG_INFO("Successfully set name to \"" + State.userName + "\"");
 				if (IsInGame())
 					State.rpcQueue.push(new RpcSetName(State.userName));
