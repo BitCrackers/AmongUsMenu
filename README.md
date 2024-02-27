@@ -1,4 +1,4 @@
-# The menu has moved to a brand new [repository](https://github.com/g0aty/SickoMenu) for better issue support and visibility! This repository will now only be used for committing new stuff to AUM. Visit the new repo here: [https://github.com/g0aty/SickoMenu](https://github.com/g0aty/SickoMenu)
+# The menu has moved to a brand new [repository](https://github.com/g0aty/SickoMenu) for better issue support and visibility! This repository will now only be used for committing new stuff to AUM. Visit the new repo here: [https://github.com/g0aty/SickoMenu](https://github.com/g0aty/SickoMenu) *(Now Live!)*
 
 ## Version 2.2.3: Prepare for SickoMenu v3.0!!!
 SickoModeAU will be moving to a new repository by the end of February for better issue support and more!
