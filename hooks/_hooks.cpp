@@ -6,12 +6,13 @@
 #include "main.h"
 #include "SignatureScan.hpp"
 #include "game.h"
+#include "logger.h"
 
 using namespace Game;
 
 bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (const auto error = DetourAttach(ppPointer, pDetour); error != NO_ERROR) {
-		std::cout << "Failed to hook " << functionName << ", error " << error << std::endl;
+		STREAM_ERROR("Failed to hook " << functionName << ", error " << error);
 		return false;
 	}
 	//std::cout << "Hooked " << functionName << std::endl;
@@ -22,7 +23,7 @@ bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 
 bool UnhookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (const auto error = DetourDetach(ppPointer, pDetour); error != NO_ERROR) {
-		std::cout << "Failed to unhook " << functionName << ", error " << error << std::endl;
+		STREAM_ERROR("Failed to unhook " << functionName << ", error " << error);
 		return false;
 	}
 	//std::cout << "Unhooked " << functionName << std::endl;
@@ -37,7 +38,7 @@ void DetourInitilization() {
 
 	directx11 d3d11 = directx11();
 	if (!d3d11.presentFunction) {
-		std::cout << "Unable to retrieve IDXGISwapChain::Present method" << std::endl;
+		LOG_ERROR("Unable to retrieve IDXGISwapChain::Present method");
 		return;
 	} else {
 		// Attempting to hook the Steam overlay
