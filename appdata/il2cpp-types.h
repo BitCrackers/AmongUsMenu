@@ -6863,6 +6863,7 @@ namespace app
         struct SpriteRenderer* layer;
         void* animator;
         void* skin;
+        void* data;
         struct PlayerMaterial_Properties matProperties;
     };
 
@@ -6900,6 +6901,8 @@ namespace app
         Normal = 0x00000000,
         Horse = 0x00000001,
         Seeker = 0x00000002,
+        Long = 0x00000003,
+        LongSeeker = 0x00000004,
     };
 
 #else
@@ -6907,6 +6910,8 @@ namespace app
         PlayerBodyTypes__Enum_Normal = 0x00000000,
         PlayerBodyTypes__Enum_Horse = 0x00000001,
         PlayerBodyTypes__Enum_Seeker = 0x00000002,
+        PlayerBodyTypes__Enum_Long = 0x00000003,
+        PlayerBodyTypes__Enum_LongSeeker = 0x00000004,
     };
 
 #endif
@@ -6970,6 +6975,9 @@ namespace app
 #pragma region CosmeticsLayer
     struct CosmeticsLayer__Fields {
         struct MonoBehaviour__Fields _;
+        void* OnColorChange;
+        void* OnSetBodyAsGhost;
+        void* OnCosmeticSet;
         bool alwaysDrawNormalPlayer;
         bool uiPet;
         float zIndexSpacing;
@@ -6990,10 +6998,11 @@ namespace app
 #endif
         struct PlayerMaterial_Properties bodyMatProperties;
         void* currentBodySprite;
-        struct PetBehaviour* currentPet;
+        void* currentPet;
         void* normalBodySprite;
         bool initialized;
         void* petAsset;
+        void* longboi;
         bool visible;
         bool isNameVisible;
         bool lockVisible;
@@ -7629,71 +7638,6 @@ namespace app
     };
 #pragma endregion
 
-#pragma region MainMenuManager
-    struct MainMenuManager__Fields {
-        struct MonoBehaviour__Fields _;
-        void* AdsPolicy;
-        void* PlayOnlineButton;
-        struct HatManager* HatManagerRef;
-        void* CosmicubeManagerRef;
-        void* playerCustomizationPrefab;
-        void* announcementPopUp;
-        struct GameObject* gameModeButtons;
-        struct GameObject* accountButtons;
-        void* screenMask;
-        struct GameObject* mainMenuUI;
-        struct GameObject* rightPanelMask;
-        struct SpriteRenderer* screenTint;
-        void* freePlayButton;
-        void* playButton;
-        void* inventoryButton;
-        void* shopButton;
-        void* myAccountButton;
-        void* newsButton;
-        void* settingsButton;
-        void* creditsButton;
-        void* quitButton;
-        void* playLocalButton;
-        void* howToPlayButton;
-        void* accountCTAButton;
-        void* mainButtons;
-        struct GameObject* creditsScreen;
-        void* DefaultButtonSelected;
-        void* ControllerSelectable;
-        void* disableOnStartup;
-        struct GameObject* NewStoreItemsIcon;
-        void* cosmicubeManager;
-    };
-
-    struct MainMenuManager {
-        struct MainMenuManager__Class* klass;
-        MonitorData* monitor;
-        struct MainMenuManager__Fields fields;
-    };
-
-    struct MainMenuManager__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct MainMenuManager__StaticFields
-    {
-    };
-
-    struct MainMenuManager__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct MainMenuManager__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct MainMenuManager__VTable vtable;
-    };
-#pragma endregion
-
 #pragma region DisconnectReasons__Enum
 #if defined(_CPLUSPLUS_)
     enum class DisconnectReasons__Enum : int32_t {
@@ -7714,6 +7658,7 @@ namespace app
         IncorrectGame = 0x00000012,
         ServerRequest = 0x00000013,
         ServerFull = 0x00000014,
+        MismatchedVersion = 0x00000015,
         InternalPlayerMissing = 0x00000064,
         InternalNonceFailure = 0x00000065,
         InternalConnectionToken = 0x00000066,
@@ -7740,6 +7685,7 @@ namespace app
         PlatformFailedToGetUserBlock = 0x000000d5,
         ServerNotFound = 0x000000d6,
         ClientTimeout = 0x000000d7,
+        ErrorAuthNonceFailure = 0x000000d8,
         Unknown = 0x000000ff,
     };
 
@@ -7762,6 +7708,7 @@ namespace app
         DisconnectReasons__Enum_IncorrectGame = 0x00000012,
         DisconnectReasons__Enum_ServerRequest = 0x00000013,
         DisconnectReasons__Enum_ServerFull = 0x00000014,
+        DisconnectReasons__Enum_MismatchedVersion = 0x00000015,
         DisconnectReasons__Enum_InternalPlayerMissing = 0x00000064,
         DisconnectReasons__Enum_InternalNonceFailure = 0x00000065,
         DisconnectReasons__Enum_InternalConnectionToken = 0x00000066,
@@ -7788,6 +7735,7 @@ namespace app
         DisconnectReasons__Enum_PlatformFailedToGetUserBlock = 0x000000d5,
         DisconnectReasons__Enum_ServerNotFound = 0x000000d6,
         DisconnectReasons__Enum_ClientTimeout = 0x000000d7,
+        DisconnectReasons__Enum_ErrorAuthNonceFailure = 0x000000d8,
         DisconnectReasons__Enum_Unknown = 0x000000ff,
     };
 
@@ -7819,6 +7767,8 @@ namespace app
         None = 0x00,
         Normal = 0x01,
         HideNSeek = 0x02,
+        NormalFools = 0x03,
+        SeekFools = 0x04,
     };
 
 #else
@@ -7826,6 +7776,8 @@ namespace app
         GameModes__Enum_None = 0x00,
         GameModes__Enum_Normal = 0x01,
         GameModes__Enum_HideNSeek = 0x02,
+        GameModes__Enum_NormalFools = 0x03,
+        GameModes__Enum_SeekFools = 0x04,
     };
 
 #endif
@@ -8368,6 +8320,8 @@ namespace app
         void* sporeMushrooms;
         void* specialSabotage;
         void* startAMBSounds;
+        void* staticWavesAsset;
+        void* animatedWavesAsset;
         void* _Zipline_k__BackingField;
         struct Vector2 _LastBinocularPos_k__BackingField;
     };
@@ -8598,575 +8552,6 @@ namespace app
         const Il2CppRGCTXData* rgctx_data;
         Il2CppClass_1 _1;
         struct DeadBody__Array__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region PetData__Array
-    struct PetData__Array
-    {
-        struct PetData__Array__Class* klass;
-        void* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct PetData* vector[32];
-    };
-
-    struct PetData__Array__VTable
-    {
-    };
-
-    struct PetData__Array__StaticFields
-    {
-    };
-
-    struct PetData__Array__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct PetData__Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct PetData__Array__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region ScriptableObject
-    struct ScriptableObject__Fields
-    {
-        struct Object_1__Fields _;
-    };
-
-    struct ScriptableObject
-    {
-        struct ScriptableObject__Class* klass;
-        MonitorData* monitor;
-        struct ScriptableObject__Fields fields;
-    };
-
-    struct ScriptableObject__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct ScriptableObject__StaticFields
-    {
-    };
-
-    struct ScriptableObject__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct ScriptableObject__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct ScriptableObject__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region LimitedTime
-    struct LimitedTime {
-        int32_t limitedDay;
-        int32_t limitedMonth;
-        int32_t limitedYear;
-        int32_t limitedHour;
-        int32_t limitedMinute;
-    };
-
-#pragma endregion
-
-#pragma region LimitedTimeStartEnd
-    struct LimitedTimeStartEnd {
-        struct LimitedTime timeStart;
-        struct LimitedTime timeEnd;
-    };
-#pragma endregion
-
-#pragma region CosmeticData
-    struct CosmeticData__Fields
-    {
-        struct ScriptableObject__Fields _;
-        void* unlockOnSelectPlatforms;
-        bool freeRedeemableCosmetic;
-        int32_t redeemPopUpColor;
-        struct String* epicId;
-        struct String* BundleId;
-        struct String* ProductId;
-        struct Vector2 ChipOffset;
-        int32_t beanCost;
-        int32_t starCost;
-        bool paidOnMobile;
-        struct LimitedTimeStartEnd limitedTime;
-        int32_t displayOrder;
-        bool NotInStore;
-        bool Free;
-        void* SpritePreview;
-        bool PreviewCrewmateColor;
-    };
-    struct CosmeticData
-    {
-        struct CosmeticData__Class* klass;
-        MonitorData* monitor;
-        struct CosmeticData__Fields fields;
-    };
-    struct CosmeticData__VTable {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_ProdId;
-        VirtualInvokeData get_BeanCost;
-        VirtualInvokeData get_StarCost;
-        VirtualInvokeData get_PaidOnMobile;
-        VirtualInvokeData get_LimitedTimeAvailable;
-        VirtualInvokeData PreviewOnPlayer;
-        VirtualInvokeData GetItemCategory;
-        VirtualInvokeData SetProdId;
-        VirtualInvokeData CoLoadIcon;
-    };
-
-    struct CosmeticData__StaticFields
-    {
-    };
-
-    struct CosmeticData__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct CosmeticData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct CosmeticData__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region HatData
-
-    struct HatData__Fields {
-        struct CosmeticData__Fields _;
-        void* ViewDataRef;
-        bool InFront;
-        bool NoBounce;
-        bool BlocksVisors;
-        struct String* StoreName;
-        struct SkinData* RelatedSkin;
-    };
-
-    struct HatData {
-        struct HatData__Class* klass;
-        MonitorData* monitor;
-        struct HatData__Fields fields;
-    };
-
-    struct HatData__VTable {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_ProdId;
-        VirtualInvokeData get_BeanCost;
-        VirtualInvokeData get_StarCost;
-        VirtualInvokeData get_PaidOnMobile;
-        VirtualInvokeData get_LimitedTimeAvailable;
-        VirtualInvokeData PreviewOnPlayer;
-        VirtualInvokeData GetItemCategory;
-        VirtualInvokeData SetProdId;
-        VirtualInvokeData CoLoadIcon;
-        VirtualInvokeData CreateAddressableAsset;
-        VirtualInvokeData GetAssetReference;
-    };
-
-    struct HatData__StaticFields {
-    };
-
-    struct HatData__Class {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatData__VTable vtable;
-    };
-
-#pragma endregion
-
-#pragma region HatData__Array
-
-    struct HatData__Array {
-        struct HatData__Array__Class* klass;
-        MonitorData* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct HatData* vector[32];
-    };
-
-    struct HatData__Array__VTable {
-    };
-
-    struct HatData__Array__StaticFields {
-    };
-
-    struct HatData__Array__Class {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatData__Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatData__Array__VTable vtable;
-    };
-
-#pragma endregion
-
-#pragma region List_1_HatData_
-
-    struct __declspec(align(4)) List_1_HatData___Fields {
-        struct HatData__Array* _items;
-        int32_t _size;
-        int32_t _version;
-        struct Object* _syncRoot;
-    };
-
-    struct List_1_HatData_ {
-        struct List_1_HatData___Class* klass;
-        MonitorData* monitor;
-        struct List_1_HatData___Fields fields;
-    };
-
-    struct List_1_HatData___VTable {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData IndexOf;
-        VirtualInvokeData Insert;
-        VirtualInvokeData RemoveAt;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_T__get_IsReadOnly;
-        VirtualInvokeData Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_T__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IList_get_Item;
-        VirtualInvokeData System_Collections_IList_set_Item;
-        VirtualInvokeData System_Collections_IList_Add;
-        VirtualInvokeData System_Collections_IList_Contains;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IList_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IList_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IList_IndexOf;
-        VirtualInvokeData System_Collections_IList_Insert;
-        VirtualInvokeData System_Collections_IList_Remove;
-        VirtualInvokeData RemoveAt_1;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Item_1;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct List_1_HatData___StaticFields {
-        struct HatData__Array* _emptyArray;
-    };
-
-    struct List_1_HatData___Class {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct List_1_HatData___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct List_1_HatData___VTable vtable;
-    };
-
-#pragma endregion
-
-#pragma region HatManager
-
-    struct DestroyableSingleton_1_HatManager___Fields
-    {
-        struct MonoBehaviour__Fields _;
-        bool DontDestroy;
-    };
-
-    struct HatManager__Fields
-    {
-        struct DestroyableSingleton_1_HatManager___Fields _;
-        void* DefaultShader;
-        void* PlayerMaterial;
-        void* MaskedPlayerMaterial;
-        void* MaskedMaterial;
-        struct PetData__Array* allPets;
-        struct HatData__Array* allHats;
-        struct SkinData__Array* allSkins;
-        void* allVisors;
-        void* allNamePlates;
-        void* allStarBundles;
-        void* allBundles;
-        void* allFeaturedItems;
-        void* allFeaturedBundles;
-        void* allFeaturedCubes;
-    };
-
-    struct HatManager
-    {
-        struct HatManager__Class* klass;
-        void* monitor;
-        struct HatManager__Fields fields;
-    };
-
-    struct HatManager__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData Awake;
-        VirtualInvokeData OnDestroy;
-    };
-
-    struct HatManager__StaticFields
-    {
-    };
-
-    struct HatManager__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct HatManager__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct HatManager__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region NamePlateData
-    struct NamePlateData__Fields {
-        struct CosmeticData__Fields _;
-        void* ViewDataRef;
-    };
-
-    struct NamePlateData {
-        void* klass;
-        MonitorData* monitor;
-        struct NamePlateData__Fields fields;
-    };
-#pragma endregion
-
-#pragma region PetData
-    struct PetBehaviour__Fields {
-        struct MonoBehaviour__Fields _;
-        struct PetData* Data;
-        struct PlayerControl* Source;
-        float YOffset;
-        void* animator;
-        void* rend;
-        void* shadowRend;
-        void* body;
-        struct Collider2D* Collider;
-        struct Transform* PettingHandPosition;
-        void* idleClip;
-        void* sadClip;
-        void* scaredClip;
-        void* walkClip;
-        void* petClip;
-        bool beingPet;
-        bool manualMoving;
-    };
-
-    struct PetBehaviour {
-        void* klass;
-        MonitorData* monitor;
-        struct PetBehaviour__Fields fields;
-    };
-
-    struct PetData__Fields {
-        struct CosmeticData__Fields _;
-#if defined(_CPLUSPLUS_)
-        StringNames__Enum StoreName;
-#else
-        int32_t StoreName;
-#endif
-        void* PetPrefabRef;
-    };
-
-    struct PetData {
-        void* klass;
-        MonitorData* monitor;
-        struct PetData__Fields fields;
-    };
-#pragma endregion
-
-#pragma region List_1_PetData_
-    struct __declspec(align(4)) List_1_PetData___Fields {
-        struct PetData__Array* _items;
-        int32_t _size;
-        int32_t _version;
-        struct Object* _syncRoot;
-    };
-
-    struct List_1_PetData_ {
-        struct List_1_PetData___Class* klass;
-        MonitorData* monitor;
-        struct List_1_PetData___Fields fields;
-    };
-
-    struct IEnumerator_1_PetData_ {
-        struct IEnumerator_1_PetData___Class* klass;
-        MonitorData* monitor;
-    };
-#pragma endregion
-
-#pragma region SkinData
-    struct SkinData__Fields
-    {
-        struct CosmeticData__Fields _;
-        void* ViewDataRef;
-        struct String* StoreName;
-    };
-
-    struct SkinData
-    {
-        struct SkinData__Class* klass;
-        void* monitor;
-        struct SkinData__Fields fields;
-    };
-    struct SkinData__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_ProdId;
-        VirtualInvokeData get_BeanCost;
-        VirtualInvokeData get_StarCost;
-        VirtualInvokeData get_PaidOnMobile;
-        VirtualInvokeData get_LimitedTimeAvailable;
-        VirtualInvokeData PreviewOnPlayer;
-        VirtualInvokeData GetItemCategory;
-        VirtualInvokeData SetProdId;
-        VirtualInvokeData CoLoadIcon;
-        VirtualInvokeData CreateAddressableAsset;
-        VirtualInvokeData GetAssetReference;
-    };
-
-    struct SkinData__StaticFields
-    {
-    };
-
-    struct SkinData__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct SkinData__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct SkinData__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region SkinData__Array
-    struct SkinData__Array
-    {
-        struct SkinData__Array__Class* klass;
-        void* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct SkinData* vector[32];
-    };
-
-    struct SkinData__Array__VTable
-    {
-    };
-
-    struct SkinData__Array__StaticFields
-    {
-    };
-
-    struct SkinData__Array__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct SkinData__Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct SkinData__Array__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region List_1_SkinData_
-    struct __declspec(align(4)) List_1_SkinData___Fields
-    {
-        struct SkinData__Array* _items;
-        int32_t _size;
-        int32_t _version;
-        struct Object* _syncRoot;
-    };
-
-    struct List_1_SkinData_
-    {
-        struct List_1_SkinData___Class* klass;
-        MonitorData* monitor;
-        struct List_1_SkinData___Fields fields;
-    };
-    struct List_1_SkinData___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData IndexOf;
-        VirtualInvokeData Insert;
-        VirtualInvokeData RemoveAt;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_T__get_IsReadOnly;
-        VirtualInvokeData Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_T__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IList_get_Item;
-        VirtualInvokeData System_Collections_IList_set_Item;
-        VirtualInvokeData System_Collections_IList_Add;
-        VirtualInvokeData System_Collections_IList_Contains;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IList_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IList_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IList_IndexOf;
-        VirtualInvokeData System_Collections_IList_Insert;
-        VirtualInvokeData System_Collections_IList_Remove;
-        VirtualInvokeData RemoveAt_1;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Item_1;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct List_1_SkinData___StaticFields
-    {
-        struct SkinData__Array* _emptyArray;
-    };
-
-    struct List_1_SkinData___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct List_1_SkinData___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct List_1_SkinData___VTable vtable;
     };
 #pragma endregion
 
@@ -9470,6 +8855,8 @@ namespace app
     struct IGameOptions__VTable {
         VirtualInvokeData get_Version;
         VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_AprilFoolsOnMode;
+        VirtualInvokeData get_AprilFoolsOffMode;
         VirtualInvokeData get_MaxPlayers;
         VirtualInvokeData get_Keywords;
         VirtualInvokeData get_MapId;
@@ -9484,6 +8871,7 @@ namespace app
         VirtualInvokeData SetBool;
         VirtualInvokeData SetInt;
         VirtualInvokeData SetUInt;
+        VirtualInvokeData TryClearAprilFoolsMode;
         VirtualInvokeData GetByte;
         VirtualInvokeData GetFloat;
         VirtualInvokeData GetBool;
@@ -9804,6 +9192,7 @@ namespace app
         void* openSound;
         void* closeSound;
         bool open;
+        bool allowAudio;
     };
 
     struct MushroomWallDoor {

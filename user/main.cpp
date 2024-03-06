@@ -91,25 +91,22 @@ void Run(LPVOID lpParam) {
 		ss << "\tCommit: " << GetGitCommit() << " - " << GetGitBranch() << std::endl; // Log git info
 		ss << "\tAmong Us Version: " << getGameVersion() << std::endl; // Log among us info
 		LOG_INFO(ss.str());
+#if _DEBUG
+		SetConsoleTitleA(std::format("AU: {}\tAUM: {}", getGameVersion(), GetGitCommit().substr(0,7)).c_str());
+#endif
 	}
 	State.Load();
 #if _DEBUG
 	hUnloadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	
-	#define DO_APP_CLASS(n, s) if(!n ## __TypeInfo) printf("Unable to locate %s\n", #n "__TypeInfo")
+#endif
+	#define DO_APP_CLASS(n, s) if(!n ## __TypeInfo) LOG_ERROR("Unable to locate " #n  "__TypeInfo")
 	#include "il2cpp-classes.h"
 	#undef DO_APP_CLASS
 
-	#define DO_APP_FUNC(r, n, p, s) if(!n) printf("Unable to locate %s\n", #n)
+	#define DO_APP_FUNC(r, n, p, s) if(!n) LOG_ERROR("Unable to locate " #n)
 	#include "il2cpp-functions.h"
 	#undef DO_APP_FUNC
-	/*
-	auto domain = il2cpp_domain_get();
-	auto assembly = il2cpp_domain_assembly_open(domain, "Assembly-CSharp");
-	auto klass = il2cpp_class_from_name(assembly->image, "", "MovingPlatformBehaviour");
-	output_class_methods(klass);
-	*/
-#endif
+
 	GAME_STATIC_POINTER(Game::pAmongUsClient, app::AmongUsClient, Instance);
 	GAME_STATIC_POINTER(Game::pGameData, app::GameData, Instance);
 	GAME_STATIC_POINTER(Game::pAllPlayerControls, app::PlayerControl, AllPlayerControls);
