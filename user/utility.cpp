@@ -137,8 +137,8 @@ PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
 	}
 }
 
-PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
-	new (this)PlayerSelection(app::GameData_PlayerInfo_get_Object(playerData, nullptr));
+PlayerSelection::PlayerSelection(NetworkedPlayerInfo* playerData) {
+	new (this)PlayerSelection(app::NetworkedPlayerInfo_get_Object(playerData, nullptr));
 }
 
 PlayerSelection::PlayerSelection(const PlayerSelection::Result& result) {
@@ -302,7 +302,7 @@ il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl() {
 	return *Game::pAllPlayerControls;
 }
 
-il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData() {
+il2cpp::List<List_1_NetworkedPlayerInfo_> GetAllPlayerData() {
 	return (*Game::pGameData)->fields.AllPlayers;
 }
 
@@ -489,7 +489,7 @@ std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
-	auto object = GameData_PlayerInfo_get_Object(playerInfo, nullptr);
+	auto object = NetworkedPlayerInfo_get_Object(playerInfo, nullptr);
 	if (!object) {
 		// Likely disconnected player.
 		if (playerInfo->fields.Disconnected != true)

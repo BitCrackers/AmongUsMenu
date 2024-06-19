@@ -36,7 +36,7 @@ void dChatController_SetVisible(ChatController* __this, bool visible, MethodInfo
 void dChatBubble_SetName(ChatBubble* __this, String* playerName, bool isDead, bool voted, Color color, MethodInfo* method) {
 	if (IsInGame()) {
 		for (auto playerData : GetAllPlayerData()) {
-			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+			auto outfit = GetPlayerOutfit(playerData);
 			if (outfit == NULL) continue;
 			if (playerName == GameData_PlayerOutfit_get_PlayerName(outfit, nullptr)) {
 				if (State.RevealRoles)

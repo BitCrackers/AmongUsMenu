@@ -60,7 +60,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!playerData || !localData)
 			return;
 
-		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
+		auto outfit = GetPlayerOutfit(playerData, true);
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
 			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
@@ -276,7 +276,7 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				}
 				Profiler::EndSample("WalkEventCreation");
 			}
-			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+			auto outfit = GetPlayerOutfit(playerData);
 			EspPlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
 			if (outfit != NULL)

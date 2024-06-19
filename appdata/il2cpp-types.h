@@ -5473,46 +5473,26 @@ namespace app
     };
 #pragma endregion
 
-#pragma region GameData_PlayerOutfit
-    struct __declspec(align(4)) GameData_PlayerOutfit__Fields {
-        bool dontCensorName;
+#pragma region NetworkedPlayerInfo_PlayerOutfit
+    struct __declspec(align(4)) NetworkedPlayerInfo_PlayerOutfit__Fields {
         int32_t ColorId;
         struct String* HatId;
         struct String* PetId;
         struct String* SkinId;
         struct String* VisorId;
         struct String* NamePlateId;
-        void* /* struct Action_1_String_* */nameCallback;
-        struct String* preCensorName;
-        struct String* postCensorName;
+        struct String* PlayerName;
+        uint8_t HatSequenceId;
+        uint8_t PetSequenceId;
+        uint8_t SkinSequenceId;
+        uint8_t VisorSequenceId;
+        uint8_t NamePlateSequenceId;
     };
 
-    struct GameData_PlayerOutfit {
-        struct GameData_PlayerOutfit__Class* klass;
+    struct NetworkedPlayerInfo_PlayerOutfit {
+        void* klass;
         MonitorData* monitor;
-        struct GameData_PlayerOutfit__Fields fields;
-    };
-
-    struct GameData_PlayerOutfit__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct GameData_PlayerOutfit__StaticFields
-    {
-    };
-
-    struct GameData_PlayerOutfit__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct GameData_PlayerOutfit__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct GameData_PlayerOutfit__VTable vtable;
+        struct NetworkedPlayerInfo_PlayerOutfit__Fields fields;
     };
 #pragma endregion
 
@@ -5544,133 +5524,6 @@ namespace app
     };
 #pragma endregion
 
-#pragma region Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit_
-    struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit_
-    {
-        int32_t hashCode;
-        int32_t next;
-#if defined(_CPLUSPLUS_)
-        PlayerOutfitType__Enum key;
-#else
-        int32_t key;
-#endif
-        struct GameData_PlayerOutfit* value;
-    };
-#pragma endregion
-
-#pragma region Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array
-    struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array
-    {
-        struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__Class* klass;
-        MonitorData* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit_ vector[32];
-    };
-    struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__VTable
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__StaticFields
-    {
-    };
-
-    struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array__VTable vtable;
-    };
-#pragma endregion
-
-#pragma region Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_
-    struct __declspec(align(4)) Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___Fields
-    {
-        struct Int32__Array* buckets;
-        struct Dictionary_2_TKey_TValue_Entry_PlayerOutfitType_GameData_PlayerOutfit___Array* entries;
-        int32_t count;
-        int32_t version;
-        int32_t freeList;
-        int32_t freeCount;
-        struct IEqualityComparer_1_PlayerOutfitType_* comparer;
-        struct Dictionary_2_TKey_TValue_KeyCollection_PlayerOutfitType_GameData_PlayerOutfit_* keys;
-        struct Dictionary_2_TKey_TValue_ValueCollection_PlayerOutfitType_GameData_PlayerOutfit_* values;
-        struct Object* _syncRoot;
-    };
-
-    struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_
-    {
-        struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___Class* klass;
-        MonitorData* monitor;
-        struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___Fields fields;
-    };
-    struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Keys;
-        VirtualInvokeData System_Collections_Generic_IDictionary_TKey_TValue__get_Values;
-        VirtualInvokeData ContainsKey;
-        VirtualInvokeData Add;
-        VirtualInvokeData Remove;
-        VirtualInvokeData TryGetValue;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___get_IsReadOnly;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Contains;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___CopyTo;
-        VirtualInvokeData System_Collections_Generic_ICollection_System_Collections_Generic_KeyValuePair_TKey_TValue___Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair_TKey_TValue___GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IDictionary_get_Item;
-        VirtualInvokeData System_Collections_IDictionary_set_Item;
-        VirtualInvokeData System_Collections_IDictionary_get_Keys;
-        VirtualInvokeData System_Collections_IDictionary_get_Values;
-        VirtualInvokeData System_Collections_IDictionary_Contains;
-        VirtualInvokeData System_Collections_IDictionary_Add;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IDictionary_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IDictionary_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IDictionary_GetEnumerator;
-        VirtualInvokeData System_Collections_IDictionary_Remove;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData ContainsKey_1;
-        VirtualInvokeData TryGetValue_1;
-        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Keys;
-        VirtualInvokeData System_Collections_Generic_IReadOnlyDictionary_TKey_TValue__get_Values;
-        VirtualInvokeData get_Count_2;
-        VirtualInvokeData GetObjectData;
-        VirtualInvokeData OnDeserialization;
-        VirtualInvokeData GetObjectData_1;
-        VirtualInvokeData OnDeserialization_1;
-    };
-
-    struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___StaticFields
-    {
-    };
-
-    struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit___VTable vtable;
-    };
-#pragma endregion
-
 #pragma region RoleTypes__Enum
 #if defined(_CPLUSPLUS_)
     enum class RoleTypes__Enum : uint16_t {
@@ -5682,6 +5535,9 @@ namespace app
         Shapeshifter = 0x0005,
         CrewmateGhost = 0x0006,
         ImpostorGhost = 0x0007,
+        Noisemaker = 0x0008,
+        Phantom = 0x0009,
+        Tracker = 0x000a,
     };
 
 #else
@@ -5694,6 +5550,9 @@ namespace app
         RoleTypes__Enum_Shapeshifter = 0x0005,
         RoleTypes__Enum_CrewmateGhost = 0x0006,
         RoleTypes__Enum_ImpostorGhost = 0x0007,
+        RoleTypes__Enum_Noisemaker = 0x0008,
+        RoleTypes__Enum_Phantom = 0x0009,
+        RoleTypes__Enum_Tracker = 0x000a,
     };
 
 #endif
@@ -5763,6 +5622,9 @@ namespace app
 #else
         int32_t BlurbNameLong;
 #endif
+        void* RoleIconSolid;
+        void* RoleIconWhite;
+        void* RoleScreenshot;
         struct Color NameColor;
         bool TasksCountTowardProgress;
         bool CanUseKillButton;
@@ -5806,7 +5668,9 @@ namespace app
         VirtualInvokeData Deinitialize;
         VirtualInvokeData SpawnTaskHeader;
         VirtualInvokeData UseAbility;
+        VirtualInvokeData OnMeetingStart;
         VirtualInvokeData OnVotingComplete;
+        VirtualInvokeData OnDeath;
         VirtualInvokeData Initialize;
         VirtualInvokeData SetUsableTarget;
         VirtualInvokeData SetPlayerTarget;
@@ -5845,9 +5709,11 @@ namespace app
     };
 #pragma endregion
 
-#pragma region GameData_PlayerInfo
-    struct __declspec(align(4)) GameData_PlayerInfo__Fields {
+#pragma region NetworkedPlayerInfo
+    struct NetworkedPlayerInfo__Fields {
+        struct InnerNetObject__Fields _;
         uint8_t PlayerId;
+        int32_t ClientId;
         struct String* FriendCode;
         struct String* Puid;
 #if defined(_CPLUSPLUS_)
@@ -5856,7 +5722,7 @@ namespace app
         uint16_t RoleType;
 #endif
         struct Nullable_1_AmongUs_GameOptions_RoleTypes_ RoleWhenAlive;
-        struct Dictionary_2_PlayerOutfitType_GameData_PlayerOutfit_* Outfits;
+        struct Dictionary_2_PlayerOutfitType_NetworkedPlayerInfo_PlayerOutfit_* Outfits;
         uint32_t PlayerLevel;
         bool Disconnected;
         struct RoleBehaviour* Role;
@@ -5865,33 +5731,10 @@ namespace app
         struct PlayerControl* _object;
     };
 
-    struct GameData_PlayerInfo
-    {
-        struct GameData_PlayerInfo__Class* klass;
-        void* monitor;
-        struct GameData_PlayerInfo__Fields fields;
-    };
-
-    struct GameData_PlayerInfo__VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-    };
-
-    struct GameData_PlayerInfo__StaticFields
-    {
-    };
-
-    struct GameData_PlayerInfo__Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct GameData_PlayerInfo__StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct GameData_PlayerInfo__VTable vtable;
+    struct NetworkedPlayerInfo {
+        void* klass;
+        MonitorData* monitor;
+        struct NetworkedPlayerInfo__Fields fields;
     };
 #pragma endregion
 
@@ -6411,6 +6254,9 @@ namespace app
         Default = 0x00000000,
         ProtectLoop = 0x00000001,
         Shapeshift = 0x00000002,
+        Vanish_Charge = 0x00000003,
+        Vanish_Poof = 0x00000004,
+        Appear_Poof = 0x00000005,
     };
 
 #else
@@ -6418,6 +6264,9 @@ namespace app
         RoleEffectAnimation_EffectType__Enum_Default = 0x00000000,
         RoleEffectAnimation_EffectType__Enum_ProtectLoop = 0x00000001,
         RoleEffectAnimation_EffectType__Enum_Shapeshift = 0x00000002,
+        RoleEffectAnimation_EffectType__Enum_Vanish_Charge = 0x00000003,
+        RoleEffectAnimation_EffectType__Enum_Vanish_Poof = 0x00000004,
+        RoleEffectAnimation_EffectType__Enum_Appear_Poof = 0x00000005,
     };
 
 #endif
@@ -6605,47 +6454,42 @@ namespace app
 #pragma endregion
 
 #pragma region GameData
-    struct GameData__Fields
-    {
-        struct InnerNetObject__Fields _;
-        struct List_1_GameData_PlayerInfo_* AllPlayers;
+    struct GameData__Fields {
+        struct MonoBehaviour__Fields _;
+        struct List_1_NetworkedPlayerInfo_* AllPlayers;
+        struct List_1_NetworkedPlayerInfo_* PlayerQueue;
         int32_t TotalTasks;
         int32_t CompletedTasks;
         struct RoleBehaviour* DefaultRole;
+        struct NetworkedPlayerInfo* PlayerInfoPrefab;
     };
 
-    struct GameData
-    {
-        void* klass;
-        void* monitor;
+    struct GameData {
+        struct GameData__Class* klass;
+        MonitorData* monitor;
         struct GameData__Fields fields;
     };
 
-    struct GameData__VTable
-    {
+    struct GameData__VTable {
         VirtualInvokeData Equals;
         VirtualInvokeData Finalize;
         VirtualInvokeData GetHashCode;
         VirtualInvokeData ToString;
-        VirtualInvokeData CompareTo;
-        VirtualInvokeData get_IsDirty;
-        VirtualInvokeData get_Chunked;
-        VirtualInvokeData OnDestroy;
-        VirtualInvokeData HandleRpc;
-        VirtualInvokeData Serialize;
-        VirtualInvokeData Deserialize;
+        VirtualInvokeData get_IsPersistent;
         VirtualInvokeData HandleDisconnect;
         VirtualInvokeData HandleDisconnect_1;
     };
 
-    struct GameData__StaticFields
-    {
+    struct GameData__StaticFields {
         struct GameData* Instance;
-        void* randy;
+        float TimeGameStarted;
+        float TimeLastMeetingStarted;
+        int32_t MeetingCount;
+        int32_t RoundsPlayedInSession;
+        int32_t LastDeathReason;// DeathReason__Enum
     };
 
-    struct GameData__Class
-    {
+    struct GameData__Class {
         Il2CppClass_0 _0;
         Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
         struct GameData__StaticFields* static_fields;
@@ -6675,7 +6519,7 @@ namespace app
         struct SpriteRenderer* MaskArea;
         void* PlatformIcon;
         struct TextMeshPro* ColorBlindName;
-        struct GameData_PlayerInfo* playerInfo;
+        struct NetworkedPlayerInfo* playerInfo;
         int32_t maskLayer;
     };
 
@@ -6736,7 +6580,7 @@ namespace app
 
     struct ChatController__Fields {
         struct MonoBehaviour__Fields _;
-        struct GameObject* chatButton;
+        void* chatButton;
         void* chatButtonAspectPosition;
         void* banButton;
         struct GameObject* openKeyboardButton;
@@ -6758,6 +6602,7 @@ namespace app
         void* backButton;
         void* defaultButtonSelected;
         void* controllerSelectable;
+        void* chatNotification;
 #if defined(_CPLUSPLUS_)
         ChatControllerState__Enum state;
 #else
@@ -7061,10 +6906,15 @@ namespace app
         bool shapeshifting;
         bool waitingForShapeshiftResponse;
         bool isKilling;
-        struct GameData_PlayerInfo* _cachedData;
+        float invisibilityAlpha;
+        struct NetworkedPlayerInfo *CachedPlayerData;
         int32_t protectedByGuardianId;
         float flashlightAngle;
         int32_t shapeshiftTargetPlayerId;
+        bool shouldAppearInvisible;
+        bool isTrackingPlayer;
+        struct PlayerControl *trackedPlayer;
+        int32_t trackedPlayerColorID;
         void* FootSteps;
         void* KillSfx;
         void* KillAnimations;
@@ -7253,7 +7103,6 @@ namespace app
         void* PetButton;
         void* AbilityButton;
         void* ReportButton;
-        struct TextMeshPro* GameSettings;
         struct GameObject* TaskStuff;
         struct TaskPanelBehaviour* TaskPanel;
         struct CrewmatesKilledTracker* CrewmatesKilled;
@@ -7530,7 +7379,7 @@ namespace app
 #endif
         struct GameObject* SkippedVoting;
         struct SpriteRenderer* HostIcon;
-        struct GameData_PlayerInfo* exiledPlayer;
+        struct NetworkedPlayerInfo* exiledPlayer;
         bool wasTie;
         struct TextMeshPro* TimerText;
         float discussionTimer;
@@ -7562,6 +7411,7 @@ namespace app
         VirtualInvokeData HandleRpc;
         VirtualInvokeData Serialize;
         VirtualInvokeData Deserialize;
+        VirtualInvokeData get_IsPersistent;
         VirtualInvokeData HandleDisconnect;
         VirtualInvokeData HandleDisconnect_1;
     };
@@ -7901,6 +7751,7 @@ namespace app
         VirtualInvokeData __unknown_9;
         VirtualInvokeData __unknown_10;
         VirtualInvokeData __unknown_11;
+        VirtualInvokeData __unknown_12;
     };
 
     struct InnerNetClient__StaticFields {
@@ -7964,6 +7815,7 @@ namespace app
         struct String* OnlineScene;
         struct String* MainMenuScene;
         struct GameData* GameDataPrefab;
+        void* VoteBanPrefab;
         struct PlayerControl* PlayerPrefab;
         void* ShipPrefabs;
         int32_t TutorialMapId;
@@ -7980,7 +7832,6 @@ namespace app
 #else
         int32_t CrossplayPrivilegeError;
 #endif
-        int32_t MAX_CLIENT_WAIT_TIME;
         void* logger;
         struct AsyncOperationHandle_1_UnityEngine_GameObject_ ShipLoadingAsyncHandle;
     };
@@ -8012,6 +7863,7 @@ namespace app
         VirtualInvokeData OnPlayerLeft;
         VirtualInvokeData OnReportedPlayer;
         VirtualInvokeData OnDisconnected;
+        VirtualInvokeData PreDisconnectInternal;
         VirtualInvokeData OnGetGameList;
     };
 
@@ -8038,6 +7890,7 @@ namespace app
         bool InScene;
         bool IsReady;
         bool HasBeenReported;
+        bool IsBeingCreated;
         struct PlayerControl* Character;
         uint32_t PlayerLevel;
         void* PlatformData;
@@ -8182,6 +8035,7 @@ namespace app
         void* SpawnInClip;
         void* SpawnPositions;
         void* DropShipSound;
+        void* MapTheme;
         void* AllRooms;
         void* logger;
         float lastFriendsCheckTime;
@@ -8614,6 +8468,13 @@ namespace app
         VirtualInvokeData GetShapeshifterLeaveSkin;
         VirtualInvokeData GetScientistCooldown;
         VirtualInvokeData GetScientistBatteryCharge;
+        VirtualInvokeData GetPhantomCooldown;
+        VirtualInvokeData GetPhantomDuration;
+        VirtualInvokeData GetTrackerCooldown;
+        VirtualInvokeData GetTrackerDuration;
+        VirtualInvokeData GetTrackerDelay;
+        VirtualInvokeData GetNoisemakerImpostorAlert;
+        VirtualInvokeData GetNoisemakerAlertDuration;
         VirtualInvokeData GetKillCooldown;
         VirtualInvokeData GetKillDistance;
         VirtualInvokeData GetPlayerSpeedMod;
@@ -8695,6 +8556,12 @@ namespace app
         ScientistBatteryCharge = 0x000004b1,
         EngineerCooldown = 0x00000514,
         EngineerInVentMaxTime = 0x00000515,
+        PhantomCooldown = 0x000005dc,
+        PhantomDuration = 0x000005dd,
+        TrackerCooldown = 0x0000060e,
+        TrackerDuration = 0x0000060f,
+        TrackerDelay = 0x00000610,
+        NoisemakerAlertDuration = 0x00000640,
     };
 
 #else
@@ -8719,6 +8586,12 @@ namespace app
         FloatOptionNames__Enum_ScientistBatteryCharge = 0x000004b1,
         FloatOptionNames__Enum_EngineerCooldown = 0x00000514,
         FloatOptionNames__Enum_EngineerInVentMaxTime = 0x00000515,
+        FloatOptionNames__Enum_PhantomCooldown = 0x000005dc,
+        FloatOptionNames__Enum_PhantomDuration = 0x000005dd,
+        FloatOptionNames__Enum_TrackerCooldown = 0x0000060e,
+        FloatOptionNames__Enum_TrackerDuration = 0x0000060f,
+        FloatOptionNames__Enum_TrackerDelay = 0x00000610,
+        FloatOptionNames__Enum_NoisemakerAlertDuration = 0x00000640,
     };
 
 #endif
@@ -8778,6 +8651,7 @@ namespace app
         CrewmatesRemainingForVitals = 0x00000064,
         CrewmateVentUses = 0x00000065,
         ImpostorPlayerID = 0x00000066,
+        RulePreset = 0x000000c8,
     };
 
 #else
@@ -8799,6 +8673,7 @@ namespace app
         Int32OptionNames__Enum_CrewmatesRemainingForVitals = 0x00000064,
         Int32OptionNames__Enum_CrewmateVentUses = 0x00000065,
         Int32OptionNames__Enum_ImpostorPlayerID = 0x00000066,
+        Int32OptionNames__Enum_RulePreset = 0x000000c8,
     };
 
 #endif
@@ -8855,8 +8730,10 @@ namespace app
     struct IGameOptions__VTable {
         VirtualInvokeData get_Version;
         VirtualInvokeData get_GameMode;
+        VirtualInvokeData get_SpecialMode;
         VirtualInvokeData get_AprilFoolsOnMode;
         VirtualInvokeData get_AprilFoolsOffMode;
+        VirtualInvokeData get_RulesPreset;
         VirtualInvokeData get_MaxPlayers;
         VirtualInvokeData get_Keywords;
         VirtualInvokeData get_MapId;
@@ -8866,6 +8743,7 @@ namespace app
         VirtualInvokeData get_RoleOptions;
         VirtualInvokeData AreInvalid;
         VirtualInvokeData SetRecommendations;
+        VirtualInvokeData SetRecommendations_1;
         VirtualInvokeData SetByte;
         VirtualInvokeData SetFloat;
         VirtualInvokeData SetBool;
@@ -8898,86 +8776,6 @@ namespace app
         struct IGameOptions__VTable vtable;
     };
 
-#pragma endregion
-
-
-#pragma region List_1_GameData_PlayerInfo_
-    struct __declspec(align(4)) List_1_GameData_PlayerInfo___Fields
-    {
-        struct GameData_PlayerInfo__Array* _items;
-        int32_t _size;
-        int32_t _version;
-        struct Object* _syncRoot;
-    };
-
-    struct List_1_GameData_PlayerInfo_
-    {
-        struct List_1_GameData_PlayerInfo___Class* klass;
-        void* monitor;
-        struct List_1_GameData_PlayerInfo___Fields fields;
-    };
-
-    struct GameData_PlayerInfo__Array {
-        struct GameData_PlayerInfo__Array__Class* klass;
-        MonitorData* monitor;
-        Il2CppArrayBounds* bounds;
-        il2cpp_array_size_t max_length;
-        struct GameData_PlayerInfo* vector[32];
-    };
-
-    struct List_1_GameData_PlayerInfo___VTable
-    {
-        VirtualInvokeData Equals;
-        VirtualInvokeData Finalize;
-        VirtualInvokeData GetHashCode;
-        VirtualInvokeData ToString;
-        VirtualInvokeData get_Item;
-        VirtualInvokeData set_Item;
-        VirtualInvokeData IndexOf;
-        VirtualInvokeData Insert;
-        VirtualInvokeData RemoveAt;
-        VirtualInvokeData get_Count;
-        VirtualInvokeData System_Collections_Generic_ICollection_T__get_IsReadOnly;
-        VirtualInvokeData Add;
-        VirtualInvokeData Clear;
-        VirtualInvokeData Contains;
-        VirtualInvokeData CopyTo;
-        VirtualInvokeData Remove;
-        VirtualInvokeData System_Collections_Generic_IEnumerable_T__GetEnumerator;
-        VirtualInvokeData System_Collections_IEnumerable_GetEnumerator;
-        VirtualInvokeData System_Collections_IList_get_Item;
-        VirtualInvokeData System_Collections_IList_set_Item;
-        VirtualInvokeData System_Collections_IList_Add;
-        VirtualInvokeData System_Collections_IList_Contains;
-        VirtualInvokeData Clear_1;
-        VirtualInvokeData System_Collections_IList_get_IsReadOnly;
-        VirtualInvokeData System_Collections_IList_get_IsFixedSize;
-        VirtualInvokeData System_Collections_IList_IndexOf;
-        VirtualInvokeData System_Collections_IList_Insert;
-        VirtualInvokeData System_Collections_IList_Remove;
-        VirtualInvokeData RemoveAt_1;
-        VirtualInvokeData System_Collections_ICollection_CopyTo;
-        VirtualInvokeData get_Count_1;
-        VirtualInvokeData System_Collections_ICollection_get_SyncRoot;
-        VirtualInvokeData System_Collections_ICollection_get_IsSynchronized;
-        VirtualInvokeData get_Item_1;
-        VirtualInvokeData get_Count_2;
-    };
-
-    struct List_1_GameData_PlayerInfo___StaticFields
-    {
-        struct GameData_PlayerInfo__Array* _emptyArray;
-    };
-
-    struct List_1_GameData_PlayerInfo___Class
-    {
-        Il2CppClass_0 _0;
-        Il2CppRuntimeInterfaceOffsetPair* interfaceOffsets;
-        struct List_1_GameData_PlayerInfo___StaticFields* static_fields;
-        const Il2CppRGCTXData* rgctx_data;
-        Il2CppClass_1 _1;
-        struct List_1_GameData_PlayerInfo___VTable vtable;
-    };
 #pragma endregion
 
 #pragma region RoleTypes__Enum__Array
@@ -9659,7 +9457,9 @@ namespace app
         VirtualInvokeData Deinitialize;
         VirtualInvokeData SpawnTaskHeader;
         VirtualInvokeData UseAbility;
+        VirtualInvokeData OnMeetingStart;
         VirtualInvokeData OnVotingComplete;
+        VirtualInvokeData OnDeath;
         VirtualInvokeData Initialize;
         VirtualInvokeData SetUsableTarget;
         VirtualInvokeData SetPlayerTarget;
@@ -9687,13 +9487,15 @@ namespace app
 #pragma endregion
 
 #pragma region RoleManager
-    struct RoleManager__Fields
-    {
+    struct RoleManager__Fields {
         struct DestroyableSingleton_1_RoleManager___Fields _;
         void* AllRoles;
-        void* shapeshiftAnim;
-        void* protectAnim;
-        void* protectLoopAnim;
+        struct RoleEffectAnimation* shapeshiftAnim;
+        struct RoleEffectAnimation* protectAnim;
+        struct RoleEffectAnimation* protectLoopAnim;
+        struct RoleEffectAnimation* vanish_ChargeAnim;
+        struct RoleEffectAnimation* vanish_PoofAnim;
+        struct RoleEffectAnimation* appear_PoofAnim;
     };
 
     struct RoleManager
