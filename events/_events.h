@@ -63,7 +63,7 @@ struct EVENT_PLAYER {
 		if (outfit != nullptr)
 		{
 			colorId = outfit->fields.ColorId;
-			playerName = convert_from_string(app::GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+			playerName = convert_from_string(outfit->fields.PlayerName);
 		}
 		else
 		{

@@ -143,7 +143,7 @@ void dMeetingHud_Update(MeetingHud* __this, MethodInfo* method) {
 		auto outfit = GetPlayerOutfit(playerData);
 
 		if (playerData && localData && outfit) {
-			std::string playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+			std::string playerName = convert_from_string(outfit->fields.PlayerName);
 			if (State.RevealRoles)
 			{
 				std::string roleName = GetRoleName(playerData->fields.Role, State.AbbreviatedRoleNames);

@@ -14,7 +14,7 @@ namespace ChatGui
 
 		auto gPlayerInfo = GetPlayerDataById((*Game::pLocalPlayer)->fields.PlayerId);
 		auto outfit = GetPlayerOutfit(gPlayerInfo);
-		auto name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+		auto name = convert_from_string(outfit->fields.PlayerName);
 		State.chatMessages.emplace_back(std::make_unique<RpcChatMessage>(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
 		if (IsInGame()) State.rpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));
 		else if (IsInLobby()) State.lobbyRpcQueue.push(new RpcChatMessage(name, message, (uint32_t)outfit->fields.ColorId, std::chrono::system_clock::now()));

@@ -242,5 +242,3 @@ DO_APP_FUNC(void, MushroomWallDoor_SetDoorway, (MushroomWallDoor* __this, bool o
 DO_APP_FUNC(void, MushroomDoorSabotageMinigame_Begin, (MushroomDoorSabotageMinigame* __this, PlayerTask* task, MethodInfo* method), "Assembly-CSharp, System.Void MushroomDoorSabotageMinigame::Begin(PlayerTask)");
 
 // 2024.6.18e
-#define GameData_PlayerOutfit_get_PlayerName(outfit, method) \
-    outfit->fields.PlayerName

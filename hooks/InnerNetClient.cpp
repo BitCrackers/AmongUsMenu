@@ -96,7 +96,7 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method)
         if (State.originalName == "-") {
             auto outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
             if (outfit != NULL)
-                State.originalName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+                State.originalName = convert_from_string(outfit->fields.PlayerName);
         }
 
         if (!State.lobbyRpcQueue.empty()) {
