@@ -44,7 +44,7 @@ namespace GameTab {
 
 				for (PlayerControl* player : GetAllPlayerControl())
 				{
-					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(player));
+					auto outfit = GetPlayerOutfit(GetPlayerData(player));
 					if (outfit == NULL) continue;
 					if (State.SelectedColorId == outfit->fields.ColorId)
 					{

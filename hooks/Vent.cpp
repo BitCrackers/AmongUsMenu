@@ -4,9 +4,9 @@
 #include "logger.h"
 #include <memory>
 
-float dVent_CanUse(Vent* __this, GameData_PlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
+float dVent_CanUse(Vent* __this, NetworkedPlayerInfo* pc, bool* canUse, bool* couldUse, MethodInfo* method) {
 	if (State.UnlockVents) {
-		auto object = GameData_PlayerInfo_get_Object(pc, nullptr);
+		auto object = NetworkedPlayerInfo_get_Object(pc, nullptr);
 		if (!object) {
 			LOG_ERROR(ToString(pc) + " _object is null");
 			return app::Vent_CanUse(__this, pc, canUse, couldUse, method);

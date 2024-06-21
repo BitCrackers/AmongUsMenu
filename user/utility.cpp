@@ -137,8 +137,8 @@ PlayerSelection::PlayerSelection(const PlayerControl* playerControl) {
 	}
 }
 
-PlayerSelection::PlayerSelection(GameData_PlayerInfo* playerData) {
-	new (this)PlayerSelection(app::GameData_PlayerInfo_get_Object(playerData, nullptr));
+PlayerSelection::PlayerSelection(NetworkedPlayerInfo* playerData) {
+	new (this)PlayerSelection(app::NetworkedPlayerInfo_get_Object(playerData, nullptr));
 }
 
 PlayerSelection::PlayerSelection(const PlayerSelection::Result& result) {
@@ -209,7 +209,7 @@ std::optional<PlayerControl*> PlayerSelection::get_PlayerControl() const {
 	return std::nullopt;
 }
 
-std::optional<GameData_PlayerInfo*> PlayerSelection::get_PlayerData() const
+std::optional<NetworkedPlayerInfo*> PlayerSelection::get_PlayerData() const
 {
 	if (auto data = GetPlayerData(this->get_PlayerControl().value_or(nullptr));
 		data != nullptr) {
@@ -265,12 +265,12 @@ bool IsColorBlindMode() {
 	return false;
 }
 
-GameData_PlayerInfo* GetPlayerData(PlayerControl* player) {
+NetworkedPlayerInfo* GetPlayerData(PlayerControl* player) {
 	if (player) return app::PlayerControl_get_Data(player, NULL);
 	return NULL;
 }
 
-GameData_PlayerInfo* GetPlayerDataById(Game::PlayerId id) {
+NetworkedPlayerInfo* GetPlayerDataById(Game::PlayerId id) {
 	return app::GameData_GetPlayerById((*Game::pGameData), id, NULL);
 }
 
@@ -302,7 +302,7 @@ il2cpp::List<List_1_PlayerControl_> GetAllPlayerControl() {
 	return *Game::pAllPlayerControls;
 }
 
-il2cpp::List<List_1_GameData_PlayerInfo_> GetAllPlayerData() {
+il2cpp::List<List_1_NetworkedPlayerInfo_> GetAllPlayerData() {
 	return (*Game::pGameData)->fields.AllPlayers;
 }
 
@@ -472,7 +472,7 @@ SystemTypes__Enum GetSystemTypes(const Vector2& vector) {
 	return SystemTypes__Enum::Outside;
 }
 
-std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
+std::optional<EVENT_PLAYER> GetEventPlayer(NetworkedPlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
 	return EVENT_PLAYER(playerInfo);
@@ -480,16 +480,16 @@ std::optional<EVENT_PLAYER> GetEventPlayer(GameData_PlayerInfo* playerInfo)
 
 std::optional<EVENT_PLAYER> GetEventPlayerControl(PlayerControl* player)
 {
-	GameData_PlayerInfo* playerInfo = GetPlayerData(player);
+	auto playerInfo = GetPlayerData(player);
 
 	if (!playerInfo) return std::nullopt;
 	return EVENT_PLAYER(playerInfo);
 }
 
-std::optional<Vector2> GetTargetPosition(GameData_PlayerInfo* playerInfo)
+std::optional<Vector2> GetTargetPosition(NetworkedPlayerInfo* playerInfo)
 {
 	if (!playerInfo) return std::nullopt;
-	auto object = GameData_PlayerInfo_get_Object(playerInfo, nullptr);
+	auto object = NetworkedPlayerInfo_get_Object(playerInfo, nullptr);
 	if (!object) {
 		// Likely disconnected player.
 		if (playerInfo->fields.Disconnected != true)
@@ -572,10 +572,10 @@ std::string ToString(__maybenull PlayerControl* player) {
 	return "<Unknown>";
 }
 
-std::string ToString(__maybenull GameData_PlayerInfo* data) {
+std::string ToString(__maybenull NetworkedPlayerInfo* data) {
 	if (data) {
 		if (const auto outfit = GetPlayerOutfit(data))
-			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr)));
+			return std::format("<#{} {}>", +data->fields.PlayerId, convert_from_string(outfit->fields.PlayerName));
 		return std::format("<#{}>", +data->fields.PlayerId);
 	}
 	return "<Unknown>";
@@ -600,12 +600,12 @@ std::string GetGitBranch()
 	return "unavailable";
 }
 
-void ImpersonateName(__maybenull GameData_PlayerInfo* data)
+void ImpersonateName(__maybenull NetworkedPlayerInfo* data)
 {
 	if (!data) return;
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(data);
+	auto outfit = GetPlayerOutfit(data);
 	if (!(IsInGame() || IsInLobby() || outfit)) return;
-	const auto& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+	const auto& playerName = convert_from_string(outfit->fields.PlayerName);
 	if (playerName.length() < 10) {
 		if (IsInGame())
 			State.rpcQueue.push(new RpcSetName(playerName + " "));
@@ -634,7 +634,7 @@ Game::ColorId GetRandomColorId()
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
 			{
-				app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(player));
+				auto outfit = GetPlayerOutfit(GetPlayerData(player));
 				if (outfit == NULL) continue;
 				if (i == outfit->fields.ColorId)
 				{
@@ -658,10 +658,10 @@ Game::ColorId GetRandomColorId()
 
 void SaveOriginalAppearance()
 {
-	app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
+	auto outfit = GetPlayerOutfit(GetPlayerData(*Game::pLocalPlayer));
 	if (outfit == NULL) return;
 	LOG_DEBUG("Set appearance values to current player");
-	State.originalName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+	State.originalName = convert_from_string(outfit->fields.PlayerName);
 	State.originalSkin = outfit->fields.SkinId;
 	State.originalHat = outfit->fields.HatId;
 	State.originalPet = outfit->fields.PetId;
@@ -682,19 +682,19 @@ void ResetOriginalAppearance()
 	State.originalNamePlate = nullptr;
 }
 
-GameData_PlayerOutfit* GetPlayerOutfit(GameData_PlayerInfo* player, bool includeShapeshifted /* = false */) {
+NetworkedPlayerInfo_PlayerOutfit* GetPlayerOutfit(NetworkedPlayerInfo* player, bool includeShapeshifted /* = false */) {
 	if (!player) return nullptr;
 	const il2cpp::Dictionary dic(player->fields.Outfits);
 	if (includeShapeshifted) {
 		auto playerOutfit = dic[PlayerOutfitType__Enum::Shapeshifted];
-		if (playerOutfit && !convert_from_string(GameData_PlayerOutfit_get_PlayerName(playerOutfit, nullptr)).empty()) {
+		if (playerOutfit && !convert_from_string(playerOutfit->fields.PlayerName).empty()) {
 			return playerOutfit;
 		}
 	}
 	return dic[PlayerOutfitType__Enum::Default];
 }
 
-bool PlayerIsImpostor(GameData_PlayerInfo* player) {
+bool PlayerIsImpostor(NetworkedPlayerInfo* player) {
 
 	if (player->fields.Role == nullptr) return false;
 
@@ -716,11 +716,14 @@ Color GetRoleColor(RoleBehaviour* roleBehaviour) {
 	case RoleTypes__Enum::Engineer:
 	case RoleTypes__Enum::GuardianAngel:
 	case RoleTypes__Enum::Scientist:
+	case RoleTypes__Enum::Noisemaker:
+	case RoleTypes__Enum::Tracker:
 		c = Palette__TypeInfo->static_fields->CrewmateBlue;
 		break;
 	case RoleTypes__Enum::Impostor:
 	case RoleTypes__Enum::Shapeshifter:
 	case RoleTypes__Enum::ImpostorGhost:
+	case RoleTypes__Enum::Phantom:
 		c = Palette__TypeInfo->static_fields->ImpostorRed;
 		break;
 	}
@@ -747,6 +750,12 @@ std::string GetRoleName(RoleBehaviour* roleBehaviour, bool abbreviated /* = fals
 		case RoleTypes__Enum::Crewmate:
 		case RoleTypes__Enum::CrewmateGhost:
 			return (abbreviated ? "Crew" : "Crewmate");
+		case RoleTypes__Enum::Noisemaker:
+			return (abbreviated ? "Noisemaker" : "Noisemaker");
+		case RoleTypes__Enum::Phantom:
+			return (abbreviated ? "Phantom" : "Phantom");
+		case RoleTypes__Enum::Tracker:
+			return (abbreviated ? "Tracker" : "Tracker");
 		default:
 			return (abbreviated ? "Unk" : "Unknown");
 	}

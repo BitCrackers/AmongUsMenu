@@ -33,9 +33,9 @@ namespace HostTab {
 					if (State.assignedRolesPlayer[index] == nullptr)
 						continue;
 
-					app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+					auto outfit = GetPlayerOutfit(playerData);
 					if (outfit == NULL) continue;
-					const std::string& playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+					const std::string& playerName = convert_from_string(outfit->fields.PlayerName);
 					if (CustomListBoxInt(playerName.c_str(), reinterpret_cast<int*>(&State.assignedRoles[index]), ROLE_NAMES, 80 * State.dpiScale))
 					{
 						State.engineers_amount = (int)GetRoleCount(RoleType::Engineer);

@@ -60,10 +60,10 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 		if (!playerData || !localData)
 			return;
 
-		app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData, true);
+		auto outfit = GetPlayerOutfit(playerData, true);
 		std::string playerName = "<Unknown>";
 		if (outfit != NULL)
-			playerName = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+			playerName = convert_from_string(outfit->fields.PlayerName);
 		if (State.ShowKillCD
 			&& __this != *Game::pLocalPlayer
 			&& !playerData->fields.IsDead
@@ -276,14 +276,14 @@ void dPlayerControl_FixedUpdate(PlayerControl* __this, MethodInfo* method) {
 				}
 				Profiler::EndSample("WalkEventCreation");
 			}
-			app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(playerData);
+			auto outfit = GetPlayerOutfit(playerData);
 			EspPlayerData espPlayerData;
 			espPlayerData.Position = WorldToScreen(playerPos);
 			if (outfit != NULL)
 			{
 				espPlayerData.Color = State.ShowEsp_RoleBased == false ? AmongUsColorToImVec4(GetPlayerColor(outfit->fields.ColorId))
 					: AmongUsColorToImVec4(GetRoleColor(playerData->fields.Role));
-				espPlayerData.Name = convert_from_string(GameData_PlayerOutfit_get_PlayerName(outfit, nullptr));
+				espPlayerData.Name = convert_from_string(outfit->fields.PlayerName);
 			}
 			else
 			{
@@ -358,7 +358,7 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
 	PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 }
 
-void dPlayerControl_StartMeeting(PlayerControl* __this, GameData_PlayerInfo* target, MethodInfo* method)
+void dPlayerControl_StartMeeting(PlayerControl* __this, NetworkedPlayerInfo* target, MethodInfo* method)
 {
 	if (auto player = GetEventPlayerControl(__this);
 		player && target) {

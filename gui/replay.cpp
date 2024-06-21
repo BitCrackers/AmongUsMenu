@@ -323,7 +323,7 @@ namespace Replay
 				ImVec2(1.0f, 1.0f),
 				GetReplayPlayerColor(plrLineData.colorId));
 
-			app::GameData_PlayerInfo* plrInfo = GetPlayerDataById(plrLineData.playerId);
+			auto plrInfo = GetPlayerDataById(plrLineData.playerId);
 			if ((plrInfo != NULL) &&
 				((plrInfo->fields.IsDead) ||
 					((plrInfo->fields.Role != NULL) &&

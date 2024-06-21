@@ -28,14 +28,6 @@ void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	}//Assign hidenseek roles
 }
 
-/*void dRoleManager_AssignRolesForTeam(List_1_GameData_PlayerInfo_* players, RoleOptionsData* opts, RoleTeamTypes__Enum team, int32_t teamMax, Nullable_1_RoleTypes_ defaultRole, MethodInfo* method) {
-	return RoleManager_AssignRolesForTeam(players, opts, team, teamMax, defaultRole, method);
-}
-
-void dRoleManager_AssignRolesFromList(List_1_GameData_PlayerInfo_* players, int32_t teamMax, List_1_RoleTypes_* roleList, int32_t* rolesAssigned, MethodInfo* method) {
-	return RoleManager_AssignRolesFromList(players, teamMax, roleList, rolesAssigned, method);
-}*/
-
 void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPlayers)
 {
 	for (size_t i = 0; i < State.assignedRolesPlayer.size(); i++)
