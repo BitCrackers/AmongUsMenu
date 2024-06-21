@@ -634,7 +634,7 @@ Game::ColorId GetRandomColorId()
 			bool colorAvailable = true;
 			for (PlayerControl* player : players)
 			{
-				app::GameData_PlayerOutfit* outfit = GetPlayerOutfit(GetPlayerData(player));
+				auto outfit = GetPlayerOutfit(GetPlayerData(player));
 				if (outfit == NULL) continue;
 				if (i == outfit->fields.ColorId)
 				{
