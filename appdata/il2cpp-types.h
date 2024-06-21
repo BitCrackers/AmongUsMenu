@@ -5125,6 +5125,8 @@ namespace app
 
     typedef int32_t StringNames__Enum;
 
+    WRAPPER_IL2CPP_ARRAY(StringNames__Enum, StringNames__Enum);
+
 #pragma endregion
 
 #pragma region SwitchSystem
@@ -8706,6 +8708,17 @@ namespace app
         struct Color Brown;
         struct Color CrewmateBlue;
         struct Color ImpostorRed;
+        struct Color CrewmateRoleBlue;
+        struct Color CrewmateRoleHeaderBlue;
+        struct Color CrewmateRoleHeaderTextBlue;
+        struct Color CrewmateRoleHeaderDarkBlue;
+        struct Color CrewmateRoleHeaderVeryDarkBlue;
+        struct Color CrewmateSettingChangeText;
+        struct Color ImpostorRoleRed;
+        struct Color ImpostorRoleHeaderRed;
+        struct Color ImpostorRoleHeaderTextRed;
+        struct Color ImpostorRoleHeaderDarkRed;
+        struct Color ImpostorRoleHeaderVeryDarkRed;
         struct Color CosmicubeCellUnlockedColor;
         struct Color CosmicubeCellLockedColor;
         struct Color CosmicubeQuality_NamePlate;
@@ -8722,6 +8735,8 @@ namespace app
         struct StringNames__Enum__Array* ColorNames;
         struct Color32__Array* PlayerColors;
         struct Color32__Array* ShadowColors;
+        struct Color32__Array* TextColors;
+        struct Color32__Array* TextOutlineColors;
         struct Color32 VisorColor;
     };
 
