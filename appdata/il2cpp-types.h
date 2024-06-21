@@ -8076,6 +8076,7 @@ namespace app
         ShowCrewmateNames = 0x0000000a,
         ShapeshifterLeaveSkin = 0x000003e8,
         ImpostorsCanSeeProtect = 0x0000044c,
+        NoisemakerImpostorAlert = 0x00000514,
     };
 
 #else
@@ -8093,6 +8094,7 @@ namespace app
         BoolOptionNames__Enum_ShowCrewmateNames = 0x0000000a,
         BoolOptionNames__Enum_ShapeshifterLeaveSkin = 0x000003e8,
         BoolOptionNames__Enum_ImpostorsCanSeeProtect = 0x0000044c,
+        BoolOptionNames__Enum_NoisemakerImpostorAlert = 0x00000514,
     };
 
 #endif
