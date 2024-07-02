@@ -40,7 +40,7 @@ void AssignPreChosenRoles(RoleRates& roleRates, std::vector<uint8_t>& assignedPl
 		auto trueRole = GetRoleTypesEnum(role);
 		roleRates.SubtractRole(trueRole);
 
-		PlayerControl_RpcSetRole(player, trueRole, NULL);
+		PlayerControl_RpcSetRole(player, trueRole, false, NULL);
 		assignedPlayers.push_back(player->fields.PlayerId);
 	}
 }
@@ -87,7 +87,7 @@ void AssignRoles(RoleRates& roleRates, int roleChance, RoleTypes__Enum role, il2
 			if (CanPlayerBeAssignedToRole(player, assignedPlayers))
 			{
 				roleRates.SubtractRole(role);
-				PlayerControl_RpcSetRole(player, role, NULL);
+				PlayerControl_RpcSetRole(player, role, false, NULL);
 				assignedPlayers.push_back(player->fields.PlayerId);
 				break;
 			}
