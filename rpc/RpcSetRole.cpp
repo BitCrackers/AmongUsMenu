@@ -10,5 +10,5 @@ RpcSetRole::RpcSetRole(PlayerControl* player, RoleTypes__Enum role)
 
 void RpcSetRole::Process()
 {
-	PlayerControl_RpcSetRole(Player, Role, NULL);
+	PlayerControl_RpcSetRole(Player, Role, false, NULL);
 }
